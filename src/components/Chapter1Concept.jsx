@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionTitle, Card, Badge, CommandBlock, Callout } from './Shared';
+import { SectionTitle, Card, Badge, CommandBlock, Callout, Quiz } from './Shared';
 import { GitGraph, Server, Key, Info, Github, Sparkles, BookOpen, TrendingUp } from 'lucide-react';
 
 export const Chapter1Concept = () => (
@@ -207,5 +207,40 @@ export const Chapter1Concept = () => (
         </p>
       </Card>
     </div>
+
+    <Quiz
+      questions={[
+        {
+          q: 'Git 和 GitHub 的關係，下面哪個說法最正確？',
+          options: [
+            'Git 和 GitHub 是同一個東西，只是兩種不同的叫法',
+            'Git 是安裝在你電腦裡的軟體工具，GitHub 是把 Git 專案放上雲端、給大家看/協作的平台',
+            'GitHub 是本地工具，Git 是雲端平台',
+          ],
+          answer: 1,
+          explain: '就像影片剪輯軟體和 YouTube：Git 是你電腦上用來剪片（記錄版本）的軟體，GitHub 則是上傳給別人看、共同協作的雲端平台。沒裝 Git，你的電腦沒辦法做版本控制；不用 GitHub，你一樣可以用 Git，只是沒有雲端備份和協作功能。',
+        },
+        {
+          q: '「Commit」如果比喻成單機遊戲的概念，最接近下面哪一個？',
+          options: [
+            '按下遊戲的「暫停」鍵',
+            '打王之前的「存檔點」——把目前狀態拍下快照，之後可以讀檔回到這裡',
+            '刪除存檔重新開一輪新遊戲',
+          ],
+          answer: 1,
+          explain: 'Commit 就是幫目前的程式碼狀態拍一張快照存起來，之後不管怎麼改壞，都能讀檔回到這個時間點。它不是暫停（暫停不會留下紀錄），也不是刪檔重來（Commit 是「新增」一筆歷史紀錄，不會抹掉之前的存檔）。',
+        },
+        {
+          q: '看到教材裡指令寫成 `$ git init`，實際在終端機輸入時該怎麼打？',
+          options: [
+            '要完整打 `$ git init`，包含開頭的 $ 符號',
+            '只打 `git init`，開頭的 $ 只是標示「這是一段指令」，不用真的輸入',
+            '$ 要換成你的使用者名稱才能執行',
+          ],
+          answer: 1,
+          explain: '`$` 是教學慣例，用來提示「這一行是要在終端機輸入的指令」，並不是指令的一部分。如果你把 `$` 也打進終端機，Git 會回報找不到這個指令。用複製按鈕會自動幫你去掉 `$`，手動輸入時也要記得跳過它。',
+        },
+      ]}
+    />
   </div>
 );

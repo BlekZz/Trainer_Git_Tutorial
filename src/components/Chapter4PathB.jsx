@@ -1,6 +1,27 @@
 import React, { useState, useRef } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout, Quiz } from './Shared';
 import { Laptop, ArrowRight, Github, Download, FileText, CheckCircle, Search, LifeBuoy } from 'lucide-react';
+
+const MAX_STEP = 6;
+
+// StepAction — 一個步驟卡的「按鈕」在挑戰模式下切換成狀態徽章，
+// 用包裝的方式接上既有的 step 狀態機，不改動原本的按鈕邏輯。
+const StepAction = ({ state, challengeMode, onClick, activeClass }) => {
+  if (challengeMode) {
+    if (state === 'current') {
+      return <span className="px-3 py-1 rounded text-xs font-bold text-white bg-purple-500 animate-pulse shrink-0">🎯 請輸入</span>;
+    }
+    if (state === 'done') {
+      return <span className="px-3 py-1 rounded text-xs font-bold text-white bg-green-500 shrink-0">完成</span>;
+    }
+    return <span className="px-3 py-1 rounded text-xs font-bold text-slate-400 bg-slate-100 shrink-0">待完成</span>;
+  }
+  return (
+    <button onClick={onClick} disabled={state !== 'current'} className={`px-3 py-1 rounded text-xs font-bold text-white shrink-0 ${state === 'done' ? 'bg-green-500' : state === 'current' ? activeClass : 'bg-slate-300'}`}>
+      {state === 'done' ? '完成' : '執行'}
+    </button>
+  );
+};
 
 export const Chapter4PathB = () => {
   const [step, setStep] = useState(0); // 0: init, 1: clone, 2: cd, 3: status, 4: add/commit, 5: push
@@ -10,6 +31,12 @@ export const Chapter4PathB = () => {
   const scrollToTerminal = () => {
     terminalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
+
+  // 第二輪挑戰模式：學員親手在模擬終端機打指令
+  const [challengeMode, setChallengeMode] = useState(false);
+  const [challengeIdx, setChallengeIdx] = useState(0);
+  const [challengeAttempts, setChallengeAttempts] = useState(0);
+  const [challengeDone, setChallengeDone] = useState(false);
 
   const addLog = (text, type = 'info', prefix = '>') => {
     setLogs(prev => [...prev, { text, type, prefix }]);
@@ -85,6 +112,111 @@ export const Chapter4PathB = () => {
   const reset = () => {
     setStep(0);
     setLogs([{ prefix: '$', text: '已重置。' }]);
+    setChallengeMode(false);
+    setChallengeIdx(0);
+    setChallengeAttempts(0);
+    setChallengeDone(false);
+  };
+
+  const normalize = (raw) => raw.trim().replace(/\s+/g, ' ');
+
+  const CHALLENGE_STEPS = [
+    {
+      label: 'git clone <網址>',
+      match: (lower, normalized) => lower.startsWith('git clone ') && normalized.slice('git clone '.length).trim().length > 0,
+      run: () => handleClone(),
+      delay: 1400,
+      hint1: '提示：先把雲端的專案完整下載下來。',
+      hint2: '指令以 git clone 開頭，後面接專案網址',
+    },
+    {
+      label: 'cd 資料夾名稱',
+      match: (lower, normalized) => lower.startsWith('cd ') && normalized.slice(3).trim().length > 0,
+      run: () => handleCd(),
+      delay: 400,
+      hint1: '提示：下載完別忘記「走進去」那個資料夾。',
+      hint2: '指令是 cd 加上資料夾名稱（例如 cd cool-project）',
+    },
+    {
+      label: 'git status',
+      match: (lower) => lower === 'git status',
+      run: () => handleStatus(),
+      delay: 500,
+      hint1: '提示：先確認一下目前工作區乾不乾淨。',
+      hint2: '指令是 git status',
+    },
+    {
+      label: 'git add .',
+      match: (lower) => lower === 'git add .' || lower === 'git add -a',
+      run: () => handleAdd(),
+      delay: 500,
+      hint1: '提示：把修改過的檔案放進暫存區。',
+      hint2: '指令是 git add .（也接受 git add -A）',
+    },
+    {
+      label: 'git commit -m "..."',
+      match: (lower, normalized) => lower.startsWith('git commit -m') && normalized.slice('git commit -m'.length).trim().length > 0,
+      run: () => handleCommit(),
+      delay: 600,
+      hint1: '提示：正式對這次修改拍照存檔，記得寫上說明文字。',
+      hint2: '指令以 git commit -m 開頭，後面接你的說明文字',
+    },
+    {
+      label: 'git push',
+      match: (lower) => lower === 'git push',
+      run: () => handlePush(),
+      delay: 1000,
+      hint1: '提示：把存檔推上雲端（clone 時 origin 已經設定好了）。',
+      hint2: '指令是 git push',
+    },
+  ];
+
+  const startChallenge = () => {
+    setChallengeMode(true);
+    setChallengeIdx(0);
+    setChallengeAttempts(0);
+    setChallengeDone(false);
+    setStep(0);
+    setLogs([{ prefix: '>', text: '挑戰開始！第 1 步：把雲端的專案下載下來（忘記指令可以往上看步驟卡）', type: 'info' }]);
+  };
+
+  const abandonChallenge = () => {
+    setChallengeMode(false);
+    setChallengeIdx(0);
+    setChallengeAttempts(0);
+    setChallengeDone(false);
+    setStep(MAX_STEP);
+    setLogs([{ prefix: '$', text: '已回到按鈕模式（第一輪已完成）。' }]);
+  };
+
+  const handleTerminalCommand = (raw) => {
+    if (challengeDone) return;
+    const normalized = normalize(raw);
+    if (!normalized) return;
+    const lower = normalized.toLowerCase();
+    const current = CHALLENGE_STEPS[challengeIdx];
+    if (!current) return;
+
+    if (current.match(lower, normalized)) {
+      setChallengeAttempts(0);
+      current.run(normalized);
+      const idx = challengeIdx;
+      const isLast = idx === CHALLENGE_STEPS.length - 1;
+      setTimeout(() => {
+        if (isLast) {
+          addLog('🎉 挑戰完成！你已經不需要按鈕了——真實終端機對你來說不再陌生。', 'success');
+          setChallengeDone(true);
+        } else {
+          addLog(`✅ 正確！下一步：${CHALLENGE_STEPS[idx + 1].label}`, 'success');
+          setChallengeIdx(idx + 1);
+        }
+      }, current.delay);
+    } else {
+      addLog(raw, 'input', 'cool-project $');
+      const attempts = challengeAttempts + 1;
+      setChallengeAttempts(attempts);
+      addLog(attempts >= 2 ? current.hint2 : current.hint1, 'warning');
+    }
   };
 
   return (
@@ -136,9 +268,7 @@ export const Chapter4PathB = () => {
               <div className={`p-3 border rounded-lg transition-all ${step === 0 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 0 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
                   <div className="font-mono text-sm text-slate-700 truncate mr-2" title={`$ git clone ${repoUrl}`}>$ git clone ...cool-project.git</div>
-                  <button onClick={handleClone} disabled={step !== 0} className={`px-3 py-1 rounded text-xs font-bold text-white shrink-0 ${step > 0 ? 'bg-green-500' : step === 0 ? 'bg-purple-600 hover:bg-purple-700' : 'bg-slate-300'}`}>
-                    {step > 0 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 0 ? 'done' : step === 0 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleClone} activeClass="bg-purple-600 hover:bg-purple-700" />
                 </div>
                 <div className="text-xs text-slate-500 mt-2">把雲端的專案完整打包下載到電腦。這會自動建立 .git 與 origin 連結！</div>
               </div>
@@ -147,9 +277,7 @@ export const Chapter4PathB = () => {
               <div className={`p-3 border rounded-lg transition-all ${step === 1 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 1 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
                   <div className="font-mono text-sm text-slate-700">$ cd cool-project</div>
-                  <button onClick={handleCd} disabled={step !== 1} className={`px-3 py-1 rounded text-xs font-bold text-white ${step > 1 ? 'bg-green-500' : step === 1 ? 'bg-purple-600 hover:bg-purple-700' : 'bg-slate-300'}`}>
-                    {step > 1 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 1 ? 'done' : step === 1 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleCd} activeClass="bg-purple-600 hover:bg-purple-700" />
                 </div>
                 <div className="text-xs text-red-500 font-bold mt-2">⚠️ 新手最常忘記這步！下載完記得用 cd (change directory) 進入資料夾，否則你後面的指令都會找不到 git！</div>
               </div>
@@ -158,9 +286,7 @@ export const Chapter4PathB = () => {
               <div className={`p-3 border rounded-lg transition-all ${step === 2 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 2 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
                   <div className="font-mono text-sm text-slate-700">$ git status</div>
-                  <button onClick={handleStatus} disabled={step !== 2} className={`px-3 py-1 rounded text-xs font-bold text-white ${step > 2 ? 'bg-green-500' : step === 2 ? 'bg-purple-600 hover:bg-purple-700' : 'bg-slate-300'}`}>
-                    {step > 2 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 2 ? 'done' : step === 2 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleStatus} activeClass="bg-purple-600 hover:bg-purple-700" />
                 </div>
                 <div className="text-xs text-slate-500 mt-2">好習慣：養成隨時看 status 的習慣，確認目前狀態是否乾淨。</div>
               </div>
@@ -169,9 +295,7 @@ export const Chapter4PathB = () => {
               <div className={`p-3 border rounded-lg transition-all ${step === 3 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 3 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
                   <div className="font-mono text-sm text-slate-700">$ git add .</div>
-                  <button onClick={handleAdd} disabled={step !== 3} className={`px-3 py-1 rounded text-xs font-bold text-white ${step > 3 ? 'bg-green-500' : step === 3 ? 'bg-purple-600 hover:bg-purple-700' : 'bg-slate-300'}`}>
-                    {step > 3 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 3 ? 'done' : step === 3 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleAdd} activeClass="bg-purple-600 hover:bg-purple-700" />
                 </div>
                 <div className="text-xs text-slate-500 mt-2">把修改過的檔案放進「暫存區」，準備好存檔。（實際操作中這步不能省！）</div>
               </div>
@@ -186,9 +310,7 @@ export const Chapter4PathB = () => {
               <div className={`p-3 border rounded-lg transition-all ${step === 4 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 4 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
                   <div className="font-mono text-sm text-slate-700">$ git commit -m "Add new feature"</div>
-                  <button onClick={handleCommit} disabled={step !== 4} className={`px-3 py-1 rounded text-xs font-bold text-white ${step > 4 ? 'bg-green-500' : step === 4 ? 'bg-purple-600 hover:bg-purple-700' : 'bg-slate-300'}`}>
-                    {step > 4 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 4 ? 'done' : step === 4 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleCommit} activeClass="bg-purple-600 hover:bg-purple-700" />
                 </div>
                 <div className="text-xs text-slate-500 mt-2">正式建立快照！<code>-m</code> 後面是這次存檔的說明文字。</div>
               </div>
@@ -197,9 +319,7 @@ export const Chapter4PathB = () => {
               <div className={`p-3 border rounded-lg transition-all ${step === 5 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 5 ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
                   <div className="font-mono text-sm text-slate-700">$ git push</div>
-                  <button onClick={handlePush} disabled={step !== 5} className={`px-3 py-1 rounded text-xs font-bold text-white ${step > 5 ? 'bg-green-500' : step === 5 ? 'bg-purple-600 hover:bg-purple-700 animate-pulse' : 'bg-slate-300'}`}>
-                    {step > 5 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 5 ? 'done' : step === 5 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handlePush} activeClass="bg-purple-600 hover:bg-purple-700 animate-pulse" />
                 </div>
                 <div className="text-xs text-slate-500 mt-2">因為 Clone 時已經有 origin 連結了，所以以後修改完直接 push 即可！</div>
               </div>
@@ -276,8 +396,40 @@ export const Chapter4PathB = () => {
       </div>
 
       <div className="mt-8" ref={terminalRef}>
-        <TerminalSim logs={logs} promptLabel={step >= 2 ? "cool-project $" : "~ $"} height="h-48" />
+        <TerminalSim
+          logs={logs}
+          promptLabel={step >= 2 ? "cool-project $" : "~ $"}
+          height="h-48"
+          onCommand={challengeMode && !challengeDone ? handleTerminalCommand : undefined}
+        />
       </div>
+
+      {step === MAX_STEP && !challengeMode && (
+        <Callout variant="success" title="第一輪完成！你已經看懂整個流程了。" className="mt-4">
+          <p className="mb-3">現在換第二輪——這次不能按按鈕了，改成你自己在下面的終端機裡打指令。把「第一次打指令」的緊張感，先在這個安全的地方消耗掉。</p>
+          <button
+            type="button"
+            onClick={startChallenge}
+            className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold shadow"
+          >
+            🔄 第二輪挑戰：這次換你打指令
+          </button>
+        </Callout>
+      )}
+
+      {challengeMode && !challengeDone && (
+        <div className="flex justify-end mt-2">
+          <button type="button" onClick={abandonChallenge} className="text-xs text-slate-500 hover:text-red-600 underline">
+            放棄挑戰，回到按鈕模式
+          </button>
+        </div>
+      )}
+
+      {challengeDone && (
+        <Callout variant="success" title="🎉 挑戰完成" className="mt-4">
+          你已經不需要按鈕了——真實終端機對你來說不再陌生。
+        </Callout>
+      )}
 
       {/* Git Status Cheatsheet */}
       <div className="mt-8">
@@ -362,6 +514,41 @@ export const Chapter4PathB = () => {
            </div>
         </Card>
       </div>
+
+      <Quiz
+        questions={[
+          {
+            q: 'Clone 完一個專案後，直接在原本的資料夾位置打 git status 卻顯示找不到 git repository，最可能是忘了做什麼？',
+            options: [
+              '忘記先 cd 進入 clone 下來的資料夾，指令還停在外層目錄',
+              'git clone 指令本身失敗了，需要重新下載',
+              'GitHub 那個 repo 其實是空的',
+            ],
+            answer: 0,
+            explain: 'git clone 會在目前位置新建一個「以專案命名」的子資料夾，並把 .git 放在那個子資料夾裡，不是放在你執行指令的當下位置。沒有 cd 進去，你的終端機根本還站在外面，當然找不到任何 git 相關資訊。這是新手最常忘記的一步。',
+          },
+          {
+            q: '執行 git status 後看到一堆紅色文字（Untracked files / Changes not staged），這代表？',
+            options: [
+              '出現錯誤了，程式碼可能已經損壞，要趕快搶救',
+              '只是「狀態標示」——代表有檔案是新增或修改過、還沒放進暫存區，不是壞掉或出錯',
+              '代表這個 repo 已經跟遠端斷線了',
+            ],
+            answer: 1,
+            explain: '紅色在 git status 裡只是一種「顏色編碼」，用來標示尚未加入暫存區的變動（新檔案或被修改的檔案），完全不代表出錯。看到紅字就緊張、以為東西壞掉，是很多初學者的直覺誤解；正確反應是接著打 git add . 把它們放進暫存區，看到變成綠色（Changes to be committed）才是下一步 commit 的時機。',
+          },
+          {
+            q: '你改壞了一個檔案、但還沒 git add，想讓它整個回到最後一次 commit 的乾淨狀態，該用哪個指令？',
+            options: [
+              'git restore <檔案名>——把還沒暫存的修改整個丟棄，回到上次 commit 的樣子',
+              'git commit -m "還原"——重新 commit 一次就能蓋掉剛剛的錯誤',
+              'git clone 重新下載一次專案最快最保險',
+            ],
+            answer: 0,
+            explain: 'git restore <檔案名> 專門用來丟棄「尚未暫存」的修改，讓檔案回到最後一次 commit 時的狀態——但要注意這個動作會讓你剛寫的改動永久消失，執行前務必先確認真的不要了。commit 沒辦法「蓋掉」錯誤，它只會再新增一筆歷史紀錄；而重新 clone 則是殺雞用牛刀，且如果本地已經有其他未推送的改動還會被覆蓋，並不是正確的救援方式。',
+          },
+        ]}
+      />
     </div>
   );
 };

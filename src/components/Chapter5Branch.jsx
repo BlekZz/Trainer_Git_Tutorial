@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, Callout } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, Callout, Quiz } from './Shared';
 import { GitBranch, Plus, ArrowRight, Activity, GitCommit, Copy } from 'lucide-react';
 
 export const Chapter5Branch = () => {
@@ -276,6 +276,41 @@ export const Chapter5Branch = () => {
            </div>
         </Card>
       </div>
+
+      <Quiz
+        questions={[
+          {
+            q: '你在 main 分支改了一些東西還沒 commit，這時想切去 feat/login 分支繼續開發，該怎麼辦？',
+            options: [
+              '直接下 git checkout feat/login，反正切過去再改就好',
+              '先用 git commit 存檔，或用 git stash 把未完成的修改暫存起來，再切換分支',
+              '把檔案手動複製一份備份到別的資料夾，再切換分支',
+            ],
+            answer: 1,
+            explain: '未存檔的修改可能會被切換分支的動作影響甚至報錯擋下（如果修改的檔案在兩個分支不同），也可能被誤帶到不相關的分支上。正確做法是先 git commit（如果東西已經完整）或 git stash（東西還沒寫完、不想現在存檔），確保工作區乾淨後再切換，之後要繼續改可以用 git stash pop 拿回來。',
+          },
+          {
+            q: 'git branch abc 和 git checkout -b abc 有什麼差別？',
+            options: [
+              '兩個效果完全一樣，只是打法不同',
+              'git branch abc 只是建立一個叫 abc 的新分支，並不會切換過去；git checkout -b abc 則是「建立 + 立刻切換」一次做完',
+              'git branch abc 會切換過去，git checkout -b abc 只是建立分支',
+            ],
+            answer: 1,
+            explain: '這是初學者最容易搞混的地方：git branch abc 執行後，你其實還留在原本的分支上，只是多了一個 abc 分支的「選項」；要真正切過去還要再打一次 git checkout abc。而 git checkout -b abc 把「建立」和「切換」兩個步驟合成一個指令，是最常用的懶人寫法。',
+          },
+          {
+            q: '你在 feat/login 分支上大幅修改程式碼，甚至改到程式跑不動了，這會影響 main 分支嗎？',
+            options: [
+              '會，因為所有分支共用同一份程式碼檔案',
+              '不會，分支就像獨立的平行宇宙，在 feat/login 上的修改完全不會影響 main，除非你之後主動把它合併 (merge) 回去',
+              '會，但只有下次開機重開終端機才會生效',
+            ],
+            answer: 1,
+            explain: '分支的核心價值就是「隔離風險」：不論在 feat/login 上怎麼改、怎麼搞砸，main 分支的內容都維持原樣不受影響，你隨時可以切回 main 看到完好的版本。唯一會讓 main 受到影響的時機，是你確認 feat/login 沒問題後，主動執行合併 (merge) 把它併回 main。',
+          },
+        ]}
+      />
     </div>
   );
 };

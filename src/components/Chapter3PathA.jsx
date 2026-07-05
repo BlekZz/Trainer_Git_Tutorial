@@ -1,6 +1,27 @@
 import React, { useState, useRef } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout, Quiz } from './Shared';
 import { Laptop, Folder, ArrowRight, Github, Shield, PlusCircle, CheckCircle, FileText, Eye, ShieldAlert } from 'lucide-react';
+
+const MAX_STEP = 4;
+
+// StepAction — 一個步驟卡的「按鈕」在挑戰模式下切換成狀態徽章，
+// 用包裝的方式接上既有的 step 狀態機，不改動原本的按鈕邏輯。
+const StepAction = ({ state, challengeMode, onClick, activeClass }) => {
+  if (challengeMode) {
+    if (state === 'current') {
+      return <span className="px-3 py-1 rounded text-xs font-bold text-white bg-indigo-500 animate-pulse shrink-0">🎯 請輸入</span>;
+    }
+    if (state === 'done') {
+      return <span className="px-3 py-1 rounded text-xs font-bold text-white bg-green-500 shrink-0">完成</span>;
+    }
+    return <span className="px-3 py-1 rounded text-xs font-bold text-slate-400 bg-slate-100 shrink-0">待完成</span>;
+  }
+  return (
+    <button onClick={onClick} disabled={state !== 'current'} className={`px-3 py-1 rounded text-xs font-bold text-white shrink-0 ${state === 'done' ? 'bg-green-500' : state === 'current' ? activeClass : 'bg-slate-300'}`}>
+      {state === 'done' ? '完成' : '執行'}
+    </button>
+  );
+};
 
 export const Chapter3PathA = () => {
   const [step, setStep] = useState(0); // 0: initial, 1: init, 2: add/commit, 3: remote add, 4: push
@@ -10,6 +31,12 @@ export const Chapter3PathA = () => {
   const scrollToTerminal = () => {
     terminalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
+
+  // 第二輪挑戰模式：學員親手在模擬終端機打指令
+  const [challengeMode, setChallengeMode] = useState(false);
+  const [challengeIdx, setChallengeIdx] = useState(0);
+  const [challengeAttempts, setChallengeAttempts] = useState(0);
+  const [challengeDone, setChallengeDone] = useState(false);
 
   const addLog = (text, type = 'info', prefix = '>') => {
     setLogs(prev => [...prev, { text, type, prefix }]);
@@ -61,6 +88,122 @@ export const Chapter3PathA = () => {
   const reset = () => {
     setStep(0);
     setLogs([{ prefix: '$', text: '已重置。' }]);
+    setChallengeMode(false);
+    setChallengeIdx(0);
+    setChallengeAttempts(0);
+    setChallengeDone(false);
+  };
+
+  // --- 挑戰模式：git add 與 git commit 在真實情境是兩個分開的指令，
+  // 這裡各自寫一個小效果，讓學員一次只打一行 ---
+  const challengeAddOnly = () => {
+    addLog('git add .', 'input', '$');
+    scrollToTerminal();
+    setTimeout(() => {
+      addLog('（沒有任何輸出——這是正常的，代表成功了，檔案已進入暫存區）', 'info');
+    }, 250);
+  };
+
+  const challengeCommitOnly = (raw) => {
+    addLog(raw, 'input', '$');
+    scrollToTerminal();
+    setTimeout(() => {
+      addLog('[main (root-commit) 1a2b3c] Initial commit', 'success');
+      setStep(2);
+    }, 300);
+  };
+
+  const normalize = (raw) => raw.trim().replace(/\s+/g, ' ');
+
+  const CHALLENGE_STEPS = [
+    {
+      label: 'git init',
+      match: (lower) => lower === 'git init',
+      run: () => handleInit(),
+      delay: 500,
+      hint1: '提示：這一步要讓 Git 開始「認識」這個資料夾。',
+      hint2: '指令是 git init',
+    },
+    {
+      label: 'git add .',
+      match: (lower) => lower === 'git add .' || lower === 'git add -a',
+      run: () => challengeAddOnly(),
+      delay: 450,
+      hint1: '提示：下一步是把檔案放進暫存區。',
+      hint2: '指令以 git add 開頭（試試 git add .）',
+    },
+    {
+      label: 'git commit -m "..."',
+      match: (lower, normalized) => lower.startsWith('git commit -m') && normalized.slice('git commit -m'.length).trim().length > 0,
+      run: (normalized) => challengeCommitOnly(normalized),
+      delay: 500,
+      hint1: '提示：把暫存區的內容正式「拍照存檔」。',
+      hint2: '指令以 git commit -m 開頭，後面接你的存檔說明文字',
+    },
+    {
+      label: 'git remote add origin <網址>',
+      match: (lower, normalized) => lower.startsWith('git remote add origin ') && normalized.slice('git remote add origin '.length).trim().length > 0,
+      run: () => handleLink(),
+      delay: 500,
+      hint1: '提示：告訴 Git 雲端的網址在哪裡。',
+      hint2: '指令是 git remote add origin 加上你的 repo 網址',
+    },
+    {
+      label: 'git push -u origin main',
+      match: (lower) => lower === 'git push -u origin main',
+      run: () => handlePush(),
+      delay: 1000,
+      hint1: '提示：把本地端的存檔正式推上雲端。',
+      hint2: '指令是 git push -u origin main',
+    },
+  ];
+
+  const startChallenge = () => {
+    setChallengeMode(true);
+    setChallengeIdx(0);
+    setChallengeAttempts(0);
+    setChallengeDone(false);
+    setStep(0);
+    setLogs([{ prefix: '>', text: '挑戰開始！第 1 步：初始化這個資料夾（忘記指令可以往上看步驟卡）', type: 'info' }]);
+  };
+
+  const abandonChallenge = () => {
+    setChallengeMode(false);
+    setChallengeIdx(0);
+    setChallengeAttempts(0);
+    setChallengeDone(false);
+    setStep(MAX_STEP);
+    setLogs([{ prefix: '$', text: '已回到按鈕模式（第一輪已完成）。' }]);
+  };
+
+  const handleTerminalCommand = (raw) => {
+    if (challengeDone) return;
+    const normalized = normalize(raw);
+    if (!normalized) return;
+    const lower = normalized.toLowerCase();
+    const current = CHALLENGE_STEPS[challengeIdx];
+    if (!current) return;
+
+    if (current.match(lower, normalized)) {
+      setChallengeAttempts(0);
+      current.run(normalized);
+      const idx = challengeIdx;
+      const isLast = idx === CHALLENGE_STEPS.length - 1;
+      setTimeout(() => {
+        if (isLast) {
+          addLog('🎉 挑戰完成！你已經不需要按鈕了——真實終端機對你來說不再陌生。', 'success');
+          setChallengeDone(true);
+        } else {
+          addLog(`✅ 正確！下一步：${CHALLENGE_STEPS[idx + 1].label}`, 'success');
+          setChallengeIdx(idx + 1);
+        }
+      }, current.delay);
+    } else {
+      addLog(raw, 'input', '$');
+      const attempts = challengeAttempts + 1;
+      setChallengeAttempts(attempts);
+      addLog(attempts >= 2 ? current.hint2 : current.hint1, 'warning');
+    }
   };
 
   return (
@@ -114,9 +257,7 @@ export const Chapter3PathA = () => {
               <div className={`p-3 border rounded-lg transition-all ${step === 0 ? 'bg-white border-indigo-300 shadow-md ring-2 ring-indigo-50' : step > 0 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
                   <div className="font-mono text-sm text-slate-700">$ git init</div>
-                  <button onClick={handleInit} disabled={step !== 0} className={`px-3 py-1 rounded text-xs font-bold text-white ${step > 0 ? 'bg-green-500' : step === 0 ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-slate-300'}`}>
-                    {step > 0 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 0 ? 'done' : step === 0 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleInit} activeClass="bg-indigo-600 hover:bg-indigo-700" />
                 </div>
                 <div className="text-xs text-slate-500 mt-2">在目前資料夾建立 .git，開始追蹤檔案。</div>
               </div>
@@ -131,9 +272,7 @@ export const Chapter3PathA = () => {
               <div className={`p-3 border rounded-lg transition-all ${step === 1 ? 'bg-white border-indigo-300 shadow-md ring-2 ring-indigo-50' : step > 1 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
                   <div className="font-mono text-sm text-slate-700">$ git add . <br/>$ git commit -m "Init"</div>
-                  <button onClick={handleCommit} disabled={step !== 1} className={`px-3 py-1 rounded text-xs font-bold text-white ${step > 1 ? 'bg-green-500' : step === 1 ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-slate-300'}`}>
-                    {step > 1 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 1 ? 'done' : step === 1 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleCommit} activeClass="bg-indigo-600 hover:bg-indigo-700" />
                 </div>
                 <div className="text-xs text-slate-500 mt-2">先把本地端的檔案正式存檔一次。</div>
               </div>
@@ -150,9 +289,7 @@ export const Chapter3PathA = () => {
                   <div className="font-mono text-sm text-slate-700 truncate mr-2" title={`$ git remote add origin ${repoUrl}`}>
                     $ git remote add origin {repoUrl.split('/').pop()}
                   </div>
-                  <button onClick={handleLink} disabled={step !== 2} className={`px-3 py-1 rounded text-xs font-bold text-white shrink-0 ${step > 2 ? 'bg-green-500' : step === 2 ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-slate-300'}`}>
-                    {step > 2 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 2 ? 'done' : step === 2 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleLink} activeClass="bg-indigo-600 hover:bg-indigo-700" />
                 </div>
                 <div className="text-xs text-slate-500 mt-2">告訴 Git 雲端的網址在哪裡（命名為 origin）。</div>
               </div>
@@ -167,9 +304,7 @@ export const Chapter3PathA = () => {
               <div className={`p-3 border rounded-lg transition-all ${step === 3 ? 'bg-white border-indigo-300 shadow-md ring-2 ring-indigo-50' : step > 3 ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
                   <div className="font-mono text-sm text-slate-700">$ git push -u origin main</div>
-                  <button onClick={handlePush} disabled={step !== 3} className={`px-3 py-1 rounded text-xs font-bold text-white ${step > 3 ? 'bg-green-500' : step === 3 ? 'bg-indigo-600 hover:bg-indigo-700 animate-pulse' : 'bg-slate-300'}`}>
-                    {step > 3 ? '完成' : '執行'}
-                  </button>
+                  <StepAction state={step > 3 ? 'done' : step === 3 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handlePush} activeClass="bg-indigo-600 hover:bg-indigo-700 animate-pulse" />
                 </div>
                 <div className="text-xs text-slate-500 mt-2">把本地的進度推上雲端！(-u 會記住預設目標)</div>
               </div>
@@ -238,8 +373,35 @@ export const Chapter3PathA = () => {
       </div>
 
       <div className="mt-8" ref={terminalRef}>
-        <TerminalSim logs={logs} height="h-48" />
+        <TerminalSim logs={logs} height="h-48" onCommand={challengeMode && !challengeDone ? handleTerminalCommand : undefined} />
       </div>
+
+      {step === MAX_STEP && !challengeMode && (
+        <Callout variant="success" title="第一輪完成！你已經看懂整個流程了。" className="mt-4">
+          <p className="mb-3">現在換第二輪——這次不能按按鈕了，改成你自己在下面的終端機裡打指令。把「第一次打指令」的緊張感，先在這個安全的地方消耗掉。</p>
+          <button
+            type="button"
+            onClick={startChallenge}
+            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow"
+          >
+            🔄 第二輪挑戰：這次換你打指令
+          </button>
+        </Callout>
+      )}
+
+      {challengeMode && !challengeDone && (
+        <div className="flex justify-end mt-2">
+          <button type="button" onClick={abandonChallenge} className="text-xs text-slate-500 hover:text-red-600 underline">
+            放棄挑戰，回到按鈕模式
+          </button>
+        </div>
+      )}
+
+      {challengeDone && (
+        <Callout variant="success" title="🎉 挑戰完成" className="mt-4">
+          你已經不需要按鈕了——真實終端機對你來說不再陌生。
+        </Callout>
+      )}
 
       {/* Commit Message Guidelines */}
       <div className="mt-8">
@@ -367,6 +529,41 @@ export const Chapter3PathA = () => {
           </Callout>
         </div>
       </div>
+
+      <Quiz
+        questions={[
+          {
+            q: '你確定自己有改檔案、也存檔了，但打開 GitHub 網頁卻完全看不到最新的內容，最可能是漏了哪一步？',
+            options: [
+              '忘記 git push——commit 只是存在自己電腦裡，沒推上雲端 GitHub 不會知道',
+              '忘記重新整理瀏覽器快取，GitHub 其實已經收到了',
+              'GitHub 上傳需要等 24 小時才會顯示',
+            ],
+            answer: 0,
+            explain: 'git commit 只是在你「本機」建立一個存檔點，資料完全還在你的電腦裡。GitHub 是遠端伺服器，只有執行 git push 之後，本機的存檔紀錄才會真正傳過去。很多初學者以為 commit 完就等於「上傳」了，其實兩者是完全不同的兩個動作。',
+          },
+          {
+            q: '執行 git remote add origin ... 之後，終端機畫面什麼反應都沒有、也沒有跳出任何文字，這代表？',
+            options: [
+              '執行失敗了，指令沒有生效，要重新打一次',
+              '這是正常現象——很多 Git 指令成功時就是「沒消息就是好消息」，不會印出文字',
+              '需要按 Enter 兩次才會真的執行',
+            ],
+            answer: 1,
+            explain: 'git remote add、git add 這類指令的設計邏輯是「沒有異常才不會輸出訊息」，安靜的畫面通常代表成功。如果真的想確認，用 git remote -v 或 git status 主動查詢即可，看到畫面空白就緊張重打，反而容易不小心重複輸入或打錯。',
+          },
+          {
+            q: '在 GitHub 網頁建立新的 Repository 時，「Add a README file」「Add .gitignore」「Choose a license」這三個初始化選項為什麼都不能勾？',
+            options: [
+              '勾選會讓 Repository 變成付費方案',
+              '勾選之後 GitHub 上就已經有了一次歷史紀錄，跟你本機第一次 push 的歷史「兜不起來」，會被拒絕',
+              '這三個選項只是介面上的裝飾，其實勾不勾都沒差',
+            ],
+            answer: 1,
+            explain: '只要勾選任何一個初始化選項，GitHub 就會在遠端自動建立一個初始 commit（例如自動產生 README）。這樣一來，遠端 repo 已經有自己的歷史起點，跟你本機從 git init 開始建立的歷史是兩條不同的分支起點，push 時 Git 會判斷成「非快進（non-fast-forward）」而直接拒絕，新手常常因此卡在第一次 push 就搞不懂為什麼失敗。保持完全空白，讓本機的第一次 push 去「創造」遠端的歷史起點，才不會衝突。',
+          },
+        ]}
+      />
     </div>
   );
 };

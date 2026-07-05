@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock } from './Shared';
+import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock, Quiz } from './Shared';
 import { Users, GitBranch, ArrowRight, GitPullRequest, AlertCircle, CheckCircle, Github, GitMerge } from 'lucide-react';
 
 export const Chapter7Team = () => {
@@ -158,6 +158,41 @@ export const Chapter7Team = () => {
 
         </div>
       </section>
+
+      <Quiz
+        questions={[
+          {
+            q: 'PR（Pull Request）的本質最接近下面哪一種說法？',
+            options: [
+              '把你分支上的內容直接寫進 main，是一個強制執行的動作',
+              '請求維護者把你的分支合併進主線，決定權在對方手上',
+              '就是 git pull 的另一種說法，把遠端進度拉到本地',
+            ],
+            answer: 1,
+            explain: '名字裡雖然有 Pull，但 PR 完全不是「拉取」，而是「請求對方拉進去」——你只是提出申請，維護者看過、審查過，才會按下 Merge。這跟直接 push 完全不同層次：push 是強制寫入的動作，PR 是需要對方同意的請求，這正是團隊協作裡權限控管的關鍵設計。',
+          },
+          {
+            q: 'PR 送出後，維護者留言 Request Changes（要求修改），這時候該怎麼辦？',
+            options: [
+              '這個 PR 已經沒救了，關掉重新開一個新的 PR',
+              '在本地把程式碼改好，git add / commit / push 到同一個分支，PR 頁面會自動更新',
+              '要重新 fork 一次、重新走一遍整個流程',
+            ],
+            answer: 1,
+            explain: 'Request Changes 不是拒絕，是「審查者看過了，希望你調整某些地方」。因為 PR 綁定的是「某個分支」而不是某一次的快照，你只要在本地繼續修改、commit、push 到同一條分支，GitHub 上的 PR 內容就會自動同步更新，完全不需要重開 PR 或重新 fork。',
+          },
+          {
+            q: 'Merge 和 PR 兩個詞常被搞混，它們的層次差別是什麼？',
+            options: [
+              '兩者是同一件事，只是叫法不同',
+              'Merge 是 Git 本身的合併動作；PR 是 GitHub（平台）提供的協作流程，內部最終也是靠 Merge 完成',
+              'PR 是本地指令，Merge 只能在網頁上點擊完成',
+            ],
+            answer: 1,
+            explain: 'Merge 是 Git 這個版本控制系統的底層動作，把兩條分支的歷史接在一起，本地執行 git merge 也做得到，跟有沒有 GitHub 帳號無關。PR 則是 GitHub（或其他平台）在 Merge 之上包裝出來的協作流程——審查、留言、CI 檢查通過後，維護者按下的「Merge pull request」按鈕，內部做的其實就是一次 Merge。搞懂這層次差異，才不會誤以為地端也需要「發 PR」才能合併分支。',
+          },
+        ]}
+      />
     </div>
   );
 };

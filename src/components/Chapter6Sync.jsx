@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, Badge, Callout, CommandBlock } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, Badge, Callout, CommandBlock, Quiz } from './Shared';
 import { Cloud, Laptop, ArrowRight, ArrowLeft, AlertCircle, Info, FileText, GitCommit, User, CheckCircle, GitGraph, FileCode, GitMerge, Zap } from 'lucide-react';
 
 export const Chapter6Sync = () => {
@@ -546,6 +546,41 @@ export const Chapter6Sync = () => {
           </div>
         </details>
       </section>
+
+      <Quiz
+        questions={[
+          {
+            q: '你打了 git push，結果終端機顯示「Rejected! Remote contains work that you do not have.」，第一步該怎麼做？',
+            options: [
+              '加上 --force 再 push 一次，把遠端蓋過去',
+              '先 git pull，把遠端上你沒有的進度同步下來，再 push',
+              '這代表帳號沒連線，重新 gh auth login',
+            ],
+            answer: 1,
+            explain: 'Rejected 代表遠端有你本地沒有的 commit，Git 是在保護那些內容不被你覆蓋，不是連線問題。用 --force 硬推會把同事的 commit 直接抹掉，是新手最危險的直覺反應。正確做法就是章節開頭的黃金法則：先 pull 再 push——把遠端進度拉下來合併好，才有資格再上傳。',
+          },
+          {
+            q: '解衝突時打開檔案，看到一堆 <<<<<<< HEAD 這種符號，是不是代表專案壞掉了？',
+            options: [
+              '是的，代表檔案已經毀損，要重新 clone 一份',
+              '不是，這是 Git 正常標示雙方修改內容的方式，需要你手動選擇保留哪一段',
+              '是的，代表 Merge 失敗，要立刻執行 git reset --hard',
+            ],
+            answer: 1,
+            explain: '<<<<<<< HEAD 到 ======= 到 >>>>>>> 之間，就是 Git 老實告訴你「這裡兩邊都改了同一行，我不知道聽誰的」，這是完全正常的過程，不是壞掉。慌張地 reset --hard 反而會把兩邊的修改全部丟掉。正確做法是照章節內的流程：打開 VSCode 看高亮，人工選擇要保留誰的內容。',
+          },
+          {
+            q: '在編輯器裡把衝突標記都刪乾淨、選好要保留的內容之後，收尾的正確順序是？',
+            options: [
+              '直接 git push 就好，衝突標記刪掉代表已經解決了',
+              '重新執行 git add . 再 git commit -m "訊息"，最後才 push',
+              '執行 git pull 讓 Git 自動判斷該保留哪一段',
+            ],
+            answer: 1,
+            explain: '存檔只是改了工作目錄的內容，Git 並不知道你「已經處理完」——它仍然記得這裡曾經衝突過。必須重新 git add . 把解決後的版本放進暫存區，再 git commit 產生一個 merge commit，才算真正收尾。漏掉這一步直接 push，Git 會說還有未解決的 merge，讓人誤以為前面做錯了。',
+          },
+        ]}
+      />
     </div>
   );
 };

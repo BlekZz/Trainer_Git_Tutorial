@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock } from './Shared';
+import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock, Quiz } from './Shared';
 import { Rocket, Target, CheckCircle, Terminal, FileText, GitBranch, ArrowUpCircle, GitPullRequest, Search, Square, CheckSquare } from 'lucide-react';
 
 const PROGRESS_KEY = 'gtm-ch8-progress';
@@ -502,6 +502,41 @@ export const Chapter8Practice = () => {
              </div>
           </Card>
         </div>
+
+        <Quiz
+          questions={[
+            {
+              q: '你在 Ch.4 已經 clone 過原 repo 了，為什麼不能直接 git push 上去交作業，非得多一道 Fork 的手續？',
+              options: [
+                '因為 push 前一定要先建立 Branch，這是 Git 的硬性規定',
+                '因為你沒有原 repo 的寫入權限，直接 push 會被 GitHub 擋下（403）',
+                '因為 Fork 之後檔案會變小，上傳比較快',
+              ],
+              answer: 1,
+              explain: '關鍵不是 Branch 沒建好，而是「權限」——原 repo 是別人的，你只有讀取權限，沒有寫入權限，這正是 Ch.4 遇到的 403 錯誤。Fork 會在你自己的帳號下複製一份完整的副本，你對這份副本有完整的寫入權限，才能合法 push，再從這裡向原 repo 發 PR 請求對方合併。',
+            },
+            {
+              q: 'Fork 完成後、開始 push 之前，本地端還有一個容易漏掉的步驟，是什麼？',
+              options: [
+                '不需要做任何事，Fork 完成後本地會自動偵測到新副本',
+                '要用 git remote set-url origin 把本地的 origin 改指向你的 Fork 網址，否則還是會推去原 repo 而失敗',
+                '要重新 git init 一次，讓 Git 重新初始化這個資料夾',
+              ],
+              answer: 1,
+              explain: 'Fork 只在 GitHub 網站上發生，你本地資料夾的 origin 設定完全不會自動跟著變——它仍然指向 BlekZz 的原 repo。如果跳過 set-url 直接 push，會遇到 403（因為 origin 還是別人的 repo）；如果連 Fork 都還沒做就先 set-url，則會遇到 Repository not found（因為你的帳號下根本還沒有這個副本）。兩者都要按順序做：先 Fork，再 set-url。',
+            },
+            {
+              q: '你的 PR 被維護者按下 Merge 之後，直接在本地執行 git checkout main + git pull，拿得到最新版的 main 嗎？',
+              options: [
+                '拿得到，因為 PR 合併後所有相關的 repo 都會同步更新',
+                '拿不到，因為 pull 只會同步 origin（也就是你的 Fork），而 Fork 不會因為原 repo 被合併就自動更新，要先到 Fork 頁面按 Sync fork',
+                '拿不到，因為必須整個資料夾重新 clone 一次才行',
+              ],
+              answer: 1,
+              explain: '合併發生在「原 repo」，而你本地的 origin 指向的是「你的 Fork」——這是兩個不同的 GitHub repo，不會自動互相同步。所以 PR 被 Merge 之後，你的 Fork 依然停留在合併前的狀態。正確順序是：先到 GitHub 你的 Fork 頁面按 Sync fork → Update branch，把原 repo 的最新進度同步進你的 Fork，再回終端機 git pull，才能真的拿到最新版本。不需要整個重新 clone。',
+            },
+          ]}
+        />
 
         <details className="mt-8 bg-slate-50 border border-slate-200 rounded-xl p-4">
           <summary className="cursor-pointer font-bold text-slate-700 text-sm">😵 整個搞砸了想重來？</summary>

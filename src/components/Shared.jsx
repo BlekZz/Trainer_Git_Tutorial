@@ -136,6 +136,85 @@ export const Callout = ({ variant = 'info', title, children, className = '' }) =
   );
 };
 
+// Quiz — 章末自我檢測
+// <Quiz questions={[{ q: '問題？', options: ['選項A', '選項B', '選項C'], answer: 0, explain: '解析' }]} />
+export const Quiz = ({ title = '📝 小測驗：檢查你有沒有真的懂', questions }) => {
+  const [answers, setAnswers] = useState({});
+
+  const answeredCount = Object.keys(answers).length;
+  const correctCount = questions.filter((q, i) => answers[i] === q.answer).length;
+  const allDone = answeredCount === questions.length;
+
+  return (
+    <div className="mt-10 bg-slate-50 border border-slate-200 rounded-xl p-5 md:p-6">
+      <h3 className="font-bold text-slate-800 mb-1">{title}</h3>
+      <p className="text-xs text-slate-500 mb-5">答錯沒關係——看完解析弄懂，比第一次就答對更重要。</p>
+      <div className="space-y-6">
+        {questions.map((q, qi) => {
+          const picked = answers[qi];
+          const isAnswered = picked !== undefined;
+          return (
+            <div key={qi}>
+              <p className="text-sm font-medium text-slate-800 mb-2">
+                {qi + 1}. {q.q}
+              </p>
+              <div className="space-y-2">
+                {q.options.map((opt, oi) => {
+                  const isCorrect = oi === q.answer;
+                  const isPicked = picked === oi;
+                  let style = 'bg-white border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 text-slate-700';
+                  if (isAnswered) {
+                    if (isCorrect) style = 'bg-green-50 border-green-400 text-green-900';
+                    else if (isPicked) style = 'bg-red-50 border-red-300 text-red-800';
+                    else style = 'bg-white border-slate-200 text-slate-400';
+                  }
+                  return (
+                    <button
+                      key={oi}
+                      type="button"
+                      disabled={isAnswered}
+                      onClick={() => setAnswers((prev) => ({ ...prev, [qi]: oi }))}
+                      className={`w-full text-left text-sm border rounded-lg px-3 py-2 transition-colors flex items-start gap-2 disabled:cursor-default ${style}`}
+                    >
+                      <span className="shrink-0 mt-0.5">
+                        {isAnswered && isCorrect && <Check size={15} className="text-green-600" aria-hidden="true" />}
+                        {isAnswered && isPicked && !isCorrect && <AlertOctagon size={15} className="text-red-500" aria-hidden="true" />}
+                        {(!isAnswered || (!isCorrect && !isPicked)) && <span className="inline-block w-[15px]" />}
+                      </span>
+                      <span>{opt}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {isAnswered && (
+                <div className={`mt-2 text-sm rounded-lg px-3 py-2 ${picked === q.answer ? 'bg-green-50 text-green-900' : 'bg-amber-50 text-amber-900'}`}>
+                  {picked === q.answer ? '✅ 答對了！' : '💡 '}
+                  {q.explain}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {allDone && (
+        <div className="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between text-sm">
+          <span className="font-bold text-slate-700">
+            結果：{correctCount} / {questions.length} 題答對
+            {correctCount === questions.length ? '，全對！🎉' : ''}
+          </span>
+          <button
+            type="button"
+            onClick={() => setAnswers({})}
+            className="text-indigo-600 hover:text-indigo-800 font-medium"
+          >
+            重新作答
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const TerminalSim = ({ logs, onCommand, promptLabel = "~/project (main)", height="h-64" }) => {
   const [input, setInput] = useState("");
   const endRef = useRef(null);

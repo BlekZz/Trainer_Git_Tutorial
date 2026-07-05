@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionTitle, Card, Badge, InstructionalText, Callout } from './Shared';
+import { SectionTitle, Card, Badge, InstructionalText, Callout, Quiz } from './Shared';
 import { GitBranch, Map, Laptop, Github, Download, PlusCircle } from 'lucide-react';
 
 export const Chapter2Flowchart = () => (
@@ -124,5 +124,40 @@ export const Chapter2Flowchart = () => (
     <Callout variant="info" className="justify-center text-center">
       <span className="font-bold">接下來的兩個章節，我們將分別帶你實際演練這兩條路線！點下方的「下一章」按鈕繼續。</span>
     </Callout>
+
+    <Quiz
+      questions={[
+        {
+          q: '公司請你加入一個已經在 GitHub 上存在的專案，你打開終端機後，第一個該打的指令是什麼？',
+          options: [
+            'git init，先把自己的資料夾初始化',
+            'git clone <URL>，把整個專案下載到本機',
+            'git push -u origin main，先把自己的東西推上去',
+          ],
+          answer: 1,
+          explain: '這是情境 B：專案已經存在雲端，你要做的是「下載」而不是「新建」。git init 是情境 A 專用（從零開始的全新專案），在這裡用會建立一個和 GitHub 上專案完全無關的空倉庫。git push 更是本末倒置——你連專案內容都還沒有，根本沒東西可推。',
+        },
+        {
+          q: '情境 A（從零開始）和情境 B（加入現有專案），兩者最關鍵的差別是什麼？',
+          options: [
+            '情境 A 用 git，情境 B 用 GitHub，是兩套不同的工具',
+            '情境 A 從「本機沒有任何 Git 紀錄」開始要用 git init 建立，情境 B 從「雲端已有專案」開始要用 git clone 下載',
+            '情境 A 只能自己一個人用，情境 B 才能多人協作',
+          ],
+          answer: 1,
+          explain: '差別在於「起點」：情境 A 是你電腦裡先有程式碼、Git 世界裡完全沒有這個專案的痕跡，所以要 git init 從無到有建立版本控制，再手動連結遠端 (remote add)。情境 B 是雲端已經有現成的專案，git clone 會直接把整個歷史和遠端連結都幫你設定好。兩者都是同一套 Git，情境 A 之後一樣能多人協作。',
+        },
+        {
+          q: '拿到一個新的開發任務，在打任何 git 指令之前，你應該先判斷什麼？',
+          options: [
+            '先判斷這個專案的程式語言是什麼',
+            '先判斷「這個專案是我剛在電腦裡新建的，還是已經存在於 GitHub 上了」，決定走情境 A 還是情境 B',
+            '先判斷公司用的是 GitHub 還是 GitLab',
+          ],
+          answer: 1,
+          explain: '這正是本章的核心提醒：初學者最常犯的錯就是不分情境亂下指令，例如專案明明已經在 GitHub 上，卻對著它打 git init。先判斷「新專案 vs 已存在的專案」，才能決定接下來該走哪一條路線，避免搞出兩個互不相關的版本歷史。',
+        },
+      ]}
+    />
   </div>
 );
