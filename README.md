@@ -8,7 +8,7 @@
 
 ### 路徑一：線上版（推薦新手起步）
 
-> **[👉 點此開啟線上版](https://blekzz.github.io/git-time-machine/)** — 不用安裝任何東西，直接在瀏覽器裡學習 Chapter 1～7。
+> **[👉 點此開啟線上版](https://blekzz.github.io/Trainer_Git_Tutorial/)** — 不用安裝任何東西，直接在瀏覽器裡學習 Chapter 1～7。
 
 到 **Chapter 8「實戰演練」**需要動手操作真實的 Git 指令時，教材會引導你回來完成安裝，現在不用先準備。
 
@@ -59,7 +59,7 @@
 ## 📁 專案結構
 
 ```text
-git-time-machine/
+Trainer_Git_Tutorial/
 ├── src/
 │   ├── components/      # 各個互動章節的獨立元件 (Chapter 1 ~ 8)
 │   ├── App.jsx          # 主要應用程式（匯整所有章節）
@@ -81,8 +81,8 @@ git-time-machine/
 ### 1. 下載本專案
 
 ```bash
-git clone https://github.com/BlekZz/git-time-machine.git
-cd git-time-machine
+git clone https://github.com/BlekZz/Trainer_Git_Tutorial.git
+cd Trainer_Git_Tutorial
 ```
 
 ### 2. 安裝依賴
@@ -136,7 +136,7 @@ MIT
 
 ### 線上版網址
 
-https://blekzz.github.io/git-time-machine/
+https://blekzz.github.io/Trainer_Git_Tutorial/
 
 ### Branch 說明
 

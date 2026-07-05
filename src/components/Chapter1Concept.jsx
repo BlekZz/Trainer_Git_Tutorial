@@ -153,7 +153,7 @@ export const Chapter1Concept = () => (
     <Callout variant="success" title="你準備好了嗎？">
       <p>
         如果你還沒有安裝 Git, Node.js 或 VSCode，請立刻查看{' '}
-        <a href="https://github.com/BlekZz/git-time-machine/blob/main/Beginner-Setup-Guide.md"
+        <a href="https://github.com/BlekZz/Trainer_Git_Tutorial/blob/main/Beginner-Setup-Guide.md"
            target="_blank" rel="noopener noreferrer"
            className="underline font-bold hover:text-green-700">
           👶 零基礎新手安裝與準備指南

@@ -7,7 +7,7 @@
 
 ## 🧭 你現在需要走完全部步驟嗎？
 
-- **只想先看 Chapter 1～7（觀念、流程、分支、同步、PR 觀念）**：不用裝任何東西，直接開 [線上版](https://blekzz.github.io/git-time-machine/) 就能學，可以先跳過這份指南。
+- **只想先看 Chapter 1～7（觀念、流程、分支、同步、PR 觀念）**：不用裝任何東西，直接開 [線上版](https://blekzz.github.io/Trainer_Git_Tutorial/) 就能學，可以先跳過這份指南。
 - **想做 Chapter 8「實戰演練」（真的發一個 PR）**：這需要在自己電腦上真的操作 Git，請把這份指南**從頭到尾走完**，再回到教學網頁繼續。
 
 ---
@@ -254,7 +254,7 @@ pwd
 ### 第一行：下載教材到你的電腦
 
 ```bash
-git clone https://github.com/BlekZz/git-time-machine.git
+git clone https://github.com/BlekZz/Trainer_Git_Tutorial.git
 ```
 
 ✅ **成功長這樣**：你會看到 `Receiving objects: 100%`，最後沒有紅色文字。
@@ -264,10 +264,10 @@ git clone https://github.com/BlekZz/git-time-machine.git
 ### 第二行：進入剛下載的資料夾（這步非常容易被忘記！）
 
 ```bash
-cd git-time-machine
+cd Trainer_Git_Tutorial
 ```
 
-✅ **成功長這樣**：終端機的提示字元裡會出現 `git-time-machine` 字樣，例如 `~/git-time-machine $`。
+✅ **成功長這樣**：終端機的提示字元裡會出現 `Trainer_Git_Tutorial` 字樣，例如 `~/Trainer_Git_Tutorial $`。
 
 > 💡 **`cd` 是什麼？** `cd` = Change Directory（切換資料夾）。就像你在 Finder / 檔案總管裡雙擊進入一個資料夾，只是用打字的方式。**如果你跳過這步，後面所有指令都會失敗。**
 

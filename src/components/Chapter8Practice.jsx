@@ -50,7 +50,7 @@ export const Chapter8Practice = () => {
 
       <Callout variant="warning" title="你是用線上版學到這裡的嗎？">
         本章需要在你自己的電腦上操作。如果你一直是用瀏覽器線上版學習、還沒安裝過 Git，請先完成{' '}
-        <a href="https://github.com/BlekZz/git-time-machine/blob/main/Beginner-Setup-Guide.md" target="_blank" rel="noreferrer" className="underline font-bold hover:text-amber-950">
+        <a href="https://github.com/BlekZz/Trainer_Git_Tutorial/blob/main/Beginner-Setup-Guide.md" target="_blank" rel="noreferrer" className="underline font-bold hover:text-amber-950">
           零基礎安裝指南
         </a>{' '}
         的全部步驟（約 30–60 分鐘），把專案 clone 到你的電腦，再回來繼續。
@@ -101,7 +101,7 @@ export const Chapter8Practice = () => {
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>任務流程：</strong> Fork 原 repo（GitHub 上點按鈕）➡️ 更新本地 Remote 連結 ➡️ 建立 Branch ➡️ 新增 md 檔並 Commit ➡️ Push 到你的 Fork ➡️ 對原 repo 發出 PR。</li>
             <li><strong>最終目標：</strong> 讓寫有你名字的 Markdown 筆記成功被合併進原 repo 的 main 主線中。</li>
-            <li><strong>注意事項：</strong> 請確保你在 git-time-machine 資料夾下操作，不要搞錯位置囉！</li>
+            <li><strong>注意事項：</strong> 請確保你在 Trainer_Git_Tutorial 資料夾下操作，不要搞錯位置囉！</li>
           </ul>
         </InstructionalText>
       </section>
@@ -119,10 +119,10 @@ export const Chapter8Practice = () => {
           <div className="space-y-3">
             <div className="bg-slate-900 rounded-lg p-4 space-y-3">
               <div>
-                <div className="text-xs text-slate-400 mb-1">① 確認你在 git-time-machine 資料夾內</div>
+                <div className="text-xs text-slate-400 mb-1">① 確認你在 Trainer_Git_Tutorial 資料夾內</div>
                 <div className="font-mono text-sm text-green-400">$ pwd</div>
-                <div className="text-xs text-slate-400 mt-1">✅ 應看到路徑結尾是 <code className="bg-slate-700 px-1 rounded">git-time-machine</code></div>
-                <div className="text-xs text-red-400 mt-0.5">❌ 如果不對：輸入 <code className="bg-slate-700 text-white px-1 rounded">cd 路徑/git-time-machine</code> 切換過去</div>
+                <div className="text-xs text-slate-400 mt-1">✅ 應看到路徑結尾是 <code className="bg-slate-700 px-1 rounded">Trainer_Git_Tutorial</code></div>
+                <div className="text-xs text-red-400 mt-0.5">❌ 如果不對：輸入 <code className="bg-slate-700 text-white px-1 rounded">cd 路徑/Trainer_Git_Tutorial</code> 切換過去</div>
               </div>
 
               <div>
@@ -261,15 +261,15 @@ export const Chapter8Practice = () => {
                  <p className="text-slate-600 mb-3 text-sm">這步在 <strong>GitHub 網站</strong>上完成，不需要用終端機。</p>
                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-2 text-sm text-slate-700">
                    <ol className="list-decimal pl-4 space-y-2">
-                     <li>打開瀏覽器，前往原 repo 頁面：<code className="bg-slate-100 px-1 rounded text-xs">github.com/BlekZz/git-time-machine</code></li>
+                     <li>打開瀏覽器，前往原 repo 頁面：<code className="bg-slate-100 px-1 rounded text-xs">github.com/BlekZz/Trainer_Git_Tutorial</code></li>
                      <li>點擊右上角的 <strong>Fork</strong> 按鈕（在 Star 旁邊）</li>
                      <li>確認 Owner 是你自己的帳號，點 <strong>Create fork</strong></li>
-                     <li>幾秒後，你的帳號下會出現 <code className="bg-slate-100 px-1 rounded text-xs">你的帳號/git-time-machine</code></li>
+                     <li>幾秒後，你的帳號下會出現 <code className="bg-slate-100 px-1 rounded text-xs">你的帳號/Trainer_Git_Tutorial</code></li>
                    </ol>
                  </div>
                  <div className="mt-3 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800 flex items-start gap-2">
                    <CheckCircle size={16} className="mt-0.5 shrink-0 text-green-600" />
-                   <div><strong>✅ 驗證成功：</strong> 瀏覽器網址變成 <code>github.com/你的帳號/git-time-machine</code>，頁面左上角顯示「forked from BlekZz/git-time-machine」</div>
+                   <div><strong>✅ 驗證成功：</strong> 瀏覽器網址變成 <code>github.com/你的帳號/Trainer_Git_Tutorial</code>，頁面左上角顯示「forked from BlekZz/Trainer_Git_Tutorial」</div>
                  </div>
                </div>
              </div>
@@ -290,14 +290,14 @@ export const Chapter8Practice = () => {
                  <Callout variant="warning" className="mb-3">
                    ⚠️ 必須先完成 Step 1 的 Fork 再執行這步。如果還沒 Fork 就 set-url，之後 push 會出現 <code className="bg-amber-100 px-1 rounded">remote: Repository not found</code>。
                  </Callout>
-                 <p className="text-slate-600 mb-3 text-sm">你電腦裡的 git-time-machine 目前的 <code>origin</code> 指向原 repo（BlekZz 的），你沒有 push 權限。現在要把它改成指向你自己 Fork 後的副本。</p>
+                 <p className="text-slate-600 mb-3 text-sm">你電腦裡的 Trainer_Git_Tutorial 目前的 <code>origin</code> 指向原 repo（BlekZz 的），你沒有 push 權限。現在要把它改成指向你自己 Fork 後的副本。</p>
                  <CommandBlock
-                   command={"git remote set-url origin https://github.com/你的帳號/git-time-machine.git\ngit remote -v"}
+                   command={"git remote set-url origin https://github.com/你的帳號/Trainer_Git_Tutorial.git\ngit remote -v"}
                    comment="把「你的帳號」換成你的 GitHub 帳號名稱；第二行用來驗證是否修改成功"
                  />
                  <div className="mt-3 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800 flex items-start gap-2">
                    <CheckCircle size={16} className="mt-0.5 shrink-0 text-green-600" />
-                   <div><strong>✅ 驗證成功：</strong> <code>git remote -v</code> 的輸出中，兩行都應該顯示 <code>https://github.com/你的帳號/git-time-machine.git</code>，不再是 BlekZz 的網址。</div>
+                   <div><strong>✅ 驗證成功：</strong> <code>git remote -v</code> 的輸出中，兩行都應該顯示 <code>https://github.com/你的帳號/Trainer_Git_Tutorial.git</code>，不再是 BlekZz 的網址。</div>
                  </div>
                  <Callout variant="danger" title="push 時遇到錯誤怎麼辦？" className="mt-3">
                    看到 <code className="bg-red-100 px-1 rounded">remote: Repository not found</code> → 兩種可能：(1) 你還沒 Fork，回 Step 1；(2) 網址裡的帳號或 repo 名打錯了。用 <code className="bg-red-100 px-1 rounded">git remote -v</code> 檢查，重跑一次 set-url 即可（set-url 可以重複執行，放心）。<br/>
@@ -416,7 +416,7 @@ export const Chapter8Practice = () => {
                  </div>
                  <p className="text-slate-700 mb-3 text-sm">你已經把分支推到你的 Fork 了。最後一步是<strong>從你的 Fork 向原 repo 發起 PR</strong>，請維護者把你的貢獻合併進原 repo 的 main。</p>
                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3 text-xs text-blue-800">
-                   <strong>💡 PR 的方向：</strong> 你的 Fork 的 <code>feat/你的帳號名</code> → 原 repo（BlekZz/git-time-machine）的 <code>main</code>
+                   <strong>💡 PR 的方向：</strong> 你的 Fork 的 <code>feat/你的帳號名</code> → 原 repo（BlekZz/Trainer_Git_Tutorial）的 <code>main</code>
                  </div>
 
                  <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -426,7 +426,7 @@ export const Chapter8Practice = () => {
                        <li>打開 GitHub 專案頁面。</li>
                        <li>你會看到一個黃色的提示框說 "feat/你的帳號名 had recent pushes..."。</li>
                        <li>點擊綠色的 <strong>Compare & pull request</strong> 按鈕。</li>
-                       <li>建立 PR 前，確認頁面上方 <strong>base repository</strong> 是 <code className="bg-slate-100 px-1 rounded">BlekZz/git-time-machine</code>、<strong>compare</strong> 是你的 Fork 的分支。</li>
+                       <li>建立 PR 前，確認頁面上方 <strong>base repository</strong> 是 <code className="bg-slate-100 px-1 rounded">BlekZz/Trainer_Git_Tutorial</code>、<strong>compare</strong> 是你的 Fork 的分支。</li>
                      </ol>
                    </div>
 
@@ -440,7 +440,7 @@ export const Chapter8Practice = () => {
                      </div>
                      <p className="text-sm text-slate-600 mb-2">確認連線後，直接在終端機輸入：</p>
                      <CommandBlock
-                       command={'gh pr create --repo BlekZz/git-time-machine --title "交作業：你的帳號名" --body "完成了實戰演練"'}
+                       command={'gh pr create --repo BlekZz/Trainer_Git_Tutorial --title "交作業：你的帳號名" --body "完成了實戰演練"'}
                        comment="--repo 確保 PR 發到原 repo，而不是你自己的 Fork"
                        className="mb-2"
                      />
