@@ -354,6 +354,7 @@ export const Chapter3PathA = () => {
             <h4 className="font-bold text-slate-700 mb-2">5. 連結並上傳</h4>
             <div className="space-y-3">
               <CommandBlock command="git remote add origin https://github.com/你的帳號/my-first-repo.git" comment="記得換成你自己複製的網址" />
+              <CommandBlock command="git branch -M main" comment="確保主分支叫 main（有些電腦預設叫 master，會對不上下一行指令）" />
               <CommandBlock command="git push -u origin main" />
             </div>
             <Callout variant="info" className="mt-3">

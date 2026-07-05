@@ -34,9 +34,9 @@ export const Chapter6Sync = () => {
       addLog('修改已加入暫存區 (Staged)。', 'success');
     } else if (command.includes('git commit')) {
       doCommit('Update via terminal');
-    } else if (command === 'git push') {
+    } else if (command.startsWith('git push')) {
       doPush();
-    } else if (command === 'git pull') {
+    } else if (command.startsWith('git pull')) {
       doPull();
     } else {
       addLog(`未知指令。試試 git add ., git commit -m "msg", git push, git pull`, 'error');
@@ -342,7 +342,7 @@ export const Chapter6Sync = () => {
              <div className="absolute top-1/2 left-20 right-20 h-1 bg-slate-200 -translate-y-1/2 rounded-full"></div>
              
              {/* Base Commit */}
-             <div className="absolute left-1/4 top-1/2 -translate-y-1/2 flex flex-col items-center">
+             <div className="absolute left-1/4 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
                 <div className="w-8 h-8 rounded-full bg-slate-400 text-white flex items-center justify-center font-bold">C0</div>
                 <div className="text-xs font-mono mt-2 bg-white px-1 border rounded">Line 1: Hello</div>
              </div>

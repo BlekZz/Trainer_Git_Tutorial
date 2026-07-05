@@ -65,8 +65,14 @@ const App = () => {
     setActiveTab(tabId);
   };
 
+  const isFirstHashSync = React.useRef(true);
   useEffect(() => {
-    window.location.hash = activeTab;
+    if (isFirstHashSync.current) {
+      isFirstHashSync.current = false;
+      window.history.replaceState(null, '', `#${activeTab}`);
+    } else {
+      window.location.hash = activeTab;
+    }
     window.scrollTo({ top: 0 });
   }, [activeTab]);
 

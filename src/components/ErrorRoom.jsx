@@ -90,6 +90,17 @@ export const ErrorRoom = () => {
       </ErrorCard>
 
       <ErrorCard
+        error="error: src refspec main does not match any"
+        translation="你要 push 的分支叫 main，但這個專案裡根本沒有叫 main 的分支——通常是因為 git init 後預設分支叫 master。"
+      >
+        <CommandBlock command="git branch -M main" comment="把目前的分支改名為 main" />
+        <CommandBlock command="git push -u origin main" comment="再 push 一次" />
+        <p className="text-sm text-slate-600">
+          想一勞永逸：執行安裝指南「一次性建議設定」裡的 <span className="font-mono">git config --global init.defaultBranch main</span>，之後新專案的主分支都會叫 main。
+        </p>
+      </ErrorCard>
+
+      <ErrorCard
         error="push 時彈出視窗要求輸入密碼（Password for 'https://github.com')"
         translation="不要輸入 GitHub 網站的登入密碼——那個方式已經被 GitHub 停用了，輸入了也一定失敗。"
       >

@@ -164,7 +164,7 @@ export const Chapter5Branch = () => {
              {branches.includes('feat/login') && (
                <>
                  <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 384 160" preserveAspectRatio="none">
-                   <path d="M 80 80 C 100 80, 110 32, 140 32 L 280 32" fill="none" stroke="rgba(236,72,153,0.3)" strokeWidth="6" strokeLinecap="round" />
+                   <path d="M 80 80 C 100 80, 110 32, 140 32 L 297 32" fill="none" stroke="rgba(236,72,153,0.3)" strokeWidth="6" strokeLinecap="round" />
                  </svg>
                  <div className="absolute top-8 left-[80%] -translate-y-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-300">
                    <div className={`w-5 h-5 rounded-full ${activeBranch === 'feat/login' ? 'bg-white ring-4 ring-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.8)]' : 'bg-pink-500'} z-10`}></div>
@@ -178,7 +178,7 @@ export const Chapter5Branch = () => {
              {branches.includes('bugfix/ui') && (
                <>
                  <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 384 160" preserveAspectRatio="none">
-                   <path d="M 80 80 C 100 80, 110 128, 140 128 L 280 128" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="6" strokeLinecap="round" />
+                   <path d="M 80 80 C 100 80, 110 128, 140 128 L 297 128" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="6" strokeLinecap="round" />
                  </svg>
                  <div className="absolute bottom-8 left-[80%] translate-y-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-300">
                    <div className={`w-5 h-5 rounded-full ${activeBranch === 'bugfix/ui' ? 'bg-white ring-4 ring-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]' : 'bg-purple-500'} z-10`}></div>

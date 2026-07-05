@@ -155,7 +155,7 @@ export const Chapter8Practice = () => {
 
             <div className="bg-green-100 border border-green-300 rounded p-3 text-sm font-bold text-green-900 flex items-center gap-2">
               <CheckCircle size={18} className="shrink-0 text-green-600" />
-              <span>五個全部確認 OK 之後，就可以開始 Step 2 了！</span>
+              <span>五個全部確認 OK 之後，先到 GitHub 完成 Step 1 的 Fork，再回終端機做 Step 2！</span>
             </div>
           </div>
         </Card>
