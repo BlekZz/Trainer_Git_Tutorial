@@ -1,56 +1,66 @@
 import React from 'react';
-import { SectionTitle, Card, Badge } from './Shared';
-import { GitGraph, Server, Monitor, Laptop, Cpu, CheckCircle, Key, Info, Folder, AlertCircle, HardDrive, Database, Cloud, Github, ArrowRight, Terminal, Users, Sparkles, BookOpen, TrendingUp } from 'lucide-react';
+import { SectionTitle, Card, Badge, CommandBlock, Callout } from './Shared';
+import { GitGraph, Server, Key, Info, Github, Sparkles, BookOpen, TrendingUp } from 'lucide-react';
 
 export const Chapter1Concept = () => (
   <div className="space-y-8 animate-fade-in">
     <SectionTitle title="1. 觀念與準備" subtitle="在開始你的時光機之旅前，我們先把裝備確認好" />
 
     {/* 學會後能做到的事 */}
-    <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-6 text-white shadow-xl">
+    <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
       <div className="flex items-center gap-3 mb-5">
-        <div className="p-2 bg-white/20 rounded-lg">
+        <div className="p-2 bg-indigo-100 rounded-lg text-indigo-600">
           <Sparkles size={22} />
         </div>
-        <h3 className="text-xl font-bold">學會 Git + GitHub，你就能夠……</h3>
+        <h3 className="text-xl font-bold text-indigo-900">學會 Git + GitHub，你就能夠……</h3>
       </div>
 
       <div className="grid md:grid-cols-2 gap-5">
         {/* TA 1: 文組生 */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+        <div className="bg-white rounded-xl p-4 border border-indigo-100">
           <div className="flex items-center gap-2 mb-3">
-            <BookOpen size={16} className="text-yellow-300" />
-            <span className="text-sm font-bold text-yellow-200">✍️ 給文組生 / 完全零基礎的你</span>
+            <BookOpen size={16} className="text-indigo-500" />
+            <span className="text-sm font-bold text-indigo-700">✍️ 給文組生 / 完全零基礎的你</span>
           </div>
-          <ul className="space-y-2 text-sm text-white/90">
-            <li className="flex items-start gap-2"><span className="text-green-300 font-bold mt-0.5">✓</span>把你的小說、部落格草稿、設計稿的每個版本都保存下來，再也不怕「改了之後後悔」</li>
-            <li className="flex items-start gap-2"><span className="text-green-300 font-bold mt-0.5">✓</span>和同學線上共同編輯一份報告，不再需要傳「最終版」「最終最終版」「真的最終版」</li>
-            <li className="flex items-start gap-2"><span className="text-green-300 font-bold mt-0.5">✓</span>讓面試官看到你認真維護的 GitHub 主頁，這比任何履歷都有說服力</li>
-            <li className="flex items-start gap-2"><span className="text-green-300 font-bold mt-0.5">✓</span>參與任何開源專案、在業界做任何「跨部門協作」的基礎技能</li>
+          <ul className="space-y-2 text-sm text-slate-700">
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold mt-0.5">✓</span>和同學線上共同編輯一份報告，不再需要傳「最終版」「最終最終版」「真的最終版」</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold mt-0.5">✓</span>讓面試官看到你認真維護的 GitHub 主頁，這比任何履歷都有說服力</li>
           </ul>
+          <details className="mt-3 text-sm text-slate-500">
+            <summary className="cursor-pointer select-none hover:text-indigo-600">看更多你能得到的改變</summary>
+            <ul className="space-y-2 mt-2">
+              <li className="flex items-start gap-2"><span className="text-green-500 font-bold mt-0.5">✓</span>把你的小說、部落格草稿、設計稿的每個版本都保存下來，再也不怕「改了之後後悔」</li>
+              <li className="flex items-start gap-2"><span className="text-green-500 font-bold mt-0.5">✓</span>參與任何開源專案、在業界做任何「跨部門協作」的基礎技能</li>
+            </ul>
+          </details>
         </div>
 
         {/* TA 2: 數據分析菜鳥 */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+        <div className="bg-white rounded-xl p-4 border border-indigo-100">
           <div className="flex items-center gap-2 mb-3">
-            <TrendingUp size={16} className="text-cyan-300" />
-            <span className="text-sm font-bold text-cyan-200">📊 給會用 Python / Excel 的數據分析新手</span>
+            <TrendingUp size={16} className="text-indigo-500" />
+            <span className="text-sm font-bold text-indigo-700">📊 給會用 Python / Excel 的數據分析新手</span>
           </div>
-          <ul className="space-y-2 text-sm text-white/90">
-            <li className="flex items-start gap-2"><span className="text-green-300 font-bold mt-0.5">✓</span>把你的 Jupyter Notebook、Python 清洗腳本放上 GitHub，告別只存在自己電腦的「孤島作品」</li>
-            <li className="flex items-start gap-2"><span className="text-green-300 font-bold mt-0.5">✓</span>和工程師同事用同一套流程協作，從此說「單機世界」再見，正式進入 MMO 合作模式</li>
-            <li className="flex items-start gap-2"><span className="text-green-300 font-bold mt-0.5">✓</span>追蹤每次調整模型參數、特徵工程的版本，再也不會問「這個 model 上週跑的結果在哪？」</li>
-            <li className="flex items-start gap-2"><span className="text-green-300 font-bold mt-0.5">✓</span>當工程師說「把你的 code 丟到 repo 來」，你直接秒懂並完成，不再需要尷尬地問「什麼是 repo？」</li>
+          <ul className="space-y-2 text-sm text-slate-700">
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold mt-0.5">✓</span>把你的 Jupyter Notebook、Python 清洗腳本放上 GitHub，告別只存在自己電腦的「孤島作品」</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold mt-0.5">✓</span>當工程師說「把你的 code 丟到 repo 來」，你直接秒懂並完成，不再需要尷尬地問「什麼是 repo？」</li>
           </ul>
+          <details className="mt-3 text-sm text-slate-500">
+            <summary className="cursor-pointer select-none hover:text-indigo-600">看更多你能得到的改變</summary>
+            <ul className="space-y-2 mt-2">
+              <li className="flex items-start gap-2"><span className="text-green-500 font-bold mt-0.5">✓</span>和工程師同事用同一套流程協作，從此說「單機世界」再見，正式進入 MMO 合作模式</li>
+              <li className="flex items-start gap-2"><span className="text-green-500 font-bold mt-0.5">✓</span>追蹤每次調整模型參數、特徵工程的版本，再也不會問「這個 model 上週跑的結果在哪？」</li>
+            </ul>
+          </details>
         </div>
       </div>
 
-      <div className="mt-4 bg-white/10 rounded-lg px-4 py-3 text-sm text-white/80 flex items-start gap-2">
-        <span className="text-yellow-300 text-base leading-none mt-0.5">💡</span>
-        <span>這門課結束後，你就正式從「單機存檔玩家」升級為「多人線上協作工程師」。準備好了嗎？</span>
+      <div className="mt-5 text-center">
+        <p className="text-lg font-bold text-indigo-900">這門課結束後，你就正式從「單機存檔玩家」升級為「多人線上協作工程師」。</p>
+        <p className="text-sm text-indigo-600 mt-1">準備好了嗎？</p>
       </div>
     </div>
-    
+
     {/* Jargon Dictionary */}
     <Card className="bg-gradient-to-br from-indigo-50 to-blue-50 border-indigo-100 mb-6">
       <div className="flex items-center gap-3 mb-4">
@@ -62,7 +72,7 @@ export const Chapter1Concept = () => (
           <p className="text-sm text-indigo-700 mt-1">Git 是一個「版本控制系統」。不用怕名詞太高深，如果你有玩過單機遊戲，那你其實已經懂了！</p>
         </div>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="bg-white p-3 rounded border border-indigo-100 shadow-sm">
           <div className="font-bold text-slate-800 mb-1 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-green-500"></div> Commit</div>
           <div className="text-indigo-600 font-bold text-sm mb-1">🎮 遊戲存檔點</div>
@@ -79,9 +89,14 @@ export const Chapter1Concept = () => (
           <p className="text-xs text-slate-600">「換台電腦繼續玩！」把你本地的存檔上傳 (Push) 到雲端伺服器，或是把雲端的最新存檔下載 (Pull) 回來。</p>
         </div>
         <div className="bg-white p-3 rounded border border-indigo-100 shadow-sm">
-          <div className="font-bold text-slate-800 mb-1 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-orange-500"></div> Merge / PR</div>
+          <div className="font-bold text-slate-800 mb-1 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-orange-500"></div> PR</div>
+          <div className="text-indigo-600 font-bold text-sm mb-1">🙏 敲門拜託</div>
+          <p className="text-xs text-slate-600">拜託你接受我的更動（這是 <strong>GitHub 上的審查流程</strong>，讓別人先看過你的改動再決定要不要收）。</p>
+        </div>
+        <div className="bg-white p-3 rounded border border-indigo-100 shadow-sm">
+          <div className="font-bold text-slate-800 mb-1 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-pink-500"></div> Merge</div>
           <div className="text-indigo-600 font-bold text-sm mb-1">🔗 結局收束</div>
-          <p className="text-xs text-slate-600">「全收集大團圓！」審核通過後，把平行宇宙 (Branch) 中開發好的新功能，正式融入完美的主線劇情中。</p>
+          <p className="text-xs text-slate-600">把平行宇宙 (Branch) 的成果合併回主宇宙（這是 <strong>Git 的動作</strong>，PR 審核通過後才會執行）。</p>
         </div>
       </div>
     </Card>
@@ -129,99 +144,53 @@ export const Chapter1Concept = () => (
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-slate-500 mt-4 bg-indigo-50 p-2 rounded">
-        💡 <strong>簡單來說：</strong> Git 是影片剪輯軟體，GitHub / GitLab 就是 YouTube。你要先用剪輯軟體 (Git) 做好影片，然後再上傳到 YouTube (GitHub) 給別人看或共同合作。
-      </p>
+      <Callout variant="info" title="簡單來說" className="mt-4">
+        Git 是影片剪輯軟體，GitHub / GitLab 就是 YouTube。你要先用剪輯軟體 (Git) 做好影片，然後再上傳到 YouTube (GitHub) 給別人看或共同合作。
+      </Callout>
     </Card>
 
     {/* Setup Reminder */}
-    <div className="bg-green-50 border border-green-200 rounded-lg p-5 flex gap-4 items-start">
-      <CheckCircle className="text-green-600 mt-0.5 shrink-0" />
-      <div>
-        <h4 className="font-bold text-green-800 mb-1">你準備好了嗎？</h4>
-        <p className="text-sm text-green-700">
-          如果你還沒有安裝 Git, Node.js 或 VSCode，請立刻查看{' '}
-          <a href="https://github.com/BlekZz/git-time-machine/blob/main/Beginner-Setup-Guide.md"
-             target="_blank" rel="noopener noreferrer"
-             className="underline font-bold text-green-800 hover:text-green-900">
-            👶 零基礎新手安裝與準備指南
-          </a>
-          （如果你已經下載了這個教材，也可以直接在資料夾裡找到 <code className="bg-green-100 px-1 rounded">Beginner-Setup-Guide.md</code>）。
-          以下章節假設你已經安裝完畢，並且知道如何打開 Terminal（終端機）！
-        </p>
-      </div>
-    </div>
-
-    {/* --- .git 資料夾警告 --- */}
-    <div className="mt-8">
-      <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <Folder size={20} className="text-red-500" /> .git 資料夾 = 你的存檔本體
-      </h3>
-      <Card className="border-red-200 bg-red-50/30">
-        <div className="grid md:grid-cols-2 gap-6 items-center">
-          <div>
-            <div className="bg-red-100 border border-red-200 rounded-lg p-3 mb-4 text-sm text-red-800 flex items-start gap-2">
-              <AlertCircle size={16} className="shrink-0 mt-0.5" />
-              <span><strong>刪除 <code>.git</code> = 刪除所有歷史紀錄！</strong>除非你已經 Push 到遠端，否則一切無法復原。</span>
-            </div>
-            <ul className="text-sm text-slate-600 space-y-2">
-              <li className="flex items-start gap-2">
-                <HardDrive size={14} className="text-slate-400 mt-1 shrink-0" />
-                <span>執行 <code>git init</code> 後，專案根目錄會產生隱藏的 <code>.git/</code> 資料夾</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Database size={14} className="text-slate-400 mt-1 shrink-0" />
-                <span>所有 Commit 歷史、Branch、Tag 都存在這裡面</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Cloud size={14} className="text-slate-400 mt-1 shrink-0" />
-                <span>只有<strong>已 Push 到 Remote</strong> 的記錄，才有異地備份</span>
-              </li>
-            </ul>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="relative flex items-center gap-6">
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-lg">
-                  <Laptop size={28} />
-                </div>
-                <div className="mt-1 bg-yellow-100 border-2 border-yellow-300 rounded px-2 py-0.5 text-[10px] font-bold text-yellow-700 flex items-center gap-1">
-                  <Folder size={10} /> .git/
-                </div>
-              </div>
-              <div className="flex flex-col items-center gap-1">
-                <ArrowRight size={20} className="text-green-500" />
-                <span className="text-[10px] text-green-600 font-bold">git push</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 rounded-2xl bg-slate-800 text-white flex items-center justify-center shadow-lg">
-                  <Github size={28} />
-                </div>
-                <div className="mt-1 bg-green-100 border border-green-300 rounded px-2 py-0.5 text-[10px] font-bold text-green-700 flex items-center gap-1">
-                  <CheckCircle size={10} /> 安全備份
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
-    </div>
+    <Callout variant="success" title="你準備好了嗎？">
+      <p>
+        如果你還沒有安裝 Git, Node.js 或 VSCode，請立刻查看{' '}
+        <a href="https://github.com/BlekZz/git-time-machine/blob/main/Beginner-Setup-Guide.md"
+           target="_blank" rel="noopener noreferrer"
+           className="underline font-bold hover:text-green-700">
+          👶 零基礎新手安裝與準備指南
+        </a>
+        （如果你已經下載了這個教材，也可以直接在資料夾裡找到 <code className="bg-green-100 px-1 rounded">Beginner-Setup-Guide.md</code>）。
+        以下章節假設你已經安裝完畢，並且知道如何打開 Terminal（終端機）！
+      </p>
+    </Callout>
 
     {/* --- 設置身份 --- */}
     <div className="mt-8">
       <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <Key size={20} className="text-amber-500" /> 🎉 歡迎登艦！你的第一步：Local 端身份設定
+        <Key size={20} className="text-amber-500" /> 你的第一步：Local 端身份設定
       </h3>
-      <Card className="bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200 shadow-sm">
-        <p className="text-sm text-slate-700 mb-3 font-medium">太棒了！基本觀念都吸收完畢了吧？現在讓我們正式開始。每次存檔 (Commit) 時，Git 都會記錄「是誰做的」。所以我們上船後的第一件事，就是設定你的專屬身份名牌：</p>
-        <div className="bg-slate-900 rounded-lg p-4 font-mono text-sm text-slate-200 space-y-2 shadow-inner">
-          <div><span className="text-green-400">$</span> git config --global user.name <span className="text-amber-300">"Your Name"</span></div>
-          <div><span className="text-green-400">$</span> git config --global user.email <span className="text-amber-300">"you@example.com"</span></div>
-          <div className="border-t border-slate-700 pt-2 mt-2">
-            <span className="text-slate-500"># 敲完上面兩行後，可以輸入這行確認設定是否成功！</span>
-          </div>
-          <div><span className="text-green-400">$</span> git config --list</div>
-        </div>
+      <Card className="bg-amber-50 border-amber-200 shadow-sm">
+        <p className="text-sm text-slate-700 mb-3 font-medium">太棒了！基本觀念都吸收完畢了吧？現在讓我們正式開始。每次存檔 (Commit) 時，Git 都會記錄「是誰做的」。所以第一件事，就是設定你的專屬身份名牌：</p>
+
+        <Callout variant="warning" title="請打開你電腦的真實終端機（不是這個網頁）" className="mb-3">
+          接下來的指令請在 VSCode 的終端機或系統的終端機 App 裡輸入，這個網頁只是教學展示，不會真的執行指令。
+        </Callout>
+
+        <CommandBlock
+          command={'git config --global user.name "Your Name"\ngit config --global user.email "you@example.com"'}
+          comment="設定你的身份名牌"
+        />
+
+        <Callout variant="info" title="`$` 是什麼？" className="mt-3">
+          指令開頭的 <code>$</code> 代表「這是要打在終端機的指令」，輸入時不用打 <code>$</code>——用上面的複製按鈕會自動幫你去掉。
+        </Callout>
+
+        <p className="text-sm text-slate-600 mt-3">
+          這兩行指令在終端機的<strong>任何資料夾</strong>輸入都可以，不需要先 <code>cd</code> 進某個專案。
+        </p>
+
+        <p className="text-sm text-slate-600 mt-3">敲完上面兩行後，輸入這行確認設定是否成功：</p>
+        <CommandBlock command="git config user.name" comment="會回你剛剛設定的名字，只有一行" />
+
         <div className="mt-3 grid sm:grid-cols-2 gap-3">
           <div className="bg-white border border-amber-200 rounded-lg p-3 text-xs text-amber-800 flex items-start gap-2 shadow-sm">
             <Info size={14} className="shrink-0 mt-0.5 text-amber-500" />
@@ -232,6 +201,10 @@ export const Chapter1Concept = () => (
             <span>如果你未來要把作品推上 GitHub，這裡的 <strong>email 請務必填寫和 GitHub 註冊時相同的信箱</strong>，大頭貼才會漂亮地顯示出來喔！</span>
           </div>
         </div>
+
+        <p className="text-xs text-slate-500 mt-3">
+          小提醒：執行 <code>git init</code> 後，專案裡會多一個隱藏的 <code>.git</code> 資料夾，那就是你的存檔本體——第 3 章會介紹它。
+        </p>
       </Card>
     </div>
   </div>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { SectionTitle, Card, Badge, InstructionalText } from './Shared';
-import { GitBranch, Map, ArrowRight, Laptop, Github, Download, PlusCircle } from 'lucide-react';
+import { SectionTitle, Card, Badge, InstructionalText, Callout } from './Shared';
+import { GitBranch, Map, Laptop, Github, Download, PlusCircle } from 'lucide-react';
 
 export const Chapter2Flowchart = () => (
   <div className="space-y-8 animate-fade-in">
@@ -121,9 +121,8 @@ export const Chapter2Flowchart = () => (
       </Card>
     </div>
     
-    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-5 flex items-center justify-center gap-3 text-yellow-800">
-       <span className="font-bold">接下來的兩個章節，我們將分別帶你實際演練這兩條路線！</span>
-       <ArrowRight size={20} className="animate-bounce" />
-    </div>
+    <Callout variant="info" className="justify-center text-center">
+      <span className="font-bold">接下來的兩個章節，我們將分別帶你實際演練這兩條路線！點下方的「下一章」按鈕繼續。</span>
+    </Callout>
   </div>
 );

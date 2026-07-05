@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, Badge } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, Badge, Callout, CommandBlock } from './Shared';
 import { Cloud, Laptop, ArrowRight, ArrowLeft, AlertCircle, Info, FileText, GitCommit, User, CheckCircle, GitGraph, FileCode, GitMerge, Zap } from 'lucide-react';
 
 export const Chapter6Sync = () => {
@@ -137,6 +137,11 @@ export const Chapter6Sync = () => {
           </ul>
         </InstructionalText>
 
+        <Callout variant="warning" title="真實操作可能遇到的錯誤" className="mb-4">
+          執行 <code className="bg-amber-100 px-1 rounded">git pull</code> 時如果出現 <code className="bg-amber-100 px-1 rounded">fatal: Need to specify how to reconcile divergent branches</code>——這是新版 Git 在問你要用哪種方式合併。執行下面這行指令（安裝指南建議的設定）後，再 <code className="bg-amber-100 px-1 rounded">git pull</code> 一次即可。
+        </Callout>
+        <CommandBlock command="git config --global pull.rebase false" comment="只需要設定一次，之後每次 pull 都適用" className="mb-8" />
+
         <div className="grid lg:grid-cols-3 gap-8 items-start mb-8">
           {/* Left Column: Controls & Terminal */}
           <div className="lg:col-span-1 space-y-4 order-2 lg:order-1">
@@ -165,9 +170,9 @@ export const Chapter6Sync = () => {
                 >
                   <span className="flex items-center gap-2"><GitCommit size={16} /> 2. 暫存 + 存檔 (add + commit)</span>
                 </button>
-                <div className="text-[10px] text-slate-400 pl-1">
-                  ⚠️ 模擬中合併為一步，實際 Terminal 需先 <code>git add .</code> 再 <code>git commit -m "..."</code>
-                </div>
+                <Callout variant="info" className="text-sm">
+                  模擬中合併為一步，實際 Terminal 需先 <code className="bg-blue-100 px-1 rounded">git add .</code> 再 <code className="bg-blue-100 px-1 rounded">git commit -m "..."</code>
+                </Callout>
 
                 <hr className="border-slate-200 my-4" />
                 
@@ -209,9 +214,9 @@ export const Chapter6Sync = () => {
 
           {/* Right Column: Visualization */}
           <div className="lg:col-span-2 order-1 lg:order-2 bg-slate-50 rounded-2xl border border-slate-200 p-6 shadow-inner min-h-[500px] flex flex-col relative">
-            <div className="grid grid-cols-5 gap-4 h-full">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 h-full">
               {/* Local Timeline */}
-              <div className="col-span-2 flex flex-col relative">
+              <div className="md:col-span-2 flex flex-col relative">
                 <div className="flex items-center gap-2 mb-6 text-indigo-700 font-bold border-b border-indigo-100 pb-2">
                   <Laptop size={20} />
                   <h3>Local (你的電腦)</h3>
@@ -220,7 +225,7 @@ export const Chapter6Sync = () => {
                 <div className="relative flex-1 space-y-4 px-2">
                   <div className="absolute left-6 top-2 bottom-0 w-0.5 bg-slate-200 -z-10"></div>
                   
-                  {localCommits.map((c, i) => {
+                  {localCommits.map((c) => {
                     const isUnpushed = !remoteCommits.find(rc => rc.id === c.id);
                     return (
                       <div key={c.id} className={`flex items-start gap-3 animate-fade-in-up transition-all duration-500`}>
@@ -256,25 +261,25 @@ export const Chapter6Sync = () => {
               </div>
 
               {/* Action Bridge (Push/Pull State) */}
-              <div className="col-span-1 flex flex-col items-center justify-center relative z-20">
-                 <div className="sticky top-1/2 -translate-y-1/2 w-full flex flex-col items-center gap-2">
-                   <div className="h-0.5 w-full bg-slate-200 absolute top-1/2 -z-10"></div>
-                   
+              <div className="md:col-span-1 flex flex-row md:flex-col items-center justify-center relative z-20 py-2 md:py-0">
+                 <div className="sticky top-1/2 md:-translate-y-1/2 w-full flex flex-row md:flex-col items-center gap-2">
+                   <div className="h-0.5 w-full bg-slate-200 absolute top-1/2 -z-10 hidden md:block"></div>
+
                    {needPull ? (
-                      <div className="group flex flex-col items-center gap-1 animate-pulse">
-                        <div className="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center border-4 border-red-50 cursor-not-allowed">
+                      <div className="group flex flex-col items-center gap-1 animate-pulse mx-auto">
+                        <div className="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center border-4 border-red-50 cursor-not-allowed rotate-90 md:rotate-0">
                           <AlertCircle size={24} />
                         </div>
-                        <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm text-center">
+                        <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded shadow-sm text-center">
                           拒絕 Push<br/>必須先 Pull
                         </span>
                       </div>
                    ) : canPush ? (
-                      <button 
+                      <button
                         onClick={doPush}
-                        className="group flex flex-col items-center gap-1 animate-bounce"
+                        className="group flex flex-col items-center gap-1 animate-bounce mx-auto"
                       >
-                        <div className="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-200 hover:scale-110 transition-transform cursor-pointer border-4 border-white">
+                        <div className="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-200 hover:scale-110 transition-transform cursor-pointer border-4 border-white rotate-90 md:rotate-0">
                           <ArrowRight size={24} />
                         </div>
                         <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded shadow-sm">
@@ -282,18 +287,18 @@ export const Chapter6Sync = () => {
                         </span>
                       </button>
                    ) : (
-                      <div className="group flex flex-col items-center gap-1 opacity-40">
+                      <div className="group flex flex-col items-center gap-1 opacity-40 mx-auto">
                         <div className="w-12 h-12 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center border-4 border-white cursor-not-allowed">
                           <CheckCircle size={20} />
                         </div>
-                        <span className="text-[10px] text-slate-400 bg-slate-100 px-1 rounded">已同步</span>
+                        <span className="text-xs text-slate-400 bg-slate-100 px-1 rounded">已同步</span>
                       </div>
                    )}
                  </div>
               </div>
 
               {/* Remote Timeline */}
-              <div className="col-span-2 flex flex-col relative">
+              <div className="md:col-span-2 flex flex-col relative">
                 <div className="flex items-center gap-2 mb-6 text-purple-700 font-bold border-b border-purple-100 pb-2">
                   <Cloud size={20} />
                   <h3>Remote (GitHub)</h3>
@@ -302,7 +307,7 @@ export const Chapter6Sync = () => {
                 <div className="relative flex-1 space-y-4 px-2">
                   <div className="absolute left-6 top-2 bottom-0 w-0.5 bg-slate-200 -z-10"></div>
 
-                  {remoteCommits.map((c, i) => (
+                  {remoteCommits.map((c) => (
                     <div key={c.id} className="flex items-start gap-3 animate-fade-in-up">
                       <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs z-10 shadow-md shrink-0 border-4 border-slate-50">
                         {c.id}
@@ -319,6 +324,9 @@ export const Chapter6Sync = () => {
           </div>
         </div>
 
+        <Callout variant="info" title="💡 這台終端機可以真的打指令！" className="mb-3">
+          全站只有這裡的終端機可以真的輸入！試試看打 <code className="bg-blue-100 px-1 rounded">git add .</code>。
+        </Callout>
         <TerminalSim logs={logs} onCommand={handleCommand} height="h-48" />
       </section>
 
@@ -340,12 +348,12 @@ export const Chapter6Sync = () => {
              </div>
 
              {/* Diverging Paths */}
-             <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                <path d="M 25% 50% Q 30% 20% 50% 20%" fill="none" stroke="#9333ea" strokeWidth="3" strokeDasharray="4" />
-                <path d="M 25% 50% Q 30% 80% 50% 80%" fill="none" stroke="#4f46e5" strokeWidth="3" strokeDasharray="4" />
-                
-                <path d="M 50% 20% Q 70% 20% 75% 50%" fill="none" stroke="#9333ea" strokeWidth="3" />
-                <path d="M 50% 80% Q 70% 80% 75% 50%" fill="none" stroke="#4f46e5" strokeWidth="3" />
+             <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 800 200" preserveAspectRatio="none">
+                <path d="M 200 100 Q 240 40 400 40" fill="none" stroke="#9333ea" strokeWidth="3" strokeDasharray="4" />
+                <path d="M 200 100 Q 240 160 400 160" fill="none" stroke="#4f46e5" strokeWidth="3" strokeDasharray="4" />
+
+                <path d="M 400 40 Q 560 40 600 100" fill="none" stroke="#9333ea" strokeWidth="3" />
+                <path d="M 400 160 Q 560 160 600 100" fill="none" stroke="#4f46e5" strokeWidth="3" />
              </svg>
 
              {/* Remote Edit */}
@@ -386,28 +394,34 @@ export const Chapter6Sync = () => {
                 <li>在衝突標記之間選擇：保留「你的修改」、「對方的修改」，或兩者都保留</li>
                 <li>存檔並關閉衝突標記</li>
                 <li className="font-bold text-indigo-700">執行 <code className="bg-indigo-50 px-1 rounded">git add .</code>（這步很多人忘記！解決完衝突還需要重新暫存）</li>
-                <li className="font-bold text-indigo-700">執行 <code className="bg-indigo-50 px-1 rounded">git commit</code>（不需要加 -m，Git 會自動產生 Merge Commit 訊息）</li>
+                <li className="font-bold text-indigo-700">執行 <code className="bg-indigo-50 px-1 rounded">git commit -m "解決衝突"</code></li>
               </ol>
-              <div className="mt-3 bg-amber-50 border border-amber-200 rounded p-2 text-xs text-amber-800">
-                ⚠️ 少做第 4 步是最常見的錯誤——解決完衝突直接 push，Git 會說「還有未解決的 merge」，讓你以為沒有修好。
+              <div className="mt-3 bg-amber-50 border border-amber-200 rounded p-2 text-sm text-amber-800">
+                少做第 4 步是最常見的錯誤——解決完衝突直接 push，Git 會說「還有未解決的 merge」，讓你以為沒有修好。
               </div>
+              <Callout variant="warning" title="🆘 救命卡：不小心打了沒有 -m 的 git commit？" className="mt-3">
+                如果畫面突然變成一堆 <code className="bg-amber-100 px-1 rounded">~</code> 符號的奇怪編輯器（它叫 Vim），不要慌：按 <code className="bg-amber-100 px-1 rounded">Esc</code>，輸入 <code className="bg-amber-100 px-1 rounded">:wq</code>，按 <code className="bg-amber-100 px-1 rounded">Enter</code>，就能存檔離開。
+              </Callout>
             </div>
         </Card>
       </section>
 
       {/* Part 3: Merge vs Rebase */}
       <section>
-        <div className="flex items-center gap-2 mb-2">
-          <Badge color="orange">Part 3</Badge>
-          <Badge color="gray">進階概念</Badge>
-          <h3 className="text-xl font-bold text-slate-800">Merge 與 Rebase：你喜歡怎樣的歷史？</h3>
-        </div>
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-4 text-sm text-amber-800 flex items-start gap-2">
-          <span className="text-lg leading-none mt-0.5">⭐</span>
-          <span><strong>這是進階概念</strong>，第一次學習時看不懂完全正常。建議先完成 Chapter 7 和 8 的實戰演練，再回來看這裡。</span>
-        </div>
+        <details className="group">
+          <summary className="cursor-pointer list-none flex items-center gap-2 mb-2">
+            <Badge color="orange">Part 3</Badge>
+            <Badge color="gray">進階概念</Badge>
+            <h3 className="text-xl font-bold text-slate-800 inline">Merge 與 Rebase：你喜歡怎樣的歷史？</h3>
+            <span className="text-slate-400 text-sm ml-auto group-open:hidden">▸ 點開看</span>
+            <span className="text-slate-400 text-sm ml-auto hidden group-open:inline">▾ 收合</span>
+          </summary>
+          <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-4 text-sm text-amber-800 flex items-start gap-2">
+            <span className="text-lg leading-none mt-0.5">⭐</span>
+            <span><strong>這是進階概念</strong>，看不懂完全正常，先跳過——第一次學習建議先完成 Chapter 7 和 8 的實戰演練，再回來看這裡。</span>
+          </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-lg mb-8">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-lg mb-8">
            <div className="bg-slate-100 px-4 py-3 border-b border-slate-200 flex gap-4">
               <button onClick={() => setActiveTab('code')} className={`flex items-center gap-2 text-sm font-bold ${activeTab === 'code' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>
                  <FileCode size={16} /> 程式碼合併比對 (Diff)
@@ -434,12 +448,12 @@ export const Chapter6Sync = () => {
               {activeTab === 'code' ? (
                 <div className="grid md:grid-cols-2 gap-4">
                    <div className="space-y-4">
-                     <div className="bg-slate-100 p-3 rounded border border-slate-200 font-mono text-[11px]">
+                     <div className="bg-slate-100 p-3 rounded border border-slate-200 font-mono text-xs">
                         <div className="mb-2 font-bold text-slate-500 flex items-center gap-1">原始程式碼 (Base)</div>
                         <pre className="text-slate-400">{codeOriginal}</pre>
                      </div>
                      <div className="grid grid-cols-2 gap-2">
-                       <div className="bg-purple-50 p-2 rounded border border-purple-200 font-mono text-[10px]">
+                       <div className="bg-purple-50 p-2 rounded border border-purple-200 font-mono text-xs">
                           <div className="mb-1 font-bold text-purple-700">同事 (Remote A)</div>
                           <pre className="text-slate-600 whitespace-pre-wrap">
                             {codeRemote.split('\n').map((line, i) => (
@@ -447,7 +461,7 @@ export const Chapter6Sync = () => {
                             ))}
                           </pre>
                        </div>
-                       <div className="bg-indigo-50 p-2 rounded border border-indigo-200 font-mono text-[10px]">
+                       <div className="bg-indigo-50 p-2 rounded border border-indigo-200 font-mono text-xs">
                           <div className="mb-1 font-bold text-indigo-700">你 (Local B)</div>
                           <pre className="text-slate-600 whitespace-pre-wrap">
                             {codeLocal.split('\n').map((line, i) => (
@@ -483,7 +497,8 @@ export const Chapter6Sync = () => {
                    </div>
                 </div>
               ) : (
-                <div className="relative w-full max-w-lg h-64 mx-auto flex items-center justify-center border rounded bg-white">
+                <div className="w-full overflow-x-auto">
+                <div className="relative min-w-[420px] max-w-lg h-64 mx-auto flex items-center justify-center border rounded bg-white">
                    <div className="absolute left-10 top-1/2 -translate-y-1/2 flex flex-col items-center z-10">
                       <div className="w-10 h-10 rounded-full bg-slate-400 text-white flex items-center justify-center font-bold shadow">Base</div>
                    </div>
@@ -525,9 +540,11 @@ export const Chapter6Sync = () => {
                      </div>
                    )}
                 </div>
+                </div>
               )}
            </div>
-        </div>
+          </div>
+        </details>
       </section>
     </div>
   );

@@ -1,11 +1,60 @@
-import React from 'react';
-import { SectionTitle, Card, Badge, InstructionalText } from './Shared';
-import { Rocket, Target, CheckCircle, Terminal, FileText, GitBranch, ArrowUpCircle, GitPullRequest, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock } from './Shared';
+import { Rocket, Target, CheckCircle, Terminal, FileText, GitBranch, ArrowUpCircle, GitPullRequest, Search, Square, CheckSquare } from 'lucide-react';
+
+const PROGRESS_KEY = 'gtm-ch8-progress';
+
+// StepCheck — Step 卡標題旁的可勾選進度按鈕（localStorage 持久化）
+const StepCheck = ({ stepId, done, onToggle }) => {
+  const isDone = done.has(stepId);
+  return (
+    <button
+      type="button"
+      onClick={() => onToggle(stepId)}
+      className={`ml-auto flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded-md transition-colors shrink-0 ${
+        isDone ? 'text-green-700 bg-green-100' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
+      }`}
+    >
+      {isDone ? <CheckSquare size={14} /> : <Square size={14} />}
+      {isDone ? '已完成' : '標記完成'}
+    </button>
+  );
+};
 
 export const Chapter8Practice = () => {
+  const [done, setDone] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]');
+      return new Set(saved);
+    } catch {
+      return new Set();
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify([...done]));
+  }, [done]);
+
+  const toggleStep = (stepId) => {
+    setDone((prev) => {
+      const next = new Set(prev);
+      if (next.has(stepId)) next.delete(stepId);
+      else next.add(stepId);
+      return next;
+    });
+  };
+
   return (
     <div className="space-y-12 animate-fade-in">
       <SectionTitle title="8. 實戰演練：發起你的第一個 PR" subtitle="將所學化為行動，在專案中留下你的足跡！" />
+
+      <Callout variant="warning" title="你是用線上版學到這裡的嗎？">
+        本章需要在你自己的電腦上操作。如果你一直是用瀏覽器線上版學習、還沒安裝過 Git，請先完成{' '}
+        <a href="https://github.com/BlekZz/git-time-machine/blob/main/Beginner-Setup-Guide.md" target="_blank" rel="noreferrer" className="underline font-bold hover:text-amber-950">
+          零基礎安裝指南
+        </a>{' '}
+        的全部步驟（約 30–60 分鐘），把專案 clone 到你的電腦，再回來繼續。
+      </Callout>
 
       {/* Part 1: The Mission */}
       <section>
@@ -13,7 +62,7 @@ export const Chapter8Practice = () => {
         <div className="bg-amber-50 border border-amber-300 rounded-xl p-5 mb-6">
           <div className="text-sm font-bold text-amber-800 mb-3 flex items-center gap-2">⚠️ 重要！先搞清楚你現在在哪個情境</div>
           <p className="text-sm text-slate-700 mb-3">在前面幾章，你都是對<strong>自己的專案</strong>練習（情境 A），或是模擬操作（情境 B）。但 Chapter 8 不一樣——<strong>你現在要去別人的 GitHub 專案做出真正的貢獻</strong>，這才是真實世界 Open Source Contribution 的場景！</p>
-          <div className="grid grid-cols-3 gap-2 text-xs text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-center">
             <div className="bg-indigo-100 rounded-lg p-2"><div className="font-bold text-indigo-700 mb-1">📘 Ch.3 情境 A</div><div className="text-indigo-600">你的 repo → 你是 Owner → push ✅</div></div>
             <div className="bg-red-100 rounded-lg p-2"><div className="font-bold text-red-700 mb-1">📕 Ch.4 情境 B</div><div className="text-red-600">別人的 repo → 無寫入權限 → push 403 ❌</div></div>
             <div className="bg-green-100 rounded-lg p-2"><div className="font-bold text-green-700 mb-1">🎯 Ch.8 今天</div><div className="text-green-600">Fork → 你的副本 → push ✅ → PR 回原 repo</div></div>
@@ -62,7 +111,11 @@ export const Chapter8Practice = () => {
         <Card className="bg-white border-slate-200 shadow-sm">
           <div className="text-xs font-bold text-slate-800 uppercase tracking-widest mb-4">🧭 開始作業前：確認你的位置</div>
           <p className="text-sm text-slate-800 mb-4 font-medium">在開始之前，請打開你的 Terminal，逐行輸入以下指令確認狀態：</p>
-          
+
+          <Callout variant="info" className="mb-4">
+            這份清單適用於<strong>第一次</strong>開始作業前。如果你已經做過 Step 2（set-url）後中斷再回來：第 ④ 步請改為先到 GitHub 你的 Fork 頁面按 <strong>Sync fork → Update branch</strong>，再執行 <code className="bg-blue-100 px-1 rounded">git pull</code>。
+          </Callout>
+
           <div className="space-y-3">
             <div className="bg-slate-900 rounded-lg p-4 space-y-3">
               <div>
@@ -71,31 +124,38 @@ export const Chapter8Practice = () => {
                 <div className="text-xs text-slate-400 mt-1">✅ 應看到路徑結尾是 <code className="bg-slate-700 px-1 rounded">git-time-machine</code></div>
                 <div className="text-xs text-red-400 mt-0.5">❌ 如果不對：輸入 <code className="bg-slate-700 text-white px-1 rounded">cd 路徑/git-time-machine</code> 切換過去</div>
               </div>
-              
+
               <div>
                 <div className="text-xs text-slate-400 mb-1">② 確認你在 main 分支</div>
                 <div className="font-mono text-sm text-green-400">$ git branch</div>
                 <div className="text-xs text-slate-400 mt-1">✅ 有星號（*）的那行應該是 <code className="bg-slate-700 px-1 rounded">* main</code></div>
                 <div className="text-xs text-red-400 mt-0.5">❌ 如果不對：輸入 <code className="bg-slate-700 text-white px-1 rounded">git checkout main</code> 切換回來</div>
               </div>
-              
+
               <div>
                 <div className="text-xs text-slate-400 mb-1">③ 確認工作區是乾淨的</div>
                 <div className="font-mono text-sm text-green-400">$ git status</div>
                 <div className="text-xs text-slate-400 mt-1">✅ 應看到 <code className="bg-slate-700 px-1 rounded">nothing to commit, working tree clean</code></div>
                 <div className="text-xs text-red-400 mt-0.5">❌ 如果有未存檔的修改：先 <code className="bg-slate-700 text-white px-1 rounded">git stash</code> 暫存起來，完成作業後再處理</div>
               </div>
-              
+
               <div>
                 <div className="text-xs text-slate-400 mb-1">④ 確認本地已和雲端同步</div>
                 <div className="font-mono text-sm text-green-400">$ git pull</div>
                 <div className="text-xs text-slate-400 mt-1">✅ 看到 <code className="bg-slate-700 px-1 rounded">Already up to date.</code> 代表你有最新的版本</div>
               </div>
+
+              <div>
+                <div className="text-xs text-slate-400 mb-1">⑤ 確認你的 Git 身份已設定</div>
+                <div className="font-mono text-sm text-green-400">$ git config user.name</div>
+                <div className="text-xs text-slate-400 mt-1">✅ 應顯示你的名字</div>
+                <div className="text-xs text-red-400 mt-0.5">❌ 沒有任何輸出：回 Chapter 1 完成身份設定，否則等一下 commit 會出現 <code className="bg-slate-700 text-white px-1 rounded">Please tell me who you are</code> 錯誤</div>
+              </div>
             </div>
-            
+
             <div className="bg-green-100 border border-green-300 rounded p-3 text-sm font-bold text-green-900 flex items-center gap-2">
               <CheckCircle size={18} className="shrink-0 text-green-600" />
-              <span>四個全部確認 OK 之後，就可以開始 Step 2 了！</span>
+              <span>五個全部確認 OK 之後，就可以開始 Step 2 了！</span>
             </div>
           </div>
         </Card>
@@ -182,19 +242,22 @@ export const Chapter8Practice = () => {
             </div>
           </div>
         </Card>
-
+        <p className="text-xs text-slate-400 text-center md:hidden mb-8">👉 圖片可左右滑動</p>
 
         <div className="space-y-6">
-          
+
           {/* Step 1: Fork */}
           <Card className="border-amber-200 shadow-sm relative overflow-hidden">
              <div className="absolute top-0 left-0 w-1.5 h-full bg-amber-400"></div>
              <div className="flex items-start gap-4">
                <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xl shrink-0 mt-1">1</div>
                <div className="flex-1">
-                 <h4 className="font-bold text-lg text-slate-800 mb-2 flex items-center gap-2">
-                   🍴 Fork 原 repo 到你的帳號
-                 </h4>
+                 <div className="flex items-center mb-2">
+                   <h4 className="font-bold text-lg text-slate-800 flex items-center gap-2">
+                     🍴 Fork 原 repo 到你的帳號
+                   </h4>
+                   <StepCheck stepId={1} done={done} onToggle={toggleStep} />
+                 </div>
                  <p className="text-slate-600 mb-3 text-sm">這步在 <strong>GitHub 網站</strong>上完成，不需要用終端機。</p>
                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-2 text-sm text-slate-700">
                    <ol className="list-decimal pl-4 space-y-2">
@@ -218,20 +281,28 @@ export const Chapter8Practice = () => {
              <div className="flex items-start gap-4">
                <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xl shrink-0 mt-1">2</div>
                <div className="flex-1">
-                 <h4 className="font-bold text-lg text-slate-800 mb-2 flex items-center gap-2">
-                   <Terminal size={18} /> 將本地 Remote 指向你的 Fork
-                 </h4>
-                 <p className="text-slate-600 mb-3 text-sm">你電腦裡的 git-time-machine 目前的 <code>origin</code> 指向原 repo（BlekZz 的），你沒有 push 權限。現在要把它改成指向你自己 Fork 後的副本。</p>
-                 <div className="bg-slate-900 rounded p-4 font-mono text-sm text-green-400 space-y-2">
-                   <div className="text-slate-400 text-xs mb-1"># 把 origin 改成你自己的 Fork URL（把「你的帳號」換成你的 GitHub 帳號名稱）</div>
-                   <div>$ git remote set-url origin https://github.com/你的帳號/git-time-machine.git</div>
-                   <div className="text-slate-400 text-xs mt-2 mb-1"># 驗證是否修改成功</div>
-                   <div>$ git remote -v</div>
+                 <div className="flex items-center mb-2">
+                   <h4 className="font-bold text-lg text-slate-800 flex items-center gap-2">
+                     <Terminal size={18} /> 將本地 Remote 指向你的 Fork
+                   </h4>
+                   <StepCheck stepId={2} done={done} onToggle={toggleStep} />
                  </div>
+                 <Callout variant="warning" className="mb-3">
+                   ⚠️ 必須先完成 Step 1 的 Fork 再執行這步。如果還沒 Fork 就 set-url，之後 push 會出現 <code className="bg-amber-100 px-1 rounded">remote: Repository not found</code>。
+                 </Callout>
+                 <p className="text-slate-600 mb-3 text-sm">你電腦裡的 git-time-machine 目前的 <code>origin</code> 指向原 repo（BlekZz 的），你沒有 push 權限。現在要把它改成指向你自己 Fork 後的副本。</p>
+                 <CommandBlock
+                   command={"git remote set-url origin https://github.com/你的帳號/git-time-machine.git\ngit remote -v"}
+                   comment="把「你的帳號」換成你的 GitHub 帳號名稱；第二行用來驗證是否修改成功"
+                 />
                  <div className="mt-3 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800 flex items-start gap-2">
                    <CheckCircle size={16} className="mt-0.5 shrink-0 text-green-600" />
                    <div><strong>✅ 驗證成功：</strong> <code>git remote -v</code> 的輸出中，兩行都應該顯示 <code>https://github.com/你的帳號/git-time-machine.git</code>，不再是 BlekZz 的網址。</div>
                  </div>
+                 <Callout variant="danger" title="push 時遇到錯誤怎麼辦？" className="mt-3">
+                   看到 <code className="bg-red-100 px-1 rounded">remote: Repository not found</code> → 兩種可能：(1) 你還沒 Fork，回 Step 1；(2) 網址裡的帳號或 repo 名打錯了。用 <code className="bg-red-100 px-1 rounded">git remote -v</code> 檢查，重跑一次 set-url 即可（set-url 可以重複執行，放心）。<br/>
+                   看到 <code className="bg-red-100 px-1 rounded">403</code> → 你跳過了 Step 2，origin 還指向原 repo。
+                 </Callout>
                </div>
              </div>
           </Card>
@@ -242,18 +313,19 @@ export const Chapter8Practice = () => {
              <div className="flex items-start gap-4">
                <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xl shrink-0 mt-1">3</div>
                <div className="flex-1">
-                 <h4 className="font-bold text-lg text-slate-800 mb-2 flex items-center gap-2">
-                   <GitBranch size={18} /> 建立專屬分支 (Branch)
-                 </h4>
-                 <p className="text-slate-600 mb-3 text-sm">為了不干擾 main 主線，請建立並切換到一個以你名字命名的分支。</p>
-                 <div className="bg-slate-900 rounded p-4 font-mono text-sm text-green-400">
-                   $ git checkout -b feat/your-name
+                 <div className="flex items-center mb-2">
+                   <h4 className="font-bold text-lg text-slate-800 flex items-center gap-2">
+                     <GitBranch size={18} /> 建立專屬分支 (Branch)
+                   </h4>
+                   <StepCheck stepId={3} done={done} onToggle={toggleStep} />
                  </div>
+                 <p className="text-slate-600 mb-3 text-sm">為了不干擾 main 主線，請建立並切換到一個分支。分支名建議用 <code className="bg-slate-100 px-1 rounded">feat/你的帳號名</code>——用 GitHub 帳號名天然唯一，不會和其他同學撞名。</p>
+                 <CommandBlock command="git checkout -b feat/你的帳號名" comment="把「你的帳號名」換成你的 GitHub 帳號名稱" />
                  <div className="mt-4 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800 flex items-start gap-2">
                    <CheckCircle size={16} className="mt-0.5 shrink-0 text-green-600" />
                    <div>
                      <strong>✅ 驗證成功：</strong><br/>
-                     如果你看到 <code>Switched to a new branch 'feat/your-name'</code>，或是終端機的提示字元結尾變成了 <code>(feat/your-name)</code>，就代表你跳躍到新的宇宙了！
+                     如果你看到 <code>Switched to a new branch 'feat/你的帳號名'</code>，或是終端機的提示字元結尾變成了 <code>(feat/你的帳號名)</code>，就代表你跳躍到新的宇宙了！
                    </div>
                  </div>
                </div>
@@ -266,9 +338,12 @@ export const Chapter8Practice = () => {
              <div className="flex items-start gap-4">
                <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xl shrink-0 mt-1">4</div>
                <div className="flex-1">
-                 <h4 className="font-bold text-lg text-slate-800 mb-2 flex items-center gap-2">
-                   <FileText size={18} /> 新增檔案並存檔 (Add & Commit)
-                 </h4>
+                 <div className="flex items-center mb-2">
+                   <h4 className="font-bold text-lg text-slate-800 flex items-center gap-2">
+                     <FileText size={18} /> 新增檔案並存檔 (Add & Commit)
+                   </h4>
+                   <StepCheck stepId={4} done={done} onToggle={toggleStep} />
+                 </div>
                  <p className="text-slate-600 mb-3 text-sm">在 <code>learner-commits</code> 目錄下新增一個屬於你的檔案，裡面隨便寫幾句話打招呼。然後把它存檔進 Git。</p>
 
                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3 text-xs text-blue-800">
@@ -276,24 +351,23 @@ export const Chapter8Practice = () => {
                    <ol className="list-decimal pl-4 space-y-1">
                      <li>在 VSCode 左側的「檔案總管」（最上方的資料夾圖示）裡，找到 <code className="bg-blue-100 px-1 rounded">learner-commits</code> 資料夾</li>
                      <li>在 <code className="bg-blue-100 px-1 rounded">learner-commits</code> 資料夾上點右鍵 → <strong>New File</strong></li>
-                     <li>輸入你的檔名，例如 <code className="bg-blue-100 px-1 rounded">blake.md</code>（改成你自己的名字）</li>
+                     <li>輸入你的檔名，用你的 <strong>GitHub 帳號名</strong>命名，例如 <code className="bg-blue-100 px-1 rounded">your-github-id.md</code>——天然唯一，不會和其他同學撞名</li>
                      <li>在檔案裡輸入一些內容（例如「大家好，我是 Blake，這是我的第一個 Git 作業！」）</li>
                      <li>按 <strong>Ctrl+S</strong>（Mac 是 <strong>Cmd+S</strong>）儲存檔案</li>
                    </ol>
                    <div className="mt-2 text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1">
-                     ⚠️ 請建立<strong>新的</strong>檔案（你自己的名字），不要修改 <code className="bg-amber-100 px-1 rounded">example-blake.md</code>。
+                     ⚠️ 請建立<strong>新的</strong>檔案（你自己的帳號名），不要修改 <code className="bg-amber-100 px-1 rounded">example-blake.md</code>。
                    </div>
                  </div>
 
-                 <div className="bg-slate-900 rounded p-4 font-mono text-sm text-green-400 space-y-2">
-                   <div>$ git add learner-commits/your-name.md</div>
-                   <div>$ git commit -m "docs: add your-name"</div>
-                 </div>
+                 <CommandBlock
+                   command={'git add learner-commits/你的帳號名.md\ngit commit -m "docs: add 你的帳號名"'}
+                 />
                  <div className="mt-4 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800 flex items-start gap-2">
                    <CheckCircle size={16} className="mt-0.5 shrink-0 text-green-600" />
                    <div>
                      <strong>✅ 驗證成功：</strong><br/>
-                     如果你看到 <code>[feat/your-name 1234567] docs: add your-name</code>，並且再輸入一次 <code>git status</code> 顯示 <code>nothing to commit, working tree clean</code>，代表快照拍攝成功！
+                     如果你看到 <code>[feat/你的帳號名 1234567] docs: add 你的帳號名</code>，並且再輸入一次 <code>git status</code> 顯示 <code>nothing to commit, working tree clean</code>，代表快照拍攝成功！
                    </div>
                  </div>
                </div>
@@ -306,20 +380,24 @@ export const Chapter8Practice = () => {
              <div className="flex items-start gap-4">
                <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xl shrink-0 mt-1">5</div>
                <div className="flex-1">
-                 <h4 className="font-bold text-lg text-slate-800 mb-2 flex items-center gap-2">
-                   <ArrowUpCircle size={18} /> 推送到你的 Fork (Push)
-                 </h4>
-                 <p className="text-slate-600 mb-3 text-sm">因為這是一個全新的分支，遠端還沒有它，所以第一次 Push 時需要加上 <code>-u origin</code>。這次 push 會上傳到你自己的 Fork（因為剛才已經更新了 remote URL）。</p>
-                 <div className="bg-slate-900 rounded p-4 font-mono text-sm text-green-400">
-                   $ git push -u origin feat/your-name
+                 <div className="flex items-center mb-2">
+                   <h4 className="font-bold text-lg text-slate-800 flex items-center gap-2">
+                     <ArrowUpCircle size={18} /> 推送到你的 Fork (Push)
+                   </h4>
+                   <StepCheck stepId={5} done={done} onToggle={toggleStep} />
                  </div>
+                 <p className="text-slate-600 mb-3 text-sm">因為這是一個全新的分支，遠端還沒有它，所以第一次 Push 時需要加上 <code>-u origin</code>。這次 push 會上傳到你自己的 Fork（因為剛才已經更新了 remote URL）。</p>
+                 <CommandBlock command="git push -u origin feat/你的帳號名" />
                  <div className="mt-4 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800 flex items-start gap-2">
                    <CheckCircle size={16} className="mt-0.5 shrink-0 text-green-600" />
                    <div>
                      <strong>✅ 驗證成功：</strong><br/>
-                     終端機會跑出一堆上傳進度，最後你會看到 <code>* [new branch] feat/your-name -{'>'} feat/your-name</code>。同時，終端機通常還會貼心附上一行網址說 <code>Create a pull request for 'feat/your-name' on GitHub by visiting: ...</code>
+                     終端機會跑出一堆上傳進度，最後你會看到 <code>* [new branch] feat/你的帳號名 -{'>'} feat/你的帳號名</code>。同時，終端機通常還會貼心附上一行網址說 <code>Create a pull request for 'feat/你的帳號名' on GitHub by visiting: ...</code>
                    </div>
                  </div>
+                 <Callout variant="info" className="mt-3">
+                   第一次 push 如果跳出瀏覽器登入視窗——照著登入即可，這是正常的。如果終端機直接要你輸入密碼——<strong>不要輸入 GitHub 網站密碼</strong>（必定失敗），執行 <code className="bg-blue-100 px-1 rounded">gh auth login</code> 重新登入後再 push。
+                 </Callout>
                </div>
              </div>
           </Card>
@@ -330,24 +408,28 @@ export const Chapter8Practice = () => {
              <div className="flex items-start gap-4">
                <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shrink-0 mt-1 shadow-md">6</div>
                <div className="flex-1">
-                 <h4 className="font-bold text-lg text-indigo-900 mb-2 flex items-center gap-2">
-                   <GitPullRequest size={18} /> 發起 Pull Request（跨 repo 的 PR）
-                 </h4>
+                 <div className="flex items-center mb-2">
+                   <h4 className="font-bold text-lg text-indigo-900 flex items-center gap-2">
+                     <GitPullRequest size={18} /> 發起 Pull Request（跨 repo 的 PR）
+                   </h4>
+                   <StepCheck stepId={6} done={done} onToggle={toggleStep} />
+                 </div>
                  <p className="text-slate-700 mb-3 text-sm">你已經把分支推到你的 Fork 了。最後一步是<strong>從你的 Fork 向原 repo 發起 PR</strong>，請維護者把你的貢獻合併進原 repo 的 main。</p>
                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3 text-xs text-blue-800">
-                   <strong>💡 PR 的方向：</strong> 你的 Fork 的 <code>feat/your-name</code> → 原 repo（BlekZz/git-time-machine）的 <code>main</code>
+                   <strong>💡 PR 的方向：</strong> 你的 Fork 的 <code>feat/你的帳號名</code> → 原 repo（BlekZz/git-time-machine）的 <code>main</code>
                  </div>
-                 
+
                  <div className="grid md:grid-cols-2 gap-4 mt-4">
                    <div className="bg-white p-4 border border-slate-200 rounded-lg">
                      <h5 className="font-bold text-slate-800 mb-2 text-sm flex items-center gap-2">🎯 方法一：透過瀏覽器 (推薦新手)</h5>
                      <ol className="list-decimal pl-4 space-y-2 text-sm text-slate-600">
                        <li>打開 GitHub 專案頁面。</li>
-                       <li>你會看到一個黃色的提示框說 "feat/your-name had recent pushes..."。</li>
+                       <li>你會看到一個黃色的提示框說 "feat/你的帳號名 had recent pushes..."。</li>
                        <li>點擊綠色的 <strong>Compare & pull request</strong> 按鈕。</li>
+                       <li>建立 PR 前，確認頁面上方 <strong>base repository</strong> 是 <code className="bg-slate-100 px-1 rounded">BlekZz/git-time-machine</code>、<strong>compare</strong> 是你的 Fork 的分支。</li>
                      </ol>
                    </div>
-                   
+
                    <div className="bg-white p-4 border border-slate-200 rounded-lg">
                      <h5 className="font-bold text-slate-800 mb-2 text-sm flex items-center gap-2">💻 方法二：使用 gh CLI (極速)</h5>
                      <div className="bg-slate-50 border border-slate-200 rounded p-2 mb-2 text-xs text-slate-600">
@@ -357,13 +439,15 @@ export const Chapter8Practice = () => {
                        如果沒有，先執行 <code className="bg-slate-100 px-0.5 rounded">gh auth login</code> 重新連線。</div>
                      </div>
                      <p className="text-sm text-slate-600 mb-2">確認連線後，直接在終端機輸入：</p>
-                     <div className="bg-slate-900 rounded p-2 font-mono text-[11px] text-green-400">
-                       $ gh pr create --title "交作業：your-name" --body "完成了實戰演練"
-                     </div>
+                     <CommandBlock
+                       command={'gh pr create --repo BlekZz/git-time-machine --title "交作業：你的帳號名" --body "完成了實戰演練"'}
+                       comment="--repo 確保 PR 發到原 repo，而不是你自己的 Fork"
+                       className="mb-2"
+                     />
                      <p className="text-xs text-slate-500 mt-2">按下 Enter，幾秒鐘內 PR 就建好了，終端機會回傳該 PR 的網址給你！</p>
                    </div>
                  </div>
-                 
+
                  <div className="mt-4 flex items-center justify-center">
                    <div className="animate-pulse bg-indigo-600 text-white px-6 py-3 rounded-full font-bold shadow-lg shadow-indigo-200">
                      🎉 大功告成！等待維護者 Approve 你的 PR 吧！
@@ -381,7 +465,7 @@ export const Chapter8Practice = () => {
                          <div className="font-bold text-green-800">維護者 Approve &amp; Merge ✅</div>
                          <p className="text-green-700 text-xs mt-1">
                            代表維護者認同並接納你的貢獻——你的創作正式成為這個專案的一部分了！🎉<br/>
-                           你會收到 GitHub 通知信。回到本地後，記得執行 <code className="bg-green-100 px-1 rounded">git pull</code>，把最新的 main 同步回你的電腦。
+                           你會收到 GitHub 通知信。先到 GitHub <strong>你的 Fork</strong> 頁面，按 <strong>Sync fork → Update branch</strong>（因為 PR 是合併進原 repo，你的 Fork 不會自動更新），然後回終端機 <code className="bg-green-100 px-1 rounded">git checkout main</code> + <code className="bg-green-100 px-1 rounded">git pull</code>。
                          </p>
                        </div>
                      </div>
@@ -407,10 +491,26 @@ export const Chapter8Practice = () => {
                       </div>
                     </div>
                   </div>
+
+                 <div className="mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl p-5 text-white shadow-lg">
+                   <h5 className="font-bold text-lg mb-2 flex items-center gap-2">🎉 你的第一個開源貢獻，完成了！</h5>
+                   <p className="text-sm text-indigo-50 leading-relaxed">
+                     去原 repo 的 <code className="bg-white/20 px-1 rounded">learner-commits/</code> 資料夾看看——你的檔案已經永遠留在這個專案裡了。點 repo 首頁的 <strong>Contributors</strong>，你的頭像也在上面。截圖留念吧，這是你的第一個開源貢獻！
+                   </p>
+                 </div>
                </div>
              </div>
           </Card>
         </div>
+
+        <details className="mt-8 bg-slate-50 border border-slate-200 rounded-xl p-4">
+          <summary className="cursor-pointer font-bold text-slate-700 text-sm">😵 整個搞砸了想重來？</summary>
+          <div className="mt-3 text-sm text-slate-600 space-y-2">
+            <p>搞砸了完全不影響原 repo，放心砍掉重練：</p>
+            <CommandBlock command={"git checkout main\ngit branch -D feat/你的帳號名"} comment="回到 main，刪掉搞砸的分支" />
+            <p>接著手動刪掉你在 <code className="bg-slate-200 px-1 rounded">learner-commits/</code> 建立的 md 檔（若還在），然後從 Step 3 重新開始即可。</p>
+          </div>
+        </details>
       </section>
     </div>
   );

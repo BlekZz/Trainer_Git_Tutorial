@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, Callout } from './Shared';
 import { GitBranch, Plus, ArrowRight, Activity, GitCommit, Copy } from 'lucide-react';
 
 export const Chapter5Branch = () => {
@@ -15,7 +15,8 @@ export const Chapter5Branch = () => {
     if (branches.includes('feat/login')) return;
     addLog('git branch feat/login', 'input', '$');
     setBranches([...branches, 'feat/login']);
-    addLog('建立分支 feat/login 成功。注意：你還在 main 分支上！', 'success');
+    addLog('（沒有任何輸出——這是正常的！真實終端裡成功時不會顯示訊息）', 'info');
+    addLog('小提醒：你還在 main 分支上，可以用 git branch 查看清單確認。', 'info');
   };
 
   const handleCheckout = (branchName) => {
@@ -46,22 +47,11 @@ export const Chapter5Branch = () => {
         </div>
         <div className="flex items-start gap-3">
           <span className="text-blue-400 text-base leading-none mt-0.5">📋</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">不知道現在有哪些分支？先查清楚再決定。</strong>單純輸入 <code className="bg-slate-700 px-1 rounded">git branch</code> 可以列出所有本地分支，前面有 <code className="bg-slate-700 px-1 rounded">*</code> 星號的就是你目前所在的分支。（注意：如果在指令後面加上文字，例如 <code className="bg-slate-700 px-1 rounded">git branch abc</code>，就會建立名為 abc 的新分支喔！）</p>
+          <p className="text-sm text-slate-300"><strong className="text-white">不知道現在有哪些分支？</strong>輸入 <code className="bg-slate-700 px-1 rounded">git branch</code> 可以列出所有本地分支，前面有 <code className="bg-slate-700 px-1 rounded">*</code> 星號的就是你目前所在的分支。</p>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-yellow-400 text-base leading-none mt-0.5">💡</span>
           <p className="text-sm text-slate-300"><strong className="text-white">最常用的懶人指令：<code className="bg-slate-700 px-1 rounded">git checkout -b 分支名</code></strong>，一次完成「建立 + 切換」，不需要分兩步做。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-red-400 text-base leading-none mt-0.5">⚠️</span>
-          <p className="text-sm text-slate-300">
-            <strong className="text-white">切換分支前，先確認工作區是乾淨的！</strong>
-            輸入 <code className="bg-slate-700 px-1 rounded">git status</code>，確認顯示 <code className="bg-slate-700 px-1 rounded">nothing to commit</code>，再執行 checkout。
-            <span className="block text-slate-400 text-xs mt-1">
-              如果你有未完成的修改，切換分支時 Git 可能會把那些修改「帶過去」，讓你以為自己搞壞了。
-              解法：先 <code className="bg-slate-600 px-1 rounded">git commit</code>（建議）或 <code className="bg-slate-600 px-1 rounded">git stash</code>（暫時保存），再切換。
-            </span>
-          </p>
         </div>
       </div>
 
@@ -91,8 +81,12 @@ export const Chapter5Branch = () => {
                    </button>
                  </div>
                  <code className="text-xs text-pink-600 bg-pink-50 px-1 rounded block mb-1">git branch feat/login</code>
-                 <p className="text-[11px] text-slate-500">只建立分支，但「不會」切換過去。</p>
+                 <p className="text-xs text-slate-500">只建立分支，但「不會」切換過去。</p>
                </div>
+
+               <Callout variant="warning" title="小心搞混">
+                 <code className="bg-amber-100 px-1 rounded">git branch abc</code> 這樣打，會<strong>建立</strong>一個叫 abc 的新分支，而不是切換過去！要切換請用 <code className="bg-amber-100 px-1 rounded">git checkout</code> 或下面的 <code className="bg-amber-100 px-1 rounded">-b</code> 懶人指令。
+               </Callout>
 
                {/* Switch Branch */}
                <div className="bg-white p-3 rounded border border-slate-200">
@@ -116,8 +110,12 @@ export const Chapter5Branch = () => {
                    </div>
                  </div>
                  <code className="text-xs text-indigo-600 bg-indigo-50 px-1 rounded block mb-1">git checkout &lt;分支名&gt;</code>
-                 <p className="text-[11px] text-slate-500">讓你的資料夾內容，瞬間切換到該宇宙的狀態。</p>
+                 <p className="text-xs text-slate-500">讓你的資料夾內容，瞬間切換到該宇宙的狀態。</p>
                </div>
+
+               <Callout variant="info" title="🎒 切換前東西沒存怎麼辦？git stash">
+                 <code className="bg-blue-100 px-1 rounded">git stash</code> = 把桌上未完成的東西先掃進抽屜（暫存）；<code className="bg-blue-100 px-1 rounded">git stash pop</code> = 從抽屜拿出來繼續。切換分支前，如果工作區還有未存檔的修改，先 <code className="bg-blue-100 px-1 rounded">git commit</code>（建議）或先 <code className="bg-blue-100 px-1 rounded">git stash</code>，再切換。
+               </Callout>
 
                {/* Create and Switch */}
                <div className="bg-white p-3 rounded border border-slate-200">
@@ -132,8 +130,12 @@ export const Chapter5Branch = () => {
                    </button>
                  </div>
                  <code className="text-xs text-purple-600 bg-purple-50 px-1 rounded block mb-1">git checkout -b bugfix/ui</code>
-                 <p className="text-[11px] text-slate-500">加上 <code>-b</code>，等於一次做完上面兩件事，非常方便！</p>
+                 <p className="text-xs text-slate-500">加上 <code>-b</code>，等於一次做完上面兩件事，非常方便！</p>
                </div>
+
+               <Callout variant="info" title="看到別人這樣寫別慌">
+                 新版 Git 也可以用 <code className="bg-blue-100 px-1 rounded">git switch -c 分支名</code>，和 <code className="bg-blue-100 px-1 rounded">git checkout -b</code> 是同一件事——看到別人這樣寫不用慌。
+               </Callout>
              </div>
           </Card>
         </div>
@@ -161,7 +163,7 @@ export const Chapter5Branch = () => {
              {/* feat/login Branch */}
              {branches.includes('feat/login') && (
                <>
-                 <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                 <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 384 160" preserveAspectRatio="none">
                    <path d="M 80 80 C 100 80, 110 32, 140 32 L 280 32" fill="none" stroke="rgba(236,72,153,0.3)" strokeWidth="6" strokeLinecap="round" />
                  </svg>
                  <div className="absolute top-8 left-[80%] -translate-y-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-300">
@@ -175,7 +177,7 @@ export const Chapter5Branch = () => {
              {/* bugfix/ui Branch */}
              {branches.includes('bugfix/ui') && (
                <>
-                 <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                 <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 384 160" preserveAspectRatio="none">
                    <path d="M 80 80 C 100 80, 110 128, 140 128 L 280 128" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="6" strokeLinecap="round" />
                  </svg>
                  <div className="absolute bottom-8 left-[80%] translate-y-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-300">
@@ -261,14 +263,14 @@ export const Chapter5Branch = () => {
                  <circle cx="180" cy="218" r="8" fill="#eab308" stroke="white" strokeWidth="3" />
                  <text x="180" y="240" fill="#a16207" fontSize="12" textAnchor="middle" fontWeight="bold">feat/db</text>
                  <circle cx="450" cy="218" r="8" fill="#eab308" stroke="white" strokeWidth="3" />
-                 <text x="450" y="240" fill="#64748b" fontSize="11" textAnchor="middle">耗時較長的開發</text>
+                 <text x="450" y="240" fill="#475569" fontSize="13" textAnchor="middle">耗時較長的開發</text>
 
                  {/* Merge Nodes */}
                  <circle cx="400" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
-                 <text x="400" y="152" fill="#475569" fontSize="11" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.1 (UI+API)</text>
+                 <text x="400" y="152" fill="#475569" fontSize="13" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.1 (UI+API)</text>
 
                  <circle cx="550" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
-                 <text x="550" y="152" fill="#475569" fontSize="11" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.2 (DB)</text>
+                 <text x="550" y="152" fill="#475569" fontSize="13" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.2 (DB)</text>
                </svg>
              </div>
            </div>

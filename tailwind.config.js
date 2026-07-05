@@ -5,7 +5,11 @@
         "./src/**/*.{js,ts,jsx,tsx}",
       ],
       theme: {
-        extend: {},
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans TC"', 'Inter', 'system-ui', 'ui-sans-serif', 'sans-serif'],
+          },
+        },
       },
       plugins: [],
     }

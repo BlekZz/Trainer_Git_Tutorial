@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText } from './Shared';
+import React, { useState, useRef } from 'react';
+import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout } from './Shared';
 import { Laptop, ArrowRight, Github, Download, FileText, CheckCircle, Search, LifeBuoy } from 'lucide-react';
 
 export const Chapter4PathB = () => {
   const [step, setStep] = useState(0); // 0: init, 1: clone, 2: cd, 3: status, 4: add/commit, 5: push
   const [logs, setLogs] = useState([{ prefix: '$', text: '準備開始情境 B：下載現有專案。' }]);
   const repoUrl = "https://github.com/company/cool-project.git";
+  const terminalRef = useRef(null);
+  const scrollToTerminal = () => {
+    terminalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
 
   const addLog = (text, type = 'info', prefix = '>') => {
     setLogs(prev => [...prev, { text, type, prefix }]);
@@ -14,6 +18,7 @@ export const Chapter4PathB = () => {
   const handleClone = () => {
     if (step >= 1) return;
     addLog(`git clone ${repoUrl}`, 'input', '$');
+    scrollToTerminal();
     setTimeout(() => {
       addLog(`Cloning into 'cool-project'...`, 'info');
     }, 300);
@@ -27,6 +32,7 @@ export const Chapter4PathB = () => {
   const handleCd = () => {
     if (step >= 2) return;
     addLog('cd cool-project', 'input', '$');
+    scrollToTerminal();
     setTimeout(() => {
       setStep(2);
     }, 200);
@@ -35,6 +41,7 @@ export const Chapter4PathB = () => {
   const handleStatus = () => {
     if (step >= 3) return;
     addLog('git status', 'input', 'cool-project $');
+    scrollToTerminal();
     setTimeout(() => {
       addLog('On branch main', 'info');
       addLog('Your branch is up to date with "origin/main".', 'info');
@@ -46,6 +53,7 @@ export const Chapter4PathB = () => {
   const handleCommit = () => {
     if (step !== 4) return;
     addLog('git commit -m "Add new feature"', 'input', 'cool-project $');
+    scrollToTerminal();
     setTimeout(() => {
       addLog('[main 7f8g9h] Add new feature', 'success');
       setStep(5);
@@ -56,8 +64,9 @@ export const Chapter4PathB = () => {
     if (step >= 4) return; // step 4 以上才算 Add 完成
     addLog('echo "hello" > new_feature.txt', 'input', 'cool-project $');
     addLog('git add .', 'input', 'cool-project $');
+    scrollToTerminal();
     setTimeout(() => {
-      addLog('Changes staged for commit.', 'success');
+      addLog('（沒有任何輸出——這是正常的，代表成功了）', 'info');
       setStep(4);
     }, 300);
   };
@@ -65,6 +74,7 @@ export const Chapter4PathB = () => {
   const handlePush = () => {
     if (step >= 6) return;
     addLog('git push', 'input', 'cool-project $');
+    scrollToTerminal();
     setTimeout(() => {
       addLog(`To ${repoUrl}`, 'success');
       addLog(`   1a2b3c..7f8g9h  main -> main`, 'success');
@@ -82,29 +92,28 @@ export const Chapter4PathB = () => {
       <SectionTitle title="4. 情境 B：參與現有專案" subtitle="下載、修改、上傳的三部曲" />
 
       {/* 進入狀態提示 */}
-      <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
+      <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-2 shadow-md mb-2">
         <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">⚡ 進入狀態：讀完再動</div>
         <div className="flex items-start gap-3">
           <span className="text-yellow-400 text-base leading-none mt-0.5">🔑</span>
-          <div className="text-sm text-slate-300">
-            <strong className="text-white">關於 Push 權限：你需要了解這件事！</strong>
-            <p className="mt-1">如果你是 Clone 別人的 repo（包括這個教學 repo），你沒有直接 Push 到對方 main 分支的權限。直接 `git push` 會得到 <code className="bg-slate-700 px-1 rounded text-red-300">403 Permission Denied</code>。</p>
-            <p className="mt-2 text-slate-400">這是正常的，代表保護機制在正常運作！</p>
-            <div className="mt-2 bg-slate-700/50 rounded-lg p-3 space-y-1">
-              <div className="text-white font-bold text-xs">✅ 本章的練習方式：</div>
-              <p className="text-xs">我們會在模擬中示範 Push 的流程。真正練習 Push，請等到 <strong className="text-white">Chapter 8 實戰演練</strong>——那裡會教你先 <strong className="text-white">Fork</strong> 取得屬於你自己的 repo 副本，再建立 Branch 並 Push，就不會有權限問題。</p>
-              <p className="text-xs text-slate-400 mt-1">（光是建立 Branch 並不會給你 Push 權限——Push 權限取決於你對那個 repo 是否有寫入權限，或是你有沒有自己的 Fork。）</p>
-            </div>
-          </div>
+          <p className="text-sm text-slate-300">直接 <code className="bg-slate-700 px-1 rounded">git push</code> 到別人的 repo 會得到 <code className="bg-slate-700 px-1 rounded text-red-300">403 Permission Denied</code>——這是正常的保護機制，真正練習 Push 請等 <strong className="text-white">Chapter 8</strong>（用 Fork 解決）。</p>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-green-400 text-base leading-none mt-0.5">💻</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">所有操作都在 Terminal 完成。</strong>Clone 完之後，<strong className="text-white">記得用 <code className="bg-slate-700 px-1 rounded">cd 專案名稱</code> 進入資料夾</strong>（例如終端機提示字元從 <code className="text-slate-400">~ $</code> 變成 <code className="text-slate-400">~/cool-project $</code> 才算進入），否則後續所有 git 指令都會找不到專案！</p>
+          <p className="text-sm text-slate-300">Clone 完記得 <code className="bg-slate-700 px-1 rounded">cd 專案名稱</code> 進入資料夾，否則後續指令都找不到專案。</p>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-blue-400 text-base leading-none mt-0.5">🔍</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">進入專案後，養成先 <code className="bg-slate-700 px-1 rounded">git status</code> 的習慣。</strong>確認工作區是乾淨的，再開始你的修改。這樣才知道「改了什麼」是你自己的。<br/><span className="text-slate-400 text-xs mt-1 block">💡 請往下查看 <strong>Git Status 狀態解碼速查表</strong> 來了解不同狀態的意義。</span></p>
+          <p className="text-sm text-slate-300">進入專案後，養成先 <code className="bg-slate-700 px-1 rounded">git status</code> 的習慣，確認工作區乾淨再開始修改（見下方速查表）。</p>
         </div>
+        <details className="mt-1 text-sm text-slate-400">
+          <summary className="cursor-pointer text-slate-300 hover:text-white">為什麼會 403？點我看完整解釋</summary>
+          <div className="mt-2 space-y-2 text-slate-400">
+            <p>如果你是 Clone 別人的 repo（包括這個教學 repo），你沒有直接 Push 到對方 main 分支的權限。</p>
+            <p>本章我們只在模擬中示範 Push 的流程。真正練習 Push，請等到 <strong className="text-white">Chapter 8 實戰演練</strong>——那裡會教你先 <strong className="text-white">Fork</strong> 取得屬於你自己的 repo 副本，再建立 Branch 並 Push，就不會有權限問題。</p>
+            <p className="text-xs">（光是建立 Branch 並不會給你 Push 權限——Push 權限取決於你對那個 repo 是否有寫入權限，或是你有沒有自己的 Fork。）</p>
+          </div>
+        </details>
       </div>
 
       <InstructionalText title="什麼時候會用到？">
@@ -118,11 +127,10 @@ export const Chapter4PathB = () => {
               <h3 className="font-bold text-slate-700 flex items-center gap-2"><Download size={18} /> 操作步驟</h3>
               <button onClick={reset} className="text-xs text-slate-500 hover:text-purple-600 underline">重新開始</button>
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-3 text-xs text-blue-800 flex items-start gap-2">
-              <span className="shrink-0 mt-0.5">💡</span>
-              <span>以下是<strong>示意模擬</strong>，點「執行」可以看到邏輯流程。<strong>實際操作請在你電腦真正的 Terminal 裡輸入同樣的指令。</strong>關於 Push 的實際練習，請等到 Chapter 8。</span>
-            </div>
-            
+            <Callout variant="info" className="mb-3" title="以下是示意模擬">
+              點「執行」可以看到邏輯流程。<strong>實際操作請在你電腦真正的 Terminal 裡輸入同樣的指令。</strong>關於 Push 的實際練習，請等到 Chapter 8。
+            </Callout>
+
             <div className="space-y-3">
               {/* Step 1 */}
               <div className={`p-3 border rounded-lg transition-all ${step === 0 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 0 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
@@ -168,6 +176,12 @@ export const Chapter4PathB = () => {
                 <div className="text-xs text-slate-500 mt-2">把修改過的檔案放進「暫存區」，準備好存檔。（實際操作中這步不能省！）</div>
               </div>
 
+              {step === 4 && (
+                <Callout variant="info" title="沒消息就是好消息">
+                  真實終端裡 <code>git add</code> 成功時<strong>不會顯示任何訊息</strong>。想確認可以輸入 <code>git status</code>，看到檔案變成綠色（Changes to be committed）就對了。
+                </Callout>
+              )}
+
               {/* Step 4b: git commit */}
               <div className={`p-3 border rounded-lg transition-all ${step === 4 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 4 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
                 <div className="flex items-center justify-between">
@@ -205,28 +219,28 @@ export const Chapter4PathB = () => {
                </div>
                {step >= 1 && (
                  <div className="absolute -left-6 top-1 flex flex-col gap-0.5 animate-fade-in">
-                   <div className="flex items-center gap-1 bg-white rounded px-1.5 py-0.5 shadow-sm border border-slate-200 text-[9px] text-slate-600 font-mono">
+                   <div className="flex items-center gap-1 bg-white rounded px-1.5 py-0.5 shadow-sm border border-slate-200 text-xs text-slate-600 font-mono">
                      <FileText size={8} className="text-blue-500 shrink-0" />code.js
                    </div>
                  </div>
                )}
                {step === 2 && (
-                 <div className="absolute -bottom-2 bg-yellow-100 text-yellow-700 text-[10px] px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-yellow-200">
+                 <div className="absolute -bottom-2 bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-yellow-200">
                    已進入資料夾
                  </div>
                )}
                {step === 3 && (
-                 <div className="absolute -bottom-2 bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-blue-200 flex items-center gap-1">
+                 <div className="absolute -bottom-2 bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-blue-200 flex items-center gap-1">
                    <Search size={10} /> 狀態乾淨
                  </div>
                )}
                {step === 4 && (
-                 <div className="absolute -bottom-2 bg-indigo-100 text-indigo-700 text-[10px] px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-indigo-200">
+                 <div className="absolute -bottom-2 bg-indigo-100 text-indigo-700 text-xs px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-indigo-200">
                    已暫存 (git add)
                  </div>
                )}
                {step === 5 && (
-                 <div className="absolute -bottom-2 bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-green-200">
+                 <div className="absolute -bottom-2 bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-green-200">
                    已修改並存檔
                  </div>
                )}
@@ -261,7 +275,7 @@ export const Chapter4PathB = () => {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8" ref={terminalRef}>
         <TerminalSim logs={logs} promptLabel={step >= 2 ? "cool-project $" : "~ $"} height="h-48" />
       </div>
 
@@ -326,20 +340,24 @@ export const Chapter4PathB = () => {
            <div className="grid md:grid-cols-2 gap-4">
              <div className="bg-white p-4 rounded border border-red-100 shadow-sm">
                <div className="font-bold text-slate-800 mb-2 flex items-center gap-2">😭 案發現場 1：不小心 Add 錯檔案</div>
-               <p className="text-xs text-slate-600 mb-2">我把還沒寫完的檔案送進暫存區了，我想把它拿出來！</p>
-               <div className="bg-slate-900 rounded p-2 font-mono text-xs text-green-400">
-                 $ git restore --staged &lt;檔案名&gt;
-               </div>
-               <p className="text-[10px] text-slate-500 mt-2">* 這只會把它移出暫存區，不會刪除你的程式碼。</p>
+               <p className="text-sm text-slate-600 mb-2">我把還沒寫完的檔案送進暫存區了，我想把它拿出來！</p>
+               <CommandBlock command="git restore --staged <檔案名>" />
+               <p className="text-xs text-slate-500 mt-2">* 這只會把它移出暫存區，不會刪除你的程式碼。restore = 搭時光機回到上一個存檔點的狀態。</p>
              </div>
-             
+
              <div className="bg-white p-4 rounded border border-red-100 shadow-sm">
                <div className="font-bold text-slate-800 mb-2 flex items-center gap-2">💥 案發現場 2：把程式碼改壞了</div>
-               <p className="text-xs text-slate-600 mb-2">剛剛亂改一通，程式全壞了，我想讓這個檔案回到最後一次 Commit 的狀態！</p>
-               <div className="bg-slate-900 rounded p-2 font-mono text-xs text-green-400">
-                 $ git restore &lt;檔案名&gt;
-               </div>
-               <p className="text-[10px] text-red-500 font-bold mt-2">⚠️ 警告：這會讓你剛寫的程式碼永遠消失，請小心使用！</p>
+               <p className="text-sm text-slate-600 mb-2">剛剛亂改一通，程式全壞了，我想讓這個檔案回到最後一次 Commit 的狀態！</p>
+               <CommandBlock command="git restore <檔案名>" />
+               <Callout variant="danger" className="mt-2">
+                 這會讓你剛寫的程式碼<strong>永遠消失</strong>，回不去了！執行前先確定你真的不要那些修改。
+               </Callout>
+             </div>
+
+             <div className="bg-white p-4 rounded border border-red-100 shadow-sm md:col-span-2">
+               <div className="font-bold text-slate-800 mb-2 flex items-center gap-2">😵 案發現場 3：畫面出現 detached HEAD</div>
+               <p className="text-sm text-slate-600 mb-2">看到 <code>You are in 'detached HEAD' state</code> → 別慌，這只是你時光旅行到了舊存檔點。</p>
+               <CommandBlock command="git checkout main" comment="輸入這行就回到現在了" />
              </div>
            </div>
         </Card>

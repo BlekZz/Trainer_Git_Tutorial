@@ -1,6 +1,6 @@
 import React from 'react';
-import { SectionTitle, Card, Badge, InstructionalText } from './Shared';
-import { Users, GitBranch, ArrowRight, GitPullRequest, AlertCircle, CheckCircle, Terminal, Github, GitMerge } from 'lucide-react';
+import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock } from './Shared';
+import { Users, GitBranch, ArrowRight, GitPullRequest, AlertCircle, CheckCircle, Github, GitMerge } from 'lucide-react';
 
 export const Chapter7Team = () => {
   return (
@@ -24,7 +24,7 @@ export const Chapter7Team = () => {
         </div>
         <div className="flex items-start gap-3">
           <span className="text-slate-400 text-base leading-none mt-0.5">ℹ️</span>
-          <p className="text-sm text-slate-300"><strong>給初學者的話：</strong>這個部分主要是在講「專案管理與合併審查」的流程，如果你只是自己練習，這部分可以先閱讀、嘗試理解整個運作邏輯就好。</p>
+          <p className="text-sm text-slate-300"><strong>給初學者的話：</strong>先讀懂 PR 的流程圖就好——下一章你就會親手跑一遍完整流程，所以別跳過喔。</p>
         </div>
       </div>
 
@@ -120,13 +120,11 @@ export const Chapter7Team = () => {
                      </ol>
                    </div>
 
-                   <div className="bg-slate-900 rounded p-3">
-                     <div className="text-xs font-bold text-green-400 mb-2">💻 方法二：GitHub CLI（記得嗎？這就是當初裝它的原因！）</div>
-                     <div className="font-mono text-xs text-green-400">
-                       $ gh pr create
-                     </div>
-                     <div className="text-[10px] text-slate-400 mt-2">
-                       這個工具在 Beginner-Setup-Guide 的步驟二安裝的。輸入這一行，它會互動式地問你標題、描述，幾秒內 PR 就建好了。
+                   <div>
+                     <div className="text-xs font-bold text-slate-600 mb-2">💻 方法二：GitHub CLI（記得嗎？這就是當初裝它的原因！）</div>
+                     <CommandBlock command="gh pr create" comment="這個工具在 Beginner-Setup-Guide 的步驟二安裝的" />
+                     <div className="text-xs text-slate-500 mt-2">
+                       輸入這一行，它會互動式地問你標題、描述，幾秒內 PR 就建好了。
                      </div>
                    </div>
                  </div>
@@ -152,10 +150,9 @@ export const Chapter7Team = () => {
               <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded border border-green-200 bg-green-50 shadow-sm">
                  <h4 className="font-bold text-green-900 mb-2 flex items-center gap-2"><CheckCircle size={16}/> Approve &amp; Merge</h4>
                  <p className="text-sm text-green-800">審查通過！維護者點擊 <strong>Merge pull request</strong>。你的分支完美融入 main 宇宙，任務圓滿達成！🎉</p>
-                 <div className="mt-3 p-2 bg-white rounded border border-green-200 text-xs text-green-700">
-                    <strong>💡 合併後會怎樣？</strong><br/>
-                    合併後，這個功能分支（如 feat/login）通常會被<strong>刪除或封存</strong>。因為它的階段性任務已經結束了。下次如果有新需求，請記得切回 main 並拉取最新進度後，<strong>再開一個全新的分支</strong>！
-                 </div>
+                 <Callout variant="info" title="合併後會怎樣？" className="mt-3">
+                   合併後，這個功能分支（如 feat/login）通常會被<strong>刪除或封存</strong>。因為它的階段性任務已經結束了。下次如果有新需求，請記得切回 main 並拉取最新進度後，<strong>再開一個全新的分支</strong>！
+                 </Callout>
               </div>
            </div>
 
