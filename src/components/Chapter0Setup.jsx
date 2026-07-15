@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Copy, Check, Monitor, Apple, MessageSquareHeart, CheckCircle2, ChevronDown, ChevronRight, ArrowRight } from 'lucide-react';
-import { SectionTitle, InstructionalText, CommandBlock, Callout } from './Shared';
+import { SectionTitle, InstructionalText, CommandBlock, Callout, NoOutputHint } from './Shared';
 
 // PromptBlock — 給「要貼給 AI 的中文提示詞」用（不是終端機指令，所以不加 $ 前綴）
 const PromptBlock = ({ text }) => {
@@ -209,9 +209,20 @@ export const Chapter0Setup = () => {
             command={isWin ? 'systeminfo | findstr /C:"OS"' : 'sw_vers && uname -m'}
             comment={isWin ? '列出 Windows 版本相關資訊' : '列出 macOS 版本與晶片架構'}
           />
+          {isWin && (
+            <Callout variant="warning" title="按下 Enter 後畫面會停住——這不是當機">
+              這條指令要花 <strong>5 秒到半分鐘</strong>收集電腦資料，期間畫面會卡住、什麼都不顯示。<strong>不要關視窗、不要重複按 Enter</strong>，耐心等它把結果印出來就好。
+            </Callout>
+          )}
+          {isWin && (
+            <CommandBlock
+              variant="output"
+              command={'OS Name:                   Microsoft Windows 11 Home\nOS Version:                10.0.26100 N/A Build 26100\n...（後面還有幾行 OS 開頭的資訊）'}
+            />
+          )}
           {isWin ? (
             <div className="text-sm text-slate-600 space-y-1">
-              <p>輸出裡的重點：</p>
+              <p>你的行數和措辭可能和上面略有不同（例如 Windows 10、不同的版本號），都是正常的。輸出裡的重點：</p>
               <ul className="list-disc pl-5 space-y-1">
                 <li><code className="bg-slate-100 px-1 rounded">OS Name</code>：你的 Windows 版本（例如 Windows 10 / 11）</li>
                 <li><code className="bg-slate-100 px-1 rounded">OS Version</code>：詳細的版本號，AI 靠它判斷你的系統夠不夠新</li>
@@ -354,16 +365,17 @@ export const Chapter0Setup = () => {
 
         {/* ── 步驟 6：驗收與連線 ── */}
         <StepCard step={step} setStep={setStep} idx={5}>
-          <p className="text-sm text-slate-600"><strong>重開一個新的終端機</strong>（{isWin ? '搜尋 powershell，或用 VSCode 的 Terminal → New Terminal' : '⌘ + 空白鍵搜尋 Terminal，或用 VSCode 的 Terminal → New Terminal'}），一次輸入一行下面的指令、按 Enter，過三關驗收：</p>
-          <CommandBlock
-            command={'git -v\nnode -v\ngh --version'}
-            comment="三關驗收：每行都要看到版本號才算過"
-          />
-          <CommandBlock
-            variant="output"
-            command={'git version 2.x.x\nv20.x.x（本教材需要 v20 以上）\ngh version 2.x.x'}
-          />
+          <p className="text-sm text-slate-600"><strong>重開一個新的終端機</strong>（{isWin ? '搜尋 powershell，或用 VSCode 的 Terminal → New Terminal' : '⌘ + 空白鍵搜尋 Terminal，或用 VSCode 的 Terminal → New Terminal'}），過三關驗收。<strong>一行一行輸入、每行按一次 Enter</strong>，每一關都要看到版本號才算過：</p>
+          <CommandBlock command="git -v" comment="第一關：Git" />
+          <CommandBlock variant="output" command="git version 2.x.x" />
+          <CommandBlock command="node -v" comment="第二關：Node.js" />
+          <CommandBlock variant="output" command="v20.x.x（本教材需要 v20 以上）" />
+          <CommandBlock command="gh --version" comment="第三關：GitHub CLI" />
+          <CommandBlock variant="output" command="gh version 2.x.x" />
           <p className="text-sm text-slate-600">三關都過了之後，讓電腦登入你的 GitHub 帳號：</p>
+          <Callout variant="warning" title="這條和前面的不一樣——它會變成問答選單">
+            按下 Enter 之後，終端機會變成一連串問答選單，要用<strong>鍵盤上下方向鍵</strong>移動、按 Enter 選擇，<strong>不是用打字的</strong>。看到一堆選項是正常的，照下面的順序選就好。中途畫面會停在 <code className="bg-amber-100 px-1 rounded">Press Enter to open github.com in your browser...</code>——這是要你按一下 Enter 開瀏覽器，不是當機。
+          </Callout>
           <CommandBlock command="gh auth login" comment="把 gh 和你的 GitHub 帳號串起來" />
           <div className="text-sm text-slate-700 space-y-1">
             <p>終端機會問你幾個問題，用<strong>上下方向鍵</strong>選、按 Enter 確認，選擇原則：</p>
@@ -377,11 +389,22 @@ export const Chapter0Setup = () => {
             <p className="text-slate-500 text-xs mt-1">問題順序和字面可能因版本略有不同，掌握原則就好：GitHub.com → HTTPS → Yes → 瀏覽器登入。</p>
           </div>
           <CommandBlock command="gh auth status" comment="確認連線：看到 Logged in as 你的帳號 就成功了" />
-          <p className="text-sm text-slate-600">最後，順手貼上這兩行<strong>一次性設定</strong>（在任何資料夾輸入都可以，只需做一次）：</p>
           <CommandBlock
-            command={'git config --global pull.rebase false\ngit config --global init.defaultBranch main'}
-            comment="第一行：pull 遇到分歧時用合併處理；第二行：新專案主分支一律叫 main"
+            variant="output"
+            command={'github.com\n  ✓ Logged in to github.com account 你的帳號 (keyring)\n  - Active account: true\n  - Git operations protocol: https'}
           />
+          <p className="text-xs text-slate-500">gh 的輸出會帶顏色和 ✓ 符號，都是正常的，看到 <code className="bg-slate-100 px-1 rounded">Logged in to github.com</code> 就是成功。</p>
+          <p className="text-sm text-slate-600">最後，順手做兩行<strong>一次性設定</strong>（在任何資料夾輸入都可以，只需做一次，一樣一行按一次 Enter）：</p>
+          <CommandBlock
+            command="git config --global pull.rebase false"
+            comment="pull 遇到分歧時用合併處理"
+          />
+          <NoOutputHint />
+          <CommandBlock
+            command="git config --global init.defaultBranch main"
+            comment="新專案主分支一律叫 main"
+          />
+          <NoOutputHint />
           <Callout variant="info" title="這兩行在防什麼？">
             不設定的話，之後 Chapter 6 做同步時 Git 可能反問你要用哪種方式合併、讓你卡住；有些電腦的新專案主分支會叫 <code>master</code>，跟教學指令裡的 <code>main</code> 對不起來。先設好，這兩個坑都不會踩到。
           </Callout>

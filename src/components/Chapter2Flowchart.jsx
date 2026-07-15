@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionTitle, Card, Badge, InstructionalText, Callout, Quiz } from './Shared';
+import { SectionTitle, Card, Badge, InstructionalText, Callout, Quiz, FalseAlarm } from './Shared';
 import { GitBranch, Map, Laptop, Github, Download, PlusCircle } from 'lucide-react';
 
 export const Chapter2Flowchart = () => (
@@ -121,6 +121,27 @@ export const Chapter2Flowchart = () => (
       </Card>
     </div>
     
+    {/* 預防照抄：上面是概念地圖，實際敲之前先打幾支預防針 */}
+    <div className="space-y-3">
+      <h3 className="text-md font-bold text-slate-700">先打預防針：照著上面的圖敲之前，這幾件事要知道</h3>
+
+      <Callout variant="warning" title="圖中的 git commit 是概念示意，實際輸入務必加 -m">
+        實際操作時請打 <code className="bg-amber-100 px-1 rounded">git commit -m "你的存檔訊息"</code>。只打 <code className="bg-amber-100 px-1 rounded">git commit</code> 會掉進一個滿是 <code className="bg-amber-100 px-1 rounded">~</code> 符號的編輯器畫面（不好離開），之後的章節會教怎麼應對，現在先記得加 <code className="bg-amber-100 px-1 rounded">-m</code> 就好。
+      </Callout>
+
+      <FalseAlarm signal={'warning: LF will be replaced by CRLF in xxx.md'}>
+        Windows 上打 <code className="bg-amber-100 px-1 rounded">git add .</code> 時很常看到這種黃字，它只是在提醒「換行格式會自動轉換」，<strong>不是錯誤</strong>，可以無視、直接繼續下一步。
+      </FalseAlarm>
+
+      <FalseAlarm signal={'Enumerating objects: 5, done.\nWriting objects: 100% (5/5), done.\nremote: ...'} title="push 時會冒出一大串訊息——那是上傳進度">
+        <code className="bg-amber-100 px-1 rounded">git push</code> 成功時反而話很多：這些是上傳進度回報，不是錯誤。第一次 push 還可能彈出登入視窗，照畫面登入 GitHub 即可。
+      </FalseAlarm>
+
+      <FalseAlarm signal={'Receiving objects:  42% (123/291)'} title="clone 時的百分比是下載進度">
+        <code className="bg-amber-100 px-1 rounded">git clone</code> 會顯示下載進度百分比，中途停一下是正常的（網路在傳檔案），等它回到可以輸入指令的狀態就是完成了。
+      </FalseAlarm>
+    </div>
+
     <Callout variant="info" className="justify-center text-center">
       <span className="font-bold">接下來的兩個章節，我們將分別帶你實際演練這兩條路線！點下方的「下一章」按鈕繼續。</span>
     </Callout>

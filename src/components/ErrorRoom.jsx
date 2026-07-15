@@ -66,6 +66,49 @@ export const ErrorRoom = () => {
         translation="你現在站在一個沒有分支名字的位置上，但別慌，這不會弄壞任何東西。"
       >
         <CommandBlock command="git checkout main" comment="回到 main 分支這個家" />
+        <p className="text-sm text-slate-600">
+          ⚠️ 如果你在這個狀態下<strong>已經 commit 過</strong>而且想保留那些成果：先執行 <span className="font-mono">git branch 臨時分支名</span> 幫它們掛上一個分支名，再 checkout main——否則直接離開後，那些 commit 會找不回來。
+        </p>
+      </ErrorCard>
+
+      <ErrorCard
+        error="CONFLICT (content): Merge conflict in xxx.md / Automatic merge failed; fix conflicts and then commit the result."
+        translation="你和別人改到了同一個地方，Git 不敢自己決定要留誰的，要你手動選。"
+      >
+        <p className="text-sm text-slate-600 mb-2">
+          解法：打開有衝突的檔案，你會看到 <span className="font-mono">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span>、<span className="font-mono">=======</span>、<span className="font-mono">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> 三種標記。把這三種標記全部刪掉、留下你要的內容並存檔，然後：
+        </p>
+        <CommandBlock command="git add 檔名" comment="告訴 Git 衝突已處理完" />
+        <CommandBlock command="git commit" comment="完成這次合併" />
+      </ErrorCard>
+
+      <ErrorCard
+        error="! [rejected] main -> main (fetch first) / Updates were rejected because the remote contains work that you do not have locally"
+        translation="遠端有你本地沒有的更新，Git 怕你蓋掉別人的東西，先把你擋下來。"
+      >
+        <CommandBlock command="git pull" comment="先把遠端的更新拉下來（如果出現衝突，照上面 merge conflict 那條處理）" />
+        <CommandBlock command="git push" comment="再推一次就會成功" />
+      </ErrorCard>
+
+      <ErrorCard
+        error="warning: LF will be replaced by CRLF in xxx"
+        translation="Windows 換行符號的轉換提醒，不是錯誤——你的指令其實已經成功了。"
+      >
+        <p className="text-sm text-slate-600">解法：不用管它，直接繼續下一步。</p>
+      </ErrorCard>
+
+      <ErrorCard
+        error={'畫面停住、左下角出現冒號 ":"，打字沒反應（git log / git diff / git branch 都會發生）'}
+        translation="你進入了「分頁瀏覽器」——因為輸出太長一頁塞不下，Git 讓你分頁看，這不是當機。"
+      >
+        <p className="text-sm text-slate-600">解法：按 <span className="font-mono font-bold">q</span> 即可離開。想繼續看的話，用上下方向鍵捲動。</p>
+      </ErrorCard>
+
+      <ErrorCard
+        error="remote: Support for password authentication was removed / fatal: Authentication failed for 'https://...'"
+        translation="你的登入憑證失效了，或是輸入錯了——GitHub 早已不接受網站密碼。"
+      >
+        <CommandBlock command="gh auth login" comment="用 GitHub CLI 重新登入一次，再重跑剛剛的指令" />
       </ErrorCard>
 
       <ErrorCard

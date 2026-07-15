@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionTitle, Card, Badge, CommandBlock, Callout, Quiz } from './Shared';
+import { SectionTitle, Card, Badge, CommandBlock, Callout, Quiz, NoOutputHint } from './Shared';
 import { GitGraph, Server, Key, Info, Github, Sparkles, BookOpen, TrendingUp } from 'lucide-react';
 
 export const Chapter1Concept = () => (
@@ -174,10 +174,25 @@ export const Chapter1Concept = () => (
           接下來的指令請在 VSCode 的終端機或系統的終端機 App 裡輸入，這個網頁只是教學展示，不會真的執行指令。
         </Callout>
 
+        <p className="text-sm text-slate-600 mb-2">兩行指令<strong>一行一行輸入、每行按一次 Enter</strong>。記得把 <code>Your Name</code> 換成你的名字、<code>you@example.com</code> 換成你自己的信箱（<strong>引號要保留</strong>）：</p>
+
         <CommandBlock
-          command={'git config --global user.name "Your Name"\ngit config --global user.email "you@example.com"'}
-          comment="設定你的身份名牌"
+          command={'git config --global user.name "Your Name"'}
+          comment="設定你的名字"
         />
+        <NoOutputHint />
+
+        <div className="mt-3">
+          <CommandBlock
+            command={'git config --global user.email "you@example.com"'}
+            comment="設定你的信箱"
+          />
+          <NoOutputHint />
+        </div>
+
+        <Callout variant="success" title="沒消息就是好消息" className="mt-3">
+          這是你人生第一條 git 指令，先記住終端機的常態：<strong>指令成功時，往往什麼都不會顯示</strong>。畫面安安靜靜跳回可輸入狀態，就代表它做完了。
+        </Callout>
 
         <Callout variant="info" title="`$` 是什麼？" className="mt-3">
           指令開頭的 <code>$</code> 代表「這是要打在終端機的指令」，輸入時不用打 <code>$</code>——用上面的複製按鈕會自動幫你去掉。
@@ -187,8 +202,9 @@ export const Chapter1Concept = () => (
           這兩行指令在終端機的<strong>任何資料夾</strong>輸入都可以，不需要先 <code>cd</code> 進某個專案。
         </p>
 
-        <p className="text-sm text-slate-600 mt-3">敲完上面兩行後，輸入這行確認設定是否成功：</p>
+        <p className="text-sm text-slate-600 mt-3">敲完上面兩行後，輸入這行確認設定是否成功——注意對比：<strong>這條有輸出</strong>（回你設定的值），上面那兩條沒有：</p>
         <CommandBlock command="git config user.name" comment="會回你剛剛設定的名字，只有一行" />
+        <CommandBlock variant="output" command="Your Name（你剛剛設定的名字）" />
 
         <div className="mt-3 grid sm:grid-cols-2 gap-3">
           <div className="bg-white border border-amber-200 rounded-lg p-3 text-xs text-amber-800 flex items-start gap-2 shadow-sm">
@@ -202,7 +218,7 @@ export const Chapter1Concept = () => (
         </div>
 
         <p className="text-xs text-slate-500 mt-3">
-          小提醒：執行 <code>git init</code> 後，專案裡會多一個隱藏的 <code>.git</code> 資料夾，那就是你的存檔本體——第 3 章會介紹它。
+          小提醒：執行 <code>git init</code> 後，專案裡會多一個隱藏的 <code>.git</code> 資料夾，那就是你的存檔本體——它預設是隱藏的，在檔案總管／Finder 裡看不到是正常的。第 3 章會介紹它。
         </p>
       </Card>
     </div>

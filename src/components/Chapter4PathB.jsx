@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout, Quiz } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout, Quiz, NoOutputHint } from './Shared';
 import { Laptop, ArrowRight, Github, Download, FileText, CheckCircle, Search, LifeBuoy } from 'lucide-react';
 
 const MAX_STEP = 6;
@@ -51,7 +51,9 @@ export const Chapter4PathB = () => {
     }, 300);
     setTimeout(() => {
       addLog(`remote: Enumerating objects: 42, done.`, 'info');
+      addLog(`Receiving objects: 100% (42/42), 12.3 KiB | 6.15 MiB/s, done.`, 'info');
       addLog(`Unpacking objects: 100% (42/42), done.`, 'success');
+      addLog('（真實 clone 會跑一連串像上面這樣的百分比進度，跑完就是成功）', 'info');
       setStep(1);
     }, 1200);
   };
@@ -89,7 +91,7 @@ export const Chapter4PathB = () => {
 
   const handleAdd = () => {
     if (step >= 4) return; // step 4 以上才算 Add 完成
-    addLog('echo "hello" > new_feature.txt', 'input', 'cool-project $');
+    addLog('（旁白：假設你剛剛新增了一個檔案 new_feature.txt——這行是劇情設定，不是要你打的指令）', 'info');
     addLog('git add .', 'input', 'cool-project $');
     scrollToTerminal();
     setTimeout(() => {
@@ -242,6 +244,8 @@ export const Chapter4PathB = () => {
           <summary className="cursor-pointer text-slate-300 hover:text-white">為什麼會 403？點我看完整解釋</summary>
           <div className="mt-2 space-y-2 text-slate-400">
             <p>如果你是 Clone 別人的 repo（包括這個教學 repo），你沒有直接 Push 到對方 main 分支的權限。</p>
+            <div className="bg-slate-900 rounded-md px-3 py-2 font-mono text-xs text-red-300 whitespace-pre-wrap break-all">{"remote: Permission to company/cool-project.git denied to 你的帳號.\nfatal: unable to access 'https://github.com/company/cool-project.git/': The requested URL returned error: 403"}</div>
+            <p>真實畫面的紅字長這樣——看到它就代表是<strong className="text-white">權限保護在作用，不是你打錯指令</strong>。</p>
             <p>本章我們只在模擬中示範 Push 的流程。真正練習 Push，請等到 <strong className="text-white">Chapter 8 實戰演練</strong>——那裡會教你先 <strong className="text-white">Fork</strong> 取得屬於你自己的 repo 副本，再建立 Branch 並 Push，就不會有權限問題。</p>
             <p className="text-xs">（光是建立 Branch 並不會給你 Push 權限——Push 權限取決於你對那個 repo 是否有寫入權限，或是你有沒有自己的 Fork。）</p>
           </div>
@@ -494,6 +498,7 @@ export const Chapter4PathB = () => {
                <div className="font-bold text-slate-800 mb-2 flex items-center gap-2">😭 案發現場 1：不小心 Add 錯檔案</div>
                <p className="text-sm text-slate-600 mb-2">我把還沒寫完的檔案送進暫存區了，我想把它拿出來！</p>
                <CommandBlock command="git restore --staged <檔案名>" />
+               <NoOutputHint>想確認的話輸入 <code>git status</code>——看到那個檔案變回紅色（未暫存）就代表拿出來了。</NoOutputHint>
                <p className="text-xs text-slate-500 mt-2">* 這只會把它移出暫存區，不會刪除你的程式碼。restore = 搭時光機回到上一個存檔點的狀態。</p>
              </div>
 
@@ -501,6 +506,7 @@ export const Chapter4PathB = () => {
                <div className="font-bold text-slate-800 mb-2 flex items-center gap-2">💥 案發現場 2：把程式碼改壞了</div>
                <p className="text-sm text-slate-600 mb-2">剛剛亂改一通，程式全壞了，我想讓這個檔案回到最後一次 Commit 的狀態！</p>
                <CommandBlock command="git restore <檔案名>" />
+               <NoOutputHint>想確認的話輸入 <code>git status</code>——那個檔案從變動清單上消失，就代表已還原成功。</NoOutputHint>
                <Callout variant="danger" className="mt-2">
                  這會讓你剛寫的程式碼<strong>永遠消失</strong>，回不去了！執行前先確定你真的不要那些修改。
                </Callout>
@@ -510,6 +516,7 @@ export const Chapter4PathB = () => {
                <div className="font-bold text-slate-800 mb-2 flex items-center gap-2">😵 案發現場 3：畫面出現 detached HEAD</div>
                <p className="text-sm text-slate-600 mb-2">看到 <code>You are in 'detached HEAD' state</code> → 別慌，這只是你時光旅行到了舊存檔點。</p>
                <CommandBlock command="git checkout main" comment="輸入這行就回到現在了" />
+               <CommandBlock variant="output" command={"Switched to branch 'main'"} className="mt-2" />
              </div>
            </div>
         </Card>

@@ -124,7 +124,10 @@ export const Chapter7Team = () => {
                      <div className="text-xs font-bold text-slate-600 mb-2">💻 方法二：GitHub CLI（記得嗎？這就是當初裝它的原因！）</div>
                      <CommandBlock command="gh pr create" comment="這個工具在 Chapter 0 行前準備安裝的" />
                      <div className="text-xs text-slate-500 mt-2">
-                       輸入這一行，它會互動式地問你標題、描述，幾秒內 PR 就建好了。
+                       輸入這一行，它會互動式地問你標題、描述，幾秒內 PR 就建好了。互動過程中它可能會問你要 push 到哪、要不要開瀏覽器——多半直接按 Enter 選預設值即可。
+                     </div>
+                     <div className="text-xs text-slate-500 mt-1">
+                       ⚠️ 如果回你 <code className="bg-slate-100 px-1 rounded">not logged into any GitHub hosts</code>，先執行 <code className="bg-slate-100 px-1 rounded">gh auth login</code> 登入，再重跑一次 <code className="bg-slate-100 px-1 rounded">gh pr create</code>。
                      </div>
                    </div>
                  </div>

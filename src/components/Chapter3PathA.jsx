@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout, Quiz } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout, Quiz, NoOutputHint, FalseAlarm } from './Shared';
 import { Laptop, Folder, ArrowRight, Github, Shield, PlusCircle, CheckCircle, FileText, Eye, ShieldAlert } from 'lucide-react';
 
 const MAX_STEP = 4;
@@ -78,6 +78,9 @@ export const Chapter3PathA = () => {
     addLog('git push -u origin main', 'input', '$');
     scrollToTerminal();
     setTimeout(() => {
+      addLog('Enumerating objects: 3, done.', 'info');
+      addLog('Writing objects: 100% (3/3), 230 bytes | 230.00 KiB/s, done.', 'info');
+      addLog('remote: Resolving deltas: 100% (0/0), done.', 'info');
       addLog(`To ${repoUrl}`, 'success');
       addLog(` * [new branch]      main -> main`, 'success');
       addLog(`Branch 'main' set up to track remote branch 'main' from 'origin'.`, 'success');
@@ -274,7 +277,7 @@ export const Chapter3PathA = () => {
                   <div className="font-mono text-sm text-slate-700">$ git add . <br/>$ git commit -m "Init"</div>
                   <StepAction state={step > 1 ? 'done' : step === 1 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleCommit} activeClass="bg-indigo-600 hover:bg-indigo-700" />
                 </div>
-                <div className="text-xs text-slate-500 mt-2">先把本地端的檔案正式存檔一次。</div>
+                <div className="text-xs text-slate-500 mt-2">先把本地端的檔案正式存檔一次。<strong className="text-slate-600">注意：這是兩條分開的指令，實作時要一行一行輸入。</strong></div>
               </div>
 
               {step === 1 && (
@@ -472,6 +475,9 @@ export const Chapter3PathA = () => {
              存檔完通常會心虛：「它真的存進去了嗎？」<code>git log</code> 就是打開時光機的儀表板，列出你所有可以回去的存檔點。
            </p>
            <CommandBlock variant="output" command={'git log --oneline\na1b2c3d (HEAD -> main) feat: 結帳功能\n9f8e7d6 docs: 更新說明'} className="mb-3" />
+           <FalseAlarm signal={':'} title="畫面卡住、打字沒反應？" className="mb-3">
+             紀錄一多，<code>git log</code> 會進入「瀏覽畫面」：底部出現一個 <code>:</code>，怎麼打字都沒反應。這不是當機——按 <code>q</code> 就能離開、回到指令列。
+           </FalseAlarm>
            <p className="text-sm text-emerald-700">
              <strong>💡 視覺化推薦：</strong>如果你覺得純文字太難懂，記得打開我們在 <a href="#setup" className="underline font-bold hover:text-emerald-900">Chapter 0 行前準備</a> 中請你裝的 <strong>Git Graph 外掛</strong>，它會在 VSCode 裡畫出超美的時間線樹狀圖喔！
            </p>
@@ -496,14 +502,24 @@ export const Chapter3PathA = () => {
           <Card>
             <h4 className="font-bold text-slate-700 mb-2">2. 打開終端機</h4>
             <p className="text-sm text-slate-600">VSCode 上方選單 <strong>Terminal → New Terminal</strong>（它會自動在你的資料夾裡，不用 cd）。</p>
+            <p className="text-sm text-slate-600 mt-2">你的畫面開頭可能是 <code className="bg-slate-100 px-1 rounded">PS C:\Users\...&gt;</code> 而不是 <code className="bg-slate-100 px-1 rounded">$</code>——只是提示符號長得不同，完全不影響操作。教學中的 <code className="bg-slate-100 px-1 rounded">$</code> 只代表「指令從這裡開始」，<strong>不用把 $ 打進去</strong>。</p>
           </Card>
 
           <Card>
             <h4 className="font-bold text-slate-700 mb-2">3. 逐行輸入以下指令</h4>
             <div className="space-y-3">
               <CommandBlock command="git init" comment="初始化這個資料夾為 Git 專案" />
+              <CommandBlock variant="output" command={'Initialized empty Git repository in C:/Users/你的名字/Desktop/my-first-repo/.git/'} />
               <CommandBlock command="git add ." comment="把 notes.md 放進暫存區" />
+              <NoOutputHint>如果出現下面那行黃色 warning，也一樣算成功。</NoOutputHint>
+              <FalseAlarm signal={'warning: LF will be replaced by CRLF in notes.md'}>
+                Windows 電腦很常出現這行黃字。它只是在提醒你「換行符號會自動轉換」，<strong>不是錯誤</strong>——忽略它，直接輸入下一條指令即可。
+              </FalseAlarm>
               <CommandBlock command='git commit -m "我的第一次存檔"' />
+              <CommandBlock variant="output" command={'[main (root-commit) 1a2b3c] 我的第一次存檔\n 1 file changed, 1 insertion(+)\n create mode 100644 notes.md'} />
+              <FalseAlarm signal={'~\n~\n~\n(整個畫面突然變樣，滿滿都是 ~ 符號)'} title="忘了打 -m，掉進奇怪的畫面？">
+                如果只打了 <code>git commit</code>（忘了 <code>-m "..."</code>），Git 會把你丟進一個滿是 <code>~</code> 的文字編輯器（vim）。逃出方法：先按 <code>Esc</code>，再輸入 <code>:q!</code> 然後按 Enter，就會回到指令列——重新打一次完整的 <code>git commit -m "..."</code> 就好。
+              </FalseAlarm>
             </div>
           </Card>
 
@@ -518,9 +534,10 @@ export const Chapter3PathA = () => {
               <CommandBlock command="git remote add origin https://github.com/你的帳號/my-first-repo.git" comment="記得換成你自己複製的網址" />
               <CommandBlock command="git branch -M main" comment="確保主分支叫 main（有些電腦預設叫 master，會對不上下一行指令）" />
               <CommandBlock command="git push -u origin main" />
+              <CommandBlock variant="output" command={'Enumerating objects: 3, done.\nWriting objects: 100% (3/3), 230 bytes | 230.00 KiB/s, done.\nremote: Resolving deltas: 100% (0/0), done.\nTo https://github.com/你的帳號/my-first-repo.git\n * [new branch]      main -> main'} />
             </div>
             <Callout variant="info" className="mt-3">
-              如果 push 時跳出瀏覽器登入視窗，照著登入即可，這是正常的身分驗證流程。
+              畫面會跳出一連串 <code>Enumerating objects...</code>、<code>Writing objects: 100%</code>、<code>remote: ...</code>——這些都是正常的上傳進度，不用理會；最後一行看到 <code>main -&gt; main</code> 就是成功了。另外，如果 push 時跳出瀏覽器登入視窗，照著登入即可，這是正常的身分驗證流程。
             </Callout>
           </Card>
 

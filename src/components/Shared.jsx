@@ -136,6 +136,38 @@ export const Callout = ({ variant = 'info', title, children, className = '' }) =
   );
 };
 
+// NoOutputHint — 標示「這條指令成功時完全沒有輸出」，解決初學者盯著空白畫面以為失敗的問題
+// 放在對應的 CommandBlock 正下方使用
+// <NoOutputHint /> 或 <NoOutputHint>自訂補充文字</NoOutputHint>
+export const NoOutputHint = ({ children, className = '' }) => (
+  <div className={`flex items-start gap-2 rounded-b-lg border border-t-0 border-slate-200 bg-slate-50 px-3 py-2 -mt-1 ${className}`}>
+    <CheckCircle size={15} className="text-green-500 shrink-0 mt-0.5" aria-hidden="true" />
+    <p className="text-xs leading-relaxed text-slate-600">
+      <span className="font-bold text-slate-700">按 Enter 後畫面不會出現任何訊息</span>
+      ——這就是成功了。終端機的習慣是「沒消息就是好消息」，直接輸入下一條指令即可。
+      {children && <span className="block mt-1">{children}</span>}
+    </p>
+  </div>
+);
+
+// FalseAlarm — 「看起來像錯誤，其實完全正常」的統一提醒框
+// signal: 學員實際會在畫面上看到的嚇人文字（等寬字型顯示）
+// <FalseAlarm signal={'warning: LF will be replaced by CRLF in xxx.md'}>這只是換行符號提醒…</FalseAlarm>
+export const FalseAlarm = ({ signal, title = '看到這個不用慌 — 這不是錯誤', children, className = '' }) => (
+  <div className={`rounded-lg border border-amber-300 bg-amber-50 p-3 md:p-4 ${className}`}>
+    <p className="font-bold text-amber-900 text-sm mb-2 flex items-center gap-2">
+      <AlertTriangle size={16} className="text-amber-500 shrink-0" aria-hidden="true" />
+      {title}
+    </p>
+    {signal && (
+      <div className="bg-slate-900 rounded-md px-3 py-2 mb-2 font-mono text-xs text-yellow-300 whitespace-pre-wrap break-all">
+        {signal}
+      </div>
+    )}
+    <div className="text-sm leading-relaxed text-amber-900">{children}</div>
+  </div>
+);
+
 // Quiz — 章末自我檢測
 // <Quiz questions={[{ q: '問題？', options: ['選項A', '選項B', '選項C'], answer: 0, explain: '解析' }]} />
 export const Quiz = ({ title = '📝 小測驗：檢查你有沒有真的懂', questions }) => {

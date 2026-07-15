@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock, Quiz } from './Shared';
+import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock, Quiz, NoOutputHint, FalseAlarm } from './Shared';
 import { Rocket, Target, CheckCircle, Terminal, FileText, GitBranch, ArrowUpCircle, GitPullRequest, Search, Square, CheckSquare } from 'lucide-react';
 
 const PROGRESS_KEY = 'gtm-ch8-progress';
@@ -121,14 +121,14 @@ export const Chapter8Practice = () => {
               <div>
                 <div className="text-xs text-slate-400 mb-1">① 確認你在 Trainer_Git_Tutorial 資料夾內</div>
                 <div className="font-mono text-sm text-green-400">$ pwd</div>
-                <div className="text-xs text-slate-400 mt-1">✅ 應看到路徑結尾是 <code className="bg-slate-700 px-1 rounded">Trainer_Git_Tutorial</code></div>
+                <div className="text-xs text-slate-400 mt-1">✅ 應看到路徑結尾是 <code className="bg-slate-700 px-1 rounded">Trainer_Git_Tutorial</code>。PowerShell 的路徑分隔會顯示為反斜線 <code className="bg-slate-700 px-1 rounded">\</code>，一樣看結尾是不是 Trainer_Git_Tutorial 就好</div>
                 <div className="text-xs text-red-400 mt-0.5">❌ 如果不對：輸入 <code className="bg-slate-700 text-white px-1 rounded">cd 路徑/Trainer_Git_Tutorial</code> 切換過去</div>
               </div>
 
               <div>
                 <div className="text-xs text-slate-400 mb-1">② 確認你在 main 分支</div>
                 <div className="font-mono text-sm text-green-400">$ git branch</div>
-                <div className="text-xs text-slate-400 mt-1">✅ 有星號（*）的那行應該是 <code className="bg-slate-700 px-1 rounded">* main</code></div>
+                <div className="text-xs text-slate-400 mt-1">✅ 有星號（*）的那行應該是 <code className="bg-slate-700 px-1 rounded">* main</code>。如果畫面停住、底部出現 <code className="bg-slate-700 px-1 rounded">:</code>，代表分支太多被送進分頁瀏覽器——按 <code className="bg-slate-700 px-1 rounded">q</code> 即可離開</div>
                 <div className="text-xs text-red-400 mt-0.5">❌ 如果不對：輸入 <code className="bg-slate-700 text-white px-1 rounded">git checkout main</code> 切換回來</div>
               </div>
 
@@ -143,6 +143,9 @@ export const Chapter8Practice = () => {
                 <div className="text-xs text-slate-400 mb-1">④ 確認本地已和雲端同步</div>
                 <div className="font-mono text-sm text-green-400">$ git pull</div>
                 <div className="text-xs text-slate-400 mt-1">✅ 看到 <code className="bg-slate-700 px-1 rounded">Already up to date.</code> 代表你有最新的版本</div>
+                <div className="text-xs text-slate-400 mt-0.5">✅ 看到一堆檔名和進度數字也是正常的——代表有抓到同事的更新，一樣算成功</div>
+                <div className="text-xs text-slate-400 mt-0.5">⚠️ 畫面突然變成滿是 <code className="bg-slate-700 px-1 rounded">~</code> 而且打不了字？你被送進了編輯器，按 <code className="bg-slate-700 px-1 rounded">Esc</code> → 輸入 <code className="bg-slate-700 px-1 rounded">:wq</code> → 按 Enter 即可離開</div>
+                <div className="text-xs text-red-400 mt-0.5">❌ 看到 <code className="bg-slate-700 text-white px-1 rounded">Need to specify how to reconcile divergent branches</code>：到錯誤急診室查這一條</div>
               </div>
 
               <div>
@@ -292,8 +295,18 @@ export const Chapter8Practice = () => {
                  </Callout>
                  <p className="text-slate-600 mb-3 text-sm">你電腦裡的 Trainer_Git_Tutorial 目前的 <code>origin</code> 指向原 repo（BlekZz 的），你沒有 push 權限。現在要把它改成指向你自己 Fork 後的副本。</p>
                  <CommandBlock
-                   command={"git remote set-url origin https://github.com/你的帳號/Trainer_Git_Tutorial.git\ngit remote -v"}
-                   comment="把「你的帳號」換成你的 GitHub 帳號名稱；第二行用來驗證是否修改成功"
+                   command="git remote set-url origin https://github.com/你的帳號/Trainer_Git_Tutorial.git"
+                   comment="把「你的帳號」換成你的 GitHub 帳號名稱"
+                 />
+                 <NoOutputHint />
+                 <CommandBlock
+                   command="git remote -v"
+                   comment="驗證是否修改成功"
+                   className="mt-3"
+                 />
+                 <CommandBlock
+                   variant="output"
+                   command={'origin  https://github.com/你的帳號/Trainer_Git_Tutorial.git (fetch)\norigin  https://github.com/你的帳號/Trainer_Git_Tutorial.git (push)'}
                  />
                  <div className="mt-3 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800 flex items-start gap-2">
                    <CheckCircle size={16} className="mt-0.5 shrink-0 text-green-600" />
@@ -362,7 +375,21 @@ export const Chapter8Practice = () => {
                  </div>
 
                  <CommandBlock
-                   command={'git add learner-commits/你的帳號名.md\ngit commit -m "docs: add 你的帳號名"'}
+                   command="git add learner-commits/你的帳號名.md"
+                   comment="把新檔案放上拍照台"
+                 />
+                 <NoOutputHint />
+                 <FalseAlarm signal={'warning: LF will be replaced by CRLF in learner-commits/xxx.md'} className="mt-3">
+                   Windows 上很常見的黃字。這只是換行符號的轉換提醒，<strong>不是錯誤</strong>——指令其實已經成功了，忽略它繼續下一步即可。
+                 </FalseAlarm>
+                 <CommandBlock
+                   command={'git commit -m "docs: add 你的帳號名"'}
+                   comment="按下快門，拍下快照"
+                   className="mt-3"
+                 />
+                 <CommandBlock
+                   variant="output"
+                   command={'[feat/你的帳號名 1234567] docs: add 你的帳號名\n 1 file changed, 1 insertion(+)\n create mode 100644 learner-commits/你的帳號名.md'}
                  />
                  <div className="mt-4 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800 flex items-start gap-2">
                    <CheckCircle size={16} className="mt-0.5 shrink-0 text-green-600" />
@@ -543,7 +570,12 @@ export const Chapter8Practice = () => {
           <summary className="cursor-pointer font-bold text-slate-700 text-sm">😵 整個搞砸了想重來？</summary>
           <div className="mt-3 text-sm text-slate-600 space-y-2">
             <p>搞砸了完全不影響原 repo，放心砍掉重練：</p>
-            <CommandBlock command={"git checkout main\ngit branch -D feat/你的帳號名"} comment="回到 main，刪掉搞砸的分支" />
+            <CommandBlock command="git checkout main" comment="先回到 main" />
+            <CommandBlock command="git branch -D feat/你的帳號名" comment="刪掉搞砸的分支" className="mt-3" />
+            <CommandBlock
+              variant="output"
+              command="Deleted branch feat/你的帳號名 (was 1234567)."
+            />
             <p>接著手動刪掉你在 <code className="bg-slate-200 px-1 rounded">learner-commits/</code> 建立的 md 檔（若還在），然後從 Step 3 重新開始即可。</p>
           </div>
         </details>

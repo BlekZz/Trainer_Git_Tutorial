@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, Callout, Quiz } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, Callout, Quiz, CommandBlock, FalseAlarm } from './Shared';
 import { GitBranch, Plus, ArrowRight, Activity, GitCommit, Copy } from 'lucide-react';
 
 export const Chapter5Branch = () => {
@@ -47,7 +47,11 @@ export const Chapter5Branch = () => {
         </div>
         <div className="flex items-start gap-3">
           <span className="text-blue-400 text-base leading-none mt-0.5">📋</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">不知道現在有哪些分支？</strong>輸入 <code className="bg-slate-700 px-1 rounded">git branch</code> 可以列出所有本地分支，前面有 <code className="bg-slate-700 px-1 rounded">*</code> 星號的就是你目前所在的分支。</p>
+          <div className="text-sm text-slate-300">
+            <p><strong className="text-white">不知道現在有哪些分支？</strong>輸入 <code className="bg-slate-700 px-1 rounded">git branch</code> 可以列出所有本地分支，輸出長得像這樣：</p>
+            <pre className="bg-slate-900 rounded px-3 py-2 mt-2 font-mono text-xs text-slate-200 leading-relaxed">{'* main\n  feat/login'}</pre>
+            <p className="mt-1 text-xs text-slate-400">前面有 <code className="bg-slate-700 px-1 rounded">*</code> 星號的那一行，就是你目前所在的分支。</p>
+          </div>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-yellow-400 text-base leading-none mt-0.5">💡</span>
@@ -81,7 +85,7 @@ export const Chapter5Branch = () => {
                    </button>
                  </div>
                  <code className="text-xs text-pink-600 bg-pink-50 px-1 rounded block mb-1">git branch feat/login</code>
-                 <p className="text-xs text-slate-500">只建立分支，但「不會」切換過去。</p>
+                 <p className="text-xs text-slate-500">只建立分支，但「不會」切換過去。輸入後不會有任何訊息跳出來——這就是成功，直接進行下一步。</p>
                </div>
 
                <Callout variant="warning" title="小心搞混">
@@ -110,12 +114,17 @@ export const Chapter5Branch = () => {
                    </div>
                  </div>
                  <code className="text-xs text-indigo-600 bg-indigo-50 px-1 rounded block mb-1">git checkout &lt;分支名&gt;</code>
-                 <p className="text-xs text-slate-500">讓你的資料夾內容，瞬間切換到該宇宙的狀態。</p>
+                 <p className="text-xs text-slate-500">讓你的資料夾內容，瞬間切換到該宇宙的狀態。<code className="bg-slate-100 px-1 rounded">&lt;分支名&gt;</code> 要整個換成真實名稱（例如 <code className="bg-slate-100 px-1 rounded">git checkout feat/login</code>），不要把角括號打進去。</p>
                </div>
 
                <Callout variant="info" title="🎒 切換前東西沒存怎麼辦？git stash">
                  <code className="bg-blue-100 px-1 rounded">git stash</code> = 把桌上未完成的東西先掃進抽屜（暫存）；<code className="bg-blue-100 px-1 rounded">git stash pop</code> = 從抽屜拿出來繼續。切換分支前，如果工作區還有未存檔的修改，先 <code className="bg-blue-100 px-1 rounded">git commit</code>（建議）或先 <code className="bg-blue-100 px-1 rounded">git stash</code>，再切換。
+                 <span className="block mt-1 text-xs">成功時你會看到：<code className="bg-blue-100 px-1 rounded">git stash</code> 顯示 <code className="bg-blue-100 px-1 rounded">Saved working directory and index state ...</code>；<code className="bg-blue-100 px-1 rounded">git stash pop</code> 最後一行顯示 <code className="bg-blue-100 px-1 rounded">Dropped refs/stash@{'{0}'}</code>。</span>
                </Callout>
+
+               <FalseAlarm signal={'warning: LF will be replaced by CRLF in xxx'}>
+                 在 Windows 上執行 <code className="bg-amber-100 px-1 rounded">git add</code> 或 commit 時，常會冒出這行黃字。它只是 Git 在提醒「換行符號會自動轉換」，不是錯誤，直接忽略、繼續下一步即可。
+               </FalseAlarm>
 
                {/* Create and Switch */}
                <div className="bg-white p-3 rounded border border-slate-200">
@@ -200,7 +209,17 @@ export const Chapter5Branch = () => {
          </p>
          <div className="bg-white p-4 rounded-lg border border-indigo-100 shadow-sm">
            <div className="font-bold text-sm text-slate-800 mb-2">要把分支「上傳並在雲端建立」，你需要執行：</div>
-           <code className="text-xs text-indigo-600 bg-indigo-50 px-2 py-1 rounded block mb-3 font-mono">git push -u origin &lt;你的分支名&gt;</code>
+           <code className="text-xs text-indigo-600 bg-indigo-50 px-2 py-1 rounded block mb-2 font-mono">git push -u origin &lt;你的分支名&gt;</code>
+           <Callout variant="warning" title="角括號不要打進去" className="mb-3">
+             <code className="bg-amber-100 px-1 rounded">&lt;你的分支名&gt;</code> 要整個換成實際的分支名，例如 <code className="bg-amber-100 px-1 rounded">git push -u origin feat/login</code>。如果連角括號一起打，會出現 <code className="bg-amber-100 px-1 rounded">error: src refspec ... does not match</code>。
+           </Callout>
+           <p className="text-sm text-slate-600 mb-1">按 Enter 後，終端機會滾動一串進度訊息，長得像這樣：</p>
+           <CommandBlock
+             variant="output"
+             command={'Enumerating objects: 5, done.\nCounting objects: 100% (5/5), done.\nWriting objects: 100% (3/3), done.\n * [new branch]      feat/login -> feat/login'}
+             className="mb-3"
+           />
+           <p className="text-sm text-slate-600 mb-3">最後看到 <code className="bg-slate-100 px-1 rounded text-xs">* [new branch] 分支名 -&gt; 分支名</code> 就是成功了。第一次 push 時，Windows 可能會彈出要你登入 GitHub 的視窗——這是正常的，登入一次就會記住。</p>
            <ul className="text-sm text-slate-600 space-y-1 list-disc pl-4">
              <li><code className="bg-slate-100 px-1 rounded text-xs">-u</code> (set-upstream) 的意思是「建立上下游連線」。</li>
              <li>這告訴 Git：「請在 GitHub 也建立一個一模一樣的分支，並把它們綁定在一起」。</li>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, Badge, Callout, CommandBlock, Quiz } from './Shared';
+import { SectionTitle, Card, TerminalSim, InstructionalText, Badge, Callout, CommandBlock, Quiz, NoOutputHint, FalseAlarm } from './Shared';
 import { Cloud, Laptop, ArrowRight, ArrowLeft, AlertCircle, Info, FileText, GitCommit, User, CheckCircle, GitGraph, FileCode, GitMerge, Zap } from 'lucide-react';
 
 export const Chapter6Sync = () => {
@@ -109,15 +109,15 @@ export const Chapter6Sync = () => {
         <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">⚡ 進入狀態：讀完再動</div>
         <div className="flex items-start gap-3">
           <span className="text-yellow-400 text-base leading-none mt-0.5">🔑</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">你的 GitHub 帳號必須已經連線（gh auth login 完成）。</strong>否則 Push 時會出現 403 Permission Denied 或要求密碼。還沒完成的話，請先回到 <a href="#setup" className="underline font-bold text-white hover:text-green-300">Chapter 0 行前準備</a>。</p>
+          <p className="text-sm text-slate-300"><strong className="text-white">你的 GitHub 帳號必須已經連線（gh auth login 完成）。</strong>否則 Push 時會出現 403 Permission Denied 或要求密碼。<code className="bg-slate-700 px-1 rounded">gh auth login</code> 會問你一連串問題（GitHub.com／HTTPS／用瀏覽器登入），照畫面一步步選即可。還沒完成的話，請先回到 <a href="#setup" className="underline font-bold text-white hover:text-green-300">Chapter 0 行前準備</a>。</p>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-orange-400 text-base leading-none mt-0.5">🚧</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">若看到 <code className="bg-slate-700 px-1 rounded">Permission denied (publickey)</code></strong>——你的電腦在用 SSH 連 GitHub，本教程全程用 HTTPS，請到錯誤急診室查「Permission denied (publickey)」這一條。</p>
+          <p className="text-sm text-slate-300"><strong className="text-white">若看到 <code className="bg-slate-700 px-1 rounded">Permission denied (publickey)</code></strong>——你的電腦在用 SSH 連 GitHub，本教程全程用 HTTPS，請到錯誤急診室查「Permission denied (publickey)」這一條。另外，用 HTTPS 第一次 push 時，Windows 可能彈出要你登入 GitHub 的視窗——這是正常的，登入一次就會記住。</p>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-blue-400 text-base leading-none mt-0.5">⬇️</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">黃金法則：先 Pull 再 Push。</strong>每次開始工作前，先 <code className="bg-slate-700 px-1 rounded">git pull</code> 把同事的最新進度同步下來，再開始你的修改，能大幅減少衝突的機率。</p>
+          <p className="text-sm text-slate-300"><strong className="text-white">黃金法則：先 Pull 再 Push。</strong>每次開始工作前，先 <code className="bg-slate-700 px-1 rounded">git pull</code> 把同事的最新進度同步下來，再開始你的修改，能大幅減少衝突的機率。輸入後看到 <code className="bg-slate-700 px-1 rounded">Already up to date.</code> 表示本來就最新（沒事）；看到 <code className="bg-slate-700 px-1 rounded">Fast-forward</code> 加一串檔案清單，表示有抓到更新（也正常）。</p>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-red-400 text-base leading-none mt-0.5">💥</span>
@@ -144,7 +144,11 @@ export const Chapter6Sync = () => {
         <Callout variant="warning" title="真實操作可能遇到的錯誤" className="mb-4">
           執行 <code className="bg-amber-100 px-1 rounded">git pull</code> 時如果出現 <code className="bg-amber-100 px-1 rounded">fatal: Need to specify how to reconcile divergent branches</code>——這是新版 Git 在問你要用哪種方式合併。執行下面這行指令（<a href="#setup" className="underline font-bold hover:text-amber-950">Chapter 0 行前準備</a>建議的設定）後，再 <code className="bg-amber-100 px-1 rounded">git pull</code> 一次即可。
         </Callout>
-        <CommandBlock command="git config --global pull.rebase false" comment="只需要設定一次，之後每次 pull 都適用" className="mb-8" />
+        <CommandBlock command="git config --global pull.rebase false" comment="只需要設定一次，之後每次 pull 都適用" />
+        <NoOutputHint className="mb-4" />
+        <Callout variant="warning" title="設定完之後 pull 可能出現的黑畫面" className="mb-8">
+          設成 false 之後，如果遠端和你的進度有分歧，<code className="bg-amber-100 px-1 rounded">git pull</code> 可能會跳出一個滿是 <code className="bg-amber-100 px-1 rounded">~</code> 符號的黑畫面（它是 Vim 編輯器），要你確認合併訊息。不要慌：按 <code className="bg-amber-100 px-1 rounded">Esc</code>，輸入 <code className="bg-amber-100 px-1 rounded">:wq</code>，按 <code className="bg-amber-100 px-1 rounded">Enter</code>，就會完成合併。這招和本章下方 Part 2 的「🆘 Vim 救命卡」是同一套逃生術。
+        </Callout>
 
         <div className="grid lg:grid-cols-3 gap-8 items-start mb-8">
           {/* Left Column: Controls & Terminal */}
@@ -203,6 +207,10 @@ export const Chapter6Sync = () => {
                   </div>
                   {canPush && !needPull && <span className="bg-blue-400 text-white text-[10px] px-1.5 py-0.5 rounded-full">可上傳</span>}
                 </button>
+
+                <Callout variant="info" className="text-sm">
+                  真實終端裡 push 會滾動 <code className="bg-blue-100 px-1 rounded">Enumerating objects...</code>、<code className="bg-blue-100 px-1 rounded">Writing objects: 100%</code> 的進度行，還有 <code className="bg-blue-100 px-1 rounded">remote:</code> 開頭的訊息——那些都是 GitHub 的正常回應，不是錯誤。
+                </Callout>
 
                 <hr className="border-slate-200 my-4" />
                 
@@ -329,7 +337,7 @@ export const Chapter6Sync = () => {
         </div>
 
         <Callout variant="info" title="💡 這台終端機可以真的打指令！" className="mb-3">
-          全站只有這裡的終端機可以真的輸入！試試看打 <code className="bg-blue-100 px-1 rounded">git add .</code>。
+          全站只有這裡的終端機可以真的輸入！試試看打 <code className="bg-blue-100 px-1 rounded">git add .</code>。（真實終端裡打 git add 若冒出黃字 <code className="bg-blue-100 px-1 rounded">warning: LF will be replaced by CRLF</code>，是正常的換行提醒，不是錯誤。）
         </Callout>
         <TerminalSim logs={logs} onCommand={handleCommand} height="h-48" />
       </section>
@@ -392,6 +400,15 @@ export const Chapter6Sync = () => {
               當兩個人「剛好改到了同一個檔案的同一行」，Git 會不知道該聽誰的，這時候就會爆發 <strong>Conflict</strong>。
             </p>
             <div className="mt-4 bg-white border border-slate-200 rounded-lg p-4 text-sm text-slate-700">
+              <div className="font-bold mb-2">👀 衝突發生時，檔案裡會長這樣：</div>
+              <CommandBlock
+                variant="output"
+                command={'<<<<<<< HEAD\n（你的修改）\n=======\n（對方的修改）\n>>>>>>> 分支名'}
+                className="mb-2"
+              />
+              <p className="text-xs text-slate-500 mb-4">
+                <code className="bg-slate-100 px-1 rounded">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> 到 <code className="bg-slate-100 px-1 rounded">=======</code> 之間是「你的版本」，<code className="bg-slate-100 px-1 rounded">=======</code> 之後到 <code className="bg-slate-100 px-1 rounded">&gt;&gt;&gt;&gt;&gt;&gt;&gt; 分支名</code> 是「對方的版本」。選好要保留的內容後，這三種標記要一起刪掉。
+              </p>
               <div className="font-bold mb-3">🛠 解決衝突的完整流程：</div>
               <ol className="space-y-2 list-decimal pl-5">
                 <li>打開 VSCode，找到被高亮標示衝突的檔案（側邊欄會有紅色驚嘆號）</li>
@@ -403,6 +420,9 @@ export const Chapter6Sync = () => {
               <div className="mt-3 bg-amber-50 border border-amber-200 rounded p-2 text-sm text-amber-800">
                 少做第 4 步是最常見的錯誤——解決完衝突直接 push，Git 會說「還有未解決的 merge」，讓你以為沒有修好。
               </div>
+              <FalseAlarm signal={'warning: LF will be replaced by CRLF in xxx'} className="mt-3">
+                解衝突後執行 <code className="bg-amber-100 px-1 rounded">git add .</code> 時，Windows 上常會冒出這行黃字。它只是換行符號轉換的提醒，<strong>不代表衝突沒解好</strong>，直接繼續下一步 commit 即可。
+              </FalseAlarm>
               <Callout variant="warning" title="🆘 救命卡：不小心打了沒有 -m 的 git commit？" className="mt-3">
                 如果畫面突然變成一堆 <code className="bg-amber-100 px-1 rounded">~</code> 符號的奇怪編輯器（它叫 Vim），不要慌：按 <code className="bg-amber-100 px-1 rounded">Esc</code>，輸入 <code className="bg-amber-100 px-1 rounded">:wq</code>，按 <code className="bg-amber-100 px-1 rounded">Enter</code>，就能存檔離開。
               </Callout>
