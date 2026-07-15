@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { GitGraph, Map, Play, Download, GitBranch, RefreshCw, Users, Rocket, Ambulance, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { GitGraph, Map, Play, Download, GitBranch, RefreshCw, Users, Rocket, Ambulance, CheckCircle, ArrowLeft, ArrowRight, Wrench } from 'lucide-react';
 
+import { Chapter0Setup } from './components/Chapter0Setup';
 import { Chapter1Concept } from './components/Chapter1Concept';
 import { Chapter2Flowchart } from './components/Chapter2Flowchart';
 import { Chapter3PathA } from './components/Chapter3PathA';
@@ -14,6 +15,7 @@ import { ErrorRoom } from './components/ErrorRoom';
 const VISITED_KEY = 'gtm-visited';
 
 const tabs = [
+  { id: 'setup', label: '0. 行前準備', shortLabel: '準備', icon: <Wrench size={16} /> },
   { id: 'concept', label: '1. 觀念與準備', shortLabel: '觀念', icon: <GitGraph size={16} /> },
   { id: 'flow', label: '2. 流程總覽', shortLabel: '流程', icon: <Map size={16} /> },
   { id: 'pathA', label: '3. 情境 A', shortLabel: '情境A', icon: <Play size={16} /> },
@@ -156,6 +158,7 @@ const App = () => {
 
         {/* Dynamic Content */}
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 md:p-10 min-h-[600px] transition-all overflow-hidden">
+          {activeTab === 'setup' && <Chapter0Setup />}
           {activeTab === 'concept' && <Chapter1Concept />}
           {activeTab === 'flow' && <Chapter2Flowchart />}
           {activeTab === 'pathA' && <Chapter3PathA />}

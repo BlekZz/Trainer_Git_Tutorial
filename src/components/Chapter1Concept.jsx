@@ -152,13 +152,12 @@ export const Chapter1Concept = () => (
     {/* Setup Reminder */}
     <Callout variant="success" title="你準備好了嗎？">
       <p>
-        如果你還沒有安裝 Git, Node.js 或 VSCode，請立刻查看{' '}
-        <a href="https://github.com/BlekZz/Trainer_Git_Tutorial/blob/main/Beginner-Setup-Guide.md"
-           target="_blank" rel="noopener noreferrer"
+        如果你還沒有安裝 Git, Node.js 或 VSCode，請先前往{' '}
+        <a href="#setup"
            className="underline font-bold hover:text-green-700">
-          👶 零基礎新手安裝與準備指南
+          👶 Chapter 0 行前準備
         </a>
-        （如果你已經下載了這個教材，也可以直接在資料夾裡找到 <code className="bg-green-100 px-1 rounded">Beginner-Setup-Guide.md</code>）。
+        {' '}完成安裝與設定。
         以下章節假設你已經安裝完畢，並且知道如何打開 Terminal（終端機）！
       </p>
     </Callout>

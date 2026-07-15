@@ -69,6 +69,23 @@ export const ErrorRoom = () => {
       </ErrorCard>
 
       <ErrorCard
+        error="git@github.com: Permission denied (publickey). fatal: Could not read from remote repository."
+        translation="你的電腦正在用 SSH 方式連 GitHub，但本教程從頭到尾都用 HTTPS——你走到別條路上了，方向錯了，不是你做壞了什麼。"
+      >
+        <p className="text-sm text-slate-600">
+          先診斷：看看你的 origin 網址是不是 <span className="font-mono">git@github.com:</span> 開頭。
+        </p>
+        <CommandBlock command="git remote -v" comment="檢查 origin 網址開頭" />
+        <p className="text-sm text-slate-600">
+          如果是 <span className="font-mono">git@github.com:</span> 開頭，用下面這行切回 HTTPS（把 <span className="font-mono">&lt;你的帳號&gt;</span> 換成你的 GitHub 帳號），然後重試剛剛的指令：
+        </p>
+        <CommandBlock command="git remote set-url origin https://github.com/<你的帳號>/Trainer_Git_Tutorial.git" comment="把 origin 切回 HTTPS 網址" />
+        <p className="text-sm text-slate-600">
+          什麼時候會誤入這條路：複製到 GitHub Code 綠色按鈕裡「SSH」分頁的網址、照抄別人畫面上的指令、或跟著網路教學設定了 SSH。全部不需要——我們全程用 HTTPS。
+        </p>
+      </ErrorCard>
+
+      <ErrorCard
         error="remote: Permission to XXX/XXX.git denied to your-username. fatal: unable to access ... 403"
         translation="你正在對別人的 repo 執行 push，但你沒有寫入權限。"
       >
@@ -96,7 +113,7 @@ export const ErrorRoom = () => {
         <CommandBlock command="git branch -M main" comment="把目前的分支改名為 main" />
         <CommandBlock command="git push -u origin main" comment="再 push 一次" />
         <p className="text-sm text-slate-600">
-          想一勞永逸：執行安裝指南「一次性建議設定」裡的 <span className="font-mono">git config --global init.defaultBranch main</span>，之後新專案的主分支都會叫 main。
+          想一勞永逸：執行 <a href="#setup" className="text-indigo-600 underline hover:text-indigo-800">Chapter 0 行前準備</a>「一次性建議設定」裡的 <span className="font-mono">git config --global init.defaultBranch main</span>，之後新專案的主分支都會叫 main。
         </p>
       </ErrorCard>
 
@@ -105,6 +122,31 @@ export const ErrorRoom = () => {
         translation="不要輸入 GitHub 網站的登入密碼——那個方式已經被 GitHub 停用了，輸入了也一定失敗。"
       >
         <CommandBlock command="gh auth login" comment="用 GitHub CLI 重新登入一次" />
+      </ErrorCard>
+
+      <ErrorCard
+        error="node -v 顯示的版本太舊（低於 v20，例如 v14 / v16）"
+        translation="你電腦上的 Node.js 版本太舊，跑不動本教程需要的工具。"
+      >
+        <CommandBlock command="node -v" comment="再確認一次目前版本" />
+        <p className="text-sm text-slate-600">
+          解法：回到「Chapter 0 行前準備」的步驟 3，把這個版本號截圖或複製給 AI 助手，請它引導你安裝 Node.js LTS（v20 以上）；如果你的電腦太舊裝不了新版，AI 會直接給你能用的舊版本與下載連結。
+        </p>
+      </ErrorCard>
+
+      <ErrorCard
+        error="npm install 失敗：npm ERR! network / ETIMEDOUT / EACCES / permission denied"
+        translation="套件下載失敗——通常是網路連不上，或是資料夾權限不足。（這只會發生在教學者/貢獻者本地執行專案的情境，一般學員走網頁版不會遇到。）"
+      >
+        <p className="text-sm text-slate-600 mb-2">
+          速查：<br />
+          1. <span className="font-mono">network / ETIMEDOUT</span> → 檢查網路，公司或學校網路可能擋住 npm，換個網路（如手機熱點）再試一次；<br />
+          2. <span className="font-mono">EACCES / permission denied</span> → 專案放到你自己的使用者資料夾（如桌面）再重跑，不要放在系統資料夾。
+        </p>
+        <CommandBlock command="npm install" comment="排除原因後再跑一次" />
+        <p className="text-sm text-slate-600">
+          還是卡住？回到「Chapter 0 行前準備」的步驟 3，把整段錯誤訊息截圖給 AI 助手處理。
+        </p>
       </ErrorCard>
     </div>
   );

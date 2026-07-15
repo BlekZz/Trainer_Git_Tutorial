@@ -109,7 +109,11 @@ export const Chapter6Sync = () => {
         <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">⚡ 進入狀態：讀完再動</div>
         <div className="flex items-start gap-3">
           <span className="text-yellow-400 text-base leading-none mt-0.5">🔑</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">你的 GitHub 帳號必須已經連線（gh auth login 完成）。</strong>否則 Push 時會出現 403 Permission Denied 或要求密碼。</p>
+          <p className="text-sm text-slate-300"><strong className="text-white">你的 GitHub 帳號必須已經連線（gh auth login 完成）。</strong>否則 Push 時會出現 403 Permission Denied 或要求密碼。還沒完成的話，請先回到 <a href="#setup" className="underline font-bold text-white hover:text-green-300">Chapter 0 行前準備</a>。</p>
+        </div>
+        <div className="flex items-start gap-3">
+          <span className="text-orange-400 text-base leading-none mt-0.5">🚧</span>
+          <p className="text-sm text-slate-300"><strong className="text-white">若看到 <code className="bg-slate-700 px-1 rounded">Permission denied (publickey)</code></strong>——你的電腦在用 SSH 連 GitHub，本教程全程用 HTTPS，請到錯誤急診室查「Permission denied (publickey)」這一條。</p>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-blue-400 text-base leading-none mt-0.5">⬇️</span>
@@ -138,7 +142,7 @@ export const Chapter6Sync = () => {
         </InstructionalText>
 
         <Callout variant="warning" title="真實操作可能遇到的錯誤" className="mb-4">
-          執行 <code className="bg-amber-100 px-1 rounded">git pull</code> 時如果出現 <code className="bg-amber-100 px-1 rounded">fatal: Need to specify how to reconcile divergent branches</code>——這是新版 Git 在問你要用哪種方式合併。執行下面這行指令（安裝指南建議的設定）後，再 <code className="bg-amber-100 px-1 rounded">git pull</code> 一次即可。
+          執行 <code className="bg-amber-100 px-1 rounded">git pull</code> 時如果出現 <code className="bg-amber-100 px-1 rounded">fatal: Need to specify how to reconcile divergent branches</code>——這是新版 Git 在問你要用哪種方式合併。執行下面這行指令（<a href="#setup" className="underline font-bold hover:text-amber-950">Chapter 0 行前準備</a>建議的設定）後，再 <code className="bg-amber-100 px-1 rounded">git pull</code> 一次即可。
         </Callout>
         <CommandBlock command="git config --global pull.rebase false" comment="只需要設定一次，之後每次 pull 都適用" className="mb-8" />
 

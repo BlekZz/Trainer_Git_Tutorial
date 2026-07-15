@@ -219,7 +219,7 @@ export const Chapter3PathA = () => {
         </div>
         <div className="flex items-start gap-3">
           <span className="text-yellow-400 text-base leading-none mt-0.5">🔑</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">需要一個已登入且連線的 GitHub 帳號。</strong>如果還沒有註冊 / 登入 GitHub，請先回到零基礎新手安裝指南完成註冊。</p>
+          <p className="text-sm text-slate-300"><strong className="text-white">需要一個已登入且連線的 GitHub 帳號。</strong>如果還沒有註冊 / 登入 GitHub，請先回到 <a href="#setup" className="underline font-bold text-white hover:text-green-300">Chapter 0 行前準備</a> 完成註冊。</p>
         </div>
         <div className="flex items-start gap-3">
           <span className="text-blue-400 text-base leading-none mt-0.5">📂</span>
@@ -473,7 +473,7 @@ export const Chapter3PathA = () => {
            </p>
            <CommandBlock variant="output" command={'git log --oneline\na1b2c3d (HEAD -> main) feat: 結帳功能\n9f8e7d6 docs: 更新說明'} className="mb-3" />
            <p className="text-sm text-emerald-700">
-             <strong>💡 視覺化推薦：</strong>如果你覺得純文字太難懂，記得打開我們在安裝教學中請你裝的 <strong>Git Graph 外掛</strong>，它會在 VSCode 裡畫出超美的時間線樹狀圖喔！
+             <strong>💡 視覺化推薦：</strong>如果你覺得純文字太難懂，記得打開我們在 <a href="#setup" className="underline font-bold hover:text-emerald-900">Chapter 0 行前準備</a> 中請你裝的 <strong>Git Graph 外掛</strong>，它會在 VSCode 裡畫出超美的時間線樹狀圖喔！
            </p>
         </Card>
       </div>

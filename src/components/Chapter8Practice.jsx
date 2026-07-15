@@ -50,8 +50,8 @@ export const Chapter8Practice = () => {
 
       <Callout variant="warning" title="你是用線上版學到這裡的嗎？">
         本章需要在你自己的電腦上操作。如果你一直是用瀏覽器線上版學習、還沒安裝過 Git，請先完成{' '}
-        <a href="https://github.com/BlekZz/Trainer_Git_Tutorial/blob/main/Beginner-Setup-Guide.md" target="_blank" rel="noreferrer" className="underline font-bold hover:text-amber-950">
-          零基礎安裝指南
+        <a href="#setup" className="underline font-bold hover:text-amber-950">
+          Chapter 0 行前準備
         </a>{' '}
         的全部步驟（約 30–60 分鐘），把專案 clone 到你的電腦，再回來繼續。
       </Callout>
@@ -301,7 +301,8 @@ export const Chapter8Practice = () => {
                  </div>
                  <Callout variant="danger" title="push 時遇到錯誤怎麼辦？" className="mt-3">
                    看到 <code className="bg-red-100 px-1 rounded">remote: Repository not found</code> → 兩種可能：(1) 你還沒 Fork，回 Step 1；(2) 網址裡的帳號或 repo 名打錯了。用 <code className="bg-red-100 px-1 rounded">git remote -v</code> 檢查，重跑一次 set-url 即可（set-url 可以重複執行，放心）。<br/>
-                   看到 <code className="bg-red-100 px-1 rounded">403</code> → 你跳過了 Step 2，origin 還指向原 repo。
+                   看到 <code className="bg-red-100 px-1 rounded">403</code> → 你跳過了 Step 2，origin 還指向原 repo。<br/>
+                   看到 <code className="bg-red-100 px-1 rounded">Permission denied (publickey)</code> → 你的電腦在用 SSH 連 GitHub，本教程全程用 HTTPS，請到錯誤急診室查「Permission denied (publickey)」這一條。
                  </Callout>
                </div>
              </div>
