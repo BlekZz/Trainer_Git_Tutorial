@@ -323,4 +323,4 @@ Ch1 從上到下全是彩色/漸層卡片，沒有一塊安靜的白底內文；
 - **發現**：GitHub repo 曾由 `git-time-machine` 改名為 `Trainer_Git_Tutorial`，導致 (1) README 線上版連結 404；(2) vite `base` 與實際 Pages 路徑不符；(3) 學員 Fork 出的 repo 名為 `Trainer_Git_Tutorial`，照教材 set-url 到 `git-time-machine.git` 必撞 `Repository not found`（fork 無轉址）。
 - **決策**：使用者未即時回覆，採不需額外授權的方案——教材內所有 URL / 資料夾名 / vite base 統一改為現行正式名稱 `Trainer_Git_Tutorial`（README、Setup Guide、Ch1、Ch8、vite.config.js 共 25 處）。
 - **保留選項**：若日後想改回 `git-time-machine`（品牌一致性較佳），在 GitHub rename 後做一次反向全域替換 + 重新 build/deploy 即可；舊名會自動轉址，風險低。
-- 歷史文件（`git-time-machine-improvement-spec.md`、`improvement2.md`）為存檔性質，未改動。
+- 歷史文件（`Plan_git_time_machine_improvement_spec.md`、`Plan_git_time_machine_improvement2.md`，2026-07-19 os-conform 依文件前綴表自 `git-time-machine-improvement-spec.md`/`improvement2.md` 改名）為存檔性質，內容未改動。
