@@ -1,0 +1,4 @@
+- updated: 2026-07-19 (claude)
+- 停點: 教學內容 overhaul（beginner terminal-UX、Chapter 0 onboarding、Ch3/Ch4 hands-on simulations、章末 quizzes）已完成，os-conform 升版至 2026-07-19.4 全 PASS。
+- 下一步: 待定 — 可參考 dev/Sprint_tutorial_optimization.md 與 dev/Sprint_chapter0_onboarding.md 是否有未收尾項目。
+- 切入: dev/Sprint_tutorial_optimization.md, dev/Sprint_chapter0_onboarding.md
