@@ -1,11 +1,4 @@
 {
   "last_conformed": "2026-08-31.1",
-  "checked_at": "2026-09-28",
-  "held_diffs": [
-    {
-      "entry": "C-20",
-      "reason": "registry.json domains_relevant 欄缺席（需人工判斷專案 domain 語意，依 os-conform 派工規則只回報建議值，由主線統一寫入 registry）",
-      "suggested_domains_relevant": ["node", "npm", "web-frontend", "git", "github", "windows"]
-    }
-  ]
+  "checked_at": "2026-09-28"
 }
