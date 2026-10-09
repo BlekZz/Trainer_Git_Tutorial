@@ -1,4 +1,6 @@
-# Sprint_chapter0_onboarding — Chapter 0 行前準備 + 入口收斂 + SSH 走錯路防護
+# Sprint_end_chapter0_onboarding — Chapter 0 行前準備 + 入口收斂 + SSH 走錯路防護
+
+> 狀態：已結案（2026-07-15 fresh-context Playwright 驗收 6/6 通過；2026-10-09 改名 Sprint_end_，OS conformance C-30）。
 
 > 建立日期：2026-07-15。動機：學員回饋（舊 Mac 安裝卡關、merge 時撞 SSH `Permission denied (publickey)`、不易判斷問題方向）。
 > 決策背景：SSH 問題確認**非教材/repo 設定問題**（教材全 HTTPS + Fork/PR），源頭是學員端 remote URL 選擇。SSH **不進正課**，只做「走錯方向偵測 + 逃生」。
@@ -34,13 +36,13 @@
 7. **完成 Checklist**：互動勾選清單（每項含如何驗證），全勾 → 🎉 成就 Callout + 導向 Chapter 1。
 
 QA（M1）：
-- [ ] `npm run build` 通過，`npm run dev` 首頁預設落在 Chapter 0。
-- [ ] tabs 進度條分母自動含 setup；造訪 Chapter 0 後 tab 出現綠勾。
-- [ ] OS 選擇後，步驟 2/5/6 的指令與截圖快捷鍵確實依 OS 切換。
-- [ ] 兩段 AI 提示詞可一鍵複製、無留白佔位符、句式為「以下是／以下附上…」。
-- [ ] 走錯方向警示（SSH）存在且為 danger 樣式。
-- [ ] stepper 三態樣式與 Chapter3PathA 一致；至少 2 處成就感提示；內部進度「X / 7」正確。
-- [ ] 上一章/下一章按鈕在 Chapter 0 ↔ Chapter 1 間導覽正常（label regex `^\d+\.\s*` 對「0. 行前準備」有效）。
+- [x] `npm run build` 通過，`npm run dev` 首頁預設落在 Chapter 0。
+- [x] tabs 進度條分母自動含 setup；造訪 Chapter 0 後 tab 出現綠勾。
+- [x] OS 選擇後，步驟 2/5/6 的指令與截圖快捷鍵確實依 OS 切換。
+- [x] 兩段 AI 提示詞可一鍵複製、無留白佔位符、句式為「以下是／以下附上…」。
+- [x] 走錯方向警示（SSH）存在且為 danger 樣式。
+- [x] stepper 三態樣式與 Chapter3PathA 一致；至少 2 處成就感提示；內部進度「X / 7」正確。
+- [x] 上一章/下一章按鈕在 Chapter 0 ↔ Chapter 1 間導覽正常（label regex `^\d+\.\s*` 對「0. 行前準備」有效）。
 
 ## M2 — ErrorRoom 新錯誤卡
 
@@ -51,9 +53,9 @@ QA（M1）：
 2. **安裝期錯誤補洞**（Chapter 0 主題延伸）：`node -v` 版本過舊（<20）→ 回 Chapter 0 步驟 3 找 AI 要 LTS 舊機安裝法；`npm install` 網路/權限失敗速查（僅教學者本地執行情境，一張卡即可）。
 
 QA（M2）：
-- [ ] 新卡沿用 `ErrorCard` 既有 props 結構與樣式。
-- [ ] SSH 卡包含「這代表你走錯方向」的定性說明 + `git remote -v` 診斷 + set-url 逃生指令（CommandBlock 可複製）。
-- [ ] 既有 11 張卡未被更動。
+- [x] 新卡沿用 `ErrorCard` 既有 props 結構與樣式。
+- [x] SSH 卡包含「這代表你走錯方向」的定性說明 + `git remote -v` 診斷 + set-url 逃生指令（CommandBlock 可複製）。
+- [x] 既有 11 張卡未被更動。
 
 ## M3 — README 收斂 + Beginner-Setup-Guide stub 化
 
@@ -63,9 +65,9 @@ QA（M2）：
 - Beginner-Setup-Guide.md 依 D7 改為 stub（≤15 行）。
 
 QA（M3）：
-- [ ] README 不再含任何「學員請看／新手請往」教學導引；學習入口只剩 Pages 連結。
-- [ ] `grep -n "Beginner-Setup-Guide" README.md` 為 0 筆（stub 檔本身除外）。
-- [ ] 教學者重置、維護紀錄等營運資訊仍在。
+- [x] README 不再含任何「學員請看／新手請往」教學導引；學習入口只剩 Pages 連結。
+- [x] `grep -n "Beginner-Setup-Guide" README.md` 為 0 筆（stub 檔本身除外）。
+- [x] 教學者重置、維護紀錄等營運資訊仍在。
 
 ## M4 — 章節內引用改指 Chapter 0 + 即時走錯方向提醒
 
@@ -75,19 +77,19 @@ QA（M3）：
 - 即時提醒（D5a 延伸）：在 Chapter6（push 前置）與 Chapter8（set-url / pr create 段落）各加一句 warning：「若出現 `Permission denied (publickey)` → 你在用 SSH，去錯誤急診室查這一條」。
 
 QA（M4）：
-- [ ] `grep -rn "Beginner-Setup-Guide" src/` 為 0 筆。
-- [ ] 站內導引用 hash 導覽（`#setup`）而非外部 blob 連結。
-- [ ] Chapter6、Chapter8 各至少一處 publickey 即時提醒，指向錯誤急診室。
-- [ ] 未改動各章教學邏輯與模擬流程本體。
+- [x] `grep -rn "Beginner-Setup-Guide" src/` 為 0 筆。
+- [x] 站內導引用 hash 導覽（`#setup`）而非外部 blob 連結。
+- [x] Chapter6、Chapter8 各至少一處 publickey 即時提醒，指向錯誤急診室。
+- [x] 未改動各章教學邏輯與模擬流程本體。
 
 ## 最終驗收 Checklist（fresh-context agent 執行，驅動真實入口）
 
-- [ ] `npm run build` 成功；`npm run dev` 起站後以瀏覽器（或 build 產物 grep）驗證：預設首頁為 Chapter 0、tab 列含「0. 行前準備」。
-- [ ] Chapter 0 全流程走查：OS 二選一 → 指令分流 → 截圖 preset 提示詞可複製 → alternative 折疊存在 → SSH danger 警示 → checklist 全勾出現成就提示。
-- [ ] ErrorRoom 含 publickey 卡且逃生指令正確（HTTPS URL 為 `https://github.com/<帳號>/Trainer_Git_Tutorial.git` 形式）。
-- [ ] 全 repo `grep -rn "Beginner-Setup-Guide" src/ README.md` = 0；stub 檔存在且指向 Pages。
-- [ ] 進度條、上一章/下一章、綠勾在含 Chapter 0 的新章節數下行為正確。
-- [ ] 無殘留死鏈（相對連結、blob 絕對連結）。
+- [x] `npm run build` 成功；`npm run dev` 起站後以瀏覽器（或 build 產物 grep）驗證：預設首頁為 Chapter 0、tab 列含「0. 行前準備」。
+- [x] Chapter 0 全流程走查：OS 二選一 → 指令分流 → 截圖 preset 提示詞可複製 → alternative 折疊存在 → SSH danger 警示 → checklist 全勾出現成就提示。
+- [x] ErrorRoom 含 publickey 卡且逃生指令正確（HTTPS URL 為 `https://github.com/<帳號>/Trainer_Git_Tutorial.git` 形式）。
+- [x] 全 repo `grep -rn "Beginner-Setup-Guide" src/ README.md` = 0；stub 檔存在且指向 Pages。
+- [x] 進度條、上一章/下一章、綠勾在含 Chapter 0 的新章節數下行為正確。
+- [x] 無殘留死鏈（相對連結、blob 絕對連結）。
 
 ## 進度
 
