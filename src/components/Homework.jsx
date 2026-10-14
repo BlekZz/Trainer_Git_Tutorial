@@ -6,14 +6,18 @@ import { HOMEWORK_REPO_NAME, INSTRUCTOR_MENTION } from '../config';
 const prDescription = `${INSTRUCTOR_MENTION} 請 review 我的 Git 作業
 
 - 這個 PR 新增了：<一句話>
-- 我在作業中解決過一次衝突：<是哪個檔案>`;
+- .gitignore 證據：<貼上截圖，同時顯示本機 scratch.txt 存在且 git status 沒有列出它>
+- 衝突發生時的證據：<貼上 CONFLICT 或 both modified 畫面的截圖>
+- 衝突檔案：<是哪個檔案>
+- 解決衝突的 merge commit：<貼上該筆 commit 的網址>
+- 最後保留的內容：<用一句話說明保留哪邊或如何整合>`;
 
 const checklist = [
   { id: 'owner', label: '這是我自己的 Public repo。', verify: 'repo 首頁的 owner 是自己的帳號，名稱旁標示 Public。' },
-  { id: 'commits', label: '至少有 3 次有意義的 commit，作者頭像是我。', verify: 'Commits 頁有每天學到什麼的紀錄；作者連到自己的帳號，email 已綁定。' },
-  { id: 'ignore', label: '.gitignore 存在，而且指定檔案確實被忽略。', verify: 'GitHub 檔案列表有 .gitignore、沒有 scratch.txt；本機 scratch.txt 還在，但 status 不列為待加入。' },
-  { id: 'merge', label: '我在本機合併並解決衝突，保留了 merge commit。', verify: 'Commits 頁可找到解決衝突的紀錄，打開該筆可看到兩個 parent（它連回兩邊的照片）。' },
-  { id: 'pr', label: `PR 要合進自己的 main，描述有 ${INSTRUCTOR_MENTION}。`, verify: 'PR 頂部的接收方是自己的 main，描述已填自己的新增內容與衝突檔名。' },
+  { id: 'commits', label: '至少三筆分別記錄一天所學的 commit，作者頭像是我。', verify: 'repo 首頁選 main → Commits，逐筆打開檢查所學內容；作者連到自己的帳號，email 已綁定。.gitignore 與 merge commit 另外驗證，不計入這三筆。' },
+  { id: 'ignore', label: '.gitignore 存在，而且指定檔案確實被忽略。', verify: 'repo 的 .gitignore 有 scratch.txt 規則；PR 已附截圖，同時顯示本機 scratch.txt 存在且 git status 沒有列出它。' },
+  { id: 'merge', label: '我在本機合併並解決衝突，保留了 merge commit。', verify: 'PR 已附 CONFLICT 或 both modified 當下截圖、衝突檔名、解決衝突的 merge commit 網址與一句保留內容說明；repo 首頁選 main → Commits 可核對該筆內容與兩個 parent。' },
+  { id: 'pr', label: `PR 要合進自己的 main，描述有 ${INSTRUCTOR_MENTION}。`, verify: 'PR 頂部的接收方是自己的 main，描述已填新增內容、忽略檔案與衝突的完整證據。' },
   { id: 'approved', label: '收到講師 Approve 後，我才自己合併。', verify: 'PR 狀態是 Merged；時間線先有講師核准紀錄，後有自己的合併紀錄。' },
   { id: 'sync', label: '合併後，本機 main 和 GitHub main 的最新 commit 相同。', verify: '比對兩邊最新存檔編號，並在原 PR 留言附上本機紀錄與 GitHub main 的截圖。' },
 ];
@@ -21,7 +25,22 @@ const checklist = [
 const LessonLink = ({ href, children }) => <a href={href} className="text-indigo-700 underline">{children}</a>;
 
 export const Homework = () => {
-  const [checks, setChecks] = useState({});
+  const [checks, setChecks] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('homework-checklist-v1'));
+      return Object.fromEntries(checklist.map(({ id }) => [id, saved?.[id] === true]));
+    } catch {
+      return {};
+    }
+  });
+  const updateChecks = (next) => {
+    setChecks(next);
+    try {
+      localStorage.setItem('homework-checklist-v1', JSON.stringify(next));
+    } catch {
+      // Storage may be unavailable; keep the checklist usable in this visit.
+    }
+  };
   const [copyState, setCopyState] = useState('複製描述');
   const checkedCount = checklist.filter((item) => checks[item.id]).length;
   const copyDescription = async () => {
@@ -43,19 +62,20 @@ export const Homework = () => {
       <Card className="space-y-4">
         <h3 className="font-bold">任務清單：從空資料夾到交件</h3>
         <ol className="list-decimal pl-5 space-y-4">
-          <li><strong>建立新的本機日誌，至少保存 3 次。</strong> 在舊 git-journal 資料夾<strong>外面</strong>建立作業專用的新資料夾 <code>{HOMEWORK_REPO_NAME}</code>，確認裡面是空的，再用 init 建立相簿。每次 commit 各記錄一天學到什麼，說明要有意義。不要搬入舊的 .git 或覆蓋舊練習。 <LessonLink href="#first-commit">回 L2：第一次存檔</LessonLink></li>
-          <li><strong>加入生效的 .gitignore。</strong> 這次指定忽略 scratch.txt；保留本機測試檔，但不要讓它進入相簿。 <LessonLink href="#diff-restore">回 L3：忽略檔案與存檔說明</LessonLink></li>
+          <li><strong>建立新的本機日誌，至少三筆分別記錄一天所學的 commit。</strong> 在舊 git-journal 資料夾<strong>外面</strong>建立作業專用的新資料夾 <code>{HOMEWORK_REPO_NAME}</code>，確認裡面是空的，再用 init 建立相簿。每次 commit 各記錄一天學到什麼，說明要有意義；逐筆打開檢查內容。.gitignore 與 merge commit 另外驗證，不計入這三筆。不要搬入舊的 .git 或覆蓋舊練習。 <LessonLink href="#first-commit">回 L2：第一次存檔</LessonLink></li>
+          <li><strong>加入生效的 .gitignore。</strong> 這次指定忽略 scratch.txt；保留本機測試檔，但不要讓它進入相簿。留下同時顯示本機 scratch.txt 存在與 git status 沒有列出它的截圖，交件時附在 PR。 <LessonLink href="#diff-restore">回 L3：忽略檔案與存檔說明</LessonLink></li>
           <li><strong>開一個 feat/... 分支加內容，在本機 merge 回 main。</strong> 斜線後自己取名，例如 feat/reflection；... 不用照打。完成後 main 要看得到分支的內容。 <LessonLink href="#branch">回 L4：分支與本機合併</LessonLink></li>
-          <li><strong>刻意製造並解決一次衝突，留下 merge commit。</strong> 讓兩個分支對同一行各有已保存的改動，選出最後內容並保存合併照片；檔案裡不能留下衝突標記。 <LessonLink href="#local-conflict">回 L5：本機衝突</LessonLink></li>
+          <li><strong>刻意製造並解決一次衝突，留下 merge commit。</strong> 讓兩個分支對同一行各有已保存的改動；看到 CONFLICT 或 both modified 時，先截圖保留，再選出最後內容並保存合併照片，檔案裡不能留下衝突標記。交件時附上截圖、衝突檔名、解決衝突的 merge commit 網址與一句保留內容說明；兩個 parent 只能證明合併，不能證明曾有衝突。 <LessonLink href="#local-conflict">回 L5：本機衝突</LessonLink></li>
           <li><strong>在 GitHub 建立自己的 Public repo，push main。</strong> 名稱用 <code>{HOMEWORK_REPO_NAME}</code>，建立空的雲端相簿再上傳；首頁應看得到自己的日誌與紀錄。 <LessonLink href="#push">回 L6：第一次上雲</LessonLink></li>
           <li><strong>再開一個新的 feat/... 分支新增內容，push 後開 PR。</strong> PR 在自己的 repo；方向是 <strong>base = 自己的 main ← compare = 這次的新分支</strong>。先保留 Open，等講師看過。 <LessonLink href="#pr">回 L7：分支上雲與 PR</LessonLink></li>
-          <li><strong>在 PR 描述寫 {INSTRUCTOR_MENTION} 請 review。</strong> 用下面範本填好新增內容和衝突檔名，再送出 PR；這就是交件，不用另填表單。提及講師會通知對方。 <LessonLink href="#pr">回 L7：填 PR 描述</LessonLink></li>
+          <li><strong>在 PR 描述寫 {INSTRUCTOR_MENTION} 請 review。</strong> 用下面範本填好新增內容、忽略檔案與衝突的完整證據，再送出 PR；這就是交件，不用另填表單。提及講師會通知對方。 <LessonLink href="#pr">回 L7：填 PR 描述</LessonLink></li>
           <li><strong>等講師 review，再依結果處理。</strong> Approve 後自己 Merge；Request changes 就在同一分支修正、保存、上傳，並留言「已修改，請再看一次」。細節見下方「交件之後會發生什麼」。 <LessonLink href="#pr">回 L7：合併申請</LessonLink>、<LessonLink href="#sync">回 L8：同步成果</LessonLink></li>
         </ol>
       </Card>
       <Card className="space-y-3">
         <h3 className="font-bold">PR 描述範本</h3>
-        <p>貼到 GitHub 的 PR 描述欄，<strong>不是終端機</strong>。把 <code>&lt;一句話&gt;</code> 和 <code>&lt;是哪個檔案&gt;</code> 整個換掉，角括號不要留下；例如分別填「新增學習心得」與「README.md」。保留第一行的講師 mention。</p>
+        <p>貼到 GitHub 的 PR 描述欄，<strong>不是終端機</strong>。每個 <code>&lt;...&gt;</code> 都要整個換掉，角括號不要留下；例如新增內容填「新增學習心得」、衝突檔案填「README.md」、保留內容填「保留 main 的標題，補上分支的心得」。到 repo 首頁選 main → Commits，打開解決衝突的那一筆，複製網址填入範本。保留第一行的講師 mention。</p>
+        <p>截圖快捷鍵可回 <LessonLink href="#setup">L0：行前準備</LessonLink>。把兩張證據截圖貼上或拖入 PR 描述欄，等上傳完成，按 Preview 確認兩張圖片都顯示，再送出。</p>
         <div className="min-w-0 rounded-lg overflow-hidden bg-slate-900 text-slate-100 shadow-md">
           <div className="flex flex-wrap items-center justify-between gap-2 bg-slate-800 px-3 py-2 text-xs">
             <span>貼到 PR 描述欄</span>
@@ -63,7 +83,7 @@ export const Homework = () => {
           </div>
           <pre className="p-3 text-sm break-all">{prDescription}</pre>
         </div>
-        <p>貼上後會看到填好的描述；按 Create pull request 後進入 Open 的 PR 頁，描述裡應有講師 mention 和自己的兩項說明。</p>
+        <p>貼上後會看到填好的描述；按 Create pull request 後進入 Open 的 PR 頁，描述裡應有講師 mention、填好的各項說明與兩張證據截圖。</p>
         <Screenshot id="HW-pr-mention" alt="學員自己的 PR 描述包含講師 mention、新增內容與衝突檔名" caption="你會看到自己的 PR 描述中提及講師，並列出新增內容與解決衝突的檔案。" />
       </Card>
       <SectionTitle title="交件之後會發生什麼" subtitle="講師看申請單，你負責把通過的照片收進主相簿。" />
@@ -94,18 +114,21 @@ export const Homework = () => {
         <Callout title="等下載完成再核對">小相簿通常幾秒到一分鐘；等進度結束、提示符回來，不要重按 Enter。成功後本機應看得到 PR 新增的內容，接著還要比對存檔編號。</Callout>
         <FalseAlarm signal={': 或 (END)'} title="翻紀錄時若停在閱讀畫面">按英文小寫 q 回到指令列；短內容可能直接結束。</FalseAlarm>
         <CommandBlock command="git log -1" comment="查看本機 main 最新一張照片的完整編號" />
-        <p>你會看到最新 commit 的編號、作者、日期與說明。到 GitHub repo 首頁選 main，再進 Commits 打開最新一筆，比對完整編號是否相同；這裡要找的是網頁合併後的新照片，不是 PR 分支最後一筆。</p>
-        <p>將本機紀錄與 GitHub main 最新 commit 截圖貼到原 PR 留言框，按 Comment。你會看到含截圖的留言；這才完成最後的同步驗收。方法忘了可回 <LessonLink href="#sync">L8</LessonLink>。</p>
+        <CommandBlock variant="output" command={'commit ad7762015c5b5906ccb6c6fbc3204863d7f71293\nMerge: 739a155 2cc13d7\nAuthor: Amy <amy@example.com>\nDate:   Wed Oct 14 15:42:38 2026 +0800\n\n    Merge pull request #1 from amy/feat/day5'} />
+        <p>這是 Git 2.55 的實錄範例，你的編號、作者、日期與說明會不同。比對第一行 commit 後的完整編號；<code>Merge:</code> 行表示這是一筆 merge commit。到 GitHub repo 首頁選 main，再進 Commits 打開最新一筆，比對完整編號是否相同；這裡要找的是網頁合併後的新照片，不是 PR 分支最後一筆。同步方法忘了可回 <LessonLink href="#sync">L8</LessonLink>。</p>
+        <p>截圖快捷鍵可回 <LessonLink href="#setup">L0：行前準備</LessonLink>。將本機紀錄與 GitHub main 最新 commit 的兩張截圖貼上或拖入原 PR 留言框 → 等上傳完成 → 按 Preview 確認兩張圖片都顯示 → 按 Comment。你會看到含兩張截圖的留言；這才完成最後的同步驗收。</p>
       </Card>
       <Callout variant="warning" title="結果不同，先停在原處核對">看到 CONFLICT → 回 <LessonLink href="#local-conflict">L5</LessonLink>；看到 rejected → 回 <LessonLink href="#sync">L8</LessonLink>；看到 Repository not found → 回 <LessonLink href="#push">L6</LessonLink> 核對地址與登入。其他錯誤從側邊欄「急診室」查原文，仍不確定就把畫面交給講師；不要一直重試或重建 repo。</Callout>
       <Card className="space-y-3">
         <h3 className="font-bold">交作業前自我檢核，審查後補完最後兩項</h3>
         <p>實際看到證據才打勾。前 5 項交件前核對，最後 2 項等講師核准、自己合併並同步後再勾。勾選只協助你盤點，不會代替送出 PR。</p>
+        <p className="text-sm text-slate-600">勾選會保存在此瀏覽器，下次回來可繼續；若瀏覽器不允許儲存，本次仍可勾選，但離開後可能不保留。</p>
+        <button type="button" onClick={() => updateChecks({})} className="text-sm text-indigo-700 underline">全部重設</button>
         <Screenshot id="HW-commits-page" alt="作業 repo 的 Commits 頁列出有意義的存檔說明、作者頭像與合併紀錄" caption="你會看到自己的存檔紀錄、作者頭像，以及本機解決衝突留下的合併照片。" />
         <div className="space-y-2">
           {checklist.map((item) => (
             <label key={item.id} className={`flex items-start gap-3 border rounded-lg px-3 py-2.5 cursor-pointer transition-colors ${checks[item.id] ? 'bg-green-50 border-green-300' : 'bg-white border-slate-200 hover:border-indigo-300'}`}>
-              <input type="checkbox" checked={!!checks[item.id]} onChange={() => setChecks((previous) => ({ ...previous, [item.id]: !previous[item.id] }))} className="mt-0.5 w-4 h-4 shrink-0 accent-green-600" />
+              <input type="checkbox" checked={!!checks[item.id]} onChange={() => updateChecks({ ...checks, [item.id]: !checks[item.id] })} className="mt-0.5 w-4 h-4 shrink-0 accent-green-600" />
               <span className="min-w-0 text-sm">
                 <span className={`font-medium ${checks[item.id] ? 'text-green-900' : 'text-slate-700'}`}>{item.label}</span>
                 <span className="block text-xs text-slate-500 mt-0.5">驗證方法：{item.verify}</span>
