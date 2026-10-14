@@ -216,7 +216,7 @@ Part 4  選修（不計分，標「學完作業再來」）
 
 ## 6. 待裁（開工前需 Blake 決定）
 
-- **A. 作業方案**：3.1「我的 Git 日誌」（推薦）／B Template repo／保留 Fork 但改選修 bonus
-- **B. 主比喻**：相簿（推薦）／保留遊戲存檔（暫存區另用「打包箱」補）
-- **C. 行前準備**：刪 Node.js、GitHub 登入移到 L6（推薦）／維持 Ch0 一次裝好
-- **D. 繳交管道**：學員交 repo 網址的地方——Google 表單／Slack 頻道／其他
+- **A. 作業方案**：✅ 2026-10-14 Blake 裁定 3.1「我的 Git 日誌」
+- **B. 主比喻**：✅ 2026-10-14 Blake 裁定 相簿
+- **C. 行前準備**：✅ 2026-10-14 Blake 裁定 刪 Node.js、GitHub 登入移到 L6
+- **D. 繳交管道**（討論中）：Blake 提案「Fork → 自己 merge 自己的 PR → 再發 PR 給 Blake，不 merge 只 review」；claude 建議「自己 repo 開 PR、描述欄 @BlekZz 請求 review → Blake review → 學員 approve 後自己 merge；Blake 用 `is:pr mentions:BlekZz` 搜尋當收件匣」。@mention 通知與非 collaborator review 的行為**未實測**，M4 用測試帳號驗證，失敗則退回「學員加 Blake 為 collaborator 並指定 reviewer」。
