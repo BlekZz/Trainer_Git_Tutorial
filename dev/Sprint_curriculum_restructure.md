@@ -231,6 +231,7 @@ PR 描述範本（教材提供可複製版）：
 - QA：用測試帳號從零實跑 L6–L8 全流程；rejected / conflict 原文截取比對；過程中記下每個 GitHub 畫面的實際按鈕文字，回填文案
 
 ### M4 作業與選修（1 天）
+> ✅ 2026-10-14 完成（9d65864 作業 repo 改名 git-homework、7b7e08c 全流程實跑腳本＋§8.2、c5d33eb codex 作業頁＋README 教學者專區、稽核修正 a98fa25）。前提實測 §8.1、作業全流程實跑 §8.2（含 Request changes 一輪）。Fork 流程→E2、rebase→E1 已於 M1 搬移；Ch8 quiz 事實錯誤已於 9012db9 修。驗收：build 過；eslint 6（既有）；BlekZz 只在 config.js；無 Fork/403/頁頂核准徽章主張；HW 截圖 id 4/4；唯一 git 輸出取自實錄；自我檢核 localStorage 保存經 dev server 實測（勾選→重新載入仍勾選）、375px 無橫向捲動。rubric 稽核（codex 唯讀）high 0／medium 5／low 3，修 7 項（.gitignore 與衝突改要求截圖證據、README 區分 main Commits 與 PR Commits、三筆日誌 commit 定義、截圖方法改連 L0、git log -1 補實錄輸出、勾選保存＋全部重設）；餘 1 項＝6 張截圖缺檔，歸 M5。
 - **第一件事：驗證 §3.1 三個未實測前提**（測試帳號開 PR @BlekZz → BlekZz 是否收到通知、能否 Approve／Request changes、`mentions:BlekZz` 搜得到）。記錄觀察到的訊號（通知信主旨、PR 時間線文字）。任一不成立 → 改用 §3.1 退回方案，再繼續
 - 作業頁：任務清單＋PR 描述範本（可複製）＋自我檢核 checklist＋「被 Request changes 怎麼辦」；講師驗收表（§3.1）與收件匣網址放 README 教學者專區
 - 舊 Ch8 Fork 流程搬 E2、rebase 搬 E1；修 Ch8 quiz 事實錯誤（S6）
