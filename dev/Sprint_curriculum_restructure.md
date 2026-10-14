@@ -238,10 +238,12 @@ PR 描述範本（教材提供可複製版）：
 - QA：測試帳號完整做一次作業（含一次 Request changes 來回），BlekZz 依驗收表判定通過；收件匣搜尋能看到該 PR
 
 ### M5 GitHub／VSCode 操作截圖（1 天）
+> ⏸ 2026-10-14 暫停：開工即撞 Claude 用量上限（5h 窗滿、7d 97%）。已備：`dev/script/shot.py`（縮放／紅框／遮蔽／≤200KB）；fixture repo（blakelee0918/mention-test PR#1 open、git-journal-rec、git-homework PR#1 merged）。待 Blake：測試帳號 Chrome 視窗目前 3440×1249，請縮到 ~1280–1440 寬；`L2-vscode-source-control`、`L5-vscode-conflict` 為 VSCode 畫面，請 Blake 自拍放 `public/screenshots/` 再用 shot.py 統一規格。
 - 依 §7.2 清單截圖（規範 §7.1），補滿 M2–M4 留下的所有佔位
 - QA：`rg "截圖待補"` 渲染結果為 0（在 dev server 逐章檢查無佔位框）；每張圖 fresh-context agent 對照圖說「你會看到…」是否與圖相符；人工檢查無真實 email／token／私人 repo 名入鏡；圖片總量 ≤ 5 MB
 
 ### M6 說人話全站掃（1 天）
+> ✅ 2026-10-14 完成（cf3b671，codex 改 L0／E1–E3／ErrorRoom，codex 內部稽核三項已修）。驗收：build rc=0；eslint rc=0（原 6 個 L0 NextButton 既有錯誤一併修掉）；主線 Lesson*／Homework 舊比喻與舊章名 rg 0；`本章撰寫中` 全站 0；BlekZz 只在 config.js；ErrorRoom 被 L4／L6／L8 引用的卡（checkout overwritten、not fully merged、publickey、Repository not found、rejected、CONFLICT、who you are、CRLF、src refspec）全數保留；E2 command 12→13，Fork→clone→PR→Sync fork 流程完整。未做：M6 獨立 fresh-context「零基礎讀者」角色閱讀（由 codex 自身子稽核代替，非本 session 派出的獨立稽核）。
 - 依 §4 比喻對照表全站替換；術語首次定義檢查；章首黑框改寫（T3）；語氣（T4）；事實修正（T5）；ErrorRoom 一塊一指令（T6）；L0 刪 Node（T7）
 - QA：`rg` 檢查舊比喻詞（平行宇宙／時光機儀表板／敲門／搶劫／MMO／黑話）在主線章 0 命中（選修章可例外）；fresh-context agent 做「零基礎讀者」角色閱讀，回報任何看不懂的句子
 
