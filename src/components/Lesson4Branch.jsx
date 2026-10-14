@@ -27,7 +27,7 @@ export const Lesson4Branch = () => (
       <h3 className="font-bold">1. 先確認書桌乾淨，再另開相簿</h3>
       <CommandBlock command={"git status"} comment="先確認沒有會被帶到另一個分支的改動" />
       <CommandBlock variant="output" command={"On branch main\nnothing to commit, working tree clean"} />
-      <Callout title="不是 clean 就先停這一步">回 L3 核對是否已保存 .gitignore、還原 day1.md。看到「Your local changes to the following files would be overwritten by checkout」時，表示 Git 正在擋住可能覆寫的切換；保留需要的改動並完成存檔後再切，不要直接丟棄它們。也可到急診室查原文。</Callout>
+      <Callout title="不是 clean 就先停這一步">回 L3 核對是否已保存 .gitignore、還原 day1.md。看到「Your local changes to the following files would be overwritten by checkout」時，表示 Git 正在擋住可能覆寫的切換；保留需要的改動並完成存檔後再切，不要直接丟棄它們。完整錯誤原文和處理方式可到急診室查。</Callout>
       <CommandBlock command={"git switch -c feat/day2"} comment="-c 表示建立新分支並立刻切過去" />
       <CommandBlock variant="output" command={"Switched to a new branch 'feat/day2'"} />
       <p>feat/day2 是這本相簿的名字，不是磁碟上的資料夾路徑。此時 HEAD 站在 feat/day2；main 仍在原本的照片。</p>
@@ -35,6 +35,7 @@ export const Lesson4Branch = () => (
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day2.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 2：學會分支</pre></div>
       <p>這次多接手一步：請自己完成「放上拍照台 → 按快門」兩步，檔案是 day2.md，照片說明用「新增 Day 2 筆記」。先寫出兩條指令，再依序輸入；卡住才展開提示。</p>
       <FalseAlarm signal={"warning: in the working copy of 'day2.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
+      <Callout variant="warning" title="記得帶 -m">commit 一律寫成 <code>git commit -m "說明"</code>。萬一漏了 -m、畫面變成滿是 ~ 的編輯器（Vim）：按 Esc，輸入 <code>:q!</code> 再按 Enter 離開，然後用 git status 確認後重打一次。</Callout>
       <p>完成後會看到以 [feat/day2 編號] 開頭的保存訊息，下方說明一個檔案新增了一行；完整輸出在提示裡可核對。</p>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">提示：先挑選檔案</summary>
       <CommandBlock command={"git add day2.md"} comment="挑選這次要保存的分支成果" />

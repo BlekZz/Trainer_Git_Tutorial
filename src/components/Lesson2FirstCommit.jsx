@@ -117,11 +117,12 @@ export const Lesson2FirstCommit = () => {
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">3. 補全練習：第二張照片由你按快門</h3>
-      <p>用剛才 New File 的方法建立 day1.md，輸入下方內容並儲存；左側會多出 day1.md。</p>
+      <p>先點左側最上方的檔案總管圖示（兩張紙，或按 Ctrl+Shift+E；Mac：Cmd+Shift+E）回到看得到 GIT-JOURNAL 的畫面，再用剛才 New File 的方法建立 day1.md，輸入下方內容並儲存；左側會多出 day1.md。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day1.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 1：學會 git init</pre></div>
       <FalseAlarm signal={"warning: in the working copy of 'day1.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
       <CommandBlock command={"git add day1.md"} comment="把第二份筆記放上拍照台" />
       <CommandBlock variant="output" command={"warning: in the working copy of 'day1.md', LF will be replaced by CRLF the next time Git touches it"} />
+      <Callout variant="warning" title="記得帶 -m">commit 一律寫成 <code>git commit -m "說明"</code>。萬一漏了 -m、畫面變成滿是 ~ 的編輯器（Vim）：按 Esc，輸入 <code>:q!</code> 再按 Enter 離開，然後用 git status 確認後重打一次。</Callout>
       <p>請先不展開答案，自己寫出保存它的指令；訊息用「新增 Day 1 筆記」。想好後展開核對，只執行一次。</p>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對最後一步</summary>
         <CommandBlock command={"git commit -m \"新增 Day 1 筆記\""} comment="把 Day 1 筆記正式存進相簿" />

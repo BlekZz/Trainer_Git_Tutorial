@@ -30,6 +30,7 @@ export const Lesson5LocalConflict = () => (
       <CommandBlock variant="output" command={"Switched to a new branch 'feat/title'"} />
       <p>打開 README.md，把第 1 行整行換成下方內容，保留行尾換行並按 Ctrl+S（Mac：Cmd+S）；編輯區會顯示新標題。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>README.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all"># 我的 Git 學習日誌</pre></div>
+      <Callout variant="warning" title="記得帶 -m">commit 一律寫成 <code>git commit -m "說明"</code>。萬一漏了 -m、畫面變成滿是 ~ 的編輯器（Vim）：按 Esc，輸入 <code>:q!</code> 再按 Enter 離開，然後用 git status 確認後重打一次。</Callout>
       <p>這次用 <strong>-am</strong>：-a 把「已被 Git 記錄的檔案」修改挑進來，-m 附上說明，所以這一條會挑選並拍照。README.md 在 L2 已記錄，可以用；全新的檔案仍要先 add。請確認這時只改了 README.md。</p>
       <FalseAlarm signal={"warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it"}>這是換行提醒，不是標題沒保存；有時還會提到已存在的 .gitignore。沒有這兩行也正常。</FalseAlarm>
       <CommandBlock command={"git commit -am \"標題改成學習日誌\""} comment="保存分支版本，之後回 main 才不會帶著未存的文字" />

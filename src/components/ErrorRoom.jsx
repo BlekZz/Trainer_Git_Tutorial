@@ -75,6 +75,32 @@ export const ErrorRoom = () => {
       </ErrorCard>
 
       <ErrorCard
+        error={'error: Your local changes to the following files would be overwritten by checkout: ... Please commit your changes or stash them before you switch branches. Aborting'}
+        translation="書桌上還有沒存的改動，切過去會被另一本相簿的內容蓋掉，所以 Git 先擋下來——你的改動都還在。"
+      >
+        <CommandBlock variant="output" command={'error: Your local changes to the following files would be overwritten by checkout:\n\tREADME.md\nPlease commit your changes or stash them before you switch branches.\nAborting'} />
+        <p className="text-sm text-slate-600 mb-2">解法：改動要留下就先存檔，再切分支（L2 教過的兩步）：</p>
+        <CommandBlock command="git add <檔名>" comment="把錯誤訊息列出的檔案放上拍照台（<檔名> 整個換掉，角括號不要打）" />
+        <NoOutputHint />
+        <CommandBlock command={'git commit -m "先存起來"'} comment="按快門" />
+        <CommandBlock variant="output" command={'[main 1a2b3c4] 先存起來\n 1 file changed, 1 insertion(+), 1 deletion(-)'} />
+        <p className="text-sm text-slate-600">確定不要這些改動，才用 L3 的 <span className="font-mono">git restore &lt;檔名&gt;</span> 丟掉——丟了就找不回來。</p>
+      </ErrorCard>
+
+      <ErrorCard
+        error="error: the branch 'feat/xxx' is not fully merged"
+        translation="這本分支相簿裡還有照片沒收進 main，現在刪掉名稱，那些照片就很難找回來，所以 Git 擋住你。"
+      >
+        <CommandBlock variant="output" command={"error: the branch 'feat/day2' is not fully merged\nhint: If you are sure you want to delete it, run 'git branch -D feat/day2'\nhint: Disable this message with \"git config set advice.forceDeleteBranch false\""} />
+        <p className="text-sm text-slate-600 mb-2">解法：先確認自己站在 main，把分支收進來，再刪一次（L4 的順序）：</p>
+        <CommandBlock command="git merge <分支名>" comment="把分支的照片收進 main（<分支名> 整個換掉）" />
+        <CommandBlock variant="output" command={'Updating 846a6e1..b2dbb59\nFast-forward\n day2.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 day2.md'} />
+        <CommandBlock command="git branch -d <分支名>" comment="收完再刪就會成功" />
+        <CommandBlock variant="output" command={'Deleted branch feat/day2 (was b2dbb59).'} />
+        <p className="text-sm text-slate-600">hint 提到的大寫 <span className="font-mono">-D</span> 是強制刪除，初學階段不要用。</p>
+      </ErrorCard>
+
+      <ErrorCard
         error="CONFLICT (content): Merge conflict in xxx.md / Automatic merge failed; fix conflicts and then commit the result."
         translation="你和別人改到了同一個地方，Git 不敢自己決定要留誰的，要你手動選。"
       >

@@ -2,7 +2,7 @@ import { SectionTitle, Card, Callout, Quiz, CommandBlock, NoOutputHint, FalseAla
 
 export const Lesson3DiffRestore = () => (
   <div className="min-w-0 space-y-6 animate-fade-in break-words">
-    <header><SectionTitle title="L3 看差異與後悔藥" subtitle="分辨保留、取消挑選與丟棄修改，並讓 Git 略過臨時檔案。" /><p className="text-sm text-slate-600">先準備：完成 L2 的兩次存檔；VSCode 開著同一個 git-journal。</p></header>
+    <header><SectionTitle title="L3 看差異與還原" subtitle="分辨保留、取消挑選與丟棄修改，並讓 Git 略過臨時檔案。" /><p className="text-sm text-slate-600">先準備：完成 L2 的兩次存檔；VSCode 開著同一個 git-journal。</p></header>
 
     <Card className="space-y-3 bg-indigo-50">
       <h3 className="font-bold">我先示範：先看書桌，再決定要不要拍</h3>
@@ -57,7 +57,8 @@ export const Lesson3DiffRestore = () => (
       <p><strong>.gitignore</strong> 是列出哪些尚未被 Git 記錄的檔案要略過的文字清單，像寫下「哪些東西不要放上拍照台」。它不會刪除檔案，也不會替已拍過的檔案取消紀錄。</p>
       <p>用左側檔案總管 New File 建立 notes.tmp，寫「練習用臨時筆記」並儲存；左側會多出這個檔案。裡面不要放真實密碼。</p>
       <CommandBlock command={"git status"} comment="先看還沒設定忽略時的狀態" />
-      <Callout title="輸入後看這裡">你會看到 notes.tmp 列在 Untracked files 下，表示它仍在 Git 的待挑選清單中。</Callout>
+      <CommandBlock variant="output" command={"On branch main\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tnotes.tmp\n\nnothing added to commit but untracked files present (use \"git add\" to track)"} />
+      <p>notes.tmp 列在 Untracked files 下，表示它仍在 Git 的待挑選清單中。</p>
       <p>再建立名為 .gitignore 的檔案，開頭的點也要輸入，不要加 .txt。內容如下，儲存後左側會看到 .gitignore。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>.gitignore</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">*.tmp</pre></div>
       <p>* 表示任意檔名，所以所有以 .tmp 結尾的新檔案都會被略過。</p>
@@ -67,6 +68,7 @@ export const Lesson3DiffRestore = () => (
       <FalseAlarm signal={"warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
       <CommandBlock command={"git add .gitignore"} comment="把忽略清單本身放上拍照台" />
       <CommandBlock variant="output" command={"warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it"} />
+      <Callout variant="warning" title="記得帶 -m">commit 一律寫成 <code>git commit -m "說明"</code>。萬一漏了 -m、畫面變成滿是 ~ 的編輯器（Vim）：按 Esc，輸入 <code>:q!</code> 再按 Enter 離開，然後用 git status 確認後重打一次。</Callout>
       <p>這次請你補完存檔，訊息是「忽略 tmp 檔」。想好後展開核對。</p>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對保存忽略清單的指令</summary>
         <CommandBlock command={"git commit -m \"忽略 tmp 檔\""} comment="讓以後的自己知道為什麼新增這份清單" />
