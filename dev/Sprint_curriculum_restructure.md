@@ -199,8 +199,9 @@ PR 描述範本（教材提供可複製版）：
 
 ### 開工前置（Blake 準備，M0 前到位）
 - [x] 一個**學員測試帳號** `blakelee0918`（M3／M4 實跑與 M5 截圖用；學員視角截圖一律用它）——2026-10-14 驗：github.com/blakelee0918 公開頁存在，Joined October 14, 2026，0 個 public repo
-- [x] `BlekZz` 登入的 Chrome（Chrome profile 1）——2026-10-14 驗：claude-in-chrome 連到的唯一瀏覽器「Browser 1」打開 github.com 顯示「Good morning, BlekZz!」
-- [ ] 測試帳號的 Chrome（Chrome profile 3）連上 claude-in-chrome——2026-10-14 `list_connected_browsers` 只列出 1 個瀏覽器，profile 3 尚未連線，無法確認其登入身分
+- [x] `BlekZz` 登入的 Chrome（Chrome profile 1）＝ claude-in-chrome deviceId `a0a7e3e1-66cd-4059-94b5-edcecd67caf4`——2026-10-14 驗：github.com 首頁顯示「Good morning, BlekZz!」
+- [x] 測試帳號的 Chrome（Chrome profile 3）＝ deviceId `73ebd58f-841e-4a3f-b835-5c034d3ac5d4`——2026-10-14 驗：github.com 首頁顯示「Welcome to GitHub, blakelee0918!」
+- ⚠️ 擴充功能顯示名稱「Browser 1／2」會隨連線順序互換（同日實測：BlekZz 那台先叫 Browser 1、後變 Browser 2），**以 deviceId 為準**；每次操作 GitHub 前先打開 github.com 首頁確認登入者再動作
 
 ### M0 準備（0.5 天）
 - 跑 `/init-tutorial`（或 `/init-skill` 選 tutor 套組）把 tutor-core / tutor-sop 與 audit agents 裝進本專案
