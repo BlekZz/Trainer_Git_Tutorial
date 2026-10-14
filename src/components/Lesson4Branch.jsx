@@ -1,241 +1,120 @@
-import { useState } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, Callout, Quiz, FalseAlarm } from './Shared';
-import { GitBranch, Activity } from 'lucide-react';
+import { SectionTitle, Card, Callout, Quiz, CommandBlock, FalseAlarm } from './Shared';
 
-export const Lesson4Branch = () => {
-  const [activeBranch, setActiveBranch] = useState('main');
-  const [branches, setBranches] = useState(['main']);
-  const [logs, setLogs] = useState([{ prefix: '$', text: '準備就緒。目前分支：main' }]);
+export const Lesson4Branch = () => (
+  <div className="min-w-0 space-y-6 animate-fade-in break-words">
+    <header><SectionTitle title="L4 分支" subtitle="另開一本相簿保存 Day 2，再把成果收回 main。" /><p className="text-sm text-slate-600">先準備：完成 L3 並保存 .gitignore；同一份 git-journal 沒有待保存的改動。</p></header>
 
-  const addLog = (text, type = 'info', prefix = '>') => {
-    setLogs(prev => [...prev, { text, type, prefix }]);
-  };
-
-  const handleCreateBranch = () => {
-    if (branches.includes('feat/login')) return;
-    addLog('git branch feat/login', 'input', '$');
-    setBranches([...branches, 'feat/login']);
-    addLog('（沒有任何輸出——這是正常的！真實終端裡成功時不會顯示訊息）', 'info');
-    addLog('小提醒：你還在 main 分支上，可以用 git branch 查看清單確認。', 'info');
-  };
-
-  const handleCheckout = (branchName) => {
-    if (!branches.includes(branchName)) return;
-    addLog(`git checkout ${branchName}`, 'input', '$');
-    setActiveBranch(branchName);
-    addLog(`Switched to branch '${branchName}'`, 'info');
-  };
-
-  const handleCheckoutB = () => {
-    if (branches.includes('bugfix/ui')) return;
-    addLog('git checkout -b bugfix/ui', 'input', '$');
-    setBranches([...branches, 'bugfix/ui']);
-    setActiveBranch('bugfix/ui');
-    addLog(`Switched to a new branch 'bugfix/ui'`, 'success');
-  };
-
-  return (
-    <div className="space-y-6 animate-fade-in">
-      <SectionTitle title="L4. 分支與宇宙跳躍" subtitle="在不搞壞主線的情況下，大膽嘗試新功能" />
-
-      {/* 進入狀態提示 */}
-      <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
-        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">⚡ 進入狀態：讀完再動</div>
-        <div className="flex items-start gap-3">
-          <span className="text-pink-400 text-base leading-none mt-0.5">🌿</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">切換分支（checkout）前，你必須先確認自己已經建立了目標分支。</strong>沒有先建立的話，切換會失敗並報錯。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-blue-400 text-base leading-none mt-0.5">📋</span>
-          <div className="text-sm text-slate-300">
-            <p><strong className="text-white">不知道現在有哪些分支？</strong>輸入 <code className="bg-slate-700 px-1 rounded">git branch</code> 可以列出所有本地分支，輸出長得像這樣：</p>
-            <pre className="bg-slate-900 rounded px-3 py-2 mt-2 font-mono text-xs text-slate-200 leading-relaxed">{'* main\n  feat/login'}</pre>
-            <p className="mt-1 text-xs text-slate-400">前面有 <code className="bg-slate-700 px-1 rounded">*</code> 星號的那一行，就是你目前所在的分支。</p>
-          </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-yellow-400 text-base leading-none mt-0.5">💡</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">最常用的懶人指令：<code className="bg-slate-700 px-1 rounded">git checkout -b 分支名</code></strong>，一次完成「建立 + 切換」，不需要分兩步做。</p>
-        </div>
+    <Card className="space-y-3 bg-indigo-50">
+      <h3 className="font-bold">我先示範：另開一本相簿，試寫 Day 2</h3>
+      <p><strong>branch（分支）</strong> 是從某張照片開始另開一本相簿，讓新想法有自己的後續紀錄。<strong>HEAD</strong> 就是「你現在站在哪一本相簿的哪一頁」。</p>
+      <p>我會先從 main 另開 feat/day2，把 Day 2 拍好再切回 main；這樣 main 的照片還是原樣。<strong>merge（合併）</strong> 是把另一本相簿的成果收進目前這本，所以要先站回 main 再收。</p>
+      <p>分支保存的是照片紀錄，尚未保存的書桌改動可能跟著你走或擋住切換；本課每次切換前都先完成存檔。</p>
+      <p className="text-sm">較舊的教材用 git checkout 做切換，作用對應這裡的 git switch；本課統一用 switch。</p>
+    </Card>
+    <Callout title="先停一下，說出答案再繼續"><p>想把 Day 2 收進主相簿，合併前應站在哪一本？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>main；合併會改變你目前站著的相簿。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
+    <Card className="space-y-3">
+      <h3 className="font-bold">一起看分支圖，補出最後一步</h3>
+      <div className="grid sm:grid-cols-2 gap-3 text-center" aria-label="分支與合併概念圖">
+        <div className="rounded bg-blue-50 p-4">main：Day 1 ＋ 忽略清單<br />↓ 留在原照片</div>
+        <div className="rounded bg-pink-50 p-4">feat/day2：從同一張開始<br />↓ 多拍 Day 2</div>
       </div>
-
-      <InstructionalText title="什麼是分支 (Branch)？" icon={<GitBranch size={18} className="text-pink-600" />}>
-        <p>分支就像是「平行宇宙」。當你想開發一個新功能（例如登入頁面），你可以從主線 (main) 複製一個一模一樣的宇宙出來。<br/>
-        在這個新的宇宙裡，你愛怎麼改就怎麼改，完全不會影響到主線！等到功能寫好、測試沒問題了，再把它合併 (Merge) 回主線。</p>
-      </InstructionalText>
-
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="space-y-4">
-          <Card className="bg-slate-50 border-slate-200">
-             <h3 className="font-bold text-slate-700 mb-4 flex items-center gap-2">
-               <Activity size={18} /> 分支操作面板
-             </h3>
-             
-             <div className="space-y-4">
-               {/* Create Branch */}
-               <div className="bg-white p-3 rounded border border-slate-200">
-                 <div className="flex justify-between items-center mb-2">
-                   <div className="font-bold text-sm text-slate-800">1. 建立新分支</div>
-                   <button 
-                     onClick={handleCreateBranch} 
-                     disabled={branches.includes('feat/login')}
-                     className={`text-xs px-2 py-1 rounded font-bold text-white ${branches.includes('feat/login') ? 'bg-slate-300' : 'bg-pink-500 hover:bg-pink-600'}`}
-                   >
-                     執行
-                   </button>
-                 </div>
-                 <code className="text-xs text-pink-600 bg-pink-50 px-1 rounded block mb-1">git branch feat/login</code>
-                 <p className="text-xs text-slate-500">只建立分支，但「不會」切換過去。輸入後不會有任何訊息跳出來——這就是成功，直接進行下一步。</p>
-               </div>
-
-               <Callout variant="warning" title="小心搞混">
-                 <code className="bg-amber-100 px-1 rounded">git branch abc</code> 這樣打，會<strong>建立</strong>一個叫 abc 的新分支，而不是切換過去！要切換請用 <code className="bg-amber-100 px-1 rounded">git checkout</code> 或下面的 <code className="bg-amber-100 px-1 rounded">-b</code> 懶人指令。
-               </Callout>
-
-               {/* Switch Branch */}
-               <div className="bg-white p-3 rounded border border-slate-200">
-                 <div className="flex justify-between items-center mb-2">
-                   <div className="font-bold text-sm text-slate-800">2. 切換分支</div>
-                   <div className="flex gap-2">
-                     <button 
-                       onClick={() => handleCheckout('main')} 
-                       disabled={activeBranch === 'main'}
-                       className={`text-xs px-2 py-1 rounded font-bold ${activeBranch === 'main' ? 'bg-slate-200 text-slate-400' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'}`}
-                     >
-                       main
-                     </button>
-                     <button 
-                       onClick={() => handleCheckout('feat/login')} 
-                       disabled={!branches.includes('feat/login') || activeBranch === 'feat/login'}
-                       className={`text-xs px-2 py-1 rounded font-bold ${activeBranch === 'feat/login' ? 'bg-slate-200 text-slate-400' : !branches.includes('feat/login') ? 'bg-slate-100 text-slate-300' : 'bg-pink-100 text-pink-700 hover:bg-pink-200'}`}
-                     >
-                       feat/login
-                     </button>
-                   </div>
-                 </div>
-                 <code className="text-xs text-indigo-600 bg-indigo-50 px-1 rounded block mb-1">git checkout &lt;分支名&gt;</code>
-                 <p className="text-xs text-slate-500">讓你的資料夾內容，瞬間切換到該宇宙的狀態。<code className="bg-slate-100 px-1 rounded">&lt;分支名&gt;</code> 要整個換成真實名稱（例如 <code className="bg-slate-100 px-1 rounded">git checkout feat/login</code>），不要把角括號打進去。</p>
-               </div>
-
-
-               <FalseAlarm signal={'warning: LF will be replaced by CRLF in xxx'}>
-                 在 Windows 上執行 <code className="bg-amber-100 px-1 rounded">git add</code> 或 commit 時，常會冒出這行黃字。它只是 Git 在提醒「換行符號會自動轉換」，不是錯誤，直接忽略、繼續下一步即可。
-               </FalseAlarm>
-
-               {/* Create and Switch */}
-               <div className="bg-white p-3 rounded border border-slate-200">
-                 <div className="flex justify-between items-center mb-2">
-                   <div className="font-bold text-sm text-slate-800">3. 建立並直接切換 (最常用⭐)</div>
-                   <button 
-                     onClick={handleCheckoutB} 
-                     disabled={branches.includes('bugfix/ui')}
-                     className={`text-xs px-2 py-1 rounded font-bold text-white ${branches.includes('bugfix/ui') ? 'bg-slate-300' : 'bg-purple-600 hover:bg-purple-700'}`}
-                   >
-                     執行
-                   </button>
-                 </div>
-                 <code className="text-xs text-purple-600 bg-purple-50 px-1 rounded block mb-1">git checkout -b bugfix/ui</code>
-                 <p className="text-xs text-slate-500">加上 <code>-b</code>，等於一次做完上面兩件事，非常方便！</p>
-               </div>
-
-               <Callout variant="info" title="看到別人這樣寫別慌">
-                 新版 Git 也可以用 <code className="bg-blue-100 px-1 rounded">git switch -c 分支名</code>，和 <code className="bg-blue-100 px-1 rounded">git checkout -b</code> 是同一件事——看到別人這樣寫不用慌。
-               </Callout>
-             </div>
-          </Card>
-        </div>
-
-        {/* Visual Map */}
-        <div className="bg-slate-800 rounded-xl p-6 relative overflow-hidden flex flex-col justify-center shadow-xl">
-          <h3 className="text-slate-300 font-bold mb-8 text-center tracking-widest text-sm uppercase">目前宇宙狀態</h3>
-          
-          <div className="relative h-40 w-full max-w-sm mx-auto">
-             {/* Main Branch */}
-             <div className="absolute top-1/2 left-0 right-0 h-1.5 bg-indigo-500/30 -translate-y-1/2 rounded-full"></div>
-             
-             {/* Base Commit */}
-             <div className="absolute top-1/2 left-[20%] -translate-y-1/2 -translate-x-1/2 flex flex-col items-center">
-               <div className="w-4 h-4 rounded-full bg-indigo-500"></div>
-             </div>
-
-             {/* Main Current Commit */}
-             <div className="absolute top-1/2 left-[80%] -translate-y-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-300">
-               <div className={`w-5 h-5 rounded-full ${activeBranch === 'main' ? 'bg-white ring-4 ring-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.8)]' : 'bg-indigo-500'} z-10`}></div>
-               <span className={`text-xs font-bold mt-2 ${activeBranch === 'main' ? 'text-white' : 'text-indigo-400'}`}>main</span>
-               {activeBranch === 'main' && <span className="absolute -top-6 text-[10px] bg-indigo-500 text-white px-2 py-0.5 rounded-full font-bold">You are here</span>}
-             </div>
-
-             {/* feat/login Branch */}
-             {branches.includes('feat/login') && (
-               <>
-                 <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 384 160" preserveAspectRatio="none">
-                   <path d="M 80 80 C 100 80, 110 32, 140 32 L 297 32" fill="none" stroke="rgba(236,72,153,0.3)" strokeWidth="6" strokeLinecap="round" />
-                 </svg>
-                 <div className="absolute top-8 left-[80%] -translate-y-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-300">
-                   <div className={`w-5 h-5 rounded-full ${activeBranch === 'feat/login' ? 'bg-white ring-4 ring-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.8)]' : 'bg-pink-500'} z-10`}></div>
-                   <span className={`absolute left-8 whitespace-nowrap text-xs font-bold ${activeBranch === 'feat/login' ? 'text-white' : 'text-pink-400'}`}>feat/login</span>
-                   {activeBranch === 'feat/login' && <span className="absolute -top-6 text-[10px] bg-pink-500 text-white px-2 py-0.5 rounded-full font-bold whitespace-nowrap">You are here</span>}
-                 </div>
-               </>
-             )}
-
-             {/* bugfix/ui Branch */}
-             {branches.includes('bugfix/ui') && (
-               <>
-                 <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 384 160" preserveAspectRatio="none">
-                   <path d="M 80 80 C 100 80, 110 128, 140 128 L 297 128" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="6" strokeLinecap="round" />
-                 </svg>
-                 <div className="absolute bottom-8 left-[80%] translate-y-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-300">
-                   <div className={`w-5 h-5 rounded-full ${activeBranch === 'bugfix/ui' ? 'bg-white ring-4 ring-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]' : 'bg-purple-500'} z-10`}></div>
-                   <span className={`absolute left-8 whitespace-nowrap text-xs font-bold ${activeBranch === 'bugfix/ui' ? 'text-white' : 'text-purple-400'}`}>bugfix/ui</span>
-                   {activeBranch === 'bugfix/ui' && <span className="absolute -bottom-6 text-[10px] bg-purple-500 text-white px-2 py-0.5 rounded-full font-bold whitespace-nowrap">You are here</span>}
-                 </div>
-               </>
-             )}
-          </div>
-        </div>
-      </div>
-
-
-      <div className="mt-8">
-        <TerminalSim logs={logs} promptLabel={`~/project (${activeBranch})`} height="h-40" />
-      </div>
-
-      <Quiz
-        questions={[
-          {
-            q: '你在 main 分支改了一些東西還沒 commit，這時想切去 feat/login 分支繼續開發，該怎麼辦？',
-            options: [
-              '直接下 git checkout feat/login，反正切過去再改就好',
-              '先用 git commit 存檔，或用 git stash 把未完成的修改暫存起來，再切換分支',
-              '把檔案手動複製一份備份到別的資料夾，再切換分支',
-            ],
-            answer: 1,
-            explain: '未存檔的修改可能會被切換分支的動作影響甚至報錯擋下（如果修改的檔案在兩個分支不同），也可能被誤帶到不相關的分支上。正確做法是先 git commit（如果東西已經完整）或 git stash（東西還沒寫完、不想現在存檔），確保工作區乾淨後再切換，之後要繼續改可以用 git stash pop 拿回來。',
-          },
-          {
-            q: 'git branch abc 和 git checkout -b abc 有什麼差別？',
-            options: [
-              '兩個效果完全一樣，只是打法不同',
-              'git branch abc 只是建立一個叫 abc 的新分支，並不會切換過去；git checkout -b abc 則是「建立 + 立刻切換」一次做完',
-              'git branch abc 會切換過去，git checkout -b abc 只是建立分支',
-            ],
-            answer: 1,
-            explain: '這是初學者最容易搞混的地方：git branch abc 執行後，你其實還留在原本的分支上，只是多了一個 abc 分支的「選項」；要真正切過去還要再打一次 git checkout abc。而 git checkout -b abc 把「建立」和「切換」兩個步驟合成一個指令，是最常用的懶人寫法。',
-          },
-          {
-            q: '你在 feat/login 分支上大幅修改程式碼，甚至改到程式跑不動了，這會影響 main 分支嗎？',
-            options: [
-              '會，因為所有分支共用同一份程式碼檔案',
-              '不會，分支就像獨立的平行宇宙，在 feat/login 上的修改完全不會影響 main，除非你之後主動把它合併 (merge) 回去',
-              '會，但只有下次開機重開終端機才會生效',
-            ],
-            answer: 1,
-            explain: '分支的核心價值就是「隔離風險」：不論在 feat/login 上怎麼改、怎麼搞砸，main 分支的內容都維持原樣不受影響，你隨時可以切回 main 看到完好的版本。唯一會讓 main 受到影響的時機，是你確認 feat/login 沒問題後，主動執行合併 (merge) 把它併回 main。',
-          },
-        ]}
-      />
-<Callout>本章撰寫中</Callout>
-    </div>
-  );
-};
+      <p>前半我帶：另開相簿 → 拍 Day 2 → 回 main。最後請你補：要讓 main 也有 Day 2，還缺什麼？</p>
+      <details><summary className="cursor-pointer">核對</summary><p>把 feat/day2 合併進 main。只是切回 main 不會自動帶入另一邊的照片。</p></details>
+    </Card>
+    <Callout title="先停一下，說出答案再繼續"><p>只切回 main，看到 day2.md 不見了，要重新建立它嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不用；它還在 feat/day2 的照片裡。接下來合併成果才會出現在 main。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
+    <SectionTitle title="🔥 換你了：在 git-journal 開分支再合併" />
+    <Card className="space-y-3">
+      <h3 className="font-bold">1. 先確認書桌乾淨，再另開相簿</h3>
+      <CommandBlock command={"git status"} comment="先確認沒有會被帶到另一個分支的改動" />
+      <CommandBlock variant="output" command={"On branch main\nnothing to commit, working tree clean"} />
+      <Callout title="不是 clean 就先停這一步">回 L3 核對是否已保存 .gitignore、還原 day1.md。看到「Your local changes to the following files would be overwritten by checkout」時，表示 Git 正在擋住可能覆寫的切換；保留需要的改動並完成存檔後再切，不要直接丟棄它們。也可到急診室查原文。</Callout>
+      <CommandBlock command={"git switch -c feat/day2"} comment="-c 表示建立新分支並立刻切過去" />
+      <CommandBlock variant="output" command={"Switched to a new branch 'feat/day2'"} />
+      <p>feat/day2 是這本相簿的名字，不是磁碟上的資料夾路徑。此時 HEAD 站在 feat/day2；main 仍在原本的照片。</p>
+      <p>用 VSCode 左側 New File 建立 day2.md，寫下方這一行、留行尾換行並儲存；左側會多出 day2.md。</p>
+      <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day2.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 2：學會分支</pre></div>
+      <p>這次多接手一步：請自己完成「放上拍照台 → 按快門」兩步，檔案是 day2.md，照片說明用「新增 Day 2 筆記」。先寫出兩條指令，再依序輸入；卡住才展開提示。</p>
+      <FalseAlarm signal={"warning: in the working copy of 'day2.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
+      <p>完成後會看到以 [feat/day2 編號] 開頭的保存訊息，下方說明一個檔案新增了一行；完整輸出在提示裡可核對。</p>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">提示：先挑選檔案</summary>
+      <CommandBlock command={"git add day2.md"} comment="挑選這次要保存的分支成果" />
+      <CommandBlock variant="output" command={"warning: in the working copy of 'day2.md', LF will be replaced by CRLF the next time Git touches it"} />
+      </details>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對按快門的指令</summary>
+        <CommandBlock command={"git commit -m \"新增 Day 2 筆記\""} comment="在 feat/day2 相簿保存新照片" />
+      <CommandBlock variant="output" command={"[feat/day2 b2dbb59] 新增 Day 2 筆記\n 1 file changed, 1 insertion(+)\n create mode 100644 day2.md"} />
+      </details>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">2. 回到 main，把成果收進來</h3>
+      <p>再多接手一步：請先自己排出「切回 main → 合併 feat/day2 → 刪除已合併分支名稱」三步。合併與刪分支是第一次學，第一次請展開提示 2、3；熟悉後再收起提示，自己重述順序。閱讀下一個提醒後再操作，不必重做已完成的指令。</p>
+      <FalseAlarm signal="day2.md 不見了" title="切回 main 後，檔案清單會變短">這是你在 VSCode 會觀察到的現象，不是終端機錯誤訊息。main 還沒有那張照片，day2.md 仍在另一本相簿，沒有被刪除。</FalseAlarm>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">提示 1：先站回 main</summary>
+      <CommandBlock command={"git switch main"} comment="回到準備接收成果的主相簿" />
+      <CommandBlock variant="output" command={"Switched to branch 'main'"} />
+      </details>
+      <p>看 VSCode 左側檔案總管，day2.md 會消失，README.md 與 day1.md 仍在；開著的 day2.md 分頁可能暫留，請以檔案清單為準。這裡不用 ls，因此 Windows 與 Mac 都能直接對照。</p>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">提示 2：收進另一邊的成果</summary>
+      <CommandBlock command={"git merge feat/day2"} comment="把 feat/day2 的照片收進目前的 main" />
+      <CommandBlock variant="output" command={"Updating 846a6e1..b2dbb59\nFast-forward\n day2.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 day2.md"} />
+      </details>
+      <p><strong>Fast-forward</strong> 表示 main 這段時間沒新增自己的照片，可以直接走到 Day 2 那一頁，不用多拍合併照片。day2.md 現在會重新出現在左側，打開後內容是「Day 2：學會分支」。</p>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">提示 3：清理用完的分支名稱</summary>
+      <CommandBlock command={"git branch -d feat/day2"} comment="成果已收進 main，刪除用完的分支名稱" />
+      <CommandBlock variant="output" command={"Deleted branch feat/day2 (was b2dbb59)."} />
+      </details>
+      <p>刪的是 feat/day2 這個名稱，不是 main 已收到的 Day 2 內容。若顯示「is not fully merged」，先核對是否漏做上面的 merge，不要改用強制刪除。</p>
+      <FalseAlarm signal={': 或 (END)'} title="分支清單若停在閱讀畫面">這是分頁閱讀畫面，不是當機；按英文小寫 q 回到指令列。清單短時也可能直接結束。</FalseAlarm>
+      <CommandBlock command={"git branch"} comment="確認目前只剩主相簿名稱" />
+      <CommandBlock variant="output" command={"* main"} />
+      <p>* 是目前所在分支。完成訊號：只列出 * main，day2.md 還在，L5 就從這裡繼續。</p>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">減少提示：換檔名，你會怎麼做？</h3>
+      <p>先在紙上安排「另開 feat/menu → 新增 menu.md → 保存 → 收進 main → 清理分支」的次序，說出每一步會在哪本相簿。這題只口述，不改目前的 git-journal；L5 結尾再用另一個資料夾獨立實作。</p>
+      <details><summary className="cursor-pointer">自我核對</summary><p>建分支並切入 → 建檔 → add → commit → 切回 main → merge → 刪分支名稱。應在 main 看得到 menu.md，最後分支清單只剩 main。</p></details>
+    </Card>
+    <Quiz questions={[
+  {
+    "q": "git switch -c feat/day2 會做什麼？",
+    "options": [
+      "只建立名稱，留在 main",
+      "建立並立刻切到 feat/day2",
+      "把所有照片刪除"
+    ],
+    "answer": 1,
+    "explain": "-c 是建立，switch 是切換；完成後你站在新的相簿。"
+  },
+  {
+    "q": "在 feat/day2 已 commit 的新內容，會立刻改變 main 的照片嗎？",
+    "options": [
+      "會",
+      "不會，要合併才會收進 main",
+      "重開電腦後會"
+    ],
+    "answer": 1,
+    "explain": "已保存的分支成果有自己的紀錄；注意未保存的書桌改動不具備同樣的隔離。"
+  },
+  {
+    "q": "診斷題：切回 main 後 day2.md 不見了，要做什麼？",
+    "options": [
+      "立刻重新建立",
+      "確認在 main，再合併 feat/day2",
+      "刪除 .git 重來"
+    ],
+    "answer": 1,
+    "explain": "main 還沒有那張照片，檔案仍在 feat/day2。"
+  },
+  {
+    "q": "HEAD 表示什麼？",
+    "options": [
+      "雲端帳號",
+      "你現在站在哪一本相簿的哪一頁",
+      "檔案總數"
+    ],
+    "answer": 1,
+    "explain": "HEAD 是目前位置；切分支後會跟著換位置。"
+  }
+]} />
+  </div>
+);

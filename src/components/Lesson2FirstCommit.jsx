@@ -1,511 +1,186 @@
-import { useState, useRef } from 'react';
-import { Quiz, SectionTitle, Card, TerminalSim, CommandBlock, Callout, NoOutputHint, FalseAlarm } from './Shared';
-import { Search, Laptop, Folder, Github, Shield, PlusCircle, CheckCircle, Eye } from 'lucide-react';
+import { SectionTitle, Card, Callout, Quiz, CommandBlock, NoOutputHint, FalseAlarm, Screenshot, TerminalSim } from './Shared';
+import { useState } from 'react';
 
-const MAX_STEP = 4;
-
-// StepAction — 一個步驟卡的「按鈕」在挑戰模式下切換成狀態徽章，
-// 用包裝的方式接上既有的 step 狀態機，不改動原本的按鈕邏輯。
-const StepAction = ({ state, challengeMode, onClick, activeClass }) => {
-  if (challengeMode) {
-    if (state === 'current') {
-      return <span className="px-3 py-1 rounded text-xs font-bold text-white bg-indigo-500 animate-pulse shrink-0">🎯 請輸入</span>;
-    }
-    if (state === 'done') {
-      return <span className="px-3 py-1 rounded text-xs font-bold text-white bg-green-500 shrink-0">完成</span>;
-    }
-    return <span className="px-3 py-1 rounded text-xs font-bold text-slate-400 bg-slate-100 shrink-0">待完成</span>;
+// Git output copied verbatim from m2-real-outputs.txt; tutorial narration stays outside the terminal.
+const simulation = [
+  {
+    "cmd": "git init",
+    "out": "Initialized empty Git repository in C:/Users/lolz_/Desktop/Projects/Trainer_Git_Tutorial/Claude Temp Files/m2-work/git-journal/.git/",
+    "why": "建立這個資料夾的相簿。"
+  },
+  {
+    "cmd": "git status",
+    "out": "On branch main\n\nNo commits yet\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tREADME.md\n\nnothing added to commit but untracked files present (use \"git add\" to track)",
+    "why": "旁白：系統已在模擬資料夾建立 README.md，內容是「# 我的 Git 日誌」；這不是要你輸入的指令。現在查看書桌。"
+  },
+  {
+    "cmd": "git add README.md",
+    "out": "warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it",
+    "why": "挑 README.md 放到拍照台。"
+  },
+  {
+    "cmd": "git status",
+    "out": "On branch main\n\nNo commits yet\n\nChanges to be committed:\n  (use \"git rm --cached <file>...\" to unstage)\n\tnew file:   README.md\n",
+    "why": "確認這次會拍到 README.md。"
+  },
+  {
+    "cmd": "git commit -m \"新增日誌標題\"",
+    "out": "[main (root-commit) 187430f] 新增日誌標題\n 1 file changed, 1 insertion(+)\n create mode 100644 README.md",
+    "why": "按快門，保存第一張照片。"
   }
-  return (
-    <button onClick={onClick} disabled={state !== 'current'} className={`px-3 py-1 rounded text-xs font-bold text-white shrink-0 ${state === 'done' ? 'bg-green-500' : state === 'current' ? activeClass : 'bg-slate-300'}`}>
-      {state === 'done' ? '完成' : '執行'}
-    </button>
-  );
-};
+];
 
 export const Lesson2FirstCommit = () => {
-  const [step, setStep] = useState(0); // 0: initial, 1: init, 2: add/commit, 3: remote add, 4: push
-  const [logs, setLogs] = useState([{ prefix: '$', text: '準備開始情境 A：從零開始建立專案。' }]);
-  const repoUrl = "https://github.com/blake/my-new-project.git";
-  const terminalRef = useRef(null);
-  const scrollToTerminal = () => {
-    terminalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  };
-
-  // 第二輪挑戰模式：學員親手在模擬終端機打指令
-  const [challengeMode, setChallengeMode] = useState(false);
-  const [challengeIdx, setChallengeIdx] = useState(0);
-  const [challengeAttempts, setChallengeAttempts] = useState(0);
-  const [challengeDone, setChallengeDone] = useState(false);
-
-  const addLog = (text, type = 'info', prefix = '>') => {
-    setLogs(prev => [...prev, { text, type, prefix }]);
-  };
-
-  const handleInit = () => {
-    if (step >= 1) return;
-    addLog('git init', 'input', '$');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog('Initialized empty Git repository in /project/.git/', 'success');
-      setStep(1);
-    }, 300);
-  };
-
-  const handleCommit = () => {
-    if (step >= 2) return;
-    addLog('git add .', 'input', '$');
-    addLog('git commit -m "Initial commit"', 'input', '$');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog('[main (root-commit) 1a2b3c] Initial commit', 'success');
-      setStep(2);
-    }, 300);
-  };
-
-  const handleLink = () => {
-    if (step >= 3) return;
-    addLog(`git remote add origin ${repoUrl}`, 'input', '$');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog('（沒有任何輸出——這是正常的，代表成功了）', 'info');
-      setStep(3);
-    }, 300);
-  };
-
-  const handlePush = () => {
-    if (step >= 4) return;
-    addLog('git push -u origin main', 'input', '$');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog('Enumerating objects: 3, done.', 'info');
-      addLog('Writing objects: 100% (3/3), 230 bytes | 230.00 KiB/s, done.', 'info');
-      addLog('remote: Resolving deltas: 100% (0/0), done.', 'info');
-      addLog(`To ${repoUrl}`, 'success');
-      addLog(` * [new branch]      main -> main`, 'success');
-      addLog(`Branch 'main' set up to track remote branch 'main' from 'origin'.`, 'success');
-      setStep(4);
-    }, 800);
-  };
-
-  const reset = () => {
-    setStep(0);
-    setLogs([{ prefix: '$', text: '已重置。' }]);
-    setChallengeMode(false);
-    setChallengeIdx(0);
-    setChallengeAttempts(0);
-    setChallengeDone(false);
-  };
-
-  // --- 挑戰模式：git add 與 git commit 在真實情境是兩個分開的指令，
-  // 這裡各自寫一個小效果，讓學員一次只打一行 ---
-  const challengeAddOnly = () => {
-    addLog('git add .', 'input', '$');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog('（沒有任何輸出——這是正常的，代表成功了，檔案已進入暫存區）', 'info');
-    }, 250);
-  };
-
-  const challengeCommitOnly = (raw) => {
-    addLog(raw, 'input', '$');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog('[main (root-commit) 1a2b3c] Initial commit', 'success');
-      setStep(2);
-    }, 300);
-  };
-
-  const normalize = (raw) => raw.trim().replace(/\s+/g, ' ');
-
-  const CHALLENGE_STEPS = [
-    {
-      label: 'git init',
-      match: (lower) => lower === 'git init',
-      run: () => handleInit(),
-      delay: 500,
-      hint1: '提示：這一步要讓 Git 開始「認識」這個資料夾。',
-      hint2: '指令是 git init',
-    },
-    {
-      label: 'git add .',
-      match: (lower) => lower === 'git add .' || lower === 'git add -a',
-      run: () => challengeAddOnly(),
-      delay: 450,
-      hint1: '提示：下一步是把檔案放進暫存區。',
-      hint2: '指令以 git add 開頭（試試 git add .）',
-    },
-    {
-      label: 'git commit -m "..."',
-      match: (lower, normalized) => lower.startsWith('git commit -m') && normalized.slice('git commit -m'.length).trim().length > 0,
-      run: (normalized) => challengeCommitOnly(normalized),
-      delay: 500,
-      hint1: '提示：把暫存區的內容正式「拍照存檔」。',
-      hint2: '指令以 git commit -m 開頭，後面接你的存檔說明文字',
-    },
-    {
-      label: 'git remote add origin <網址>',
-      match: (lower, normalized) => lower.startsWith('git remote add origin ') && normalized.slice('git remote add origin '.length).trim().length > 0,
-      run: () => handleLink(),
-      delay: 500,
-      hint1: '提示：告訴 Git 雲端的網址在哪裡。',
-      hint2: '指令是 git remote add origin 加上你的 repo 網址',
-    },
-    {
-      label: 'git push -u origin main',
-      match: (lower) => lower === 'git push -u origin main',
-      run: () => handlePush(),
-      delay: 1000,
-      hint1: '提示：把本地端的存檔正式推上雲端。',
-      hint2: '指令是 git push -u origin main',
-    },
-  ];
-
-  const startChallenge = () => {
-    setChallengeMode(true);
-    setChallengeIdx(0);
-    setChallengeAttempts(0);
-    setChallengeDone(false);
-    setStep(0);
-    setLogs([{ prefix: '>', text: '挑戰開始！第 1 步：初始化這個資料夾（忘記指令可以往上看步驟卡）', type: 'info' }]);
-  };
-
-  const abandonChallenge = () => {
-    setChallengeMode(false);
-    setChallengeIdx(0);
-    setChallengeAttempts(0);
-    setChallengeDone(false);
-    setStep(MAX_STEP);
-    setLogs([{ prefix: '$', text: '已回到按鈕模式（第一輪已完成）。' }]);
-  };
-
-  const handleTerminalCommand = (raw) => {
-    if (challengeDone) return;
-    const normalized = normalize(raw);
-    if (!normalized) return;
-    const lower = normalized.toLowerCase();
-    const current = CHALLENGE_STEPS[challengeIdx];
+  const [step, setStep] = useState(0);
+  const [logs, setLogs] = useState([]);
+  const [challenge, setChallenge] = useState(false);
+  const [feedback, setFeedback] = useState('');
+  const current = simulation[step];
+  const advance = (raw) => {
     if (!current) return;
-
-    if (current.match(lower, normalized)) {
-      setChallengeAttempts(0);
-      current.run(normalized);
-      const idx = challengeIdx;
-      const isLast = idx === CHALLENGE_STEPS.length - 1;
-      setTimeout(() => {
-        if (isLast) {
-          addLog('🎉 挑戰完成！你已經不需要按鈕了——真實終端機對你來說不再陌生。', 'success');
-          setChallengeDone(true);
-        } else {
-          addLog(`✅ 正確！下一步：${CHALLENGE_STEPS[idx + 1].label}`, 'success');
-          setChallengeIdx(idx + 1);
-        }
-      }, current.delay);
-    } else {
-      addLog(raw, 'input', '$');
-      const attempts = challengeAttempts + 1;
-      setChallengeAttempts(attempts);
-      addLog(attempts >= 2 ? current.hint2 : current.hint1, 'warning');
+    if (raw.trim() !== current.cmd) {
+      setFeedback('還沒符合這一步。先想這一步的目的；需要時展開提示，核對大小寫、空格與英文雙引號。');
+      return;
     }
+    setLogs(prev => [...prev, { prefix: '$', text: raw }, ...current.out.split('\n').map(text => ({ text }))]);
+    setStep(step + 1);
+    setFeedback('這一步完成，請讀下一步旁白。');
   };
-
+  const reset = (mode) => { setStep(0); setLogs([]); setChallenge(mode); setFeedback(''); };
   return (
-    <div className="space-y-6 animate-fade-in">
-      <SectionTitle title="L2. 情境 A：從零開始" subtitle="自己當造物主，將本地專案上傳到 GitHub" />
+  <div className="min-w-0 space-y-6 animate-fade-in break-words">
+    <header><SectionTitle title="L2 第一次存檔" subtitle="在自己的 git-journal 保存兩個版本，並翻出存檔紀錄。" /><p className="text-sm text-slate-600">先準備：完成 L0 的 Git 身份與 main 設定；讀完 L1。</p></header>
 
-      {/* 進入狀態提示 */}
-      <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
-        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">⚡ 進入狀態：讀完再動</div>
-        <div className="flex items-start gap-3">
-          <span className="text-green-400 text-base leading-none mt-0.5">💻</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">本章所有操作都透過 Terminal 指令完成。</strong>請確保你已經打開終端機（建議用 VSCode 內建終端），並且知道如何在裡面操作目錄。</p>
-        </div>
+    <Card className="space-y-3 bg-indigo-50">
+      <h3 className="font-bold">我先示範：保存標題，為什麼要分兩步？</h3>
+      <p>我先用 add 挑選 README.md，因為拍照台只應放這次要保存的內容；再用 commit 按快門。README.md 是介紹資料夾內容的文字檔，本課拿它放日誌標題。</p>
+      <p>每次輸入一條指令再按 Enter，等提示符回來再輸入下一條。以下長路徑、作者、日期、照片編號是實測範例，不用改成和範例一樣；編號是 Git 給每次存檔的識別碼。</p>
+    </Card>
+    <Callout title="先停一下，說出答案再繼續"><p>add 完成就代表相簿多一張照片了嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>還沒有，只有拍照台準備好；下一步才是 commit。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
+    <Card className="space-y-3">
+      <h3 className="font-bold">一起做：保留按鈕示範與挑戰終端機</h3>
+      <p>這是網頁內模擬，不會改你的電腦。第一輪按按鈕，每次只代打一條；第二輪從記憶輸入。終端機標題的 bash 只是模擬外觀，這些 Git 指令也能在 PowerShell 使用。</p>
+      <FalseAlarm signal={"warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
+      {current ? <>
+        <p className="font-bold">步驟 {step + 1} / {simulation.length}：{current.why}</p>
+        {challenge ? <details><summary className="cursor-pointer">需要時看這一步的指令</summary><code className="break-all">{current.cmd}</code></details> : <button className="rounded bg-indigo-600 px-4 py-2 text-white break-all" onClick={() => advance(current.cmd)}>系統代打：{current.cmd}</button>}
+      </> : <Callout variant="success">模擬完成！你已替 README.md 保存第一個版本。</Callout>}
+      <div className="whitespace-pre-wrap min-w-0"><TerminalSim logs={logs} promptLabel="練習" onCommand={challenge && current ? advance : undefined} /></div>
+      <p role="status" className="text-sm text-indigo-700">{feedback}</p>
+      <div className="flex flex-wrap gap-3">
+        <button className="rounded border px-3 py-2" onClick={() => reset(false)}>重看按鈕示範</button>
+        <button className="rounded border px-3 py-2" onClick={() => reset(true)}>挑戰：自己輸入五步</button>
       </div>
-
-
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="space-y-6">
-          <Card className="bg-slate-50">
-            <div className="flex justify-between items-start mb-1">
-              <h3 className="font-bold text-slate-700 flex items-center gap-2"><PlusCircle size={18} /> 操作步驟</h3>
-              <button onClick={reset} className="text-xs text-slate-500 hover:text-indigo-600 underline">重新開始</button>
-            </div>
-            <Callout variant="info" className="mb-3" title="以下是示意模擬">
-              點「執行」可以看到邏輯流程。<strong>實際操作請在你電腦真正的 Terminal 裡輸入同樣的指令</strong>（本章末的「換你了」區塊會帶你做一次）。範例中的 Repository URL 是假想的，僅供教學演示。
-            </Callout>
-
-            <div className="space-y-3">
-
-              {/* Step 1 */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 0 ? 'bg-white border-indigo-300 shadow-md ring-2 ring-indigo-50' : step > 0 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700">$ git init</div>
-                  <StepAction state={step > 0 ? 'done' : step === 0 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleInit} activeClass="bg-indigo-600 hover:bg-indigo-700" />
-                </div>
-                <div className="text-xs text-slate-500 mt-2">在目前資料夾建立 .git，開始追蹤檔案。</div>
-              </div>
-
-              {step >= 1 && (
-                <Callout variant="danger" title="你的資料夾裡多了一個 .git 資料夾">
-                  它就是你的<strong>存檔資料庫</strong>，記錄了所有版本歷史。<strong>絕對不要手動刪除或修改它</strong>——刪掉它等於刪掉所有存檔紀錄，而且救不回來。（它預設是隱藏檔案，平常看不到很正常。）
-                </Callout>
-              )}
-
-              {/* Step 2 */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 1 ? 'bg-white border-indigo-300 shadow-md ring-2 ring-indigo-50' : step > 1 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700">$ git add . <br/>$ git commit -m "Init"</div>
-                  <StepAction state={step > 1 ? 'done' : step === 1 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleCommit} activeClass="bg-indigo-600 hover:bg-indigo-700" />
-                </div>
-                <div className="text-xs text-slate-500 mt-2">先把本地端的檔案正式存檔一次。<strong className="text-slate-600">注意：這是兩條分開的指令，實作時要一行一行輸入。</strong></div>
-              </div>
-
-              {step === 1 && (
-                <Callout variant="info" title="第一次遇到「暫存區」？">
-                  <code>git add</code> = 把要拍照的東西擺上桌（放進暫存區）；<code>git commit</code> = 按下快門（正式存檔）。兩個指令合體才算完成一次存檔。
-                </Callout>
-              )}
-
-              {/* Step 3 */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 2 ? 'bg-white border-indigo-300 shadow-md ring-2 ring-indigo-50' : step > 2 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700 truncate mr-2" title={`$ git remote add origin ${repoUrl}`}>
-                    $ git remote add origin {repoUrl.split('/').pop()}
-                  </div>
-                  <StepAction state={step > 2 ? 'done' : step === 2 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleLink} activeClass="bg-indigo-600 hover:bg-indigo-700" />
-                </div>
-                <div className="text-xs text-slate-500 mt-2">告訴 Git 雲端的網址在哪裡（命名為 origin）。</div>
-              </div>
-
-              {step === 2 && (
-                <Callout variant="info" title="真實終端裡這個指令通常「沒消息就是好消息」">
-                  <code>git remote add</code> 執行成功時<strong>不會顯示任何訊息</strong>——空白畫面就代表成功了。想確認可以輸入 <code>git remote -v</code>，會列出剛剛連結的網址。
-                </Callout>
-              )}
-
-              {/* Step 4 */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 3 ? 'bg-white border-indigo-300 shadow-md ring-2 ring-indigo-50' : step > 3 ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700">$ git push -u origin main</div>
-                  <StepAction state={step > 3 ? 'done' : step === 3 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handlePush} activeClass="bg-indigo-600 hover:bg-indigo-700 animate-pulse" />
-                </div>
-                <div className="text-xs text-slate-500 mt-2">把本地的進度推上雲端！(-u 會記住預設目標)</div>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Visual Feedback */}
-        <div className="flex items-center justify-center bg-slate-100 rounded-xl border border-slate-200 p-8 relative overflow-hidden">
-          {step === 4 && <div className="absolute inset-0 bg-green-50/50 z-0 animate-fade-in pointer-events-none"></div>}
-          
-          <div className="relative flex items-center gap-20 z-10 w-full justify-center">
-             {/* Local Folder */}
-             <div className="flex flex-col items-center relative">
-               <div className={`w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-500 ${step >= 1 ? 'bg-indigo-600 text-white ring-4 ring-indigo-200' : 'bg-white text-slate-300 border border-slate-200'}`}>
-                 <Laptop size={40} />
-               </div>
-               {step >= 1 && (
-                 <div className="absolute -right-3 -top-3 w-9 h-9 bg-yellow-100 border-2 border-yellow-300 rounded-lg flex items-center justify-center shadow-md animate-fade-in" title=".git folder created">
-                   <Folder size={14} className="text-yellow-600" />
-                   <span className="absolute text-[7px] font-black text-yellow-700 -bottom-0.5">.git</span>
-                 </div>
-               )}
-               {step >= 2 && step < 4 && (
-                 <div className="absolute -bottom-2 bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-green-200">
-                   已存檔 (待上傳)
-                 </div>
-               )}
-               <span className="mt-4 font-bold text-slate-600">Local (你的電腦)</span>
-             </div>
-
-             {/* Connection Line */}
-             <div className="absolute left-10 right-10 top-10 h-1 bg-slate-200 -z-10 rounded-full">
-               <div className={`h-full rounded-full transition-all duration-1000 ease-out bg-indigo-500 ${step >= 3 ? 'w-full opacity-50' : 'w-0'} ${step === 4 ? 'opacity-100 bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]' : ''}`}></div>
-             </div>
-             
-             {step === 3 && (
-               <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 animate-fade-in px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 border border-indigo-200">
-                 已連結 (Ready)
-               </div>
-             )}
-             
-             {step === 4 && (
-               <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 animate-fade-in px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200 flex items-center gap-1">
-                 <CheckCircle size={14} /> 上傳成功！
-               </div>
-             )}
-
-             {/* GitHub Repo */}
-             <div className="flex flex-col items-center relative">
-               <div className={`w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-500 ${step >= 4 ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-300 border border-slate-200'}`}>
-                 <Github size={40} />
-               </div>
-               <span className="mt-4 font-bold text-slate-600">Remote (GitHub)</span>
-
-               {step >= 4 && (
-                 <div className="absolute -right-5 top-1 flex flex-col gap-0.5 animate-fade-in">
-                   <div className="flex items-center justify-center gap-1 bg-green-100 border border-green-300 rounded px-1.5 py-0.5 shadow-sm text-[9px] text-green-700 font-bold">
-                     <Shield size={10} /> 備份完成
-                   </div>
-                 </div>
-               )}
-             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8" ref={terminalRef}>
-        <TerminalSim logs={logs} height="h-48" onCommand={challengeMode && !challengeDone ? handleTerminalCommand : undefined} />
-      </div>
-
-      {step === MAX_STEP && !challengeMode && (
-        <Callout variant="success" title="第一輪完成！你已經看懂整個流程了。" className="mt-4">
-          <p className="mb-3">現在換第二輪——這次不能按按鈕了，改成你自己在下面的終端機裡打指令。把「第一次打指令」的緊張感，先在這個安全的地方消耗掉。</p>
-          <button
-            type="button"
-            onClick={startChallenge}
-            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow"
-          >
-            🔄 第二輪挑戰：這次換你打指令
-          </button>
-        </Callout>
-      )}
-
-      {challengeMode && !challengeDone && (
-        <div className="flex justify-end mt-2">
-          <button type="button" onClick={abandonChallenge} className="text-xs text-slate-500 hover:text-red-600 underline">
-            放棄挑戰，回到按鈕模式
-          </button>
-        </div>
-      )}
-
-      {challengeDone && (
-        <Callout variant="success" title="🎉 挑戰完成" className="mt-4">
-          你已經不需要按鈕了——真實終端機對你來說不再陌生。
-        </Callout>
-      )}
-
-      {/* Gitignore & Git Log */}
-      <div className="mt-8 grid md:grid-cols-2 gap-6">
-        <Card className="bg-emerald-50 border-emerald-200">
-           <h3 className="font-bold text-emerald-800 mb-3 flex items-center gap-2">
-             <Eye size={18} /> 偷看遊戲存檔：git log
-           </h3>
-           <p className="text-sm text-emerald-700 mb-3">
-             存檔完通常會心虛：「它真的存進去了嗎？」<code>git log</code> 就是打開時光機的儀表板，列出你所有可以回去的存檔點。
-           </p>
-           <CommandBlock variant="output" command={'git log --oneline\na1b2c3d (HEAD -> main) feat: 結帳功能\n9f8e7d6 docs: 更新說明'} className="mb-3" />
-           <FalseAlarm signal={':'} title="畫面卡住、打字沒反應？" className="mb-3">
-             紀錄一多，<code>git log</code> 會進入「瀏覽畫面」：底部出現一個 <code>:</code>，怎麼打字都沒反應。這不是當機——按 <code>q</code> 就能離開、回到指令列。
-           </FalseAlarm>
-           <p className="text-sm text-emerald-700">
-             <strong>💡 視覺化推薦：</strong>如果你覺得純文字太難懂，記得打開我們在 <a href="#setup" className="underline font-bold hover:text-emerald-900">L0 行前準備</a> 中請你裝的 <strong>Git Graph 外掛</strong>，它會在 VSCode 裡畫出超美的時間線樹狀圖喔！
-           </p>
-        </Card>
-      </div>
-
-      {/* 換你了：真機實作 */}
-      <div className="mt-10">
-        <SectionTitle title="🔥 換你了：在真實電腦上做一次" subtitle="模擬跑完了，現在換你在真實電腦上做一次。" />
-
-        <div className="space-y-4">
-          <Card>
-            <h4 className="font-bold text-slate-700 mb-2">1. 用 VSCode 建一個資料夾</h4>
-            <ol className="list-decimal pl-5 space-y-1 text-sm text-slate-600">
-              <li>在桌面點右鍵 →「新增資料夾」，命名為 <code className="bg-slate-100 px-1 rounded">my-first-repo</code></li>
-              <li>打開 VSCode，選單 <strong>File → Open Folder</strong>，選擇剛剛建立的資料夾</li>
-              <li>左側檔案總管區點右鍵 →「New File」，建立 <code className="bg-slate-100 px-1 rounded">notes.md</code></li>
-              <li>在檔案裡隨便寫一句話，按 <code className="bg-slate-100 px-1 rounded">Ctrl+S</code> 存檔</li>
-            </ol>
-          </Card>
-
-          <Card>
-            <h4 className="font-bold text-slate-700 mb-2">2. 打開終端機</h4>
-            <p className="text-sm text-slate-600">VSCode 上方選單 <strong>Terminal → New Terminal</strong>（它會自動在你的資料夾裡，不用 cd）。</p>
-            <p className="text-sm text-slate-600 mt-2">你的畫面開頭可能是 <code className="bg-slate-100 px-1 rounded">PS C:\Users\...&gt;</code> 而不是 <code className="bg-slate-100 px-1 rounded">$</code>——只是提示符號長得不同，完全不影響操作。教學中的 <code className="bg-slate-100 px-1 rounded">$</code> 只代表「指令從這裡開始」，<strong>不用把 $ 打進去</strong>。</p>
-          </Card>
-
-          <Card>
-            <h4 className="font-bold text-slate-700 mb-2">3. 逐行輸入以下指令</h4>
-            <div className="space-y-3">
-              <CommandBlock command="git init" comment="初始化這個資料夾為 Git 專案" />
-              <CommandBlock variant="output" command={'Initialized empty Git repository in C:/Users/你的名字/Desktop/my-first-repo/.git/'} />
-              <CommandBlock command="git add ." comment="把 notes.md 放進暫存區" />
-              <NoOutputHint>如果出現下面那行黃色 warning，也一樣算成功。</NoOutputHint>
-              <FalseAlarm signal={'warning: LF will be replaced by CRLF in notes.md'}>
-                Windows 電腦很常出現這行黃字。它只是在提醒你「換行符號會自動轉換」，<strong>不是錯誤</strong>——忽略它，直接輸入下一條指令即可。
-              </FalseAlarm>
-              <CommandBlock command='git commit -m "我的第一次存檔"' />
-              <CommandBlock variant="output" command={'[main (root-commit) 1a2b3c] 我的第一次存檔\n 1 file changed, 1 insertion(+)\n create mode 100644 notes.md'} />
-              <FalseAlarm signal={'~\n~\n~\n(整個畫面突然變樣，滿滿都是 ~ 符號)'} title="忘了打 -m，掉進奇怪的畫面？">
-                如果只打了 <code>git commit</code>（忘了 <code>-m "..."</code>），Git 會把你丟進一個滿是 <code>~</code> 的文字編輯器（vim）。逃出方法：先按 <code>Esc</code>，再輸入 <code>:q!</code> 然後按 Enter，就會回到指令列——重新打一次完整的 <code>git commit -m "..."</code> 就好。
-              </FalseAlarm>
-            </div>
-          </Card>
-
-        </div>
-      </div>
-
-      {/* Git Status Cheatsheet */}
-      <div className="mt-8">
-        <Card className="bg-slate-50 border-slate-200">
-           <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
-             <Search size={18} className="text-slate-600" /> Git Status 狀態解碼速查表
-           </h3>
-           <p className="text-sm text-slate-600 mb-4">輸入 <code>git status</code> 後，終端機會用不同顏色告訴你檔案目前的狀態：</p>
-           
-           <div className="overflow-x-auto">
-             <table className="w-full text-sm text-left text-slate-600 border-collapse bg-white rounded-lg overflow-hidden shadow-sm border border-slate-200">
-               <thead className="bg-slate-100 text-slate-700">
-                 <tr>
-                   <th className="px-4 py-3 border-b">狀態名稱</th>
-                   <th className="px-4 py-3 border-b">顏色顯示</th>
-                   <th className="px-4 py-3 border-b">代表什麼意思？</th>
-                   <th className="px-4 py-3 border-b">下一步該怎麼做？</th>
-                 </tr>
-               </thead>
-               <tbody>
-                 <tr className="border-b">
-                   <td className="px-4 py-3 font-mono font-bold text-slate-800">Untracked files</td>
-                   <td className="px-4 py-3 text-red-500 font-bold">紅色</td>
-                   <td className="px-4 py-3">這是你剛建立的「新檔案」，Git 還不認識它。</td>
-                   <td className="px-4 py-3">輸入 <code>git add .</code> 把它加入暫存區。</td>
-                 </tr>
-                 <tr className="border-b">
-                   <td className="px-4 py-3 font-mono font-bold text-slate-800">Changes not staged</td>
-                   <td className="px-4 py-3 text-red-500 font-bold">紅色</td>
-                   <td className="px-4 py-3">舊檔案被你「修改」了，但還沒放進準備存檔的區域。</td>
-                   <td className="px-4 py-3">輸入 <code>git add .</code> 把它加入暫存區。</td>
-                 </tr>
-                 <tr className="border-b">
-                   <td className="px-4 py-3 font-mono font-bold text-slate-800">Changes to be committed</td>
-                   <td className="px-4 py-3 text-green-500 font-bold">綠色</td>
-                   <td className="px-4 py-3">檔案已經在「暫存區」了，準備好要存檔了！</td>
-                   <td className="px-4 py-3">輸入 <code>git commit -m "..."</code> 正式存檔。</td>
-                 </tr>
-                 <tr>
-                   <td className="px-4 py-3 font-mono font-bold text-slate-800">nothing to commit</td>
-                   <td className="px-4 py-3 text-slate-500 font-bold">無色</td>
-                   <td className="px-4 py-3">工作區超級乾淨，所有修改都已經存檔完畢。</td>
-                   <td className="px-4 py-3">安心去喝杯咖啡，或是 <code>git push</code> 上傳。</td>
-                 </tr>
-               </tbody>
-             </table>
-           </div>
-        </Card>
-      </div>
-
-    <Quiz questions={[{
-            q: '執行 git status 後看到一堆紅色文字（Untracked files / Changes not staged），這代表？',
-            options: [
-              '出現錯誤了，程式碼可能已經損壞，要趕快搶救',
-              '只是「狀態標示」——代表有檔案是新增或修改過、還沒放進暫存區，不是壞掉或出錯',
-              '代表這個 repo 已經跟遠端斷線了',
-            ],
-            answer: 1,
-            explain: '紅色在 git status 裡只是一種「顏色編碼」，用來標示尚未加入暫存區的變動（新檔案或被修改的檔案），完全不代表出錯。看到紅字就緊張、以為東西壞掉，是很多初學者的直覺誤解；正確反應是接著打 git add . 把它們放進暫存區，看到變成綠色（Changes to be committed）才是下一步 commit 的時機。',
-          }]} />
-</div>
+    </Card>
+    <Callout title="先停一下，說出答案再繼續"><p>診斷題：status 的 Changes to be committed 出現 README.md，下一步要拍照還是再建資料夾？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>要拍照。那個標題表示 README.md 已在拍照台。請先完成一次挑戰，再進真機。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
+    <SectionTitle title="🔥 換你了：在自己的 git-journal 拍兩張照片" />
+    <Card className="space-y-3">
+      <h3 className="font-bold">1. 打開自己的資料夾與終端機</h3>
+      <p>沿用 L1 的空 git-journal。還沒建的話，在 Windows 檔案總管或 Mac Finder 的「文件」新增這個資料夾；會看到一個空資料夾。VSCode 選 File → Open Folder → 選它，左側會顯示 GIT-JOURNAL。</p>
+      <p>選 Terminal → New Terminal，下方出現輸入面板；Windows 的路徑應以 git-journal 結尾。若不是，關掉舊終端機，再從剛開好的資料夾新增終端機。Mac 提示符外觀不同，操作一樣。</p>
+      <p><strong>$ 不用打</strong>，也不要輸入畫面原有的 PS 路徑。下面深色框的輸出是讓你對照，不是要再輸入。</p>
+      <CommandBlock command={"git init"} comment="在目前資料夾建立保存紀錄的地方" />
+      <CommandBlock variant="output" command={"Initialized empty Git repository in C:/Users/lolz_/Desktop/Projects/Trainer_Git_Tutorial/Claude Temp Files/m2-work/git-journal/.git/"} />
+      <p>你會多一個通常隱藏的 .git 資料夾；那是相簿紀錄，不要手動刪改。上面的完整路徑是講師測試位置，你的應指向自己的 git-journal。</p>
+      <CommandBlock command={"git status"} comment="先看空相簿與空書桌的狀態" />
+      <CommandBlock variant="output" command={"On branch main\n\nNo commits yet\n\nnothing to commit (create/copy files and use \"git add\" to track)"} />
+      <p>No commits yet 表示還沒拍照。On branch main 表示目前是主相簿；若是 master，展開下面的更名步驟再繼續。</p>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">只有顯示 On branch master 時才做</summary>
+        <p>L0 的預設設定只影響之後新建的相簿，不會替已建立的相簿更名。這裡先把目前的名稱改成 main，讓後續步驟一致。</p>
+        <CommandBlock command="git branch -m main" comment="把目前的分支名稱改成 main，不更動檔案內容" />
+        <NoOutputHint />
+        <CommandBlock command="git status" comment="確認更名後已站在 main" />
+        <CommandBlock variant="output" command={'On branch main\n\nNo commits yet\n\nnothing to commit (create/copy files and use "git add" to track)'} />
+      </details>
+      <Callout title="真的遇到錯誤時">看到「git is not recognized」或 PowerShell 的「The term 'git' is not recognized」→ 回 L0 確認安裝並重開 VSCode；看到「fatal: not a git repository」→ 確認開的是 git-journal，且已完成這裡的 init。其他訊息到側邊欄「急診室」對照原文。</Callout>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">2. 建立標題，挑選，再保存</h3>
+      <p>點 VSCode 左側檔案總管，在 GIT-JOURNAL 上按右鍵 → New File，輸入 README.md，再按 Enter。檔案會在左側出現，中間打開空白編輯區。</p>
+      <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>README.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all"># 我的 Git 日誌</pre></div>
+      <p>輸入上面這一行，最後按一次 Enter 留下行尾換行，再按 Ctrl+S（Mac：Cmd+S）儲存。分頁上的未儲存圓點消失，內容仍留在編輯區。後面建立單行檔案也照這個方式儲存。</p>
+      <FalseAlarm signal="Untracked files:">status 裡的紅色 README.md 是尚未挑選的新檔案，不是檔案壞掉。</FalseAlarm>
+      <CommandBlock command={"git status"} comment="檢查剛建立的檔案是否在書桌上" />
+      <CommandBlock variant="output" command={"On branch main\n\nNo commits yet\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tREADME.md\n\nnothing added to commit but untracked files present (use \"git add\" to track)"} />
+      <p>輸出中的 <code>&lt;file&gt;</code> 是 Git 的佔位符，表示要整個換成真實檔名，角括號不要打。下面已替你填好 README.md。</p>
+      <FalseAlarm signal={"warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
+      <CommandBlock command={"git add README.md"} comment="只把這個檔案放上拍照台" />
+      <CommandBlock variant="output" command={"warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it"} />
+      <CommandBlock command={"git status"} comment="確認拍照台已經有 README.md" />
+      <CommandBlock variant="output" command={"On branch main\n\nNo commits yet\n\nChanges to be committed:\n  (use \"git rm --cached <file>...\" to unstage)\n\tnew file:   README.md\n"} />
+      <p>Changes to be committed 表示已挑選好。點左側 Source Control（原始檔控制，分叉線圖示）也會看到 README.md 在 Staged Changes（暫存的變更）；這裡只用來對照，指令仍在終端機輸入。</p>
+      <Screenshot id="L2-vscode-source-control" alt="VSCode 原始檔控制面板顯示 README.md 已暫存" caption="你會看到 README.md 從 Changes 移到 Staged Changes，表示已放上拍照台。" />
+      <FalseAlarm signal="~" title="若漏掉 -m，可能打開 Vim 編輯器">本課一律帶 -m 與英文雙引號，直接寫照片說明。若誤入滿是 ~ 的畫面，按 Esc，輸入 :q! 再按 Enter 離開；:wq 則是儲存訊息並離開。離開後先看 status，仍顯示 Changes to be committed 才重做下面這條。</FalseAlarm>
+      <CommandBlock command={"git commit -m \"新增日誌標題\""} comment="-m 後面的引號內是這張照片的說明" />
+      <CommandBlock variant="output" command={"[main (root-commit) 187430f] 新增日誌標題\n 1 file changed, 1 insertion(+)\n create mode 100644 README.md"} />
+      <p>root-commit 表示第一張照片，1 file changed 表示這次有一個檔案變動。看到「Author identity unknown」或「Please tell me who you are」時，回 L0 補姓名與 email 設定後重試；不需要登入 GitHub。</p>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">3. 補全練習：第二張照片由你按快門</h3>
+      <p>用剛才 New File 的方法建立 day1.md，輸入下方內容並儲存；左側會多出 day1.md。</p>
+      <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day1.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 1：學會 git init</pre></div>
+      <FalseAlarm signal={"warning: in the working copy of 'day1.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
+      <CommandBlock command={"git add day1.md"} comment="把第二份筆記放上拍照台" />
+      <CommandBlock variant="output" command={"warning: in the working copy of 'day1.md', LF will be replaced by CRLF the next time Git touches it"} />
+      <p>請先不展開答案，自己寫出保存它的指令；訊息用「新增 Day 1 筆記」。想好後展開核對，只執行一次。</p>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對最後一步</summary>
+        <CommandBlock command={"git commit -m \"新增 Day 1 筆記\""} comment="把 Day 1 筆記正式存進相簿" />
+      <CommandBlock variant="output" command={"[main fea9562] 新增 Day 1 筆記\n 1 file changed, 1 insertion(+)\n create mode 100644 day1.md"} />
+      </details>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">4. 翻相簿確認兩張照片都在</h3>
+      <FalseAlarm signal={': 或 (END)'} title="畫面停住、不能繼續輸入指令？">這是分頁閱讀畫面（pager），不是當機；按英文小寫 q 回到指令列。短內容也可能直接結束。</FalseAlarm>
+      <CommandBlock command={"git log"} comment="看完整存檔紀錄，由新到舊排列" />
+      <CommandBlock variant="output" command={"commit fea9562f9f8b792fa82f03d68f63f87c1ec0879d\nAuthor: Amy <amy@example.com>\nDate:   Wed Oct 14 12:39:43 2026 +0800\n\n    新增 Day 1 筆記\n\ncommit 187430fa489096190aec00fe1774935d1a378395\nAuthor: Amy <amy@example.com>\nDate:   Wed Oct 14 12:39:43 2026 +0800\n\n    新增日誌標題"} />
+      <p>Author 是你在 L0 設定的姓名與 email，Date 是你的存檔時間。範例作者 Amy 不需要照填。若畫面有 HEAD，它表示「你現在站在哪一本相簿的哪一頁」；L4 再操作它。</p>
+      <FalseAlarm signal={': 或 (END)'} title="畫面停住、不能繼續輸入指令？">這是分頁閱讀畫面（pager），不是當機；按英文小寫 q 回到指令列。短內容也可能直接結束。</FalseAlarm>
+      <CommandBlock command={"git log --oneline"} comment="讓每次存檔只占一行，方便數照片" />
+      <CommandBlock variant="output" command={"fea9562 新增 Day 1 筆記\n187430f 新增日誌標題"} />
+      <Callout variant="success">完成訊號：你看到兩行紀錄，上面是「新增 Day 1 筆記」，下面是「新增日誌標題」。保留此資料夾，L3 直接接著做。</Callout>
+    </Card>
+    <Quiz questions={[
+  {
+    "q": "status 顯示紅色 Untracked files，代表什麼？",
+    "options": [
+      "檔案損壞",
+      "有新檔案還沒被挑進暫存區",
+      "需要 GitHub 登入"
+    ],
+    "answer": 1,
+    "explain": "這是狀態標示；只挑這次想保存的檔案，不必把所有紅字全部加入。"
+  },
+  {
+    "q": "診斷題：add 後又修改 README.md，直接 commit 會拍到哪份？",
+    "options": [
+      "自動拍最新修改",
+      "上一次 add 時放在拍照台的內容",
+      "所有檔案都刪掉"
+    ],
+    "answer": 1,
+    "explain": "拍照台不會自動跟著書桌更新；想保存後來的修改，需要重新 add。"
+  },
+  {
+    "q": "翻相簿時停在 (END)，怎麼回去輸入指令？",
+    "options": [
+      "一直按 Enter",
+      "按小寫 q",
+      "關機"
+    ],
+    "answer": 1,
+    "explain": "這是分頁閱讀畫面；q 離開閱讀，不會刪除紀錄。"
+  },
+  {
+    "q": "第二次 commit 完，log --oneline 應看到什麼？",
+    "options": [
+      "兩筆紀錄，新在上、舊在下",
+      "只剩最新的一筆",
+      "GitHub 網址"
+    ],
+    "answer": 0,
+    "explain": "每次 commit 添一張照片，舊的照片仍保留。"
+  }
+]} />
+  </div>
   );
 };
