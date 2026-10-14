@@ -1,10 +1,10 @@
-import React from 'react';
-import { SectionTitle, Card, Badge, CommandBlock, Callout, Quiz, NoOutputHint } from './Shared';
-import { GitGraph, Server, Key, Info, Github, Sparkles, BookOpen, TrendingUp } from 'lucide-react';
 
-export const Chapter1Concept = () => (
+import { SectionTitle, Callout, Card, Quiz, FalseAlarm } from './Shared';
+import { GitGraph, Server, Github, Sparkles, BookOpen, TrendingUp } from 'lucide-react';
+
+export const Lesson1Concept = () => (
   <div className="space-y-8 animate-fade-in">
-    <SectionTitle title="1. 觀念與準備" subtitle="在開始你的時光機之旅前，我們先把裝備確認好" />
+    <SectionTitle title="L1 觀念" subtitle="在開始你的時光機之旅前，我們先把裝備確認好" />
 
     {/* 學會後能做到的事 */}
     <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
@@ -155,73 +155,13 @@ export const Chapter1Concept = () => (
         如果你還沒有安裝 Git、GitHub CLI 或 VSCode，請先前往{' '}
         <a href="#setup"
            className="underline font-bold hover:text-green-700">
-          👶 Chapter 0 行前準備
+          👶 L0 行前準備
         </a>
         {' '}完成安裝與設定。
         以下章節假設你已經安裝完畢，並且知道如何打開 Terminal（終端機）！
       </p>
     </Callout>
 
-    {/* --- 設置身份 --- */}
-    <div className="mt-8">
-      <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <Key size={20} className="text-amber-500" /> 你的第一步：Local 端身份設定
-      </h3>
-      <Card className="bg-amber-50 border-amber-200 shadow-sm">
-        <p className="text-sm text-slate-700 mb-3 font-medium">太棒了！基本觀念都吸收完畢了吧？現在讓我們正式開始。每次存檔 (Commit) 時，Git 都會記錄「是誰做的」。所以第一件事，就是設定你的專屬身份名牌：</p>
-
-        <Callout variant="warning" title="請打開你電腦的真實終端機（不是這個網頁）" className="mb-3">
-          接下來的指令請在 VSCode 的終端機或系統的終端機 App 裡輸入，這個網頁只是教學展示，不會真的執行指令。
-        </Callout>
-
-        <p className="text-sm text-slate-600 mb-2">兩行指令<strong>一行一行輸入、每行按一次 Enter</strong>。記得把 <code>Your Name</code> 換成你的名字、<code>you@example.com</code> 換成你自己的信箱（<strong>引號要保留</strong>）：</p>
-
-        <CommandBlock
-          command={'git config --global user.name "Your Name"'}
-          comment="設定你的名字"
-        />
-        <NoOutputHint />
-
-        <div className="mt-3">
-          <CommandBlock
-            command={'git config --global user.email "you@example.com"'}
-            comment="設定你的信箱"
-          />
-          <NoOutputHint />
-        </div>
-
-        <Callout variant="success" title="沒消息就是好消息" className="mt-3">
-          這是你人生第一條 git 指令，先記住終端機的常態：<strong>指令成功時，往往什麼都不會顯示</strong>。畫面安安靜靜跳回可輸入狀態，就代表它做完了。
-        </Callout>
-
-        <Callout variant="info" title="`$` 是什麼？" className="mt-3">
-          指令開頭的 <code>$</code> 代表「這是要打在終端機的指令」，輸入時不用打 <code>$</code>——用上面的複製按鈕會自動幫你去掉。
-        </Callout>
-
-        <p className="text-sm text-slate-600 mt-3">
-          這兩行指令在終端機的<strong>任何資料夾</strong>輸入都可以，不需要先 <code>cd</code> 進某個專案。
-        </p>
-
-        <p className="text-sm text-slate-600 mt-3">敲完上面兩行後，輸入這行確認設定是否成功——注意對比：<strong>這條有輸出</strong>（回你設定的值），上面那兩條沒有：</p>
-        <CommandBlock command="git config user.name" comment="會回你剛剛設定的名字，只有一行" />
-        <CommandBlock variant="output" command="Your Name（你剛剛設定的名字）" />
-
-        <div className="mt-3 grid sm:grid-cols-2 gap-3">
-          <div className="bg-white border border-amber-200 rounded-lg p-3 text-xs text-amber-800 flex items-start gap-2 shadow-sm">
-            <Info size={14} className="shrink-0 mt-0.5 text-amber-500" />
-            <span><strong>--global</strong> 代表全域設定，設定一次就好，這台電腦上所有的 Git 專案都會認識你。</span>
-          </div>
-          <div className="bg-white border border-amber-200 rounded-lg p-3 text-xs text-blue-800 flex items-start gap-2 shadow-sm">
-            <Info size={14} className="shrink-0 mt-0.5 text-blue-500" />
-            <span>如果你未來要把作品推上 GitHub，這裡的 <strong>email 請務必填寫和 GitHub 註冊時相同的信箱</strong>，大頭貼才會漂亮地顯示出來喔！</span>
-          </div>
-        </div>
-
-        <p className="text-xs text-slate-500 mt-3">
-          小提醒：執行 <code>git init</code> 後，專案裡會多一個隱藏的 <code>.git</code> 資料夾，那就是你的存檔本體——它預設是隱藏的，在檔案總管／Finder 裡看不到是正常的。第 3 章會介紹它。
-        </p>
-      </Card>
-    </div>
 
     <Quiz
       questions={[
@@ -257,5 +197,98 @@ export const Chapter1Concept = () => (
         },
       ]}
     />
+<SectionTitle title="全課地圖" />
+<div className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-3 relative">
+            <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-indigo-200"></div>
+            
+            <div className="flex items-center gap-4 relative">
+              <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold shadow-md z-10">1</div>
+              <div className="flex-1 bg-white p-3 rounded-lg border border-indigo-100 shadow-sm">
+                <div className="font-bold text-slate-700 text-sm">初始化 (Init)</div>
+                <code className="text-xs text-indigo-600 bg-indigo-50 px-1 rounded">git init</code>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4 relative">
+              <div className="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center text-sm font-bold shadow-md z-10">2</div>
+              <div className="flex-1 bg-white p-3 rounded-lg border border-indigo-100 shadow-sm">
+                <div className="font-bold text-slate-700 text-sm">暫存與存檔 (Add & Commit)</div>
+                <code className="text-xs text-indigo-600 bg-indigo-50 px-1 rounded">git add .</code> / <code className="text-xs text-indigo-600 bg-indigo-50 px-1 rounded">git commit</code>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 relative">
+              <div className="w-8 h-8 rounded-full bg-indigo-400 text-white flex items-center justify-center text-sm font-bold shadow-md z-10">3</div>
+              <div className="flex-1 bg-white p-3 rounded-lg border border-indigo-100 shadow-sm">
+                <div className="font-bold text-slate-700 text-sm">連結遠端 (Remote Add)</div>
+                <code className="text-xs text-indigo-600 bg-indigo-50 px-1 rounded">git remote add origin</code>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 relative">
+              <div className="w-8 h-8 rounded-full bg-indigo-300 text-white flex items-center justify-center text-sm font-bold shadow-md z-10">4</div>
+              <div className="flex-1 bg-white p-3 rounded-lg border border-indigo-100 shadow-sm">
+                <div className="font-bold text-slate-700 text-sm">推上雲端 (Push)</div>
+                <code className="text-xs text-indigo-600 bg-indigo-50 px-1 rounded">git push -u origin main</code>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-3 relative">
+            <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-purple-200"></div>
+            
+            <div className="flex items-center gap-4 relative">
+              <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-sm font-bold shadow-md z-10">1</div>
+              <div className="flex-1 bg-white p-3 rounded-lg border border-purple-100 shadow-sm">
+                <div className="font-bold text-slate-700 text-sm">下載專案 (Clone)</div>
+                <code className="text-xs text-purple-600 bg-purple-50 px-1 rounded">git clone &lt;URL&gt;</code>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4 relative">
+              <div className="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center text-sm font-bold shadow-md z-10">2</div>
+              <div className="flex-1 bg-white p-3 rounded-lg border border-purple-100 shadow-sm">
+                <div className="font-bold text-slate-700 text-sm">進入資料夾</div>
+                <code className="text-xs text-purple-600 bg-purple-50 px-1 rounded">cd &lt;專案名稱&gt;</code>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 relative">
+              <div className="w-8 h-8 rounded-full bg-purple-400 text-white flex items-center justify-center text-sm font-bold shadow-md z-10">3</div>
+              <div className="flex-1 bg-white p-3 rounded-lg border border-purple-100 shadow-sm">
+                <div className="font-bold text-slate-700 text-sm">開發與存檔 (Add & Commit)</div>
+                <code className="text-xs text-purple-600 bg-purple-50 px-1 rounded">git add .</code> / <code className="text-xs text-purple-600 bg-purple-50 px-1 rounded">git commit</code>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 relative">
+              <div className="w-8 h-8 rounded-full bg-purple-300 text-white flex items-center justify-center text-sm font-bold shadow-md z-10">4</div>
+              <div className="flex-1 bg-white p-3 rounded-lg border border-purple-100 shadow-sm">
+                <div className="font-bold text-slate-700 text-sm">推上雲端 (Push)</div>
+                <code className="text-xs text-purple-600 bg-purple-50 px-1 rounded">git push</code>
+              </div>
+            </div>
+          </div>
+</div>
+    {/* 預防照抄：上面是概念地圖，實際敲之前先打幾支預防針 */}
+    <div className="space-y-3">
+      <h3 className="text-md font-bold text-slate-700">先打預防針：照著上面的圖敲之前，這幾件事要知道</h3>
+
+      <Callout variant="warning" title="圖中的 git commit 是概念示意，實際輸入務必加 -m">
+        實際操作時請打 <code className="bg-amber-100 px-1 rounded">git commit -m "你的存檔訊息"</code>。只打 <code className="bg-amber-100 px-1 rounded">git commit</code> 會掉進一個滿是 <code className="bg-amber-100 px-1 rounded">~</code> 符號的編輯器畫面（不好離開），之後的章節會教怎麼應對，現在先記得加 <code className="bg-amber-100 px-1 rounded">-m</code> 就好。
+      </Callout>
+
+      <FalseAlarm signal={'warning: LF will be replaced by CRLF in xxx.md'}>
+        Windows 上打 <code className="bg-amber-100 px-1 rounded">git add .</code> 時很常看到這種黃字，它只是在提醒「換行格式會自動轉換」，<strong>不是錯誤</strong>，可以無視、直接繼續下一步。
+      </FalseAlarm>
+
+      <FalseAlarm signal={'Enumerating objects: 5, done.\nWriting objects: 100% (5/5), done.\nremote: ...'} title="push 時會冒出一大串訊息——那是上傳進度">
+        <code className="bg-amber-100 px-1 rounded">git push</code> 成功時反而話很多：這些是上傳進度回報，不是錯誤。第一次 push 還可能彈出登入視窗，照畫面登入 GitHub 即可。
+      </FalseAlarm>
+
+      <FalseAlarm signal={'Receiving objects:  42% (123/291)'} title="clone 時的百分比是下載進度">
+        <code className="bg-amber-100 px-1 rounded">git clone</code> 會顯示下載進度百分比，中途停一下是正常的（網路在傳檔案），等它回到可以輸入指令的狀態就是完成了。
+      </FalseAlarm>
+    </div>
   </div>
 );

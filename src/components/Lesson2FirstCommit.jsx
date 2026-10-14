@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, CommandBlock, Callout, Quiz, NoOutputHint, FalseAlarm } from './Shared';
-import { Laptop, Folder, ArrowRight, Github, Shield, PlusCircle, CheckCircle, FileText, Eye, ShieldAlert } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Quiz, SectionTitle, Card, TerminalSim, CommandBlock, Callout, NoOutputHint, FalseAlarm } from './Shared';
+import { Search, Laptop, Folder, Github, Shield, PlusCircle, CheckCircle, Eye } from 'lucide-react';
 
 const MAX_STEP = 4;
 
@@ -23,7 +23,7 @@ const StepAction = ({ state, challengeMode, onClick, activeClass }) => {
   );
 };
 
-export const Chapter3PathA = () => {
+export const Lesson2FirstCommit = () => {
   const [step, setStep] = useState(0); // 0: initial, 1: init, 2: add/commit, 3: remote add, 4: push
   const [logs, setLogs] = useState([{ prefix: '$', text: '準備開始情境 A：從零開始建立專案。' }]);
   const repoUrl = "https://github.com/blake/my-new-project.git";
@@ -211,7 +211,7 @@ export const Chapter3PathA = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <SectionTitle title="3. 情境 A：從零開始" subtitle="自己當造物主，將本地專案上傳到 GitHub" />
+      <SectionTitle title="L2. 情境 A：從零開始" subtitle="自己當造物主，將本地專案上傳到 GitHub" />
 
       {/* 進入狀態提示 */}
       <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
@@ -220,28 +220,8 @@ export const Chapter3PathA = () => {
           <span className="text-green-400 text-base leading-none mt-0.5">💻</span>
           <p className="text-sm text-slate-300"><strong className="text-white">本章所有操作都透過 Terminal 指令完成。</strong>請確保你已經打開終端機（建議用 VSCode 內建終端），並且知道如何在裡面操作目錄。</p>
         </div>
-        <div className="flex items-start gap-3">
-          <span className="text-yellow-400 text-base leading-none mt-0.5">🔑</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">需要一個已登入且連線的 GitHub 帳號。</strong>如果還沒有註冊 / 登入 GitHub，請先回到 <a href="#setup" className="underline font-bold text-white hover:text-green-300">Chapter 0 行前準備</a> 完成註冊。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-blue-400 text-base leading-none mt-0.5">📂</span>
-          <div className="text-sm text-slate-300">
-            <strong className="text-white">先在 GitHub 網頁上建好一個空白的新 Repository：</strong>
-            <ol className="list-decimal pl-5 mt-2 space-y-1 text-slate-300">
-              <li>登入 GitHub，點右上角的 <strong className="text-white">"+"</strong> → <strong className="text-white">New repository</strong></li>
-              <li>取一個 Repository 名稱（例如 <code className="bg-slate-700 px-1 rounded">my-first-repo</code>）</li>
-              <li>選擇 <strong className="text-white">Public</strong></li>
-              <li className="text-red-300 font-bold">⚠️ 關鍵：「Add a README file」、「Add .gitignore」、「Choose a license」這三個選項全部<strong>不要勾選</strong>，保持完全空白！（勾了會造成歷史衝突，Push 時會被拒絕）</li>
-              <li>點 <strong className="text-white">Create repository</strong>，然後複製頁面上的 HTTPS 網址備用（格式：<code className="bg-slate-700 px-1 rounded text-slate-300">https://github.com/你的帳號/專案名.git</code>）</li>
-            </ol>
-          </div>
-        </div>
       </div>
 
-      <InstructionalText title="什麼時候會用到？">
-        <p>你用 VSCode 在電腦裡建立了一個資料夾，寫好了幾個 HTML 檔案，現在你想把它們上傳到 GitHub 備份，並分享給全世界。</p>
-      </InstructionalText>
 
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-6">
@@ -406,67 +386,8 @@ export const Chapter3PathA = () => {
         </Callout>
       )}
 
-      {/* Commit Message Guidelines */}
-      <div className="mt-8">
-        <Card className="bg-blue-50 border-blue-200">
-           <h3 className="font-bold text-blue-800 mb-3 flex items-center gap-2">
-             <FileText size={18} /> 養成好習慣：Commit Message 怎麼寫？
-           </h3>
-           <p className="text-sm text-blue-700 mb-4">好的 Commit Message 能讓同事（或一個月後的你）秒懂你改了什麼。業界通常會使用「前綴 (Prefix)」來分類：</p>
-           <div className="grid md:grid-cols-2 gap-4">
-             <div className="bg-white p-3 rounded border border-blue-100 shadow-sm text-sm">
-               <div className="font-bold text-slate-700"><span className="text-blue-600 bg-blue-100 px-1 rounded">feat:</span> 新增功能</div>
-               <div className="text-slate-500 mt-1">例如：<code>feat: 新增購物車結帳按鈕</code></div>
-             </div>
-             <div className="bg-white p-3 rounded border border-blue-100 shadow-sm text-sm">
-               <div className="font-bold text-slate-700"><span className="text-red-600 bg-red-100 px-1 rounded">fix:</span> 修復 Bug</div>
-               <div className="text-slate-500 mt-1">例如：<code>fix: 修正登入失敗時不會跳出警告的問題</code></div>
-             </div>
-             <div className="bg-white p-3 rounded border border-blue-100 shadow-sm text-sm">
-               <div className="font-bold text-slate-700"><span className="text-purple-600 bg-purple-100 px-1 rounded">docs:</span> 文件修改</div>
-               <div className="text-slate-500 mt-1">例如：<code>docs: 更新 README 安裝教學</code></div>
-             </div>
-             <div className="bg-white p-3 rounded border border-blue-100 shadow-sm text-sm">
-               <div className="font-bold text-slate-700"><span className="text-green-600 bg-green-100 px-1 rounded">style:</span> 格式修改</div>
-               <div className="text-slate-500 mt-1">例如：<code>style: 調整首頁標題字體大小</code></div>
-             </div>
-           </div>
-        </Card>
-      </div>
-
       {/* Gitignore & Git Log */}
       <div className="mt-8 grid md:grid-cols-2 gap-6">
-        <Card className="bg-yellow-50 border-yellow-200">
-           <h3 className="font-bold text-yellow-800 mb-3 flex items-center gap-2">
-             <ShieldAlert size={18} /> 防雷神針：隱形斗篷 .gitignore
-           </h3>
-           <p className="text-sm text-yellow-700 mb-3">
-             新手最常犯的錯，就是把「幾萬個暫存檔 (如 <code>node_modules</code>)」或是「寫有資料庫密碼的檔案」一起 <code>git add .</code> 傳上 GitHub，導致專案又肥又危險。
-           </p>
-           <p className="text-sm text-yellow-700 font-bold mb-2">解決方法：</p>
-           <p className="text-sm text-yellow-700">
-             在專案資料夾底下建立一個名為 <code>.gitignore</code> 的檔案。在裡面寫上你不想被 Git 追蹤的檔案或資料夾名稱。Git 就會當作沒看到它們！<br/>
-             <span className="text-xs text-yellow-600">用 VSCode 檔案總管右鍵 → New File，檔名輸入 <code>.gitignore</code>（對，開頭就是一個點）。</span>
-           </p>
-           <div className="bg-slate-900 rounded p-3 mt-3 font-mono text-xs text-green-400">
-             # 檔案名稱：.gitignore<br/>
-             node_modules/<br/>
-             .env<br/>
-             *.log
-           </div>
-           <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mt-3">
-             <div className="text-xs font-bold text-purple-800 mb-2">📊 數據分析菜鳥版（Python / Jupyter）</div>
-             <div className="bg-slate-900 rounded p-2 font-mono text-xs text-green-400">
-               # Python 數據分析常見需要忽略的<br/>
-               __pycache__/<br/>
-               .ipynb_checkpoints/<br/>
-               .env<br/>
-               *.pyc<br/>
-               data/raw/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 原始資料通常不放 Git
-             </div>
-           </div>
-        </Card>
-
         <Card className="bg-emerald-50 border-emerald-200">
            <h3 className="font-bold text-emerald-800 mb-3 flex items-center gap-2">
              <Eye size={18} /> 偷看遊戲存檔：git log
@@ -479,7 +400,7 @@ export const Chapter3PathA = () => {
              紀錄一多，<code>git log</code> 會進入「瀏覽畫面」：底部出現一個 <code>:</code>，怎麼打字都沒反應。這不是當機——按 <code>q</code> 就能離開、回到指令列。
            </FalseAlarm>
            <p className="text-sm text-emerald-700">
-             <strong>💡 視覺化推薦：</strong>如果你覺得純文字太難懂，記得打開我們在 <a href="#setup" className="underline font-bold hover:text-emerald-900">Chapter 0 行前準備</a> 中請你裝的 <strong>Git Graph 外掛</strong>，它會在 VSCode 裡畫出超美的時間線樹狀圖喔！
+             <strong>💡 視覺化推薦：</strong>如果你覺得純文字太難懂，記得打開我們在 <a href="#setup" className="underline font-bold hover:text-emerald-900">L0 行前準備</a> 中請你裝的 <strong>Git Graph 外掛</strong>，它會在 VSCode 裡畫出超美的時間線樹狀圖喔！
            </p>
         </Card>
       </div>
@@ -523,64 +444,68 @@ export const Chapter3PathA = () => {
             </div>
           </Card>
 
-          <Card>
-            <h4 className="font-bold text-slate-700 mb-2">4. 到 GitHub 建一個空 repo</h4>
-            <p className="text-sm text-slate-600">回到本章最上面「⚡ 進入狀態」區塊，照著步驟建立一個空白 Repository（記得三個選項都<strong>不要勾</strong>），並複製它的 HTTPS 網址。</p>
-          </Card>
-
-          <Card>
-            <h4 className="font-bold text-slate-700 mb-2">5. 連結並上傳</h4>
-            <div className="space-y-3">
-              <CommandBlock command="git remote add origin https://github.com/你的帳號/my-first-repo.git" comment="記得換成你自己複製的網址" />
-              <CommandBlock command="git branch -M main" comment="確保主分支叫 main（有些電腦預設叫 master，會對不上下一行指令）" />
-              <CommandBlock command="git push -u origin main" />
-              <CommandBlock variant="output" command={'Enumerating objects: 3, done.\nWriting objects: 100% (3/3), 230 bytes | 230.00 KiB/s, done.\nremote: Resolving deltas: 100% (0/0), done.\nTo https://github.com/你的帳號/my-first-repo.git\n * [new branch]      main -> main'} />
-            </div>
-            <Callout variant="info" className="mt-3">
-              畫面會跳出一連串 <code>Enumerating objects...</code>、<code>Writing objects: 100%</code>、<code>remote: ...</code>——這些都是正常的上傳進度，不用理會；最後一行看到 <code>main -&gt; main</code> 就是成功了。另外，如果 push 時跳出瀏覽器登入視窗，照著登入即可，這是正常的身分驗證流程。
-            </Callout>
-          </Card>
-
-          <Callout variant="success" title="驗證點">
-            打開你 GitHub 的 repo 頁面按 <strong>F5 重新整理</strong>——看到 <code>notes.md</code> 出現，恭喜你完成了人生第一次 push！
-          </Callout>
         </div>
       </div>
 
-      <Quiz
-        questions={[
-          {
-            q: '你確定自己有改檔案、也存檔了，但打開 GitHub 網頁卻完全看不到最新的內容，最可能是漏了哪一步？',
+      {/* Git Status Cheatsheet */}
+      <div className="mt-8">
+        <Card className="bg-slate-50 border-slate-200">
+           <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
+             <Search size={18} className="text-slate-600" /> Git Status 狀態解碼速查表
+           </h3>
+           <p className="text-sm text-slate-600 mb-4">輸入 <code>git status</code> 後，終端機會用不同顏色告訴你檔案目前的狀態：</p>
+           
+           <div className="overflow-x-auto">
+             <table className="w-full text-sm text-left text-slate-600 border-collapse bg-white rounded-lg overflow-hidden shadow-sm border border-slate-200">
+               <thead className="bg-slate-100 text-slate-700">
+                 <tr>
+                   <th className="px-4 py-3 border-b">狀態名稱</th>
+                   <th className="px-4 py-3 border-b">顏色顯示</th>
+                   <th className="px-4 py-3 border-b">代表什麼意思？</th>
+                   <th className="px-4 py-3 border-b">下一步該怎麼做？</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 <tr className="border-b">
+                   <td className="px-4 py-3 font-mono font-bold text-slate-800">Untracked files</td>
+                   <td className="px-4 py-3 text-red-500 font-bold">紅色</td>
+                   <td className="px-4 py-3">這是你剛建立的「新檔案」，Git 還不認識它。</td>
+                   <td className="px-4 py-3">輸入 <code>git add .</code> 把它加入暫存區。</td>
+                 </tr>
+                 <tr className="border-b">
+                   <td className="px-4 py-3 font-mono font-bold text-slate-800">Changes not staged</td>
+                   <td className="px-4 py-3 text-red-500 font-bold">紅色</td>
+                   <td className="px-4 py-3">舊檔案被你「修改」了，但還沒放進準備存檔的區域。</td>
+                   <td className="px-4 py-3">輸入 <code>git add .</code> 把它加入暫存區。</td>
+                 </tr>
+                 <tr className="border-b">
+                   <td className="px-4 py-3 font-mono font-bold text-slate-800">Changes to be committed</td>
+                   <td className="px-4 py-3 text-green-500 font-bold">綠色</td>
+                   <td className="px-4 py-3">檔案已經在「暫存區」了，準備好要存檔了！</td>
+                   <td className="px-4 py-3">輸入 <code>git commit -m "..."</code> 正式存檔。</td>
+                 </tr>
+                 <tr>
+                   <td className="px-4 py-3 font-mono font-bold text-slate-800">nothing to commit</td>
+                   <td className="px-4 py-3 text-slate-500 font-bold">無色</td>
+                   <td className="px-4 py-3">工作區超級乾淨，所有修改都已經存檔完畢。</td>
+                   <td className="px-4 py-3">安心去喝杯咖啡，或是 <code>git push</code> 上傳。</td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+        </Card>
+      </div>
+
+    <Quiz questions={[{
+            q: '執行 git status 後看到一堆紅色文字（Untracked files / Changes not staged），這代表？',
             options: [
-              '忘記 git push——commit 只是存在自己電腦裡，沒推上雲端 GitHub 不會知道',
-              '忘記重新整理瀏覽器快取，GitHub 其實已經收到了',
-              'GitHub 上傳需要等 24 小時才會顯示',
-            ],
-            answer: 0,
-            explain: 'git commit 只是在你「本機」建立一個存檔點，資料完全還在你的電腦裡。GitHub 是遠端伺服器，只有執行 git push 之後，本機的存檔紀錄才會真正傳過去。很多初學者以為 commit 完就等於「上傳」了，其實兩者是完全不同的兩個動作。',
-          },
-          {
-            q: '執行 git remote add origin ... 之後，終端機畫面什麼反應都沒有、也沒有跳出任何文字，這代表？',
-            options: [
-              '執行失敗了，指令沒有生效，要重新打一次',
-              '這是正常現象——很多 Git 指令成功時就是「沒消息就是好消息」，不會印出文字',
-              '需要按 Enter 兩次才會真的執行',
+              '出現錯誤了，程式碼可能已經損壞，要趕快搶救',
+              '只是「狀態標示」——代表有檔案是新增或修改過、還沒放進暫存區，不是壞掉或出錯',
+              '代表這個 repo 已經跟遠端斷線了',
             ],
             answer: 1,
-            explain: 'git remote add、git add 這類指令的設計邏輯是「沒有異常才不會輸出訊息」，安靜的畫面通常代表成功。如果真的想確認，用 git remote -v 或 git status 主動查詢即可，看到畫面空白就緊張重打，反而容易不小心重複輸入或打錯。',
-          },
-          {
-            q: '在 GitHub 網頁建立新的 Repository 時，「Add a README file」「Add .gitignore」「Choose a license」這三個初始化選項為什麼都不能勾？',
-            options: [
-              '勾選會讓 Repository 變成付費方案',
-              '勾選之後 GitHub 上就已經有了一次歷史紀錄，跟你本機第一次 push 的歷史「兜不起來」，會被拒絕',
-              '這三個選項只是介面上的裝飾，其實勾不勾都沒差',
-            ],
-            answer: 1,
-            explain: '只要勾選任何一個初始化選項，GitHub 就會在遠端自動建立一個初始 commit（例如自動產生 README）。這樣一來，遠端 repo 已經有自己的歷史起點，跟你本機從 git init 開始建立的歷史是兩條不同的分支起點，push 時 Git 會判斷成「非快進（non-fast-forward）」而直接拒絕，新手常常因此卡在第一次 push 就搞不懂為什麼失敗。保持完全空白，讓本機的第一次 push 去「創造」遠端的歷史起點，才不會衝突。',
-          },
-        ]}
-      />
-    </div>
+            explain: '紅色在 git status 裡只是一種「顏色編碼」，用來標示尚未加入暫存區的變動（新檔案或被修改的檔案），完全不代表出錯。看到紅字就緊張、以為東西壞掉，是很多初學者的直覺誤解；正確反應是接著打 git add . 把它們放進暫存區，看到變成綠色（Changes to be committed）才是下一步 commit 的時機。',
+          }]} />
+</div>
   );
 };

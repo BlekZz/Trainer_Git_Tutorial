@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { SectionTitle, Card, TerminalSim, InstructionalText, Callout, Quiz, CommandBlock, FalseAlarm } from './Shared';
-import { GitBranch, Plus, ArrowRight, Activity, GitCommit, Copy } from 'lucide-react';
+import { useState } from 'react';
+import { SectionTitle, Card, TerminalSim, InstructionalText, Callout, Quiz, FalseAlarm } from './Shared';
+import { GitBranch, Activity } from 'lucide-react';
 
-export const Chapter5Branch = () => {
+export const Lesson4Branch = () => {
   const [activeBranch, setActiveBranch] = useState('main');
   const [branches, setBranches] = useState(['main']);
   const [logs, setLogs] = useState([{ prefix: '$', text: '準備就緒。目前分支：main' }]);
@@ -36,7 +36,7 @@ export const Chapter5Branch = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <SectionTitle title="5. 分支與宇宙跳躍" subtitle="在不搞壞主線的情況下，大膽嘗試新功能" />
+      <SectionTitle title="L4. 分支與宇宙跳躍" subtitle="在不搞壞主線的情況下，大膽嘗試新功能" />
 
       {/* 進入狀態提示 */}
       <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
@@ -117,10 +117,6 @@ export const Chapter5Branch = () => {
                  <p className="text-xs text-slate-500">讓你的資料夾內容，瞬間切換到該宇宙的狀態。<code className="bg-slate-100 px-1 rounded">&lt;分支名&gt;</code> 要整個換成真實名稱（例如 <code className="bg-slate-100 px-1 rounded">git checkout feat/login</code>），不要把角括號打進去。</p>
                </div>
 
-               <Callout variant="info" title="🎒 切換前東西沒存怎麼辦？git stash">
-                 <code className="bg-blue-100 px-1 rounded">git stash</code> = 把桌上未完成的東西先掃進抽屜（暫存）；<code className="bg-blue-100 px-1 rounded">git stash pop</code> = 從抽屜拿出來繼續。切換分支前，如果工作區還有未存檔的修改，先 <code className="bg-blue-100 px-1 rounded">git commit</code>（建議）或先 <code className="bg-blue-100 px-1 rounded">git stash</code>，再切換。
-                 <span className="block mt-1 text-xs">成功時你會看到：<code className="bg-blue-100 px-1 rounded">git stash</code> 顯示 <code className="bg-blue-100 px-1 rounded">Saved working directory and index state ...</code>；<code className="bg-blue-100 px-1 rounded">git stash pop</code> 最後一行顯示 <code className="bg-blue-100 px-1 rounded">Dropped refs/stash@{'{0}'}</code>。</span>
-               </Callout>
 
                <FalseAlarm signal={'warning: LF will be replaced by CRLF in xxx'}>
                  在 Windows 上執行 <code className="bg-amber-100 px-1 rounded">git add</code> 或 commit 時，常會冒出這行黃字。它只是 Git 在提醒「換行符號會自動轉換」，不是錯誤，直接忽略、繼續下一步即可。
@@ -200,100 +196,9 @@ export const Chapter5Branch = () => {
         </div>
       </div>
 
-      <Card className="bg-indigo-50 border-indigo-200 mt-6 p-5">
-         <h3 className="font-bold text-indigo-900 mb-2 flex items-center gap-2">
-           <span className="text-xl">💡</span> 重要觀念：本地分支 vs 雲端分支
-         </h3>
-         <p className="text-sm text-indigo-800 mb-4 leading-relaxed">
-           請記住：<strong>你在電腦上用 checkout 建立的分支，只有你自己看得到！</strong> 雲端（GitHub）此時還不知道有這個宇宙的存在。這就是為什麼只在本地新增分支時，別人是無法拉取 (pull) 到你的進度的。
-         </p>
-         <div className="bg-white p-4 rounded-lg border border-indigo-100 shadow-sm">
-           <div className="font-bold text-sm text-slate-800 mb-2">要把分支「上傳並在雲端建立」，你需要執行：</div>
-           <code className="text-xs text-indigo-600 bg-indigo-50 px-2 py-1 rounded block mb-2 font-mono">git push -u origin &lt;你的分支名&gt;</code>
-           <Callout variant="warning" title="角括號不要打進去" className="mb-3">
-             <code className="bg-amber-100 px-1 rounded">&lt;你的分支名&gt;</code> 要整個換成實際的分支名，例如 <code className="bg-amber-100 px-1 rounded">git push -u origin feat/login</code>。如果連角括號一起打，會出現 <code className="bg-amber-100 px-1 rounded">error: src refspec ... does not match</code>。
-           </Callout>
-           <p className="text-sm text-slate-600 mb-1">按 Enter 後，終端機會滾動一串進度訊息，長得像這樣：</p>
-           <CommandBlock
-             variant="output"
-             command={'Enumerating objects: 5, done.\nCounting objects: 100% (5/5), done.\nWriting objects: 100% (3/3), done.\n * [new branch]      feat/login -> feat/login'}
-             className="mb-3"
-           />
-           <p className="text-sm text-slate-600 mb-3">最後看到 <code className="bg-slate-100 px-1 rounded text-xs">* [new branch] 分支名 -&gt; 分支名</code> 就是成功了。第一次 push 時，Windows 可能會彈出要你登入 GitHub 的視窗——這是正常的，登入一次就會記住。</p>
-           <ul className="text-sm text-slate-600 space-y-1 list-disc pl-4">
-             <li><code className="bg-slate-100 px-1 rounded text-xs">-u</code> (set-upstream) 的意思是「建立上下游連線」。</li>
-             <li>這告訴 Git：「請在 GitHub 也建立一個一模一樣的分支，並把它們綁定在一起」。</li>
-             <li>綁定之後，未來你在這個分支只要簡單打 <code className="bg-slate-100 px-1 rounded text-xs">git push</code>，它就會知道要推送到雲端的對應分支了！</li>
-           </ul>
-         </div>
-      </Card>
 
       <div className="mt-8">
         <TerminalSim logs={logs} promptLabel={`~/project (${activeBranch})`} height="h-40" />
-      </div>
-
-      {/* Team Parallel Dev Graph */}
-      <div className="mt-8">
-        <Card className="bg-white border-slate-200">
-           <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
-             <GitBranch size={18} className="text-indigo-600" /> 團隊協作的大局觀：多模組平行開發
-           </h3>
-           <p className="text-sm text-slate-600 mb-2">在真實的公司專案中，主線 (main) 就像火車的主幹道，而大家會各自開分支 (Branch) 進行平行開發，完成後再合併回來（產品迭代），周而復始。</p>
-           
-           <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 mb-6">
-             <h4 className="font-bold text-blue-800 text-sm mb-1">💡 觀念釐清：分支是「階段性服務」</h4>
-             <p className="text-xs text-blue-700">分支是為了解決某個特定的功能 (Feature) 或修復 (Bug) 而短暫存在的。當任務完成並合併 (Merge) 回主線後，該分支的使命就結束了，通常會被刪除或封存。長期讓兩個分支平行存在而不合併，是非常危險且容易產生大量衝突的不良設計。</p>
-           </div>
-           
-           <div className="w-full overflow-x-auto">
-             <div style={{ minWidth: '600px' }}>
-               <svg
-                 viewBox="0 0 700 256"
-                 xmlns="http://www.w3.org/2000/svg"
-                 className="w-full h-auto"
-                 style={{ maxHeight: '256px' }}
-               >
-                 {/* Main Line */}
-                 <line x1="0" y1="128" x2="700" y2="128" stroke="#cbd5e1" strokeWidth="6" />
-
-                 {/* Pink (UI) Branch: y=48 */}
-                 <path d="M 100 128 C 130 128, 140 48, 180 48 L 320 48 C 360 48, 370 128, 400 128" fill="none" stroke="#ec4899" strokeWidth="5" />
-
-                 {/* Blue (API) Branch: y=168 */}
-                 <path d="M 260 128 C 290 128, 300 168, 340 168 L 360 168 C 380 168, 390 128, 400 128" fill="none" stroke="#3b82f6" strokeWidth="5" />
-
-                 {/* Yellow (DB) Branch: y=218 */}
-                 <path d="M 100 128 C 130 128, 140 218, 180 218 L 450 218 C 500 218, 510 128, 550 128" fill="none" stroke="#eab308" strokeWidth="5" />
-
-                 {/* v1.0 Base */}
-                 <circle cx="100" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
-                 <text x="100" y="152" fill="#475569" fontSize="12" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.0</text>
-
-                 {/* Pink Nodes */}
-                 <circle cx="180" cy="48" r="8" fill="#ec4899" stroke="white" strokeWidth="3" />
-                 <text x="180" y="32" fill="#be185d" fontSize="12" textAnchor="middle" fontWeight="bold">feat/ui</text>
-                 <circle cx="320" cy="48" r="8" fill="#ec4899" stroke="white" strokeWidth="3" />
-
-                 {/* Blue Nodes */}
-                 <circle cx="340" cy="168" r="8" fill="#3b82f6" stroke="white" strokeWidth="3" />
-                 <text x="340" y="190" fill="#1d4ed8" fontSize="12" textAnchor="middle" fontWeight="bold">feat/api</text>
-
-                 {/* Yellow Nodes */}
-                 <circle cx="180" cy="218" r="8" fill="#eab308" stroke="white" strokeWidth="3" />
-                 <text x="180" y="240" fill="#a16207" fontSize="12" textAnchor="middle" fontWeight="bold">feat/db</text>
-                 <circle cx="450" cy="218" r="8" fill="#eab308" stroke="white" strokeWidth="3" />
-                 <text x="450" y="240" fill="#475569" fontSize="13" textAnchor="middle">耗時較長的開發</text>
-
-                 {/* Merge Nodes */}
-                 <circle cx="400" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
-                 <text x="400" y="152" fill="#475569" fontSize="13" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.1 (UI+API)</text>
-
-                 <circle cx="550" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
-                 <text x="550" y="152" fill="#475569" fontSize="13" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.2 (DB)</text>
-               </svg>
-             </div>
-           </div>
-        </Card>
       </div>
 
       <Quiz
@@ -330,6 +235,7 @@ export const Chapter5Branch = () => {
           },
         ]}
       />
+<Callout>本章撰寫中</Callout>
     </div>
   );
 };

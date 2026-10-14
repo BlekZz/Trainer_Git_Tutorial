@@ -1,33 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { GitGraph, Map, Play, Download, GitBranch, RefreshCw, Users, Rocket, Ambulance, CheckCircle, ArrowLeft, ArrowRight, Wrench } from 'lucide-react';
 
-import { Chapter0Setup } from './components/Chapter0Setup';
-import { Chapter1Concept } from './components/Chapter1Concept';
-import { Chapter2Flowchart } from './components/Chapter2Flowchart';
-import { Chapter3PathA } from './components/Chapter3PathA';
-import { Chapter4PathB } from './components/Chapter4PathB';
-import { Chapter5Branch } from './components/Chapter5Branch';
-import { Chapter6Sync } from './components/Chapter6Sync';
-import { Chapter7Team } from './components/Chapter7Team';
-import { Chapter8Practice } from './components/Chapter8Practice';
+import { Lesson0Setup } from './components/Lesson0Setup';
+import { Lesson1Concept } from './components/Lesson1Concept';
+import { Lesson2FirstCommit } from './components/Lesson2FirstCommit';
+import { Lesson3DiffRestore } from './components/Lesson3DiffRestore';
+import { Lesson4Branch } from './components/Lesson4Branch';
+import { Lesson5LocalConflict } from './components/Lesson5LocalConflict';
+import { Lesson6Push } from './components/Lesson6Push';
+import { Lesson7PR } from './components/Lesson7PR';
+import { Lesson8Sync } from './components/Lesson8Sync';
+import { Homework } from './components/Homework';
+import { Elective1Rebase } from './components/Elective1Rebase';
+import { Elective2Fork } from './components/Elective2Fork';
+import { Elective3Misc } from './components/Elective3Misc';
 import { ErrorRoom } from './components/ErrorRoom';
 
 const VISITED_KEY = 'gtm-visited';
 
 const tabs = [
-  { id: 'setup', label: '0. 行前準備', shortLabel: '準備', icon: <Wrench size={16} /> },
-  { id: 'concept', label: '1. 觀念與準備', shortLabel: '觀念', icon: <GitGraph size={16} /> },
-  { id: 'flow', label: '2. 流程總覽', shortLabel: '流程', icon: <Map size={16} /> },
-  { id: 'pathA', label: '3. 情境 A', shortLabel: '情境A', icon: <Play size={16} /> },
-  { id: 'pathB', label: '4. 情境 B', shortLabel: '情境B', icon: <Download size={16} /> },
-  { id: 'branch', label: '5. 分支跳躍', shortLabel: '分支', icon: <GitBranch size={16} /> },
-  { id: 'sync', label: '6. 同步與衝突', shortLabel: '同步', icon: <RefreshCw size={16} /> },
-  { id: 'team', label: '7. 團隊與 PR', shortLabel: 'PR', icon: <Users size={16} /> },
-  { id: 'practice', label: '8. 實戰演練', shortLabel: '實戰', icon: <Rocket size={16} /> },
-  { id: 'errors', label: '🚑 急診室', shortLabel: '急診室', icon: <Ambulance size={16} /> },
+  { id: 'setup', label: 'L0 行前準備', group: 'Part 0 準備', icon: <Wrench size={16} /> },
+  { id: 'concept', label: 'L1 觀念', group: 'Part 1 單機', icon: <GitGraph size={16} /> },
+  { id: 'first-commit', label: 'L2 第一次存檔', group: 'Part 1 單機', icon: <Play size={16} /> },
+  { id: 'diff-restore', label: 'L3 看差異與後悔藥', group: 'Part 1 單機', icon: <Map size={16} /> },
+  { id: 'branch', label: 'L4 分支', group: 'Part 1 單機', icon: <GitBranch size={16} /> },
+  { id: 'local-conflict', label: 'L5 本機衝突', group: 'Part 1 單機', icon: <RefreshCw size={16} /> },
+  { id: 'push', label: 'L6 GitHub 與第一次 push', group: 'Part 2 上雲', icon: <Rocket size={16} /> },
+  { id: 'pr', label: 'L7 分支上雲與自己的 PR', group: 'Part 2 上雲', icon: <Users size={16} /> },
+  { id: 'sync', label: 'L8 兩台電腦的同步', group: 'Part 2 上雲', icon: <Download size={16} /> },
+  { id: 'homework', label: '作業：我的 Git 日誌', group: 'Part 3 作業', icon: <CheckCircle size={16} /> },
+  { id: 'e1-rebase', label: 'E1 Merge vs Rebase', group: 'Part 4 選修', icon: <GitBranch size={16} /> },
+  { id: 'e2-fork', label: 'E2 參與別人的專案', group: 'Part 4 選修', icon: <Users size={16} /> },
+  { id: 'e3-misc', label: 'E3 stash 與其他', group: 'Part 4 選修', icon: <Wrench size={16} /> },
+  { id: 'errors', label: '🚑 急診室', group: '急診室', icon: <Ambulance size={16} /> },
 ];
-
-const chapterIds = tabs.filter((t) => t.id !== 'errors').map((t) => t.id);
+const groups = ["Part 0 準備","Part 1 單機","Part 2 上雲","Part 3 作業","Part 4 選修","急診室"];
+const chapterIds = tabs.slice(0, 10).map(t => t.id);
+const legacyHashes = { flow: 'concept', pathA: 'first-commit', pathB: 'first-commit', team: 'pr', practice: 'e2-fork' };
 
 const getVisited = () => {
   try {
@@ -41,7 +50,7 @@ const validTabIds = new Set(tabs.map((t) => t.id));
 
 const getInitialTab = () => {
   const hash = window.location.hash.replace('#', '');
-  return validTabIds.has(hash) ? hash : tabs[0].id;
+  return legacyHashes[hash] || (validTabIds.has(hash) ? hash : tabs[0].id);
 };
 
 const App = () => {
@@ -49,13 +58,13 @@ const App = () => {
   const [visited, setVisited] = useState(() => {
     const initial = getVisited();
     const first = getInitialTab();
-    if (first !== 'errors') initial.add(first);
+    if (chapterIds.includes(first)) initial.add(first);
     localStorage.setItem(VISITED_KEY, JSON.stringify([...initial]));
     return initial;
   });
 
   const navigateTo = (tabId) => {
-    if (tabId !== 'errors') {
+    if (chapterIds.includes(tabId)) {
       setVisited((prev) => {
         if (prev.has(tabId)) return prev;
         const next = new Set(prev);
@@ -64,28 +73,25 @@ const App = () => {
         return next;
       });
     }
+    if (window.location.hash !== `#${tabId}`) window.location.hash = tabId;
     setActiveTab(tabId);
   };
 
-  const isFirstHashSync = React.useRef(true);
   useEffect(() => {
-    if (isFirstHashSync.current) {
-      isFirstHashSync.current = false;
-      window.history.replaceState(null, '', `#${activeTab}`);
-    } else {
-      window.location.hash = activeTab;
-    }
-    window.scrollTo({ top: 0 });
-  }, [activeTab]);
-
-  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    const target = legacyHashes[hash] || (validTabIds.has(hash) ? hash : tabs[0].id);
+    if (hash !== target) window.history.replaceState(null, '', `#${target}`);
     const onHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (validTabIds.has(hash)) navigateTo(hash);
+      const hash = window.location.hash.slice(1);
+      const target = legacyHashes[hash] || (validTabIds.has(hash) ? hash : tabs[0].id);
+      if (hash !== target) window.history.replaceState(null, '', `#${target}`);
+      navigateTo(target);
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
+
+  useEffect(() => { window.scrollTo({ top: 0 }); }, [activeTab]);
 
   const currentIndex = tabs.findIndex((t) => t.id === activeTab);
   const progressCount = chapterIds.filter((id) => visited.has(id)).length;
@@ -113,39 +119,23 @@ const App = () => {
       <main className="max-w-5xl mx-auto px-4 -mt-8 relative z-20 pb-20">
 
         {/* Navigation Tabs */}
-        <div
-          role="tablist"
-          aria-label="章節導覽"
-          className="flex sm:flex-wrap gap-2 mb-1 bg-white p-2 rounded-xl shadow-lg border border-slate-200 overflow-x-auto flex-nowrap sm:overflow-visible"
-        >
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id;
-            const isVisited = tab.id !== 'errors' && visited.has(tab.id);
-            return (
-              <button
-                key={tab.id}
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => navigateTo(tab.id)}
-                className={`relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 shrink-0 sm:flex-1 justify-center whitespace-nowrap
-                  ${isActive
-                    ? 'bg-indigo-600 text-white shadow-md -translate-y-0.5 z-10'
-                    : 'hover:bg-slate-100 text-slate-600 hover:text-indigo-600'
-                  }`}
-              >
-                {tab.icon}
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">{tab.shortLabel}</span>
-                {isVisited && (
-                  <CheckCircle
-                    size={12}
-                    className={isActive ? 'text-white' : 'text-green-500'}
-                    aria-label="已造訪"
-                  />
-                )}
-              </button>
-            );
-          })}
+        <div className="mb-3 bg-white p-3 rounded-xl shadow-lg border border-slate-200 space-y-3">
+          {groups.map(group => (
+            <div key={group}>
+              <div className="text-xs font-bold text-slate-500 mb-2">{group}</div>
+              <div role="tablist" aria-label={group} className="flex flex-wrap gap-2 min-w-0">
+                {tabs.filter(tab => tab.group === group).map(tab => (
+                  <button key={tab.id} role="tab" aria-selected={activeTab === tab.id}
+                    onClick={() => navigateTo(tab.id)}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-left max-w-full transition-colors ${activeTab === tab.id ? 'bg-indigo-600 text-white shadow-md' : 'hover:bg-slate-100 text-slate-600 hover:text-indigo-600'}`}>
+                    <span className="shrink-0">{tab.icon}</span>
+                    <span>{tab.label}{tab.id.startsWith('e') && tab.id !== 'errors' && <span className="block text-xs opacity-75">學完作業再來</span>}</span>
+                    {chapterIds.includes(tab.id) && visited.has(tab.id) && <CheckCircle size={12} className="shrink-0" aria-label="已造訪" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Progress bar */}
@@ -158,20 +148,24 @@ const App = () => {
 
         {/* Dynamic Content */}
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 md:p-10 min-h-[600px] transition-all overflow-hidden">
-          {activeTab === 'setup' && <Chapter0Setup />}
-          {activeTab === 'concept' && <Chapter1Concept />}
-          {activeTab === 'flow' && <Chapter2Flowchart />}
-          {activeTab === 'pathA' && <Chapter3PathA />}
-          {activeTab === 'pathB' && <Chapter4PathB />}
-          {activeTab === 'branch' && <Chapter5Branch />}
-          {activeTab === 'sync' && <Chapter6Sync />}
-          {activeTab === 'team' && <Chapter7Team />}
-          {activeTab === 'practice' && <Chapter8Practice />}
+          {activeTab === 'setup' && <Lesson0Setup />}
+          {activeTab === 'concept' && <Lesson1Concept />}
+          {activeTab === 'first-commit' && <Lesson2FirstCommit />}
+          {activeTab === 'diff-restore' && <Lesson3DiffRestore />}
+          {activeTab === 'branch' && <Lesson4Branch />}
+          {activeTab === 'local-conflict' && <Lesson5LocalConflict />}
+          {activeTab === 'push' && <Lesson6Push />}
+          {activeTab === 'pr' && <Lesson7PR />}
+          {activeTab === 'sync' && <Lesson8Sync />}
+          {activeTab === 'homework' && <Homework />}
+          {activeTab === 'e1-rebase' && <Elective1Rebase />}
+          {activeTab === 'e2-fork' && <Elective2Fork />}
+          {activeTab === 'e3-misc' && <Elective3Misc />}
           {activeTab === 'errors' && <ErrorRoom />}
         </div>
 
         {/* Chapter navigation */}
-        <div className="flex items-center justify-between mt-6 gap-4">
+        <div className="flex flex-wrap items-center justify-between mt-6 gap-4">
           {prevTab ? (
             <button
               onClick={() => navigateTo(prevTab.id)}

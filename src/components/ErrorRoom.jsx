@@ -136,7 +136,7 @@ export const ErrorRoom = () => {
         translation="你正在對別人的 repo 執行 push，但你沒有寫入權限。"
       >
         <p className="text-sm text-slate-600">
-          解法：請看 Chapter 8 的說明——你需要先 Fork 一份到自己名下，再用 <span className="font-mono">git remote set-url</span> 把本地的 origin 改指向你自己的 Fork。
+          解法：請看 E2 參與別人的專案 的說明——你需要先 Fork 一份到自己名下，再用 <span className="font-mono">git remote set-url</span> 把本地的 origin 改指向你自己的 Fork。
         </p>
       </ErrorCard>
 
@@ -159,7 +159,7 @@ export const ErrorRoom = () => {
         <CommandBlock command="git branch -M main" comment="把目前的分支改名為 main" />
         <CommandBlock command="git push -u origin main" comment="再 push 一次" />
         <p className="text-sm text-slate-600">
-          想一勞永逸：執行 <a href="#setup" className="text-indigo-600 underline hover:text-indigo-800">Chapter 0 行前準備</a>「一次性建議設定」裡的 <span className="font-mono">git config --global init.defaultBranch main</span>，之後新專案的主分支都會叫 main。
+          想一勞永逸：執行 <a href="#setup" className="text-indigo-600 underline hover:text-indigo-800">L0 行前準備</a>「一次性建議設定」裡的 <span className="font-mono">git config --global init.defaultBranch main</span>，之後新專案的主分支都會叫 main。
         </p>
       </ErrorCard>
 

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Copy, Check, Monitor, Apple, MessageSquareHeart, CheckCircle2, ChevronDown, ChevronRight, ArrowRight } from 'lucide-react';
-import { SectionTitle, InstructionalText, CommandBlock, Callout, NoOutputHint } from './Shared';
+import { useState } from 'react';
+import { SectionTitle, InstructionalText, CommandBlock, Callout, NoOutputHint, Card } from './Shared';
+import { Copy, Check, Monitor, Apple, MessageSquareHeart, CheckCircle2, ChevronDown, ChevronRight, ArrowRight, Key, Info } from 'lucide-react';
 
 // PromptBlock — 給「要貼給 AI 的中文提示詞」用（不是終端機指令，所以不加 $ 前綴）
 const PromptBlock = ({ text }) => {
@@ -53,9 +53,9 @@ const STEP_TITLES = [
   '判別你的電腦',
   '印出你的電腦規格',
   '請 AI 當你的安裝助手',
-  '註冊 GitHub 帳號',
   '安裝三樣工具',
   '驗收與連線',
+  'Local 端身份設定',
   '完成 Checklist',
 ];
 
@@ -95,16 +95,14 @@ const StepCard = ({ idx, step, setStep, children }) => {
 };
 
 const CHECKLIST_ITEMS = [
-  { id: 'account', label: 'GitHub 帳號註冊完成', verify: '能登入 github.com 看到自己的主頁' },
   { id: 'vscode', label: 'VSCode 安裝完成', verify: '能正常開啟 VSCode' },
   { id: 'gitgraph', label: 'Git Graph 外掛安裝完成', verify: 'VSCode 左側延伸模組列表能看到 Git Graph' },
   { id: 'git', label: 'Git 安裝完成', verify: '終端機輸入 git -v 顯示 git version 2.x.x' },
   { id: 'gh', label: 'GitHub CLI（gh）安裝完成', verify: '終端機輸入 gh --version 顯示版本號' },
-  { id: 'auth', label: 'gh 帳號連線完成', verify: '終端機輸入 gh auth status 顯示 Logged in as 你的帳號' },
   { id: 'config', label: '兩行一次性設定完成', verify: '已在終端機貼過 pull.rebase false 與 init.defaultBranch main 兩行設定' },
 ];
 
-export const Chapter0Setup = () => {
+export const Lesson0Setup = () => {
   const [os, setOs] = useState(null); // 'windows' | 'mac'
   const [step, setStep] = useState(0); // 目前所在步驟（0-based），前面的步驟視為已完成
   const [showTextPrompt, setShowTextPrompt] = useState(false);
@@ -132,7 +130,7 @@ export const Chapter0Setup = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <SectionTitle title="0. 行前準備" subtitle="開始上課前，把你的電腦準備好——一步一步來，不用急" />
+      <SectionTitle title="L0 行前準備" subtitle="開始上課前，把你的電腦準備好——一步一步來，不用急" />
 
       {/* 進入狀態提示（深色前置條件框） */}
       <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
@@ -289,36 +287,13 @@ export const Chapter0Setup = () => {
           </div>
         </StepCard>
 
-        {/* ── 步驟 4：註冊 GitHub 帳號 ── */}
-        <StepCard step={step} setStep={setStep} idx={3}>
-          <p className="text-sm text-slate-600">GitHub 是全球最大的程式碼平台，之後的練習都會上傳到這裡。已經有帳號的話，確認能登入就可以直接跳下一步。</p>
-          <ol className="list-decimal pl-5 space-y-1.5 text-sm text-slate-700">
-            <li>前往 <a href="https://github.com/" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">github.com</a>，點右上角 <strong>Sign up</strong> 註冊免費帳號。</li>
-            <li>依畫面輸入 email、密碼、帳號名稱（username）。</li>
-            <li>到你的信箱收驗證碼，回到網頁輸入完成驗證。</li>
-            <li>可能會出現英文拼圖人機驗證，照畫面拖曳完成即可。</li>
-            <li>註冊後的「你是做什麼的」問卷——<strong>直接按 Skip 跳過</strong>，不影響任何後續步驟。</li>
-          </ol>
-          <Callout variant="info" title="兩個小提醒">
-            <ul className="list-disc pl-4 space-y-1">
-              <li><strong>帳號名稱</strong>會出現在你的個人主頁網址（github.com/你的帳號名），別取太隨便。</li>
-              <li><strong>註冊用的 email 請記住</strong>——之後設定 Git 身份時會用到同一個 email。</li>
-            </ul>
-          </Callout>
-          <div className="flex justify-end">
-            <NextButton label="我能登入 GitHub 了，下一步" />
-          </div>
-        </StepCard>
+
 
         {/* 成就感提示：過半 */}
-        {step >= 4 && !allChecked && (
-          <Callout variant="success" title="🎉 你已經完成一半了，加油！">
-            帳號有了、AI 助手也就位了——剩下的就是把工具裝上、驗收，然後正式開課。
-          </Callout>
-        )}
+
 
         {/* ── 步驟 5：安裝三樣工具 ── */}
-        <StepCard step={step} setStep={setStep} idx={4}>
+        <StepCard step={step} setStep={setStep} idx={3}>
           <p className="text-sm text-slate-600">依序安裝這三樣工具。<strong>任何一樣裝不動，就回步驟 3 把畫面截圖丟給 AI</strong>，讓它帶你排除。</p>
           <div className="space-y-3 text-sm text-slate-700">
             <div className="border border-slate-200 rounded-lg p-3 bg-white">
@@ -359,34 +334,12 @@ export const Chapter0Setup = () => {
         </StepCard>
 
         {/* ── 步驟 6：驗收與連線 ── */}
-        <StepCard step={step} setStep={setStep} idx={5}>
+        <StepCard step={step} setStep={setStep} idx={4}>
           <p className="text-sm text-slate-600"><strong>重開一個新的終端機</strong>（{isWin ? '搜尋 powershell，或用 VSCode 的 Terminal → New Terminal' : '⌘ + 空白鍵搜尋 Terminal，或用 VSCode 的 Terminal → New Terminal'}），過兩關驗收。<strong>一行一行輸入、每行按一次 Enter</strong>，每一關都要看到版本號才算過：</p>
           <CommandBlock command="git -v" comment="第一關：Git" />
           <CommandBlock variant="output" command="git version 2.x.x" />
           <CommandBlock command="gh --version" comment="第二關：GitHub CLI" />
           <CommandBlock variant="output" command="gh version 2.x.x" />
-          <p className="text-sm text-slate-600">兩關都過了之後，讓電腦登入你的 GitHub 帳號：</p>
-          <Callout variant="warning" title="這條和前面的不一樣——它會變成問答選單">
-            按下 Enter 之後，終端機會變成一連串問答選單，要用<strong>鍵盤上下方向鍵</strong>移動、按 Enter 選擇，<strong>不是用打字的</strong>。看到一堆選項是正常的，照下面的順序選就好。中途畫面會停在 <code className="bg-amber-100 px-1 rounded">Press Enter to open github.com in your browser...</code>——這是要你按一下 Enter 開瀏覽器，不是當機。
-          </Callout>
-          <CommandBlock command="gh auth login" comment="把 gh 和你的 GitHub 帳號串起來" />
-          <div className="text-sm text-slate-700 space-y-1">
-            <p>終端機會問你幾個問題，用<strong>上下方向鍵</strong>選、按 Enter 確認，選擇原則：</p>
-            <ol className="list-decimal pl-5 space-y-1 text-slate-600">
-              <li>What account? → <strong>GitHub.com</strong></li>
-              <li>Preferred protocol? → <strong>HTTPS</strong>（記得嗎？我們全程不用 SSH）</li>
-              <li>Authenticate Git with your GitHub credentials? → <strong>Yes</strong></li>
-              <li>How to authenticate? → <strong>Login with a web browser</strong></li>
-              <li>它會給你一組 8 碼驗證碼，按 Enter 開瀏覽器、貼上 8 碼、點 Authorize。瀏覽器沒自動開的話，把終端機顯示的網址手動貼到瀏覽器即可。</li>
-            </ol>
-            <p className="text-slate-500 text-xs mt-1">問題順序和字面可能因版本略有不同，掌握原則就好：GitHub.com → HTTPS → Yes → 瀏覽器登入。</p>
-          </div>
-          <CommandBlock command="gh auth status" comment="確認連線：看到 Logged in as 你的帳號 就成功了" />
-          <CommandBlock
-            variant="output"
-            command={'github.com\n  ✓ Logged in to github.com account 你的帳號 (keyring)\n  - Active account: true\n  - Git operations protocol: https'}
-          />
-          <p className="text-xs text-slate-500">gh 的輸出會帶顏色和 ✓ 符號，都是正常的，看到 <code className="bg-slate-100 px-1 rounded">Logged in to github.com</code> 就是成功。</p>
           <p className="text-sm text-slate-600">最後，順手做兩行<strong>一次性設定</strong>（在任何資料夾輸入都可以，只需做一次，一樣一行按一次 Enter）：</p>
           <CommandBlock
             command="git config --global pull.rebase false"
@@ -399,13 +352,76 @@ export const Chapter0Setup = () => {
           />
           <NoOutputHint />
           <Callout variant="info" title="這兩行在防什麼？">
-            不設定的話，之後 Chapter 6 做同步時 Git 可能反問你要用哪種方式合併、讓你卡住；有些電腦的新專案主分支會叫 <code>master</code>，跟教學指令裡的 <code>main</code> 對不起來。先設好，這兩個坑都不會踩到。
+            不設定的話，之後 L8 做同步時 Git 可能反問你要用哪種方式合併、讓你卡住；有些電腦的新專案主分支會叫 <code>master</code>，跟教學指令裡的 <code>main</code> 對不起來。先設好，這兩個坑都不會踩到。
           </Callout>
           <div className="flex justify-end">
             <NextButton label="驗收全過、帳號連好了，最後一步" />
           </div>
         </StepCard>
 
+<StepCard step={step} setStep={setStep} idx={5}>
+    {/* --- 設置身份 --- */}
+    <div className="mt-8">
+      <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+        <Key size={20} className="text-amber-500" /> 你的第一步：Local 端身份設定
+      </h3>
+      <Card className="bg-amber-50 border-amber-200 shadow-sm">
+        <p className="text-sm text-slate-700 mb-3 font-medium">太棒了！基本觀念都吸收完畢了吧？現在讓我們正式開始。每次存檔 (Commit) 時，Git 都會記錄「是誰做的」。所以第一件事，就是設定你的專屬身份名牌：</p>
+
+        <Callout variant="warning" title="請打開你電腦的真實終端機（不是這個網頁）" className="mb-3">
+          接下來的指令請在 VSCode 的終端機或系統的終端機 App 裡輸入，這個網頁只是教學展示，不會真的執行指令。
+        </Callout>
+
+        <p className="text-sm text-slate-600 mb-2">兩行指令<strong>一行一行輸入、每行按一次 Enter</strong>。記得把 <code>Your Name</code> 換成你的名字、<code>you@example.com</code> 換成你自己的信箱（<strong>引號要保留</strong>）：</p>
+
+        <CommandBlock
+          command={'git config --global user.name "Your Name"'}
+          comment="設定你的名字"
+        />
+        <NoOutputHint />
+
+        <div className="mt-3">
+          <CommandBlock
+            command={'git config --global user.email "you@example.com"'}
+            comment="設定你的信箱"
+          />
+          <NoOutputHint />
+        </div>
+
+        <Callout variant="success" title="沒消息就是好消息" className="mt-3">
+          這是你人生第一條 git 指令，先記住終端機的常態：<strong>指令成功時，往往什麼都不會顯示</strong>。畫面安安靜靜跳回可輸入狀態，就代表它做完了。
+        </Callout>
+
+        <Callout variant="info" title="`$` 是什麼？" className="mt-3">
+          指令開頭的 <code>$</code> 代表「這是要打在終端機的指令」，輸入時不用打 <code>$</code>——用上面的複製按鈕會自動幫你去掉。
+        </Callout>
+
+        <p className="text-sm text-slate-600 mt-3">
+          這兩行指令在終端機的<strong>任何資料夾</strong>輸入都可以，不需要先 <code>cd</code> 進某個專案。
+        </p>
+
+        <p className="text-sm text-slate-600 mt-3">敲完上面兩行後，輸入這行確認設定是否成功——注意對比：<strong>這條有輸出</strong>（回你設定的值），上面那兩條沒有：</p>
+        <CommandBlock command="git config user.name" comment="會回你剛剛設定的名字，只有一行" />
+        <CommandBlock variant="output" command="Your Name（你剛剛設定的名字）" />
+
+        <div className="mt-3 grid sm:grid-cols-2 gap-3">
+          <div className="bg-white border border-amber-200 rounded-lg p-3 text-xs text-amber-800 flex items-start gap-2 shadow-sm">
+            <Info size={14} className="shrink-0 mt-0.5 text-amber-500" />
+            <span><strong>--global</strong> 代表全域設定，設定一次就好，這台電腦上所有的 Git 專案都會認識你。</span>
+          </div>
+          <div className="bg-white border border-amber-200 rounded-lg p-3 text-xs text-blue-800 flex items-start gap-2 shadow-sm">
+            <Info size={14} className="shrink-0 mt-0.5 text-blue-500" />
+            <span>如果你未來要把作品推上 GitHub，這裡的 <strong>email 請務必填寫和 GitHub 註冊時相同的信箱</strong>，大頭貼才會漂亮地顯示出來喔！</span>
+          </div>
+        </div>
+
+        <p className="text-xs text-slate-500 mt-3">
+          小提醒：執行 <code>git init</code> 後，專案裡會多一個隱藏的 <code>.git</code> 資料夾，那就是你的存檔本體——它預設是隱藏的，在檔案總管／Finder 裡看不到是正常的。L2會介紹它。
+        </p>
+      </Card>
+    </div>
+<div className="flex justify-end"><NextButton label="下一步" /></div>
+</StepCard>
         {/* ── 步驟 7：完成 Checklist ── */}
         <StepCard step={step} setStep={setStep} idx={6}>
           <p className="text-sm text-slate-600">最後盤點一次。每一項都附了驗證方法，<strong>實際驗證過再打勾</strong>——有任何一項打不了勾，就回到對應的步驟補做。</p>
@@ -436,7 +452,7 @@ export const Chapter0Setup = () => {
                 href="#concept"
                 className="inline-flex items-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-green-700 transition-colors no-underline"
               >
-                前往 Chapter 1：觀念與準備
+                前往 L1：觀念與準備
                 <ArrowRight size={15} aria-hidden="true" />
               </a>
             </Callout>

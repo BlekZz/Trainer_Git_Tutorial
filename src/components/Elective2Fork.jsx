@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock, Quiz, NoOutputHint, FalseAlarm } from './Shared';
+import { useState, useEffect } from 'react';
+import { SectionTitle, InstructionalText, CommandBlock, Callout, NoOutputHint, Card, Badge, Quiz, FalseAlarm } from './Shared';
+import { GitBranch, CheckCircle, FileText, Users, GitPullRequest, Target, Terminal, ArrowUpCircle, Square, CheckSquare } from 'lucide-react';
 import { TUTORIAL_REPO, INSTRUCTOR_GITHUB } from '../config';
-import { Rocket, Target, CheckCircle, Terminal, FileText, GitBranch, ArrowUpCircle, GitPullRequest, Search, Square, CheckSquare } from 'lucide-react';
 
 const PROGRESS_KEY = 'gtm-ch8-progress';
 
@@ -22,7 +22,7 @@ const StepCheck = ({ stepId, done, onToggle }) => {
   );
 };
 
-export const Chapter8Practice = () => {
+export const Elective2Fork = () => {
   const [done, setDone] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]');
@@ -47,22 +47,49 @@ export const Chapter8Practice = () => {
 
   return (
     <div className="space-y-12 animate-fade-in">
-      <SectionTitle title="8. 實戰演練：發起你的第一個 PR" subtitle="將所學化為行動，在專案中留下你的足跡！" />
+      <SectionTitle title="E2. 實戰演練：發起你的第一個 PR" subtitle="將所學化為行動，在專案中留下你的足跡！" />
 
       <Callout variant="warning" title="你是用線上版學到這裡的嗎？">
         本章需要在你自己的電腦上操作。如果你一直是用瀏覽器線上版學習、還沒安裝過 Git，請先完成{' '}
         <a href="#setup" className="underline font-bold hover:text-amber-950">
-          Chapter 0 行前準備
+          L0 行前準備
         </a>{' '}
         的全部步驟（約 30–60 分鐘），把專案 clone 到你的電腦，再回來繼續。
       </Callout>
+
+<div className="bg-slate-800 rounded-xl px-5 py-4 space-y-3">
+        <div className="flex items-start gap-3">
+          <span className="text-yellow-400 text-base leading-none mt-0.5">🔑</span>
+          <p className="text-sm text-slate-300">直接 <code className="bg-slate-700 px-1 rounded">git push</code> 到別人的 repo 會得到 <code className="bg-slate-700 px-1 rounded text-red-300">403 Permission Denied</code>——這是正常的保護機制，真正練習 Push 請等 <strong className="text-white">E2</strong>（用 Fork 解決）。</p>
+        </div>
+        <details className="mt-1 text-sm text-slate-400">
+          <summary className="cursor-pointer text-slate-300 hover:text-white">為什麼會 403？點我看完整解釋</summary>
+          <div className="mt-2 space-y-2 text-slate-400">
+            <p>如果你是 Clone 別人的 repo（包括這個教學 repo），你沒有直接 Push 到對方 main 分支的權限。</p>
+            <div className="bg-slate-900 rounded-md px-3 py-2 font-mono text-xs text-red-300 whitespace-pre-wrap break-all">{"remote: Permission to company/cool-project.git denied to 你的帳號.\nfatal: unable to access 'https://github.com/company/cool-project.git/': The requested URL returned error: 403"}</div>
+            <p>真實畫面的紅字長這樣——看到它就代表是<strong className="text-white">權限保護在作用，不是你打錯指令</strong>。</p>
+            <p>本章我們只在模擬中示範 Push 的流程。真正練習 Push，請等到 <strong className="text-white">E2 實戰演練</strong>——那裡會教你先 <strong className="text-white">Fork</strong> 取得屬於你自己的 repo 副本，再建立 Branch 並 Push，就不會有權限問題。</p>
+            <p className="text-xs">（光是建立 Branch 並不會給你 Push 權限——Push 權限取決於你對那個 repo 是否有寫入權限，或是你有沒有自己的 Fork。）</p>
+          </div>
+        </details>
+</div>
+           {/* Step 3 */}
+           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-slate-200 text-slate-600 font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm z-10">
+                 <Users size={18} />
+              </div>
+              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded border border-slate-200 bg-white shadow-sm">
+                 <h4 className="font-bold text-slate-800 mb-2">Code Review (程式碼審查)</h4>
+                 <p className="text-sm text-slate-600">資深同事或維護者會進來檢查你的程式碼。如果需要修改，你可以繼續在本地修改並 push，PR 會自動更新。</p>
+              </div>
+           </div>
 
       {/* Part 1: The Mission */}
       <section>
         {/* 情境切換說明 */}
         <div className="bg-amber-50 border border-amber-300 rounded-xl p-5 mb-6">
           <div className="text-sm font-bold text-amber-800 mb-3 flex items-center gap-2">⚠️ 重要！先搞清楚你現在在哪個情境</div>
-          <p className="text-sm text-slate-700 mb-3">在前面幾章，你都是對<strong>自己的專案</strong>練習（情境 A），或是模擬操作（情境 B）。但 Chapter 8 不一樣——<strong>你現在要去別人的 GitHub 專案做出真正的貢獻</strong>，這才是真實世界 Open Source Contribution 的場景！</p>
+          <p className="text-sm text-slate-700 mb-3">在前面幾章，你都是對<strong>自己的專案</strong>練習（情境 A），或是模擬操作（情境 B）。但 E2 不一樣——<strong>你現在要去別人的 GitHub 專案做出真正的貢獻</strong>，這才是真實世界 Open Source Contribution 的場景！</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-center">
             <div className="bg-indigo-100 rounded-lg p-2"><div className="font-bold text-indigo-700 mb-1">📘 Ch.3 情境 A</div><div className="text-indigo-600">你的 repo → 你是 Owner → push ✅</div></div>
             <div className="bg-red-100 rounded-lg p-2"><div className="font-bold text-red-700 mb-1">📕 Ch.4 情境 B</div><div className="text-red-600">別人的 repo → 無寫入權限 → push 403 ❌</div></div>
@@ -153,7 +180,7 @@ export const Chapter8Practice = () => {
                 <div className="text-xs text-slate-400 mb-1">⑤ 確認你的 Git 身份已設定</div>
                 <div className="font-mono text-sm text-green-400">$ git config user.name</div>
                 <div className="text-xs text-slate-400 mt-1">✅ 應顯示你的名字</div>
-                <div className="text-xs text-red-400 mt-0.5">❌ 沒有任何輸出：回 Chapter 1 完成身份設定，否則等一下 commit 會出現 <code className="bg-slate-700 text-white px-1 rounded">Please tell me who you are</code> 錯誤</div>
+                <div className="text-xs text-red-400 mt-0.5">❌ 沒有任何輸出：回 L0 完成身份設定，否則等一下 commit 會出現 <code className="bg-slate-700 text-white px-1 rounded">Please tell me who you are</code> 錯誤</div>
               </div>
             </div>
 
@@ -581,6 +608,17 @@ export const Chapter8Practice = () => {
           </div>
         </details>
       </section>
+<Quiz questions={[{
+            q: 'PR 送出後，維護者留言 Request Changes（要求修改），這時候該怎麼辦？',
+            options: [
+              '這個 PR 已經沒救了，關掉重新開一個新的 PR',
+              '在本地把程式碼改好，git add / commit / push 到同一個分支，PR 頁面會自動更新',
+              '要重新 fork 一次、重新走一遍整個流程',
+            ],
+            answer: 1,
+            explain: 'Request Changes 不是拒絕，是「審查者看過了，希望你調整某些地方」。因為 PR 綁定的是「某個分支」而不是某一次的快照，你只要在本地繼續修改、commit、push 到同一條分支，GitHub 上的 PR 內容就會自動同步更新，完全不需要重開 PR 或重新 fork。',
+          }]} />
+
     </div>
   );
 };

@@ -1,11 +1,11 @@
-import React from 'react';
-import { SectionTitle, Card, Badge, InstructionalText, Callout, CommandBlock, Quiz } from './Shared';
-import { Users, GitBranch, ArrowRight, GitPullRequest, AlertCircle, CheckCircle, Github, GitMerge } from 'lucide-react';
 
-export const Chapter7Team = () => {
+import { SectionTitle, InstructionalText, CommandBlock, Callout, Card, Badge, Quiz } from './Shared';
+import { ArrowRight, Github, GitBranch, CheckCircle, AlertCircle, GitMerge, GitPullRequest } from 'lucide-react';
+
+export const Lesson7PR = () => {
   return (
     <div className="animate-fade-in space-y-12">
-      <SectionTitle title="7. 團隊合併與 PR" subtitle="Pull Request：不是請求你拉取，而是請求你合併" />
+      <SectionTitle title="L7. 團隊合併與 PR" subtitle="Pull Request：不是請求你拉取，而是請求你合併" />
 
       {/* 進入狀態提示 */}
       <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
@@ -114,7 +114,7 @@ export const Chapter7Team = () => {
                            <div className="text-slate-400 mb-1">標題範例：</div>
                            <div>feat: 新增 your-name 的學習筆記</div>
                            <div className="text-slate-400 mt-1 mb-1">描述範例：</div>
-                           <div>這是我的第一個 PR，包含了 Chapter 8 實戰演練中新增的個人筆記。</div>
+                           <div>這是我的第一個 PR，包含了 E2 實戰演練中新增的個人筆記。</div>
                          </div>
                        </li>
                      </ol>
@@ -122,7 +122,7 @@ export const Chapter7Team = () => {
 
                    <div>
                      <div className="text-xs font-bold text-slate-600 mb-2">💻 方法二：GitHub CLI（記得嗎？這就是當初裝它的原因！）</div>
-                     <CommandBlock command="gh pr create" comment="這個工具在 Chapter 0 行前準備安裝的" />
+                     <CommandBlock command="gh pr create" comment="這個工具在 L0 行前準備安裝的" />
                      <div className="text-xs text-slate-500 mt-2">
                        輸入這一行，它會互動式地問你標題、描述，幾秒內 PR 就建好了。互動過程中它可能會問你要 push 到哪、要不要開瀏覽器——多半直接按 Enter 選預設值即可。
                      </div>
@@ -131,17 +131,6 @@ export const Chapter7Team = () => {
                      </div>
                    </div>
                  </div>
-              </div>
-           </div>
-
-           {/* Step 3 */}
-           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-slate-200 text-slate-600 font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm z-10">
-                 <Users size={18} />
-              </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded border border-slate-200 bg-white shadow-sm">
-                 <h4 className="font-bold text-slate-800 mb-2">Code Review (程式碼審查)</h4>
-                 <p className="text-sm text-slate-600">資深同事或維護者會進來檢查你的程式碼。如果需要修改，你可以繼續在本地修改並 push，PR 會自動更新。</p>
               </div>
            </div>
 
@@ -162,6 +151,97 @@ export const Chapter7Team = () => {
         </div>
       </section>
 
+      <Card className="bg-indigo-50 border-indigo-200 mt-6 p-5">
+         <h3 className="font-bold text-indigo-900 mb-2 flex items-center gap-2">
+           <span className="text-xl">💡</span> 重要觀念：本地分支 vs 雲端分支
+         </h3>
+         <p className="text-sm text-indigo-800 mb-4 leading-relaxed">
+           請記住：<strong>你在電腦上用 checkout 建立的分支，只有你自己看得到！</strong> 雲端（GitHub）此時還不知道有這個宇宙的存在。這就是為什麼只在本地新增分支時，別人是無法拉取 (pull) 到你的進度的。
+         </p>
+         <div className="bg-white p-4 rounded-lg border border-indigo-100 shadow-sm">
+           <div className="font-bold text-sm text-slate-800 mb-2">要把分支「上傳並在雲端建立」，你需要執行：</div>
+           <code className="text-xs text-indigo-600 bg-indigo-50 px-2 py-1 rounded block mb-2 font-mono">git push -u origin &lt;你的分支名&gt;</code>
+           <Callout variant="warning" title="角括號不要打進去" className="mb-3">
+             <code className="bg-amber-100 px-1 rounded">&lt;你的分支名&gt;</code> 要整個換成實際的分支名，例如 <code className="bg-amber-100 px-1 rounded">git push -u origin feat/login</code>。如果連角括號一起打，會出現 <code className="bg-amber-100 px-1 rounded">error: src refspec ... does not match</code>。
+           </Callout>
+           <p className="text-sm text-slate-600 mb-1">按 Enter 後，終端機會滾動一串進度訊息，長得像這樣：</p>
+           <CommandBlock
+             variant="output"
+             command={'Enumerating objects: 5, done.\nCounting objects: 100% (5/5), done.\nWriting objects: 100% (3/3), done.\n * [new branch]      feat/login -> feat/login'}
+             className="mb-3"
+           />
+           <p className="text-sm text-slate-600 mb-3">最後看到 <code className="bg-slate-100 px-1 rounded text-xs">* [new branch] 分支名 -&gt; 分支名</code> 就是成功了。第一次 push 時，Windows 可能會彈出要你登入 GitHub 的視窗——這是正常的，登入一次就會記住。</p>
+           <ul className="text-sm text-slate-600 space-y-1 list-disc pl-4">
+             <li><code className="bg-slate-100 px-1 rounded text-xs">-u</code> (set-upstream) 的意思是「建立上下游連線」。</li>
+             <li>這告訴 Git：「請在 GitHub 也建立一個一模一樣的分支，並把它們綁定在一起」。</li>
+             <li>綁定之後，未來你在這個分支只要簡單打 <code className="bg-slate-100 px-1 rounded text-xs">git push</code>，它就會知道要推送到雲端的對應分支了！</li>
+           </ul>
+         </div>
+      </Card>
+      {/* Team Parallel Dev Graph */}
+      <div className="mt-8">
+        <Card className="bg-white border-slate-200">
+           <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
+             <GitBranch size={18} className="text-indigo-600" /> 團隊協作的大局觀：多模組平行開發
+           </h3>
+           <p className="text-sm text-slate-600 mb-2">在真實的公司專案中，主線 (main) 就像火車的主幹道，而大家會各自開分支 (Branch) 進行平行開發，完成後再合併回來（產品迭代），周而復始。</p>
+           
+           <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 mb-6">
+             <h4 className="font-bold text-blue-800 text-sm mb-1">💡 觀念釐清：分支是「階段性服務」</h4>
+             <p className="text-xs text-blue-700">分支是為了解決某個特定的功能 (Feature) 或修復 (Bug) 而短暫存在的。當任務完成並合併 (Merge) 回主線後，該分支的使命就結束了，通常會被刪除或封存。長期讓兩個分支平行存在而不合併，是非常危險且容易產生大量衝突的不良設計。</p>
+           </div>
+           
+           <div className="w-full overflow-x-auto">
+             <div style={{ minWidth: '600px' }}>
+               <svg
+                 viewBox="0 0 700 256"
+                 xmlns="http://www.w3.org/2000/svg"
+                 className="w-full h-auto"
+                 style={{ maxHeight: '256px' }}
+               >
+                 {/* Main Line */}
+                 <line x1="0" y1="128" x2="700" y2="128" stroke="#cbd5e1" strokeWidth="6" />
+
+                 {/* Pink (UI) Branch: y=48 */}
+                 <path d="M 100 128 C 130 128, 140 48, 180 48 L 320 48 C 360 48, 370 128, 400 128" fill="none" stroke="#ec4899" strokeWidth="5" />
+
+                 {/* Blue (API) Branch: y=168 */}
+                 <path d="M 260 128 C 290 128, 300 168, 340 168 L 360 168 C 380 168, 390 128, 400 128" fill="none" stroke="#3b82f6" strokeWidth="5" />
+
+                 {/* Yellow (DB) Branch: y=218 */}
+                 <path d="M 100 128 C 130 128, 140 218, 180 218 L 450 218 C 500 218, 510 128, 550 128" fill="none" stroke="#eab308" strokeWidth="5" />
+
+                 {/* v1.0 Base */}
+                 <circle cx="100" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
+                 <text x="100" y="152" fill="#475569" fontSize="12" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.0</text>
+
+                 {/* Pink Nodes */}
+                 <circle cx="180" cy="48" r="8" fill="#ec4899" stroke="white" strokeWidth="3" />
+                 <text x="180" y="32" fill="#be185d" fontSize="12" textAnchor="middle" fontWeight="bold">feat/ui</text>
+                 <circle cx="320" cy="48" r="8" fill="#ec4899" stroke="white" strokeWidth="3" />
+
+                 {/* Blue Nodes */}
+                 <circle cx="340" cy="168" r="8" fill="#3b82f6" stroke="white" strokeWidth="3" />
+                 <text x="340" y="190" fill="#1d4ed8" fontSize="12" textAnchor="middle" fontWeight="bold">feat/api</text>
+
+                 {/* Yellow Nodes */}
+                 <circle cx="180" cy="218" r="8" fill="#eab308" stroke="white" strokeWidth="3" />
+                 <text x="180" y="240" fill="#a16207" fontSize="12" textAnchor="middle" fontWeight="bold">feat/db</text>
+                 <circle cx="450" cy="218" r="8" fill="#eab308" stroke="white" strokeWidth="3" />
+                 <text x="450" y="240" fill="#475569" fontSize="13" textAnchor="middle">耗時較長的開發</text>
+
+                 {/* Merge Nodes */}
+                 <circle cx="400" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
+                 <text x="400" y="152" fill="#475569" fontSize="13" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.1 (UI+API)</text>
+
+                 <circle cx="550" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
+                 <text x="550" y="152" fill="#475569" fontSize="13" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.2 (DB)</text>
+               </svg>
+             </div>
+           </div>
+        </Card>
+      </div>
+
       <Quiz
         questions={[
           {
@@ -174,16 +254,7 @@ export const Chapter7Team = () => {
             answer: 1,
             explain: '名字裡雖然有 Pull，但 PR 完全不是「拉取」，而是「請求對方拉進去」——你只是提出申請，維護者看過、審查過，才會按下 Merge。這跟直接 push 完全不同層次：push 是直接寫入，前提是你本來就有寫入權限（沒有就會被 GitHub 拒絕）；PR 則是需要對方同意的請求，這正是團隊協作裡權限控管的關鍵設計。',
           },
-          {
-            q: 'PR 送出後，維護者留言 Request Changes（要求修改），這時候該怎麼辦？',
-            options: [
-              '這個 PR 已經沒救了，關掉重新開一個新的 PR',
-              '在本地把程式碼改好，git add / commit / push 到同一個分支，PR 頁面會自動更新',
-              '要重新 fork 一次、重新走一遍整個流程',
-            ],
-            answer: 1,
-            explain: 'Request Changes 不是拒絕，是「審查者看過了，希望你調整某些地方」。因為 PR 綁定的是「某個分支」而不是某一次的快照，你只要在本地繼續修改、commit、push 到同一條分支，GitHub 上的 PR 內容就會自動同步更新，完全不需要重開 PR 或重新 fork。',
-          },
+          
           {
             q: 'Merge 和 PR 兩個詞常被搞混，它們的層次差別是什麼？',
             options: [
