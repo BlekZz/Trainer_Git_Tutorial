@@ -169,31 +169,6 @@ export const ErrorRoom = () => {
       >
         <CommandBlock command="gh auth login" comment="用 GitHub CLI 重新登入一次" />
       </ErrorCard>
-
-      <ErrorCard
-        error="node -v 顯示的版本太舊（低於 v20，例如 v14 / v16）"
-        translation="你電腦上的 Node.js 版本太舊，跑不動本教程需要的工具。"
-      >
-        <CommandBlock command="node -v" comment="再確認一次目前版本" />
-        <p className="text-sm text-slate-600">
-          解法：回到「Chapter 0 行前準備」的步驟 3，把這個版本號截圖或複製給 AI 助手，請它引導你安裝 Node.js LTS（v20 以上）；如果你的電腦太舊裝不了新版，AI 會直接給你能用的舊版本與下載連結。
-        </p>
-      </ErrorCard>
-
-      <ErrorCard
-        error="npm install 失敗：npm ERR! network / ETIMEDOUT / EACCES / permission denied"
-        translation="套件下載失敗——通常是網路連不上，或是資料夾權限不足。（這只會發生在教學者/貢獻者本地執行專案的情境，一般學員走網頁版不會遇到。）"
-      >
-        <p className="text-sm text-slate-600 mb-2">
-          速查：<br />
-          1. <span className="font-mono">network / ETIMEDOUT</span> → 檢查網路，公司或學校網路可能擋住 npm，換個網路（如手機熱點）再試一次；<br />
-          2. <span className="font-mono">EACCES / permission denied</span> → 專案放到你自己的使用者資料夾（如桌面）再重跑，不要放在系統資料夾。
-        </p>
-        <CommandBlock command="npm install" comment="排除原因後再跑一次" />
-        <p className="text-sm text-slate-600">
-          還是卡住？回到「Chapter 0 行前準備」的步驟 3，把整段錯誤訊息截圖給 AI 助手處理。
-        </p>
-      </ErrorCard>
     </div>
   );
 };

@@ -152,7 +152,7 @@ export const Chapter1Concept = () => (
     {/* Setup Reminder */}
     <Callout variant="success" title="你準備好了嗎？">
       <p>
-        如果你還沒有安裝 Git, Node.js 或 VSCode，請先前往{' '}
+        如果你還沒有安裝 Git、GitHub CLI 或 VSCode，請先前往{' '}
         <a href="#setup"
            className="underline font-bold hover:text-green-700">
           👶 Chapter 0 行前準備

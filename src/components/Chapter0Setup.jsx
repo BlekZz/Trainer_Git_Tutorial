@@ -44,17 +44,17 @@ const PromptBlock = ({ text }) => {
 };
 
 const SCREENSHOT_PROMPT =
-  '我是完全沒有寫過程式的新手，正在準備一堂 Git 入門課，需要在我的電腦上安裝這四樣工具：VSCode、Node.js（LTS 版，需要 v20 以上）、Git、GitHub CLI（gh）。以下附上我電腦資訊的截圖，請你先根據截圖判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。';
+  '我是完全沒有寫過程式的新手，正在準備一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。以下附上我電腦資訊的截圖，請你先根據截圖判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。';
 
 const TEXT_PROMPT =
-  '我是完全沒有寫過程式的新手，正在準備一堂 Git 入門課，需要在我的電腦上安裝這四樣工具：VSCode、Node.js（LTS 版，需要 v20 以上）、Git、GitHub CLI（gh）。請你先根據我貼在最後面的電腦資訊判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。以下是我的電腦資訊：';
+  '我是完全沒有寫過程式的新手，正在準備一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。請你先根據我貼在最後面的電腦資訊判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。以下是我的電腦資訊：';
 
 const STEP_TITLES = [
   '判別你的電腦',
   '印出你的電腦規格',
   '請 AI 當你的安裝助手',
   '註冊 GitHub 帳號',
-  '安裝四樣工具',
+  '安裝三樣工具',
   '驗收與連線',
   '完成 Checklist',
 ];
@@ -98,7 +98,6 @@ const CHECKLIST_ITEMS = [
   { id: 'account', label: 'GitHub 帳號註冊完成', verify: '能登入 github.com 看到自己的主頁' },
   { id: 'vscode', label: 'VSCode 安裝完成', verify: '能正常開啟 VSCode' },
   { id: 'gitgraph', label: 'Git Graph 外掛安裝完成', verify: 'VSCode 左側延伸模組列表能看到 Git Graph' },
-  { id: 'node', label: 'Node.js 安裝完成', verify: '終端機輸入 node -v 顯示 v20 以上的版本號' },
   { id: 'git', label: 'Git 安裝完成', verify: '終端機輸入 git -v 顯示 git version 2.x.x' },
   { id: 'gh', label: 'GitHub CLI（gh）安裝完成', verify: '終端機輸入 gh --version 顯示版本號' },
   { id: 'auth', label: 'gh 帳號連線完成', verify: '終端機輸入 gh auth status 顯示 Logged in as 你的帳號' },
@@ -318,9 +317,9 @@ export const Chapter0Setup = () => {
           </Callout>
         )}
 
-        {/* ── 步驟 5：安裝四樣工具 ── */}
+        {/* ── 步驟 5：安裝三樣工具 ── */}
         <StepCard step={step} setStep={setStep} idx={4}>
-          <p className="text-sm text-slate-600">依序安裝這四樣工具。<strong>任何一樣裝不動，就回步驟 3 把畫面截圖丟給 AI</strong>，讓它帶你排除。</p>
+          <p className="text-sm text-slate-600">依序安裝這三樣工具。<strong>任何一樣裝不動，就回步驟 3 把畫面截圖丟給 AI</strong>，讓它帶你排除。</p>
           <div className="space-y-3 text-sm text-slate-700">
             <div className="border border-slate-200 rounded-lg p-3 bg-white">
               <p className="font-bold text-slate-800 mb-1">① VSCode（寫程式的編輯器）</p>
@@ -332,11 +331,7 @@ export const Chapter0Setup = () => {
               <p className="mt-1 text-slate-600">裝好後打開 VSCode，點左側四個方塊圖示（延伸模組），搜尋並安裝 <strong>Git Graph</strong> 外掛——它能讓你「看見」Git 的時間線。</p>
             </div>
             <div className="border border-slate-200 rounded-lg p-3 bg-white">
-              <p className="font-bold text-slate-800 mb-1">② Node.js（讓教學相關工具能運作的引擎）</p>
-              <p>到 <a href="https://nodejs.org/" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">nodejs.org</a> 下載標有 <strong>LTS（長期維護版）</strong>的{isWin ? ' .msi' : ' .pkg'} 安裝檔，一路按「Next / 繼續 / 同意」裝到好。</p>
-            </div>
-            <div className="border border-slate-200 rounded-lg p-3 bg-white">
-              <p className="font-bold text-slate-800 mb-1">③ Git（本課程的主角）</p>
+              <p className="font-bold text-slate-800 mb-1">② Git（本課程的主角）</p>
               {isWin ? (
                 <p>到 <a href="https://git-scm.com/downloads" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">git-scm.com/downloads</a> 下載 Windows 版，安裝過程<strong>一直按「Next」就好</strong>，不需要改任何預設選項。</p>
               ) : (
@@ -344,7 +339,7 @@ export const Chapter0Setup = () => {
               )}
             </div>
             <div className="border border-slate-200 rounded-lg p-3 bg-white">
-              <p className="font-bold text-slate-800 mb-1">④ GitHub CLI（gh，最後一章發 PR 的神器）</p>
+              <p className="font-bold text-slate-800 mb-1">③ GitHub CLI（gh，把電腦和 GitHub 帳號連起來的小工具）</p>
               {isWin ? (
                 <p>到 <a href="https://github.com/cli/cli/releases" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">GitHub CLI Releases</a> 找最新版本，在 <strong>Assets</strong> 列表（通常要點開展開）中下載<strong>檔名結尾是 <code className="bg-slate-100 px-1 rounded">windows_amd64.msi</code></strong> 的檔案並安裝。</p>
               ) : (
@@ -359,20 +354,18 @@ export const Chapter0Setup = () => {
             <p>任何一樣工具卡住，<button type="button" onClick={() => setStep(2)} className="underline font-bold text-amber-900 hover:text-amber-700">回步驟 3</button> 把錯誤畫面截圖丟給 AI，照它的指示排除後再回來。</p>
           </Callout>
           <div className="flex justify-end">
-            <NextButton label="四樣工具都裝好了，下一步" />
+            <NextButton label="三樣工具都裝好了，下一步" />
           </div>
         </StepCard>
 
         {/* ── 步驟 6：驗收與連線 ── */}
         <StepCard step={step} setStep={setStep} idx={5}>
-          <p className="text-sm text-slate-600"><strong>重開一個新的終端機</strong>（{isWin ? '搜尋 powershell，或用 VSCode 的 Terminal → New Terminal' : '⌘ + 空白鍵搜尋 Terminal，或用 VSCode 的 Terminal → New Terminal'}），過三關驗收。<strong>一行一行輸入、每行按一次 Enter</strong>，每一關都要看到版本號才算過：</p>
+          <p className="text-sm text-slate-600"><strong>重開一個新的終端機</strong>（{isWin ? '搜尋 powershell，或用 VSCode 的 Terminal → New Terminal' : '⌘ + 空白鍵搜尋 Terminal，或用 VSCode 的 Terminal → New Terminal'}），過兩關驗收。<strong>一行一行輸入、每行按一次 Enter</strong>，每一關都要看到版本號才算過：</p>
           <CommandBlock command="git -v" comment="第一關：Git" />
           <CommandBlock variant="output" command="git version 2.x.x" />
-          <CommandBlock command="node -v" comment="第二關：Node.js" />
-          <CommandBlock variant="output" command="v20.x.x（本教材需要 v20 以上）" />
-          <CommandBlock command="gh --version" comment="第三關：GitHub CLI" />
+          <CommandBlock command="gh --version" comment="第二關：GitHub CLI" />
           <CommandBlock variant="output" command="gh version 2.x.x" />
-          <p className="text-sm text-slate-600">三關都過了之後，讓電腦登入你的 GitHub 帳號：</p>
+          <p className="text-sm text-slate-600">兩關都過了之後，讓電腦登入你的 GitHub 帳號：</p>
           <Callout variant="warning" title="這條和前面的不一樣——它會變成問答選單">
             按下 Enter 之後，終端機會變成一連串問答選單，要用<strong>鍵盤上下方向鍵</strong>移動、按 Enter 選擇，<strong>不是用打字的</strong>。看到一堆選項是正常的，照下面的順序選就好。中途畫面會停在 <code className="bg-amber-100 px-1 rounded">Press Enter to open github.com in your browser...</code>——這是要你按一下 Enter 開瀏覽器，不是當機。
           </Callout>
