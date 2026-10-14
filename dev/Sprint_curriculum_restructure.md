@@ -198,8 +198,9 @@ PR 描述範本（教材提供可複製版）：
 
 
 ### 開工前置（Blake 準備，M0 前到位）
-- [ ] 一個**學員測試帳號**（GitHub 新帳號、不含真實個資）——M3／M4 實跑與 M5 截圖用；學員視角的截圖一律用它，避免露出 Blake 的 email／私人 repo
-- [ ] Chrome 準備兩個 profile：測試帳號登入一個、`BlekZz` 登入一個（截 review 端畫面用）
+- [x] 一個**學員測試帳號** `blakelee0918`（M3／M4 實跑與 M5 截圖用；學員視角截圖一律用它）——2026-10-14 驗：github.com/blakelee0918 公開頁存在，Joined October 14, 2026，0 個 public repo
+- [x] `BlekZz` 登入的 Chrome（Chrome profile 1）——2026-10-14 驗：claude-in-chrome 連到的唯一瀏覽器「Browser 1」打開 github.com 顯示「Good morning, BlekZz!」
+- [ ] 測試帳號的 Chrome（Chrome profile 3）連上 claude-in-chrome——2026-10-14 `list_connected_browsers` 只列出 1 個瀏覽器，profile 3 尚未連線，無法確認其登入身分
 
 ### M0 準備（0.5 天）
 - 跑 `/init-tutorial`（或 `/init-skill` 選 tutor 套組）把 tutor-core / tutor-sop 與 audit agents 裝進本專案
