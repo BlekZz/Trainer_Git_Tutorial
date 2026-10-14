@@ -149,7 +149,10 @@ export const Lesson8Sync = () => (
     <Card className="space-y-3 bg-green-50">
       <h3 className="font-bold">獨立練習：換一個下載入口，自己驗收</h3>
       <p>現在換回 GIT-JOURNAL-LAPTOP 視窗，不新增檔案、不改文字。先自己決定怎麼讓第二份相簿也收到剛才的合併照片；不看指令做一次，卡住再回第 3 步。</p>
-      <p>你會看到下載進度與更新的 README.md，等提示符回來再檢查。完成訊號：這份 README.md 也有相同標題；翻紀錄能找到「解決標題衝突」。這證明你選對了視窗與下載方法。若有未保存改動，先處理完再同步。</p>
+      <p>你會看到下載進度，等提示符回來再檢查。注意：這次 README.md 的文字可能和原本一模一樣（解完衝突的標題剛好等於舊標題），真正更新的是「紀錄」，所以不能只看檔案內容判斷。若有未保存改動，先處理完再同步。</p>
+      <p>完成訊號：在<strong>兩個</strong>視窗的終端機各輸入一次 <code>git log -1 --oneline</code>（只顯示最新一張照片），兩邊印出的編號要一模一樣。編號以你自己第一個資料夾顯示的為準，下面只是範例：</p>
+      <CommandBlock command="git log -1 --oneline" comment="兩個資料夾各輸入一次，比對最前面的編號" />
+      <CommandBlock variant="output" command={"d0e7843 解決標題衝突"} />
     </Card>
     <Quiz questions={[
       { q: 'clone 完後，終端機還在父資料夾，能直接在那裡操作日誌嗎？', options: ['可以，Git 會自己找', '先在新視窗開 git-journal-laptop，確認新終端機位置', '再 clone 一次'], answer: 1, explain: 'clone 會建資料夾，但不會把原本終端機移進去；必須確認正在操作哪份相簿。' },

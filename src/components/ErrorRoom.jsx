@@ -151,7 +151,8 @@ export const ErrorRoom = () => {
         <p className="text-sm text-slate-600">
           如果是 <span className="font-mono">git@github.com:</span> 開頭，用下面這行切回 HTTPS（把 <span className="font-mono">&lt;你的帳號&gt;</span> 換成你的 GitHub 帳號），然後重試剛剛的指令：
         </p>
-        <CommandBlock command="git remote set-url origin https://github.com/<你的帳號>/Trainer_Git_Tutorial.git" comment="把 origin 切回 HTTPS 網址" />
+        <CommandBlock command="git remote set-url origin https://github.com/<你的帳號>/git-journal.git" comment="把 origin 切回 HTTPS 網址（<你的帳號> 整個換成你的 GitHub 帳號，角括號不要打）" />
+        <NoOutputHint>改完用 <span className="font-mono">git remote -v</span> 確認兩行都變成 https:// 開頭，再重試剛剛的指令。</NoOutputHint>
         <p className="text-sm text-slate-600">
           什麼時候會誤入這條路：複製到 GitHub Code 綠色按鈕裡「SSH」分頁的網址、照抄別人畫面上的指令、或跟著網路教學設定了 SSH。全部不需要——我們全程用 HTTPS。
         </p>
@@ -162,7 +163,7 @@ export const ErrorRoom = () => {
         translation="你正在對別人的 repo 執行 push，但你沒有寫入權限。"
       >
         <p className="text-sm text-slate-600">
-          解法：請看 E2 參與別人的專案 的說明——你需要先 Fork 一份到自己名下，再用 <span className="font-mono">git remote set-url</span> 把本地的 origin 改指向你自己的 Fork。
+          （只會在選修 E2 參與別人的專案時發生；自己的 git-journal 不會遇到。）解法：請看 E2 的說明——你需要先 Fork 一份到自己名下，再用 <span className="font-mono">git remote set-url</span> 把本地的 origin 改指向你自己的 Fork。
         </p>
       </ErrorCard>
 
@@ -171,11 +172,13 @@ export const ErrorRoom = () => {
         translation="Git 找不到這個網址對應的 repo，通常是兩種情況之一。"
       >
         <p className="text-sm text-slate-600 mb-2">
-          1. 你還沒完成 Fork 就跑了 <span className="font-mono">set-url</span>；<br />
-          2. 網址裡的帳號或 repo 名稱打錯了。
+          依序核對：① GitHub 上真的已經建好這個 repo（打開 <span className="font-mono">github.com/&lt;你的帳號&gt;/git-journal</span> 看得到）；② 網址裡的帳號和 repo 名稱沒打錯；③ 終端機登入的是同一個 GitHub 帳號（repo 設成 Private 時，帳號不對也會顯示找不到）。
         </p>
-        <CommandBlock command="git remote -v" comment="先檢查目前 origin 指向哪裡" />
-        <p className="text-sm text-slate-600">確認 Fork 已完成後，重新執行一次 <span className="font-mono">git remote set-url</span>。</p>
+        <CommandBlock command="git remote -v" comment="② 看目前 origin 指向哪個網址（clone 失敗就直接核對你貼的網址）" />
+        <CommandBlock variant="output" command={'origin\thttps://github.com/<你的帳號>/git-journal.git (fetch)\norigin\thttps://github.com/<你的帳號>/git-journal.git (push)'} />
+        <CommandBlock command="gh auth status" comment="③ 看終端機登入的是哪個帳號" />
+        <CommandBlock variant="output" command={"github.com\n  ✓ Logged in to github.com account <你的帳號> (keyring)\n  - Active account: true\n  - Git operations protocol: https\n  - Token: gho_************************************\n  - Token scopes: 'gist', 'read:org', 'repo'"} />
+        <p className="text-sm text-slate-600">網址打錯就用 <span className="font-mono">git remote set-url origin &lt;正確網址&gt;</span> 改掉；帳號不對就重跑 <span className="font-mono">gh auth login</span>。（在 E2 參與別人的專案時，另一個常見原因是還沒 Fork 就改了網址。）</p>
       </ErrorCard>
 
       <ErrorCard
