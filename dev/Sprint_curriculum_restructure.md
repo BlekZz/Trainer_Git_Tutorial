@@ -249,7 +249,7 @@ PR 描述範本（教材提供可複製版）：
 - [ ] 學員在 Part 1 全程不需要 GitHub 帳號即可完成所有真機練習
 - [ ] 主線（L0–L8＋作業）不出現 Fork、跨 owner PR、403、rebase
 - [ ] 作業交件＝自己 repo 的 PR 內 @BlekZz；講師用收件匣搜尋看到 PR 並能 review；學員 Approve 後自己 merge
-- [ ] §3.1 三個前提已實測，觀察訊號記錄在本檔 §8
+- [x] §3.1 三個前提已實測，觀察訊號記錄在本檔 §8（2026-10-14，§8.1）
 - [ ] 每章都有真機 You Do 區與章末 quiz
 - [ ] 全站單一比喻系統；必定義術語清單每項都有白話首次定義
 - [ ] 模擬終端輸出全部為真機原文
@@ -300,4 +300,14 @@ PR 描述範本（教材提供可複製版）：
 
 ## 8. 實測紀錄（M4 填寫）
 
-（尚無）
+### 8.1 §3.1 三個前提（2026-10-14，全數成立 → 不需退回方案）
+測試 fixture：`blakelee0918/mention-test`（Public，Add README）→ 網頁新增 `day1.md`、Commit 對話框選「Create a new branch for this commit and start a pull request」（分支 `blakelee0918-patch-1`）→ PR #1，描述用 §3.1 範本（首行 `@BlekZz 請 review 我的 Git 作業`）。PR 保留未 merge，供 M5 截圖重用。
+
+| 前提 | 結果 | 觀察到的訊號 |
+|---|---|---|
+| (1) @mention 通知非 collaborator | ✅ | BlekZz 瀏覽器 `github.com/notifications?query=repo:blakelee0918/mention-test` 出現一列「blakelee0918/mention-test #1 Create day1.md mention」（reason = mention） |
+| (2) 非 collaborator 可 Approve | ✅ | `gh pr review 1 -R blakelee0918/mention-test --approve` exit 0；`GET /pulls/1/reviews` → `BlekZz APPROVED NONE`（author_association = NONE 即非 collaborator）。Request changes 為同一 API 不同 event，未另測，M4 作業全流程實跑時補 |
+| (3) `mentions:BlekZz` 搜得到 | ✅ | `gh search prs --mentions BlekZz` → `https://github.com/blakelee0918/mention-test/pull/1 open blakelee0918` |
+
+- 附帶事實：無 branch protection 時 `reviewDecision` 為空字串——Approve 只顯示在 PR 時間線，PR 頁頂不會有「Approved」狀態徽章；作業驗收表「時間線先 Approved 後 merged」的寫法正確，教材不要說「PR 會顯示已核准狀態」。
+- 附帶事實：本機 `gh`（OAuth token，scopes gist/read:org/repo）`gh api notifications?all=true` 回 0 筆——讀不到通知，講師收件匣一律用網頁 `is:pr mentions:BlekZz` 或 `gh search prs --mentions BlekZz`，不用 notifications API。
