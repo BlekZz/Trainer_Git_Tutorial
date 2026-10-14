@@ -11,7 +11,7 @@ export const INSTRUCTOR_MENTION = `@${INSTRUCTOR_GITHUB}`;
 export const TUTORIAL_REPO = `${INSTRUCTOR_GITHUB}/Trainer_Git_Tutorial`;
 
 /** 作業 repo 名稱（學員建在自己帳號下）。 */
-export const HOMEWORK_REPO_NAME = 'git-journal';
+export const HOMEWORK_REPO_NAME = 'git-homework';
 
 /** 講師收件匣：所有 @ 講師的 PR。 */
 export const INSTRUCTOR_INBOX_URL = `https://github.com/search?q=is%3Apr+mentions%3A${INSTRUCTOR_GITHUB}&type=pullrequests`;

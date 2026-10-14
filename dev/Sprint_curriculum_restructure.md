@@ -104,7 +104,7 @@ Part 4  選修（不計分，標「學完作業再來」）
 | 講師 GitHub 帳號 | `BlekZz`（https://github.com/BlekZz） |
 | 學員在 PR 描述要寫的 mention | `@BlekZz` |
 | 講師收件匣（所有作業 PR 一頁列出） | https://github.com/pulls?q=is%3Apr+mentions%3ABlekZz （GitHub 搜尋 `is:pr mentions:BlekZz`；只看待審加 `is:open`） |
-| 作業 repo 名稱 | `git-journal`（全班統一，方便講師辨識） |
+| 作業 repo 名稱 | `git-homework`（全班統一，方便講師辨識；L2–L8 練習用的是另一個 `git-journal`，2026-10-14 改名避免同名） |
 
 > 帳號若更換，只改這張表＋`src` 內集中常數（M1 建立 `src/config.js` 的 `INSTRUCTOR_GITHUB`），教材文字不得寫死帳號。
 
@@ -112,7 +112,7 @@ Part 4  選修（不計分，標「學完作業再來」）
 
 學員**從空資料夾開始**（不同於 L2–L8 範例的表面情境，符合 fading 的 far transfer），只拿到一份任務清單、不給逐步指令：
 
-1. 本機 `git init` 一個 `git-journal` 專案，至少 3 次有意義的 commit（各寫一天學到什麼）
+1. 本機 `git init` 一個 `git-homework` 專案（新的空資料夾，不是 L2–L8 的 git-journal），至少 3 次有意義的 commit（各寫一天學到什麼）
 2. 有一個 `.gitignore`（忽略指定的檔案）
 3. 開 `feat/...` 分支加內容，**本機** merge 回 main
 4. 刻意製造並解決一次衝突（留下 merge commit）
