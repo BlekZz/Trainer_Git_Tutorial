@@ -209,6 +209,7 @@ PR 描述範本（教材提供可複製版）：
 - QA：CLAUDE.md 引用路徑 `ls` 存在；`.claude/skills/tutor-sop/SKILL.md` 存在
 
 ### M1 骨架、導覽與共用元件（1 天）
+> ✅ 2026-10-14 完成（1b9bea3 config/Screenshot、aafb12d 骨架由 codex 搬移）。驗收：build 過；eslint 6（既有）；指令＋quiz 89 項 multiset 0 遺失；`rg BlekZz src` 只命中 config.js；dev server 實測 14 分頁可開、`#flow #pathA #pathB #team #practice` 轉址正確、375px 無橫向捲動、console 0 error；進度條＝tabs 前 10 個（L0–L8＋作業）。未驗：Screenshot 佔位框（尚無章節使用，M2 首用時驗）、瀏覽器上一頁行為。
 - `App.jsx` tabs 改為 Part 0–4 分組（L0…L8、作業、選修、急診室），hash id 用新名；舊 hash（`#pathA` 等）轉址到對應新章避免舊連結失效
 - 新章先以「搬移舊素材」建立空殼（依 §2.1），內容尚不改寫
 - 新增 `src/config.js`（`INSTRUCTOR_GITHUB = 'BlekZz'`、作業 repo 名、收件匣搜尋網址）——教材文字一律引用常數
