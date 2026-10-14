@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, SectionTitle, Callout, CommandBlock } from './Shared';
+import { Card, SectionTitle, Callout, CommandBlock, NoOutputHint } from './Shared';
 
 const ErrorCard = ({ error, translation, children }) => (
   <Card className="mb-4">
@@ -50,7 +50,10 @@ export const ErrorRoom = () => {
         error="*** Please tell me who you are."
         translation="Git 不知道你是誰，第一次 commit 前要先自我介紹。"
       >
-        <CommandBlock command={'git config --global user.name "你的名字"\ngit config --global user.email "你的Email"'} comment="Chapter 1 教過的兩行設定" />
+        <CommandBlock command={'git config --global user.name "你的名字"'} comment="第 1 行：設定名字" />
+        <NoOutputHint />
+        <CommandBlock command={'git config --global user.email "你的Email"'} comment="第 2 行：設定 Email" />
+        <NoOutputHint />
       </ErrorCard>
 
       <ErrorCard

@@ -76,7 +76,7 @@ export const Chapter8Practice = () => {
 
           <div className="space-y-4 text-sm text-slate-700 mb-4">
             <p><strong>先想一個問題：</strong>如果你今天走進一間超商，直接把商品放進自己口袋走出去，那叫搶劫。但如果你先付錢、讓店員確認、拿到收據，那叫購物。</p>
-            <p><code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800">git push</code> 就像是強行把東西放進別人的倉庫——它是<strong>直接、強制的寫入動作</strong>。對自己的 repo push 沒問題，但對別人的 repo 直接 push，是<strong>邏輯上不合理、也在技術上被禁止</strong>的事。</p>
+            <p><code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800">git push</code> 是<strong>直接把東西放進倉庫</strong>的動作——只有倉庫主人給了你鑰匙（寫入權限）才放得進去。對自己的 repo push 沒問題；對別人的 repo 直接 push，GitHub 會<strong>直接拒絕你（403 錯誤）</strong>。</p>
             <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
               <div className="font-bold text-slate-800 mb-2">那貢獻者要怎麼辦？這就帶出了 PR 的本質：</div>
               <p className="text-slate-600"><strong>PR（Pull Request）= 拜託你接受我的更動。</strong><br/>你不能直接推進去，所以你先在自己的副本做好，再向對方說「嘿，我這裡有些改動，你看看要不要拉進你的 repo 裡？」。維護者看了、審查了、覺得 OK，才點 Merge。這才是合理的協作流程。</p>
@@ -534,14 +534,14 @@ export const Chapter8Practice = () => {
         <Quiz
           questions={[
             {
-              q: '你在 Ch.4 已經 clone 過原 repo 了，為什麼不能直接 git push 上去交作業，非得多一道 Fork 的手續？',
+              q: '如果你 clone 了別人的 repo，為什麼不能直接 git push 上去，非得多一道 Fork 的手續？',
               options: [
                 '因為 push 前一定要先建立 Branch，這是 Git 的硬性規定',
                 '因為你沒有原 repo 的寫入權限，直接 push 會被 GitHub 擋下（403）',
                 '因為 Fork 之後檔案會變小，上傳比較快',
               ],
               answer: 1,
-              explain: '關鍵不是 Branch 沒建好，而是「權限」——原 repo 是別人的，你只有讀取權限，沒有寫入權限，這正是 Ch.4 遇到的 403 錯誤。Fork 會在你自己的帳號下複製一份完整的副本，你對這份副本有完整的寫入權限，才能合法 push，再從這裡向原 repo 發 PR 請求對方合併。',
+              explain: '關鍵不是 Branch 沒建好，而是「權限」——原 repo 是別人的，你只有讀取權限，沒有寫入權限，直接 push 會收到 403 錯誤。Fork 會在你自己的帳號下複製一份完整的副本，你對這份副本有完整的寫入權限，才能合法 push，再從這裡向原 repo 發 PR 請求對方合併。',
             },
             {
               q: 'Fork 完成後、開始 push 之前，本地端還有一個容易漏掉的步驟，是什麼？',

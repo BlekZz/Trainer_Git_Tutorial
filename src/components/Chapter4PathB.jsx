@@ -499,7 +499,7 @@ export const Chapter4PathB = () => {
                <p className="text-sm text-slate-600 mb-2">我把還沒寫完的檔案送進暫存區了，我想把它拿出來！</p>
                <CommandBlock command="git restore --staged <檔案名>" />
                <NoOutputHint>想確認的話輸入 <code>git status</code>——看到那個檔案變回紅色（未暫存）就代表拿出來了。</NoOutputHint>
-               <p className="text-xs text-slate-500 mt-2">* 這只會把它移出暫存區，不會刪除你的程式碼。restore = 搭時光機回到上一個存檔點的狀態。</p>
+               <p className="text-xs text-slate-500 mt-2">* 這只會把它移出暫存區，不會刪除你的程式碼。就像把照片從拍照台上拿下來，檔案內容一個字都不會變。</p>
              </div>
 
              <div className="bg-white p-4 rounded border border-red-100 shadow-sm">

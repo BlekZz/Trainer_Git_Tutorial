@@ -59,7 +59,10 @@ export const Chapter6Sync = () => {
 
   const doPush = () => {
     if (needPull) {
-      addLog('Rejected! Remote contains work that you do not have. Please git pull first.', 'error');
+      addLog('To https://github.com/project.git', 'error', '');
+      addLog(' ! [rejected]        main -> main (fetch first)', 'error', '');
+      addLog("error: failed to push some refs to 'https://github.com/project.git'", 'error', '');
+      addLog('hint: Updates were rejected because the remote contains work that you do not have locally.', 'error', '');
       return;
     }
     if (!canPush) {
@@ -80,8 +83,12 @@ export const Chapter6Sync = () => {
     const newLocalState = [...remoteCommits, ...localExclusive];
     
     setLocalCommits(newLocalState);
-    addLog('Updating...', 'success');
-    addLog(`Fast-forward / Merge successful.`, 'success');
+    if (localExclusive.length === 0) {
+      addLog(`Updating ${localHeadId}..${remoteHeadId}`, 'success');
+      addLog('Fast-forward', 'success', '');
+    } else {
+      addLog("Merge made by the 'ort' strategy.", 'success');
+    }
   };
 
   const simulateTeammatePush = () => {

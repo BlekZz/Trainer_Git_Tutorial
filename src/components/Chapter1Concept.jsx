@@ -96,7 +96,7 @@ export const Chapter1Concept = () => (
         <div className="bg-white p-3 rounded border border-indigo-100 shadow-sm">
           <div className="font-bold text-slate-800 mb-1 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-pink-500"></div> Merge</div>
           <div className="text-indigo-600 font-bold text-sm mb-1">🔗 結局收束</div>
-          <p className="text-xs text-slate-600">把平行宇宙 (Branch) 的成果合併回主宇宙（這是 <strong>Git 的動作</strong>，PR 審核通過後才會執行）。</p>
+          <p className="text-xs text-slate-600">把平行宇宙 (Branch) 的成果合併回主宇宙（這是 <strong>Git 的動作</strong>，在自己電腦上隨時可以做；在 GitHub 上，PR 審核通過後按下 Merge 也是在做這件事）。</p>
         </div>
       </div>
     </Card>
