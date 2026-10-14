@@ -1,205 +1,151 @@
-import React from 'react';
-import { Card, SectionTitle, Callout, CommandBlock, NoOutputHint } from './Shared';
+import { Card, SectionTitle, Callout, CommandBlock, NoOutputHint, FalseAlarm } from './Shared';
 
 const ErrorCard = ({ error, translation, children }) => (
-  <Card className="mb-4">
-    <p className="font-mono text-sm text-red-600 bg-red-50 border border-red-100 rounded-md px-3 py-2 mb-3 break-all">
-      {error}
-    </p>
-    <p className="text-slate-700 font-medium mb-3">👉 {translation}</p>
-    <div className="space-y-2">{children}</div>
+  <Card className="space-y-3">
+    <pre className="font-mono text-sm text-red-700 bg-red-50 rounded p-3 whitespace-pre-wrap break-words">{error}</pre>
+    <p className="text-slate-700 font-medium">{translation}</p>
+    <div className="space-y-3">{children}</div>
   </Card>
 );
 
-export const ErrorRoom = () => {
-  return (
-    <div>
-      <SectionTitle title="🚑 錯誤訊息急診室" subtitle="遇到看不懂的錯誤？先來這裡查一查" />
+const TransferHint = () => (
+  <Callout title="等待傳輸完成">通常等幾秒到一分鐘，期間可能看到 remote:、Counting objects:、Writing objects: 等進度；不要重按 Enter。成功會列出更新摘要，沒有新內容時會說已同步；若看到 rejected、fatal 或 CONFLICT，先處理該錯誤。</Callout>
+);
 
-      <Callout variant="info" title="怎麼用這一頁" className="mb-6">
-        遇到看不懂的英文錯誤？在這頁用 <span className="font-mono">Ctrl+F</span> / <span className="font-mono">Cmd+F</span>
-        貼上你的錯誤訊息關鍵字，找到白話翻譯和解法。
-      </Callout>
+export const ErrorRoom = () => (
+  <div className="space-y-6">
+    <SectionTitle title="🚑 錯誤訊息急診室" subtitle="用畫面上的原文找原因，再選對應的解法。" />
+    <Callout title="怎麼查">按 Ctrl+F（Mac：Cmd+F），貼上錯誤中的幾個英文單字搜尋。只做符合你情況的那張卡，不要整頁依序執行；$ 不用輸入。所有 &lt;佔位文字&gt; 都要整個換掉，角括號不要打進去。</Callout>
 
-      <ErrorCard
-        error="'git' is not recognized as an internal or external command / command not found: git"
-        translation="電腦還不認識 git 指令——通常是因為你剛裝完軟體，終端機沒有重新啟動。"
-      >
-        <p className="text-sm text-slate-600">
-          解法：把 VSCode / 終端機視窗全部關掉，重新打開一次再試。PATH 設定只有在「新開的」終端機才會生效。
-        </p>
-      </ErrorCard>
+    <ErrorCard error={"The term 'git' is not recognized\n'git' is not recognized as an internal or external command\ncommand not found: git"} translation="電腦目前找不到 Git，可能是還沒安裝，或安裝後終端機尚未重開。">
+      <p>先把 VSCode 與終端機完全關閉再重開；仍找不到時，回 L0 確認 Git 安裝。上方是不同終端機可能顯示的原文片段，不會一次出現三種。</p>
+      <CommandBlock command="git --version" comment="確認新開的終端機找得到 Git" />
+      <CommandBlock variant="output" command="git version 2.x.x" />
+      <p>版本號依安裝版本不同；看到版本號再重試原本的操作。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error={'畫面突然變成一堆 "~" 符號，游標卡住、打字打不出東西（Vim 編輯器）'}
-        translation="你被送進了 Vim 這個文字編輯器，這是 Git 預設用來寫 commit 訊息的工具。"
-      >
-        <CommandBlock variant="output" command={'~\n~\n~\n"COMMIT_EDITMSG" 為新檔案'} />
-        <p className="text-sm text-slate-600">解法：先按一下 <span className="font-mono font-bold">Esc</span>，再輸入 <span className="font-mono font-bold">:wq</span>，最後按 Enter 即可離開並存檔。</p>
-      </ErrorCard>
+    <ErrorCard error={'~\n~\n".git/COMMIT_EDITMSG"'} translation="你進入了 Vim 文字編輯器，Git 正在等你寫存檔說明。">
+      <p>若已寫好說明，按 Esc → 輸入 :wq → Enter，保存並離開；不想編輯則按 Esc → 輸入 :q! → Enter，放棄本次文字編輯。回終端機後先確認狀態；放棄編輯不等於保證取消 Git 的操作，因為原本可能已有預填說明。</p>
+      <CommandBlock command="git status" comment="離開編輯器後，先看 Git 是否還在等你完成存檔或合併" />
+      <CommandBlock variant="output" command={'On branch main\nnothing to commit, working tree clean'} />
+      <p>上方是已完成存檔的例子；分支名可能不同。</p>
+      <p>會列出分支與檔案狀態；若仍有待存內容，回 L2 或 L5 使用帶 -m 的存檔指令。若書桌已乾淨，先核對最新存檔再決定是否重做。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="fatal: Need to specify how to reconcile divergent branches."
-        translation="Git 不知道遠端和本地的紀錄要用什麼方式合併，需要先設定一次偏好。"
-      >
-        <CommandBlock command="git config --global pull.rebase false" comment="設定合併策略（只需做一次）" />
-        <CommandBlock command="git pull" comment="再重新拉取一次" />
-      </ErrorCard>
+    <ErrorCard error="fatal: Need to specify how to reconcile divergent branches." translation="本機和雲端相簿各有新照片，Git 要你先選擇如何整理在一起。">
+      <CommandBlock command="git config --global pull.rebase false" comment="依本課做法，用合併保留兩邊紀錄" />
+      <NoOutputHint />
+      <FalseAlarm signal="~" title="下載後可能打開合併說明">若出現 Vim，按 Esc → :wq → Enter 接受說明並離開；:q! 是放棄文字編輯。離開後看 status 確認，不要直接再跑一次。</FalseAlarm>
+      <TransferHint />
+      <CommandBlock command="git pull" comment="重新下載並合併雲端改動" />
+      <p>完成會列出更新或合併摘要；若出現 CONFLICT，照下方衝突卡處理。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="*** Please tell me who you are."
-        translation="Git 不知道你是誰，第一次 commit 前要先自我介紹。"
-      >
-        <CommandBlock command={'git config --global user.name "你的名字"'} comment="第 1 行：設定名字" />
-        <NoOutputHint />
-        <CommandBlock command={'git config --global user.email "你的Email"'} comment="第 2 行：設定 Email" />
-        <NoOutputHint />
-      </ErrorCard>
+    <ErrorCard error="*** Please tell me who you are." translation="Git 還不知道照片旁要記錄哪位作者的名字與信箱。">
+      <p>把引號內的範例換成自己的資料，引號保留；這不是登入 GitHub。完整核對方法見 L0。</p>
+      <CommandBlock command={'git config --global user.name "你的名字"'} comment="設定作者名字" />
+      <NoOutputHint />
+      <CommandBlock command={'git config --global user.email "you@example.com"'} comment="把範例換成自己的信箱" />
+      <NoOutputHint />
+      <p>設定後重試原本的 commit，成功會列出分支、照片編號與說明。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="fatal: not a git repository (or any of the parent directories): .git"
-        translation="你現在所在的資料夾不是一個 Git 專案，Git 找不到 .git 資料夾。"
-      >
-        <p className="text-sm text-slate-600 mb-2">解法：用 <span className="font-mono">cd</span> 切換到你的專案資料夾再執行指令。</p>
-        <CommandBlock command="cd 你的專案資料夾路徑" comment="先移動到專案資料夾" />
-      </ErrorCard>
+    <ErrorCard error="fatal: not a git repository (or any of the parent directories): .git" translation="目前這個資料夾找不到 Git 相簿紀錄，可能只是開錯位置。">
+      <p>用 VSCode 的 File → Open Folder 選原本的 git-journal 或作業專案，再用 Terminal → New Terminal 開啟終端機；路徑應以該專案名稱結尾。不要為了消除錯誤就隨便建立新相簿。</p>
+      <CommandBlock command="git status" comment="核對這裡是否有原本的 Git 紀錄" />
+      <CommandBlock variant="output" command={'On branch main\nnothing to commit, working tree clean'} />
+      <p>應顯示 On branch 與檔案狀態；若仍是同樣錯誤，回 L2 檢查是否在這個資料夾做過 init，或回 L8 檢查 clone 是否完成。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="You are in 'detached HEAD' state"
-        translation="你現在站在一個沒有分支名字的位置上，但別慌，這不會弄壞任何東西。"
-      >
-        <CommandBlock command="git checkout main" comment="回到 main 分支這個家" />
-        <p className="text-sm text-slate-600">
-          ⚠️ 如果你在這個狀態下<strong>已經 commit 過</strong>而且想保留那些成果：先執行 <span className="font-mono">git branch 臨時分支名</span> 幫它們掛上一個分支名，再 checkout main——否則直接離開後，那些 commit 會找不回來。
-        </p>
-      </ErrorCard>
+    <ErrorCard error="You are in 'detached HEAD' state" translation="你正在看某張照片，沒有跟著一個分支相簿的名稱。">
+      <p>HEAD 是 Git 標記目前版本的位置。若在這裡改過內容或新增過 commit，先到 E3 替成果建立分支並保存，再回 main；若只是查看舊版本，直接做下面這條。</p>
+      <CommandBlock command="git switch main" comment="回到 main 相簿" />
+      <CommandBlock variant="output" command={"Switched to branch 'main'"} />
+      <p>可能另附同步狀態；若拒絕切換，先看下一張卡，不要強制切換。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error={'error: Your local changes to the following files would be overwritten by checkout: ... Please commit your changes or stash them before you switch branches. Aborting'}
-        translation="書桌上還有沒存的改動，切過去會被另一本相簿的內容蓋掉，所以 Git 先擋下來——你的改動都還在。"
-      >
-        <CommandBlock variant="output" command={'error: Your local changes to the following files would be overwritten by checkout:\n\tREADME.md\nPlease commit your changes or stash them before you switch branches.\nAborting'} />
-        <p className="text-sm text-slate-600 mb-2">解法：改動要留下就先存檔，再切分支（L2 教過的兩步）：</p>
-        <CommandBlock command="git add <檔名>" comment="把錯誤訊息列出的檔案放上拍照台（<檔名> 整個換掉，角括號不要打）" />
-        <NoOutputHint />
-        <CommandBlock command={'git commit -m "先存起來"'} comment="按快門" />
-        <CommandBlock variant="output" command={'[main 1a2b3c4] 先存起來\n 1 file changed, 1 insertion(+), 1 deletion(-)'} />
-        <p className="text-sm text-slate-600">確定不要這些改動，才用 L3 的 <span className="font-mono">git restore &lt;檔名&gt;</span> 丟掉——丟了就找不回來。</p>
-      </ErrorCard>
+    <ErrorCard error={'error: Your local changes to the following files would be overwritten by checkout:\n\tREADME.md\nPlease commit your changes or stash them before you switch branches.\nAborting'} translation="書桌上還有改動，切到另一本相簿會蓋掉它們，所以 Git 先擋下來。">
+      <p>若要保留，先依下面兩步保存，再重試切換；只做到一半可看 E3 的 stash。檔名請依錯誤列出的實際檔案替換，例如 README.md。</p>
+      <FalseAlarm signal="LF will be replaced by CRLF" title="Windows 可能有換行提醒">這段是換行格式提醒，可以繼續；沒有訊息也正常。</FalseAlarm>
+      <CommandBlock command="git add <檔名>" comment="把要保留的改動放上拍照台，例如 git add README.md" />
+      <NoOutputHint />
+      <CommandBlock command={'git commit -m "保存目前的改動"'} comment="保存後才切換相簿" />
+      <CommandBlock variant="output" command={'[main 1a2b3c4] 保存目前的改動\n 1 file changed, 1 insertion(+), 1 deletion(-)'} />
+      <p>這是修改一個檔案的例子；分支名、編號與行數依你的改動不同。</p>
+      <p>成功時會列出分支、照片編號、說明與檔案摘要；若說沒有可存內容，先確認 add 的檔名是否正確。不要為了切換而丟掉還要保留的文字。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="error: the branch 'feat/xxx' is not fully merged"
-        translation="這本分支相簿裡還有照片沒收進 main，現在刪掉名稱，那些照片就很難找回來，所以 Git 擋住你。"
-      >
-        <CommandBlock variant="output" command={"error: the branch 'feat/day2' is not fully merged\nhint: If you are sure you want to delete it, run 'git branch -D feat/day2'\nhint: Disable this message with \"git config set advice.forceDeleteBranch false\""} />
-        <p className="text-sm text-slate-600 mb-2">解法：先確認自己站在 main，把分支收進來，再刪一次（L4 的順序）：</p>
-        <CommandBlock command="git merge <分支名>" comment="把分支的照片收進 main（<分支名> 整個換掉）" />
-        <CommandBlock variant="output" command={'Updating 846a6e1..b2dbb59\nFast-forward\n day2.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 day2.md'} />
-        <CommandBlock command="git branch -d <分支名>" comment="收完再刪就會成功" />
-        <CommandBlock variant="output" command={'Deleted branch feat/day2 (was b2dbb59).'} />
-        <p className="text-sm text-slate-600">hint 提到的大寫 <span className="font-mono">-D</span> 是強制刪除，初學階段不要用。</p>
-      </ErrorCard>
+    <ErrorCard error="error: the branch 'feat/day2' is not fully merged" translation="分支還有照片沒收進目前或指定的目標相簿，Git 不願直接刪掉它的名稱。">
+      <p>不要改用大寫 -D 強制刪除。回 L4 核對目前在 main、書桌乾淨，再合併那個分支；若發生衝突先照 L5 處理。確認成果已在 main 後，再重試小寫 -d 的刪分支步驟。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="CONFLICT (content): Merge conflict in xxx.md / Automatic merge failed; fix conflicts and then commit the result."
-        translation="你和別人改到了同一個地方，Git 不敢自己決定要留誰的，要你手動選。"
-      >
-        <p className="text-sm text-slate-600 mb-2">
-          解法：打開有衝突的檔案，你會看到 <span className="font-mono">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span>、<span className="font-mono">=======</span>、<span className="font-mono">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> 三種標記。把這三種標記全部刪掉、留下你要的內容並存檔，然後：
-        </p>
-        <CommandBlock command="git add 檔名" comment="告訴 Git 衝突已處理完" />
-        <CommandBlock command="git commit" comment="完成這次合併" />
-      </ErrorCard>
+    <ErrorCard error={'CONFLICT (content): Merge conflict in README.md\nAutomatic merge failed; fix conflicts and then commit the result.'} translation="兩本相簿對同一處保存了不同內容，Git 需要你決定最後保留什麼。">
+      <p>打開訊息列出的檔案，選好內容，刪掉 &lt;&lt;&lt;&lt;&lt;&lt;&lt;、=======、&gt;&gt;&gt;&gt;&gt;&gt;&gt; 標記，再儲存；每個衝突檔案都要處理。完整示範在 L5，遠端情況見 L8。</p>
+      <FalseAlarm signal="LF will be replaced by CRLF" title="挑選檔案時可能有換行提醒">這不是新的衝突；檢查沒有其他錯誤後可繼續。</FalseAlarm>
+      <CommandBlock command="git add <檔名>" comment="逐個挑選已解決的檔案，例如 git add README.md" />
+      <NoOutputHint />
+      <CommandBlock command={'git commit -m "解決合併衝突"'} comment="所有衝突都處理完後，保存合併結果" />
+      <CommandBlock variant="output" command="[main 1a2b3c4] 解決合併衝突" />
+      <p>分支名與照片編號依實際紀錄不同。</p>
+      <p>成功會列出分支、照片編號與這句說明；若仍提示 unmerged，還有檔案未解決或未 add，先核對訊息列出的檔名。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="! [rejected] main -> main (fetch first) / Updates were rejected because the remote contains work that you do not have locally"
-        translation="遠端有你本地沒有的更新，Git 怕你蓋掉別人的東西，先把你擋下來。"
-      >
-        <CommandBlock command="git pull" comment="先把遠端的更新拉下來（如果出現衝突，照上面 merge conflict 那條處理）" />
-        <CommandBlock command="git push" comment="再推一次就會成功" />
-      </ErrorCard>
+    <ErrorCard error={'! [rejected] main -> main (fetch first)\nUpdates were rejected because the remote contains work that you do not have locally'} translation="雲端相簿有本機還沒拿到的照片，Git 要你先整合再上傳。">
+      <p>先保存本機改動，再下載；這不只會發生在別人改檔，你自己從 GitHub 網頁改檔也會遇到。</p>
+      <FalseAlarm signal="~" title="合併時可能打開說明編輯器">若進入 Vim，按 Esc → :wq → Enter 保存說明離開；:q! 是放棄編輯。回終端機先看 status；若出現衝突，先完成上方衝突卡。</FalseAlarm>
+      <TransferHint />
+      <CommandBlock command="git pull" comment="先把雲端新照片下載並合併" />
+      <p>完成會列出更新摘要；有衝突時必須先解完並 commit，不能立刻執行下一條。</p>
+      <TransferHint />
+      <CommandBlock command="git push" comment="整合完成後，再嘗試上傳" />
+      <p>成功會列出分支更新，若期間雲端又有更新仍可能被拒絕；不要用強制上傳覆蓋它。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="warning: LF will be replaced by CRLF in xxx"
-        translation="Windows 換行符號的轉換提醒，不是錯誤——你的指令其實已經成功了。"
-      >
-        <p className="text-sm text-slate-600">解法：不用管它，直接繼續下一步。</p>
-      </ErrorCard>
+    <ErrorCard error="warning: LF will be replaced by CRLF" translation="Git 正在提醒 Windows 換行格式可能轉換，這段本身不是操作失敗。">
+      <p>沒有其他 error 或 fatal 時，可繼續下一步；不能只看到 warning 就判定整條指令一定成功。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error={'畫面停住、左下角出現冒號 ":"，打字沒反應（git log / git diff / git branch 都會發生）'}
-        translation="你進入了「分頁瀏覽器」——因為輸出太長一頁塞不下，Git 讓你分頁看，這不是當機。"
-      >
-        <p className="text-sm text-slate-600">解法：按 <span className="font-mono font-bold">q</span> 即可離開。想繼續看的話，用上下方向鍵捲動。</p>
-      </ErrorCard>
+    <ErrorCard error={':\n(END)'} translation="你正在分頁看較長的內容，畫面停在等你翻頁，沒有當機。">
+      <p>這是 git log、git diff 或 git branch 可能出現的畫面；按 q 離開，終端機提示符會回來。想繼續看可用上下方向鍵。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="remote: Support for password authentication was removed / fatal: Authentication failed for 'https://...'"
-        translation="你的登入憑證失效了，或是輸入錯了——GitHub 早已不接受網站密碼。"
-      >
-        <CommandBlock command="gh auth login" comment="用 GitHub CLI 重新登入一次，再重跑剛剛的指令" />
-      </ErrorCard>
+    <ErrorCard error={"remote: Support for password authentication was removed\nfatal: Authentication failed for 'https://...'\nPassword for 'https://github.com':"} translation="GitHub 需要有效的登入授權，終端機裡不能用網站登入密碼取代它。">
+      <p>這些是同類登入問題的原文片段。若正在等密碼，按 Ctrl+C 取消，回 L6 按登入步驟重新授權；會出現方向鍵選單並開啟瀏覽器，完成後再重試剛才的操作。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="git@github.com: Permission denied (publickey). fatal: Could not read from remote repository."
-        translation="你的電腦正在用 SSH 方式連 GitHub，但本教程從頭到尾都用 HTTPS——你走到別條路上了，方向錯了，不是你做壞了什麼。"
-      >
-        <p className="text-sm text-slate-600">
-          先診斷：看看你的 origin 網址是不是 <span className="font-mono">git@github.com:</span> 開頭。
-        </p>
-        <CommandBlock command="git remote -v" comment="檢查 origin 網址開頭" />
-        <p className="text-sm text-slate-600">
-          如果是 <span className="font-mono">git@github.com:</span> 開頭，用下面這行切回 HTTPS（把 <span className="font-mono">&lt;你的帳號&gt;</span> 換成你的 GitHub 帳號），然後重試剛剛的指令：
-        </p>
-        <CommandBlock command="git remote set-url origin https://github.com/<你的帳號>/git-journal.git" comment="把 origin 切回 HTTPS 網址（<你的帳號> 整個換成你的 GitHub 帳號，角括號不要打）" />
-        <NoOutputHint>改完用 <span className="font-mono">git remote -v</span> 確認兩行都變成 https:// 開頭，再重試剛剛的指令。</NoOutputHint>
-        <p className="text-sm text-slate-600">
-          什麼時候會誤入這條路：複製到 GitHub Code 綠色按鈕裡「SSH」分頁的網址、照抄別人畫面上的指令、或跟著網路教學設定了 SSH。全部不需要——我們全程用 HTTPS。
-        </p>
-      </ErrorCard>
+    <ErrorCard error={'git@github.com: Permission denied (publickey).\nfatal: Could not read from remote repository.'} translation="目前使用的 SSH 連線需要電腦金鑰，但本課練習使用 HTTPS 網址登入。">
+      <p>SSH 是用電腦金鑰驗證的連線方式；HTTPS 是本課搭配登入授權使用的網址方式。先查 origin，也就是 Git 記住的雲端地址。</p>
+      <CommandBlock command="git remote -v" comment="查看 origin 是否以 git@github.com: 開頭" />
+      <CommandBlock variant="output" command={'origin  git@github.com:你的帳號/git-journal.git (fetch)\norigin  git@github.com:你的帳號/git-journal.git (push)'} />
+      <p>若符合這個情況，在 GitHub 開啟你真正要同步的專案，從 Code → HTTPS 複製網址，再替換下一條的整個佔位文字；例如 https://github.com/amy/git-journal.git，別照抄範例帳號。</p>
+      <CommandBlock command="git remote set-url origin <你複製的HTTPS網址>" comment="保留同一個專案，只改連線網址" />
+      <NoOutputHint />
+      <p>再用上面的 remote -v 核對兩行都變成正確的 https:// 網址，再試原本的操作。若失敗的是 clone，尚無專案可改設定，直接用正確的 HTTPS 網址重試 clone。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="remote: Permission to XXX/XXX.git denied to your-username. fatal: unable to access ... 403"
-        translation="你正在對別人的 repo 執行 push，但你沒有寫入權限。"
-      >
-        <p className="text-sm text-slate-600">
-          （只會在選修 E2 參與別人的專案時發生；自己的 git-journal 不會遇到。）解法：請看 E2 的說明——你需要先 Fork 一份到自己名下，再用 <span className="font-mono">git remote set-url</span> 把本地的 origin 改指向你自己的 Fork。
-        </p>
-      </ErrorCard>
+    <ErrorCard error={'remote: Permission to owner/repo.git denied to username.\nThe requested URL returned error: 403'} translation="目前登入的帳號沒有權限把照片上傳到這個雲端相簿。">
+      <p>先核對 L6 登入的帳號，以及 origin 是否指向自己真正要上傳的專案。若在 E2 參與別人的專案，先 Fork 並 clone 自己的副本，再從副本提出 PR；單純建立分支不會增加寫入權限。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="remote: Repository not found. fatal: repository 'https://github.com/...' not found"
-        translation="Git 找不到這個網址對應的 repo，通常是兩種情況之一。"
-      >
-        <p className="text-sm text-slate-600 mb-2">
-          依序核對：① GitHub 上真的已經建好這個 repo（打開 <span className="font-mono">github.com/&lt;你的帳號&gt;/git-journal</span> 看得到）；② 網址裡的帳號和 repo 名稱沒打錯；③ 終端機登入的是同一個 GitHub 帳號（repo 設成 Private 時，帳號不對也會顯示找不到）。
-        </p>
-        <CommandBlock command="git remote -v" comment="② 看目前 origin 指向哪個網址（clone 失敗就直接核對你貼的網址）" />
-        <CommandBlock variant="output" command={'origin\thttps://github.com/<你的帳號>/git-journal.git (fetch)\norigin\thttps://github.com/<你的帳號>/git-journal.git (push)'} />
-        <CommandBlock command="gh auth status" comment="③ 看終端機登入的是哪個帳號" />
-        <CommandBlock variant="output" command={"github.com\n  ✓ Logged in to github.com account <你的帳號> (keyring)\n  - Active account: true\n  - Git operations protocol: https\n  - Token: gho_************************************\n  - Token scopes: 'gist', 'read:org', 'repo'"} />
-        <p className="text-sm text-slate-600">網址打錯就用 <span className="font-mono">git remote set-url origin &lt;正確網址&gt;</span> 改掉；帳號不對就重跑 <span className="font-mono">gh auth login</span>。（在 E2 參與別人的專案時，另一個常見原因是還沒 Fork 就改了網址。）</p>
-      </ErrorCard>
+    <ErrorCard error={"remote: Repository not found.\nfatal: repository 'https://github.com/...' not found"} translation="Git 無法存取這個專案，可能是網址錯了、還沒建立，或目前帳號沒有閱讀權限。">
+      <p>在瀏覽器用同一個帳號打開該網址，確認專案存在且能閱讀；核對網址中的帳號、專案名稱，再依 L6 核對終端機登入。E2 要先完成 Fork，自己的副本網址才會存在。</p>
+      <CommandBlock command="git remote -v" comment="已有本機相簿時，檢查記住的地址；clone 失敗則直接核對貼上的網址" />
+      <CommandBlock variant="output" command={'origin  https://github.com/你的帳號/git-journal.git (fetch)\norigin  https://github.com/你的帳號/git-journal.git (push)'} />
+      <p>專案名依你正在操作的相簿不同；作業應是 git-homework，E2 應是 Trainer_Git_Tutorial。若地址錯誤，依上一張 SSH 卡的 set-url 步驟改成正確 HTTPS 網址。</p>
+    </ErrorCard>
 
-      <ErrorCard
-        error="error: src refspec main does not match any"
-        translation="你要 push 的分支叫 main，但這個專案裡根本沒有叫 main 的分支——通常是因為 git init 後預設分支叫 master。"
-      >
-        <CommandBlock command="git branch -M main" comment="把目前的分支改名為 main" />
-        <CommandBlock command="git push -u origin main" comment="再 push 一次" />
-        <p className="text-sm text-slate-600">
-          想一勞永逸：執行 <a href="#setup" className="text-indigo-600 underline hover:text-indigo-800">L0 行前準備</a>「一次性建議設定」裡的 <span className="font-mono">git config --global init.defaultBranch main</span>，之後新專案的主分支都會叫 main。
-        </p>
-      </ErrorCard>
-
-      <ErrorCard
-        error="push 時彈出視窗要求輸入密碼（Password for 'https://github.com')"
-        translation="不要輸入 GitHub 網站的登入密碼——那個方式已經被 GitHub 停用了，輸入了也一定失敗。"
-      >
-        <CommandBlock command="gh auth login" comment="用 GitHub CLI 重新登入一次" />
-      </ErrorCard>
-    </div>
-  );
-};
+    <ErrorCard error="error: src refspec main does not match any" translation="Git 找不到可以上傳的 main，可能還沒存過第一張照片，也可能分支名字不同。">
+      <CommandBlock command="git status" comment="先分辨缺少存檔，還是名稱不同" />
+      <p>情況一：還沒有任何照片時，輸出包含這兩段：</p>
+      <CommandBlock variant="output" command={'On branch main\n\nNo commits yet'} />
+      <p>情況二：已有照片，但目前名稱是 master；乾淨的相簿會像這樣：</p>
+      <CommandBlock variant="output" command={'On branch master\nnothing to commit, working tree clean'} />
+      <p>看到 No commits yet：回 L2 完成第一次 add 與 commit，再上傳。看到 On branch master 且已有存檔：可以做下一條把目前分支改名；若是其他分支，先按 L4 核對，不要直接改名。</p>
+      <CommandBlock command="git branch -m main" comment="只在確認目前是要更名的主分支時使用" />
+      <NoOutputHint />
+      <p>若提示 main 已存在，停下核對，不要用強制更名覆蓋它。成功後回 L6 重試上傳；L0 的預設分支設定只影響之後新建的相簿。</p>
+    </ErrorCard>
+  </div>
+);
 
 export default ErrorRoom;

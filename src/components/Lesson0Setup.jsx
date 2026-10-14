@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SectionTitle, InstructionalText, CommandBlock, Callout, NoOutputHint, Card } from './Shared';
+import { SectionTitle, CommandBlock, Callout, NoOutputHint, Card } from './Shared';
 import { Copy, Check, Monitor, Apple, MessageSquareHeart, CheckCircle2, ChevronDown, ChevronRight, ArrowRight, Key, Info } from 'lucide-react';
 
 // PromptBlock — 給「要貼給 AI 的中文提示詞」用（不是終端機指令，所以不加 $ 前綴）
@@ -54,8 +54,8 @@ const STEP_TITLES = [
   '印出你的電腦規格',
   '請 AI 當你的安裝助手',
   '安裝三樣工具',
-  '驗收與連線',
-  'Local 端身份設定',
+  '確認工具與預設設定',
+  '設定存檔作者',
   '完成 Checklist',
 ];
 
@@ -99,8 +99,21 @@ const CHECKLIST_ITEMS = [
   { id: 'gitgraph', label: 'Git Graph 外掛安裝完成', verify: 'VSCode 左側延伸模組列表能看到 Git Graph' },
   { id: 'git', label: 'Git 安裝完成', verify: '終端機輸入 git -v 顯示 git version 2.x.x' },
   { id: 'gh', label: 'GitHub CLI（gh）安裝完成', verify: '終端機輸入 gh --version 顯示版本號' },
+  { id: 'identity', label: '存檔作者設定完成', verify: 'git config user.name 與 git config user.email 顯示自己的名字與信箱' },
   { id: 'config', label: '兩行一次性設定完成', verify: '已在終端機貼過 pull.rebase false 與 init.defaultBranch main 兩行設定' },
 ];
+
+const NextButton = ({ label, onClick, disabled = false }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled}
+    className="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+  >
+    {label}
+    <ArrowRight size={15} aria-hidden="true" />
+  </button>
+);
 
 export const Lesson0Setup = () => {
   const [os, setOs] = useState(null); // 'windows' | 'mac'
@@ -116,42 +129,12 @@ export const Lesson0Setup = () => {
   const next = () => setStep((s) => Math.min(s + 1, TOTAL_STEPS - 1));
   const toggleCheck = (id) => setChecks((prev) => ({ ...prev, [id]: !prev[id] }));
 
-  const NextButton = ({ label, disabled = false }) => (
-    <button
-      type="button"
-      onClick={next}
-      disabled={disabled}
-      className="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-    >
-      {label}
-      <ArrowRight size={15} aria-hidden="true" />
-    </button>
-  );
-
   return (
     <div className="space-y-6 animate-fade-in">
-      <SectionTitle title="L0 行前準備" subtitle="開始上課前，把你的電腦準備好——一步一步來，不用急" />
-
-      {/* 進入狀態提示（深色前置條件框） */}
-      <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
-        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">⚡ 進入狀態：讀完再動</div>
-        <div className="flex items-start gap-3">
-          <span className="text-green-400 text-base leading-none mt-0.5">🧭</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">這一章不教 Git，只做一件事：把你的電腦裝備好。</strong>全部走完大約 30～60 分鐘，建議找一段不被打斷的時間一次完成。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-yellow-400 text-base leading-none mt-0.5">🖥️</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">你需要一台能安裝軟體的電腦</strong>（Windows 10+ 或 macOS 10.15+，有管理員權限），以及穩定的網路。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-blue-400 text-base leading-none mt-0.5">🤖</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">卡關不是你的問題。</strong>每台電腦狀況不同，本章第 3 步會教你把 AI 變成你的專屬安裝助手——遇到任何裝不動的狀況，回去找它就對了。</p>
-        </div>
-      </div>
-
-      <InstructionalText title="為什麼要先做這一章？">
-        <p>後面的章節會需要你在自己的電腦上真的敲指令、真的發 PR。現在花一點時間把工具裝好、帳號連好，之後的每一章都會順很多。</p>
-      </InstructionalText>
+      <header>
+        <SectionTitle title="L0 行前準備" subtitle="安裝練習需要的工具，設定每次存檔要記錄的作者名字與信箱。" />
+        <p className="text-sm text-slate-600">先準備：一台可安裝軟體的 Windows 或 Mac 電腦；可下載安裝檔的網路連線。</p>
+      </header>
 
       {/* 內部進度 */}
       <div className="flex items-center gap-3">
@@ -195,27 +178,29 @@ export const Lesson0Setup = () => {
             </Callout>
           )}
           <div className="flex justify-end">
-            <NextButton label={os ? '選好了，下一步' : '先選一個系統才能繼續'} disabled={!os} />
+            <NextButton onClick={next} label={os ? '選好了，下一步' : '先選一個系統才能繼續'} disabled={!os} />
           </div>
         </StepCard>
 
         {/* ── 步驟 2：印出你的電腦規格 ── */}
         <StepCard step={step} setStep={setStep} idx={1}>
-          <p className="text-sm text-slate-600">先打開終端機：{isWin ? <>按 <code className="bg-slate-100 px-1 rounded">Windows 鍵</code>，搜尋 <code className="bg-slate-100 px-1 rounded">powershell</code>，點「Windows PowerShell」打開藍色視窗。</> : <>按 <code className="bg-slate-100 px-1 rounded">⌘ + 空白鍵</code> 打開 Spotlight，輸入 <code className="bg-slate-100 px-1 rounded">Terminal</code>（終端機）按 Enter。</>}然後輸入這行指令，把你電腦的規格印出來：</p>
-          <CommandBlock
-            command={isWin ? 'systeminfo | findstr /C:"OS"' : 'sw_vers && uname -m'}
-            comment={isWin ? '列出 Windows 版本相關資訊' : '列出 macOS 版本與晶片架構'}
-          />
-          {isWin && (
-            <Callout variant="warning" title="按下 Enter 後畫面會停住——這不是當機">
-              這條指令要花 <strong>5 秒到半分鐘</strong>收集電腦資料，期間畫面會卡住、什麼都不顯示。<strong>不要關視窗、不要重複按 Enter</strong>，耐心等它把結果印出來就好。
-            </Callout>
-          )}
-          {isWin && (
-            <CommandBlock
-              variant="output"
-              command={'OS Name:                   Microsoft Windows 11 Home\nOS Version:                10.0.26100 N/A Build 26100\n...（後面還有幾行 OS 開頭的資訊）'}
-            />
+          <p className="text-sm text-slate-600">終端機是用文字指令操作電腦的視窗。先打開終端機：{isWin ? <>按 <code className="bg-slate-100 px-1 rounded">Windows 鍵</code>，搜尋 <code className="bg-slate-100 px-1 rounded">powershell</code>，點「Windows PowerShell」打開藍色視窗。</> : <>按 <code className="bg-slate-100 px-1 rounded">⌘ + 空白鍵</code> 打開 Spotlight，輸入 <code className="bg-slate-100 px-1 rounded">Terminal</code>（終端機）按 Enter。</>}然後輸入這行指令，把你電腦的規格印出來：</p>
+          <p className="text-sm text-slate-600">下面的 $ 是提示符，不用輸入；按複製只會複製指令，每次貼一條再按 Enter。</p>
+          {isWin ? (
+            <>
+              <Callout title="收集資料需要等一下">輸入後可能先空白 5 秒到半分鐘，接著列出系統資訊；不要關視窗或重複按 Enter。</Callout>
+              <CommandBlock command="systeminfo" comment="列出系統資訊，讓安裝助手判斷適合的版本" />
+              <CommandBlock variant="output" command={'OS Name:                   Microsoft Windows 11 Home\nOS Version:                10.0.26100 N/A Build 26100'} />
+              <p className="text-sm text-slate-600">上方只節錄兩行；實際會有更多資訊，中文系統的標籤可能是「作業系統名稱」「作業系統版本」。</p>
+            </>
+          ) : (
+            <>
+              <CommandBlock command="sw_vers" comment="先查 macOS 版本" />
+              <CommandBlock variant="output" command={'ProductName: macOS\nProductVersion: 15.0\nBuildVersion: 24A335'} />
+              <CommandBlock command="uname -m" comment="再查晶片架構，下載時才能選對安裝檔" />
+              <CommandBlock variant="output" command="arm64" />
+              <p className="text-sm text-slate-600">版本號依電腦不同；Intel Mac 會顯示 x86_64。</p>
+            </>
           )}
           {isWin ? (
             <div className="text-sm text-slate-600 space-y-1">
@@ -238,22 +223,22 @@ export const Lesson0Setup = () => {
             下一步我們要把這個畫面直接拿去問 AI，留著它。
           </Callout>
           <div className="flex justify-end">
-            <NextButton label="我看到規格了，下一步" />
+            <NextButton onClick={next} label="我看到規格了，下一步" />
           </div>
         </StepCard>
 
         {/* ── 步驟 3：請 AI 當你的安裝助手 ── */}
         <StepCard step={step} setStep={setStep} idx={2}>
-          <p className="text-sm text-slate-600"><strong>這是全章最重要的一步。</strong>每台電腦的狀況都不同（尤其是比較舊的電腦），與其對照文件猜，不如讓 AI 看著你的電腦資訊、陪你一步一步裝。方法很簡單：<strong>截圖 + 一段提示詞</strong>。</p>
+          <p className="text-sm text-slate-600">每台電腦的狀況不同，可以把系統版本與晶片資訊交給 AI，請它一次說明一個安裝步驟。若建議與畫面不符，先停下，把差異告訴它或請講師協助。</p>
           <div className="text-sm text-slate-700 space-y-2">
-            <p><strong>① 把整個終端機視窗截圖</strong>（就是上一步印出規格的那個畫面）：</p>
+            <p><strong>① 把系統版本與晶片資訊截圖</strong>（就是上一步印出規格的那個畫面）：</p>
             <ul className="list-disc pl-5 space-y-1 text-slate-600">
               {isWin ? (
-                <li>按 <code className="bg-slate-100 px-1 rounded">Win + Shift + S</code>，拖曳框選整個終端機視窗，截圖會自動存到剪貼簿。</li>
+                <li>按 <code className="bg-slate-100 px-1 rounded">Win + Shift + S</code>，拖曳框選要提供的資訊，截圖會自動存到剪貼簿。</li>
               ) : (
-                <li>按 <code className="bg-slate-100 px-1 rounded">⌘ + Shift + 4</code>，拖曳框選整個終端機視窗，截圖會存到桌面。</li>
+                <li>按 <code className="bg-slate-100 px-1 rounded">⌘ + Shift + 4</code>，拖曳框選要提供的資訊，截圖會存到桌面。</li>
               )}
-              <li>不用煩惱哪些資訊重要——<strong>整個視窗都截進去最安全</strong>，讓 AI 自己判斷。</li>
+              <li>只保留系統版本與晶片資訊；電腦名稱、帳號與其他個人資訊不要一起貼出。</li>
             </ul>
             <p><strong>② 複製下面這段提示詞，連同截圖一起貼給 AI：</strong></p>
           </div>
@@ -268,22 +253,22 @@ export const Lesson0Setup = () => {
           </button>
           {showTextPrompt && (
             <div className="space-y-3 border-l-2 border-indigo-200 pl-4">
-              <p className="text-sm text-slate-600">先複製下面的提示詞貼給 AI，<strong>再把終端機裡的文字複製上去接在後面</strong>：</p>
+              <p className="text-sm text-slate-600">先複製下面的提示詞貼給 AI，<strong>再把系統版本與晶片資訊接在後面</strong>：</p>
               <PromptBlock text={TEXT_PROMPT} />
               <Callout variant="warning" title="複製終端機文字的安全方法">
                 {isWin ? (
-                  <p>用<strong>滑鼠選取</strong>你要的文字，然後<strong>按滑鼠右鍵</strong>（或按 Enter）就會複製。<strong>不要在終端機裡按 Ctrl+C 以外的任何組合鍵</strong>——有些組合鍵會直接中斷或關閉程式。不確定的時候，一律用滑鼠右鍵最安全。</p>
+                  <p>用<strong>滑鼠選取</strong>你要的文字，然後<strong>按滑鼠右鍵</strong>（或按 Enter）就會複製。先選取再複製；沒有選取文字時，Ctrl+C 通常是中斷目前指令。</p>
                 ) : (
                   <p>用滑鼠選取你要的文字，按 <code className="bg-amber-100 px-1 rounded">⌘ + C</code> 複製即可，Mac 的終端機這樣操作是安全的。</p>
                 )}
               </Callout>
             </div>
           )}
-          <Callout variant="danger" title="走錯方向警示：本教程從頭到尾不需要 SSH">
-            <p>如果 AI 或任何網路教學叫你跑 <code className="bg-red-100 px-1 rounded">ssh-keygen</code>、設定 <strong>SSH key</strong>、或給你 <code className="bg-red-100 px-1 rounded">git@github.com:</code> 開頭的網址——<strong>停下來，那是另一條路</strong>。我們全程用 HTTPS，直接回覆 AI：「我不要用 SSH，請改用 HTTPS 的方式」。</p>
+          <Callout variant="danger" title="這一步只需要安裝工具">
+            <p>若 AI 開始帶你建立 GitHub 帳號或登入，先回覆：「我現在只安裝工具，帳號登入會在 L6 再做。」</p>
           </Callout>
           <div className="flex justify-end">
-            <NextButton label="我知道怎麼向 AI 求助了，下一步" />
+            <NextButton onClick={next} label="我知道怎麼向 AI 求助了，下一步" />
           </div>
         </StepCard>
 
@@ -306,7 +291,7 @@ export const Lesson0Setup = () => {
               <p className="mt-1 text-slate-600">裝好後打開 VSCode，點左側四個方塊圖示（延伸模組），搜尋並安裝 <strong>Git Graph</strong> 外掛——它能讓你「看見」Git 的時間線。</p>
             </div>
             <div className="border border-slate-200 rounded-lg p-3 bg-white">
-              <p className="font-bold text-slate-800 mb-1">② Git（本課程的主角）</p>
+              <p className="font-bold text-slate-800 mb-1">② Git（幫你保存與比較檔案版本的工具）</p>
               {isWin ? (
                 <p>到 <a href="https://git-scm.com/downloads" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">git-scm.com/downloads</a> 下載 Windows 版，安裝過程<strong>一直按「Next」就好</strong>，不需要改任何預設選項。</p>
               ) : (
@@ -329,7 +314,7 @@ export const Lesson0Setup = () => {
             <p>任何一樣工具卡住，<button type="button" onClick={() => setStep(2)} className="underline font-bold text-amber-900 hover:text-amber-700">回步驟 3</button> 把錯誤畫面截圖丟給 AI，照它的指示排除後再回來。</p>
           </Callout>
           <div className="flex justify-end">
-            <NextButton label="三樣工具都裝好了，下一步" />
+            <NextButton onClick={next} label="三樣工具都裝好了，下一步" />
           </div>
         </StepCard>
 
@@ -340,10 +325,10 @@ export const Lesson0Setup = () => {
           <CommandBlock variant="output" command="git version 2.x.x" />
           <CommandBlock command="gh --version" comment="第二關：GitHub CLI" />
           <CommandBlock variant="output" command="gh version 2.x.x" />
-          <p className="text-sm text-slate-600">最後，順手做兩行<strong>一次性設定</strong>（在任何資料夾輸入都可以，只需做一次，一樣一行按一次 Enter）：</p>
+          <p className="text-sm text-slate-600">最後做兩條<strong>預設設定</strong>（在任何資料夾輸入都可以，一條一條按 Enter）。分支是從某個版本另開的一本相簿，main 是主相簿的名稱；pull 是下載雲端的新照片並整理進目前這本相簿。L4 與 L8 會帶你實際操作，現在先設定它們的預設做法。</p>
           <CommandBlock
             command="git config --global pull.rebase false"
-            comment="pull 遇到分歧時用合併處理"
+            comment="本機與雲端各有新照片時，保留兩邊紀錄再合在一起"
           />
           <NoOutputHint />
           <CommandBlock
@@ -352,10 +337,10 @@ export const Lesson0Setup = () => {
           />
           <NoOutputHint />
           <Callout variant="info" title="這兩行在防什麼？">
-            不設定的話，之後 L8 做同步時 Git 可能反問你要用哪種方式合併、讓你卡住；有些電腦的新專案主分支會叫 <code>master</code>，跟教學指令裡的 <code>main</code> 對不起來。先設好，這兩個坑都不會踩到。
+            不設定的話，之後 L8 做同步時 Git 可能反問你要用哪種方式合併、讓你卡住；有些電腦的新專案主分支會叫 <code>master</code>，跟教學指令裡的 <code>main</code> 對不起來。先設好，之後新建的練習相簿就能使用一致的名稱與合併方式。
           </Callout>
           <div className="flex justify-end">
-            <NextButton label="驗收全過、帳號連好了，最後一步" />
+            <NextButton onClick={next} label="工具確認完成，設定存檔作者" />
           </div>
         </StepCard>
 
@@ -363,10 +348,10 @@ export const Lesson0Setup = () => {
     {/* --- 設置身份 --- */}
     <div className="mt-8">
       <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <Key size={20} className="text-amber-500" /> 你的第一步：Local 端身份設定
+        <Key size={20} className="text-amber-500" /> 設定這台電腦的存檔作者
       </h3>
       <Card className="bg-amber-50 border-amber-200 shadow-sm">
-        <p className="text-sm text-slate-700 mb-3 font-medium">太棒了！基本觀念都吸收完畢了吧？現在讓我們正式開始。每次存檔 (Commit) 時，Git 都會記錄「是誰做的」。所以第一件事，就是設定你的專屬身份名牌：</p>
+        <p className="text-sm text-slate-700 mb-3 font-medium">commit 是保存一個版本，像在相簿裡多放一張照片。Git 會在照片旁記錄作者的名字與信箱，所以先設定這兩項；這不是登入 GitHub。</p>
 
         <Callout variant="warning" title="請打開你電腦的真實終端機（不是這個網頁）" className="mb-3">
           接下來的指令請在 VSCode 的終端機或系統的終端機 App 裡輸入，這個網頁只是教學展示，不會真的執行指令。
@@ -389,7 +374,7 @@ export const Lesson0Setup = () => {
         </div>
 
         <Callout variant="success" title="沒消息就是好消息" className="mt-3">
-          這是你人生第一條 git 指令，先記住終端機的常態：<strong>指令成功時，往往什麼都不會顯示</strong>。畫面安安靜靜跳回可輸入狀態，就代表它做完了。
+          這兩條設定成功時不會印出文字：<strong>指令成功時，往往什麼都不會顯示</strong>。畫面安安靜靜跳回可輸入狀態，就代表它做完了。
         </Callout>
 
         <Callout variant="info" title="`$` 是什麼？" className="mt-3">
@@ -402,25 +387,26 @@ export const Lesson0Setup = () => {
 
         <p className="text-sm text-slate-600 mt-3">敲完上面兩行後，輸入這行確認設定是否成功——注意對比：<strong>這條有輸出</strong>（回你設定的值），上面那兩條沒有：</p>
         <CommandBlock command="git config user.name" comment="會回你剛剛設定的名字，只有一行" />
-        <CommandBlock variant="output" command="Your Name（你剛剛設定的名字）" />
+        <CommandBlock variant="output" command="Your Name" />
+        <p className="text-sm text-slate-600">實際應顯示你填的名字，接著核對信箱：</p>
+        <CommandBlock command="git config user.email" comment="確認存檔作者的信箱" />
+        <CommandBlock variant="output" command="you@example.com" />
+        <p className="text-sm text-slate-600">應顯示你自己的信箱；若不對，重做對應的設定再查一次。</p>
 
         <div className="mt-3 grid sm:grid-cols-2 gap-3">
           <div className="bg-white border border-amber-200 rounded-lg p-3 text-xs text-amber-800 flex items-start gap-2 shadow-sm">
             <Info size={14} className="shrink-0 mt-0.5 text-amber-500" />
-            <span><strong>--global</strong> 代表全域設定，設定一次就好，這台電腦上所有的 Git 專案都會認識你。</span>
+            <span><strong>--global</strong> 代表這台電腦上各個 Git 專案共用的預設值；個別專案仍可能另設不同的值。</span>
           </div>
           <div className="bg-white border border-amber-200 rounded-lg p-3 text-xs text-blue-800 flex items-start gap-2 shadow-sm">
             <Info size={14} className="shrink-0 mt-0.5 text-blue-500" />
-            <span>如果你未來要把作品推上 GitHub，這裡的 <strong>email 請務必填寫和 GitHub 註冊時相同的信箱</strong>，大頭貼才會漂亮地顯示出來喔！</span>
+            <span>先填自己使用的信箱；到 L6 建立 GitHub 帳號後，再確認它已加入帳號並完成驗證，讓存檔能對應到你的帳號。</span>
           </div>
         </div>
 
-        <p className="text-xs text-slate-500 mt-3">
-          小提醒：執行 <code>git init</code> 後，專案裡會多一個隱藏的 <code>.git</code> 資料夾，那就是你的存檔本體——它預設是隱藏的，在檔案總管／Finder 裡看不到是正常的。L2會介紹它。
-        </p>
       </Card>
     </div>
-<div className="flex justify-end"><NextButton label="下一步" /></div>
+<div className="flex justify-end"><NextButton onClick={next} label="下一步" /></div>
 </StepCard>
         {/* ── 步驟 7：完成 Checklist ── */}
         <StepCard step={step} setStep={setStep} idx={6}>
@@ -446,8 +432,8 @@ export const Lesson0Setup = () => {
           </div>
           <p className="text-xs text-slate-500 text-right">已勾選 {checkedCount} / {CHECKLIST_ITEMS.length} 項</p>
           {allChecked ? (
-            <Callout variant="success" title="🎉 行前準備全部完成——你已經是一個裝備齊全的冒險者了！">
-              <p className="mb-3">工具裝好、帳號連上、還多了一個隨時待命的 AI 助手。接下來就正式進入 Git 的世界吧！</p>
+            <Callout variant="success" title="行前準備完成">
+              <p className="mb-3">工具與作者資料已確認，接著到 L1 看懂相簿的三個位置。GitHub 註冊與登入會在 L6 進行。</p>
               <a
                 href="#concept"
                 className="inline-flex items-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-green-700 transition-colors no-underline"
@@ -457,7 +443,7 @@ export const Lesson0Setup = () => {
               </a>
             </Callout>
           ) : (
-            <Callout variant="info" title="全部勾完就完賽了">
+            <Callout variant="info" title="依實際結果逐項確認">
               中途被打斷也沒關係，回來對照這份清單，補做打不了勾的那幾項就好。
             </Callout>
           )}

@@ -1,160 +1,47 @@
 import { useState } from 'react';
-import { SectionTitle, Badge } from './Shared';
-import { GitGraph, CheckCircle, FileCode } from 'lucide-react';
+import { SectionTitle, Card, Callout } from './Shared';
+
+const histories = {
+  diverged: '共同照片 → A（main）\n        ↘ B（你的分支）',
+  merged: '共同照片 → A ──→ M（合併照片）\n        ↘ B ──↗',
+  rebased: "共同照片 → A → B′（重新套用你的改動）",
+};
 
 export const Elective1Rebase = () => {
   const [mode, setMode] = useState('diverged');
-  const [activeTab, setActiveTab] = useState('code');
-  const codeOriginal = `function calculate(a, b) {\n  return a + b;\n}`;
-  const codeRemote = `function calculate(a, b) {\n  console.log("Calculating..."); // 同事 (A) 新增\n  return a + b;\n}`;
-  const codeLocal = `function calculate(a, b) {\n  if (a < 0) return 0; // 你 (B) 新增\n  return a + b;\n}`;
-  
-  const codeMerged = `function calculate(a, b) {\n  if (a < 0) return 0; // 你 (B) 新增\n  console.log("Calculating..."); // 同事 (A) 新增\n  return a + b;\n}`;
-  const codeRebased = `function calculate(a, b) {\n  console.log("Calculating..."); // 同事 (A) 新增\n  if (a < 0) return 0; // 你 (B) 被重新套用\n  return a + b;\n}`;
-
-return (<div className="space-y-6 animate-fade-in">
-<SectionTitle title="E1 Merge vs Rebase" />
-      {/* Part 3: Merge vs Rebase */}
-      <section>
-        <details className="group">
-          <summary className="cursor-pointer list-none flex items-center gap-2 mb-2">
-            <Badge color="orange">Part 3</Badge>
-            <Badge color="gray">進階概念</Badge>
-            <h3 className="text-xl font-bold text-slate-800 inline">Merge 與 Rebase：你喜歡怎樣的歷史？</h3>
-            <span className="text-slate-400 text-sm ml-auto group-open:hidden">▸ 點開看</span>
-            <span className="text-slate-400 text-sm ml-auto hidden group-open:inline">▾ 收合</span>
-          </summary>
-          <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-4 text-sm text-amber-800 flex items-start gap-2">
-            <span className="text-lg leading-none mt-0.5">⭐</span>
-            <span><strong>這是進階概念</strong>，看不懂完全正常，先跳過——第一次學習建議先完成 L7 和 E2 的實戰演練，再回來看這裡。</span>
-          </div>
-
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-lg mb-8">
-           <div className="bg-slate-100 px-4 py-3 border-b border-slate-200 flex gap-4">
-              <button onClick={() => setActiveTab('code')} className={`flex items-center gap-2 text-sm font-bold ${activeTab === 'code' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>
-                 <FileCode size={16} /> 程式碼合併比對 (Diff)
-              </button>
-              <button onClick={() => setActiveTab('graph')} className={`flex items-center gap-2 text-sm font-bold ${activeTab === 'graph' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}>
-                 <GitGraph size={16} /> 歷史結構圖 (Graph)
-              </button>
-           </div>
-
-           <div className="p-6 bg-slate-50/50 min-h-[350px]">
-              {/* Controls */}
-              <div className="flex gap-2 mb-6 max-w-md mx-auto">
-                  <button onClick={() => setMode('diverged')} className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${mode === 'diverged' ? 'bg-slate-800 text-white' : 'bg-white text-slate-600'}`}>
-                    1. 分歧 (原始狀態)
-                  </button>
-                  <button onClick={() => setMode('merged')} className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${mode === 'merged' ? 'bg-blue-600 text-white shadow' : 'bg-white text-slate-600'}`}>
-                    2. Merge 結果
-                  </button>
-                  <button onClick={() => setMode('rebased')} className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${mode === 'rebased' ? 'bg-orange-600 text-white shadow' : 'bg-white text-slate-600'}`}>
-                    3. Rebase 結果
-                  </button>
-              </div>
-
-              {activeTab === 'code' ? (
-                <div className="grid md:grid-cols-2 gap-4">
-                   <div className="space-y-4">
-                     <div className="bg-slate-100 p-3 rounded border border-slate-200 font-mono text-xs">
-                        <div className="mb-2 font-bold text-slate-500 flex items-center gap-1">原始程式碼 (Base)</div>
-                        <pre className="text-slate-400">{codeOriginal}</pre>
-                     </div>
-                     <div className="grid grid-cols-2 gap-2">
-                       <div className="bg-purple-50 p-2 rounded border border-purple-200 font-mono text-xs">
-                          <div className="mb-1 font-bold text-purple-700">同事 (Remote A)</div>
-                          <pre className="text-slate-600 whitespace-pre-wrap">
-                            {codeRemote.split('\n').map((line, i) => (
-                              <div key={i} className={line.includes('新增') ? 'bg-purple-200 text-purple-900 font-bold' : ''}>{line}</div>
-                            ))}
-                          </pre>
-                       </div>
-                       <div className="bg-indigo-50 p-2 rounded border border-indigo-200 font-mono text-xs">
-                          <div className="mb-1 font-bold text-indigo-700">你 (Local B)</div>
-                          <pre className="text-slate-600 whitespace-pre-wrap">
-                            {codeLocal.split('\n').map((line, i) => (
-                              <div key={i} className={line.includes('新增') ? 'bg-indigo-200 text-indigo-900 font-bold' : ''}>{line}</div>
-                            ))}
-                          </pre>
-                       </div>
-                     </div>
-                   </div>
-
-                   <div className={`p-4 rounded-lg border h-full transition-all duration-500 font-mono text-xs ${mode === 'diverged' ? 'bg-slate-100 border-slate-300' : mode === 'rebased' ? 'bg-orange-50 border-orange-300 shadow-md' : 'bg-blue-50 border-blue-300 shadow-md'}`}>
-                      <div className="mb-4 font-bold text-slate-700 flex items-center gap-2 text-sm border-b pb-2">
-                        {mode === 'diverged' ? '等待合併...' : 
-                         mode === 'rebased' ? <><CheckCircle size={16} className="text-orange-600"/> Rebase：替換基底，再貼上你的修改</> : 
-                         <><CheckCircle size={16} className="text-blue-600"/> Merge：保留各自歷史，直接融為一體</>}
-                      </div>
-                      
-                      {mode === 'diverged' ? (
-                         <div className="h-40 flex items-center justify-center text-slate-400 italic">請選擇上方按鈕查看結果</div>
-                      ) : mode === 'rebased' ? (
-                        <pre className="text-slate-700 whitespace-pre-wrap leading-loose">
-                          {codeRebased.split('\n').map((line, i) => (
-                             <div key={i} className={line.includes('你') ? 'bg-indigo-100 text-indigo-800 px-1 rounded' : line.includes('同事') ? 'bg-purple-100 text-purple-800 px-1 rounded' : ''}>{line}</div>
-                          ))}
-                        </pre>
-                      ) : (
-                        <pre className="text-slate-700 whitespace-pre-wrap leading-loose">
-                          {codeMerged.split('\n').map((line, i) => (
-                             <div key={i} className={line.includes('你') ? 'bg-indigo-100 text-indigo-800 px-1 rounded' : line.includes('同事') ? 'bg-purple-100 text-purple-800 px-1 rounded' : ''}>{line}</div>
-                          ))}
-                        </pre>
-                      )}
-                   </div>
-                </div>
-              ) : (
-                <div className="w-full overflow-x-auto">
-                <div className="relative min-w-[420px] max-w-lg h-64 mx-auto flex items-center justify-center border rounded bg-white">
-                   <div className="absolute left-10 top-1/2 -translate-y-1/2 flex flex-col items-center z-10">
-                      <div className="w-10 h-10 rounded-full bg-slate-400 text-white flex items-center justify-center font-bold shadow">Base</div>
-                   </div>
-
-                   <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                      <line x1="80" y1="128" x2="160" y2="80" stroke="#9333ea" strokeWidth="3" strokeDasharray="5,5" />
-                      {mode !== 'rebased' && <line x1="80" y1="128" x2="160" y2="176" stroke="#4f46e5" strokeWidth="3" strokeDasharray="5,5" />}
-                      
-                      {mode === 'merged' && (
-                         <>
-                           <line x1="200" y1="80" x2="320" y2="128" stroke="#9333ea" strokeWidth="3" />
-                           <line x1="200" y1="176" x2="320" y2="128" stroke="#4f46e5" strokeWidth="3" />
-                         </>
-                      )}
-                   </svg>
-
-                   <div className="absolute left-40 top-[60px] flex flex-col items-center z-10">
-                      <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold shadow ring-4 ring-white">A</div>
-                      <span className="text-xs text-purple-700 mt-1">Remote</span>
-                   </div>
-
-                   <div className={`absolute flex flex-col items-center z-10 transition-all duration-700 ease-in-out
-                      ${mode === 'rebased' ? 'left-72 top-[60px]' : 'left-40 top-[156px]'}
-                   `}>
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold shadow ring-4 ring-white bg-indigo-600 text-white`}>
-                         {mode === 'rebased' ? "B'" : "B"}
-                      </div>
-                      <span className="text-xs text-indigo-700 mt-1">Local</span>
-                   </div>
-
-                   {mode === 'rebased' && (
-                      <div className="absolute left-[210px] top-[78px] w-16 h-1 bg-gradient-to-r from-purple-600 to-indigo-600"></div>
-                   )}
-
-                   {mode === 'merged' && (
-                     <div className="absolute left-80 top-1/2 -translate-y-1/2 flex flex-col items-center z-10 animate-fade-in">
-                        <div className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center font-bold shadow ring-4 ring-white">M</div>
-                        <span className="text-xs text-green-700 mt-1">Merge</span>
-                     </div>
-                   )}
-                </div>
-                </div>
-              )}
-           </div>
-          </div>
-        </details>
-      </section>
-
-
-</div>);
+  return (
+    <div className="space-y-6 animate-fade-in">
+      <header>
+        <SectionTitle title="E1 Merge 與 Rebase" subtitle="比較兩種整理相簿紀錄的方法，知道什麼時候先別改歷史。" />
+        <p className="text-sm text-slate-600">選修，不計分，學完作業再來；先熟悉 L4 的分支與 L5 的衝突。</p>
+      </header>
+      <Card className="space-y-3">
+        <h3 className="font-bold">同樣是收進改動，留下的紀錄不同</h3>
+        <p><strong>Merge（合併）</strong> 是把另一本分支相簿的成果收進目前這本相簿。<strong>Rebase（重新套用）</strong> 是換一個起點，把自己這邊的改動逐次重做成新的照片。</p>
+        <p>假設兩本相簿從同一張照片出發：main 多了 A，你的分支多了 B。我先保留 A、B 的分開過程，再用合併照片 M 連起來，這是這個例子的 Merge；若把 B 的改動接到 A 後面重新保存，就得到 B′，這是 Rebase。</p>
+        <p><strong>commit</strong> 是一次保存的版本，也就是相簿裡的一張照片。B′ 的編號不同於 B，因為它接在不同的照片後面；Rebase 不只是把圖上的圓點移位置。</p>
+        <div className="flex flex-wrap gap-2">
+          {[
+            ['diverged', '1. 兩邊各有新照片'],
+            ['merged', '2. 看 Merge'],
+            ['rebased', '3. 看 Rebase'],
+          ].map(([value, label]) => (
+            <button key={value} type="button" aria-pressed={mode === value} onClick={() => setMode(value)} className={`px-3 py-2 rounded border ${mode === value ? 'bg-indigo-600 text-white' : 'bg-white text-slate-700'}`}>{label}</button>
+          ))}
+        </div>
+        <pre className="overflow-x-auto rounded bg-slate-100 p-4" aria-live="polite">{histories[mode]}</pre>
+        <p className="text-sm text-slate-600">這是相簿關係示意，不是終端機輸出，也沒有在你的電腦執行指令。兩邊都改到同一處時，兩種方法都可能需要你解衝突；不能靠選 Rebase 省略判斷。</p>
+      </Card>
+      <Callout variant="warning" title="照片已經分享出去，就先別重做">
+        <strong>push</strong> 是把本機保存的版本上傳到雲端。若別人已經拿到你的照片，Rebase 換掉編號後，彼此的紀錄可能接不起來。這堂入門課繼續用已學過的 Merge；日後有團隊需求，再確認哪些尚未分享的紀錄可以整理。
+      </Callout>
+      <Card className="space-y-3">
+        <h3 className="font-bold">一起判斷，再自己說明</h3>
+        <p>我想保留「兩邊各自做事，最後合起來」的過程，因此選 Merge。換你補完：如果改用 Rebase，B 的編號會保留嗎？</p>
+        <details><summary className="cursor-pointer text-indigo-700">核對答案</summary><p>這個例子不會；B 接到 A 後重新保存，成為編號不同的 B′。不確定就切換上方圖再看一次。</p></details>
+        <p>再想一個不同情況：同事已經下載你的分支，現在你只想讓圖排成一直線，適合直接 Rebase 嗎？</p>
+        <details><summary className="cursor-pointer text-indigo-700">核對判斷</summary><p>不適合直接做；先確認團隊如何協作。圖比較整齊不值得讓大家手上的紀錄不一致。</p></details>
+      </Card>
+    </div>
+  );
 };
