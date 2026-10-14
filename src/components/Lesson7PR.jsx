@@ -1,272 +1,109 @@
+import { SectionTitle, Card, Callout, Quiz, CommandBlock, FalseAlarm, Screenshot } from './Shared';
 
-import { SectionTitle, InstructionalText, CommandBlock, Callout, Card, Badge, Quiz } from './Shared';
-import { ArrowRight, Github, GitBranch, CheckCircle, AlertCircle, GitMerge, GitPullRequest } from 'lucide-react';
-
-export const Lesson7PR = () => {
-  return (
-    <div className="animate-fade-in space-y-12">
-      <SectionTitle title="L7. 團隊合併與 PR" subtitle="Pull Request：不是請求你拉取，而是請求你合併" />
-
-      {/* 進入狀態提示 */}
-      <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
-        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">⚡ 進入狀態：發 PR 前必讀</div>
-        <div className="flex items-start gap-3">
-          <span className="text-pink-400 text-base leading-none mt-0.5">🌿</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">發 PR 的前提：你必須已經有一個獨立的 Branch（分支），</strong>並且已經把它 <code className="bg-slate-700 px-1 rounded">git push -u origin 分支名</code> 推上 GitHub。沒有分支就沒有 PR。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-purple-400 text-base leading-none mt-0.5">🔀</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">PR 是「請求把你的分支合併回 main」，</strong>不是下載最新進度。目標分支通常是 <code className="bg-slate-700 px-1 rounded">main</code> 或 <code className="bg-slate-700 px-1 rounded">develop</code>，請在發 PR 前確認清楚要合併去哪裡。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-yellow-400 text-base leading-none mt-0.5">🔑</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">你需要在 GitHub 上已連線的帳號，</strong>並且已將你的分支 push 到 GitHub（推到你的 Fork 或有寫入權限的 repo），才能看到 Compare &amp; pull request 的按鈕。不需要是 Collaborator——Fork 後 push 到自己的副本，同樣可以發起 PR！</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-slate-400 text-base leading-none mt-0.5">ℹ️</span>
-          <p className="text-sm text-slate-300"><strong>給初學者的話：</strong>先讀懂 PR 的流程圖就好——下一章你就會親手跑一遍完整流程，所以別跳過喔。</p>
-        </div>
-      </div>
-
-      {/* Part 1: PR Concepts */}
-      <section>
-        <InstructionalText title="核心觀念：版本推拉 vs 分支合併" icon={<AlertCircle size={18} className="text-indigo-600" />}>
-          <p className="mb-4">新手最常搞混的是「什麼時候用 Pull」跟「什麼時候發 PR」。<br/><strong>PR (Pull Request)</strong> 的本質是「請求管理員將我的分支拉進主線」。</p>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Same Timeline */}
-            <div className="bg-white p-5 rounded-xl border border-indigo-200 shadow-sm relative overflow-hidden">
-               <div className="absolute top-0 left-0 w-full h-1 bg-indigo-500"></div>
-               <h4 className="font-bold text-indigo-800 mb-3 text-lg">1. 同一條時間線上的更新</h4>
-               <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-                 你和同事<strong>都在 main 分支</strong>上工作。同事上傳了新版本，你的電腦版本舊了。<br/>
-                 這時候你只需要 <code>git pull</code> 把更新拉下來，修改完後再 <code>git push</code>。這是<strong>日常的版本迭代</strong>。
-               </p>
-               <div className="flex items-center justify-between text-indigo-500 font-mono text-sm bg-indigo-50 p-3 rounded">
-                  <span>main (你)</span>
-                  <div className="flex items-center gap-1">
-                     <ArrowRight size={14} />
-                     <span className="text-[10px] bg-indigo-200 text-indigo-800 px-1 rounded">pull/push</span>
-                     <ArrowRight size={14} />
-                  </div>
-                  <span>main (遠端)</span>
-               </div>
-            </div>
-
-            {/* Different Timelines */}
-            <div className="bg-white p-5 rounded-xl border border-purple-200 shadow-sm relative overflow-hidden">
-               <div className="absolute top-0 left-0 w-full h-1 bg-purple-500"></div>
-               <h4 className="font-bold text-purple-800 mb-3 text-lg">2. 完全不同的時間線</h4>
-               <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-                 你在 <strong>feat/login</strong> 分支，而主線是 <strong>main</strong>。你想把你的功能整包裝進主線裡。<br/>
-                 這時候你不能只用 pull，你必須到 GitHub 上發起 <strong>Pull Request (PR)</strong>。
-               </p>
-               <div className="flex items-center justify-between text-purple-500 font-mono text-sm bg-purple-50 p-3 rounded">
-                  <span>feat/login</span>
-                  <div className="flex flex-col items-center">
-                     <GitPullRequest size={18} className="text-purple-600" />
-                     <span className="text-[10px] font-bold mt-1 text-purple-700">發起 PR 請求合併</span>
-                  </div>
-                  <span>main</span>
-               </div>
-            </div>
-          </div>
-        </InstructionalText>
-      </section>
-
-      {/* Part 2: The PR Flow */}
-      <section>
-        <div className="flex items-center gap-2 mb-6">
-          <Badge color="purple">PR 流程解析</Badge>
-          <h3 className="text-xl font-bold text-slate-800">一個 PR 從誕生到合併的一生</h3>
-        </div>
-
-        <div className="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
-           
-           {/* Step 1 */}
-           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-slate-200 text-slate-600 font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm z-10">1</div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded border border-slate-200 bg-white shadow-sm">
-                 <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2"><GitBranch size={16}/> 開發與上傳</h4>
-                 <p className="text-sm text-slate-600">在你自己的分支上完成開發，並使用 <code>git push -u origin 分支名</code> 將整條分支推上 GitHub。</p>
-              </div>
-           </div>
-
-           {/* Step 2 */}
-           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-purple-500 text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm z-10">
-                 <GitPullRequest size={18} />
-              </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded border border-purple-200 bg-purple-50 shadow-sm relative">
-                 <div className="absolute -right-2 -top-2 bg-purple-600 text-white text-[10px] px-2 py-1 rounded-full font-bold shadow animate-pulse">Action!</div>
-                 <h4 className="font-bold text-purple-900 mb-2 flex items-center gap-2"><Github size={16}/> 發起 Pull Request</h4>
-                 <p className="text-sm text-purple-800 mb-3">在 GitHub 網頁上點擊 "Compare &amp; pull request"，寫下你做了什麼改變。</p>
-
-                 <div className="space-y-3">
-                   <div className="bg-white rounded border border-purple-100 p-3">
-                     <div className="text-xs font-bold text-slate-600 mb-2">🌐 方法一：瀏覽器操作（推薦初學者）</div>
-                     <ol className="text-xs text-slate-600 space-y-1 list-decimal pl-4">
-                       <li>打開 GitHub 專案頁面</li>
-                       <li>點擊黃色提示框的 <strong>Compare &amp; pull request</strong></li>
-                       <li>
-                         寫標題與描述，點 <strong>Create pull request</strong>
-                         <div className="mt-1 bg-slate-50 border border-slate-200 rounded p-2 font-mono text-[10px] text-slate-600">
-                           <div className="text-slate-400 mb-1">標題範例：</div>
-                           <div>feat: 新增 your-name 的學習筆記</div>
-                           <div className="text-slate-400 mt-1 mb-1">描述範例：</div>
-                           <div>這是我的第一個 PR，包含了 E2 實戰演練中新增的個人筆記。</div>
-                         </div>
-                       </li>
-                     </ol>
-                   </div>
-
-                   <div>
-                     <div className="text-xs font-bold text-slate-600 mb-2">💻 方法二：GitHub CLI（記得嗎？這就是當初裝它的原因！）</div>
-                     <CommandBlock command="gh pr create" comment="這個工具在 L0 行前準備安裝的" />
-                     <div className="text-xs text-slate-500 mt-2">
-                       輸入這一行，它會互動式地問你標題、描述，幾秒內 PR 就建好了。互動過程中它可能會問你要 push 到哪、要不要開瀏覽器——多半直接按 Enter 選預設值即可。
-                     </div>
-                     <div className="text-xs text-slate-500 mt-1">
-                       ⚠️ 如果回你 <code className="bg-slate-100 px-1 rounded">not logged into any GitHub hosts</code>，先執行 <code className="bg-slate-100 px-1 rounded">gh auth login</code> 登入，再重跑一次 <code className="bg-slate-100 px-1 rounded">gh pr create</code>。
-                     </div>
-                   </div>
-                 </div>
-              </div>
-           </div>
-
-           {/* Step 4 */}
-           <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-green-500 text-white font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm z-10">
-                 <GitMerge size={18} />
-              </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded border border-green-200 bg-green-50 shadow-sm">
-                 <h4 className="font-bold text-green-900 mb-2 flex items-center gap-2"><CheckCircle size={16}/> Approve &amp; Merge</h4>
-                 <p className="text-sm text-green-800">審查通過！維護者點擊 <strong>Merge pull request</strong>。你的分支完美融入 main 宇宙，任務圓滿達成！🎉</p>
-                 <Callout variant="info" title="合併後會怎樣？" className="mt-3">
-                   合併後，這個功能分支（如 feat/login）通常會被<strong>刪除或封存</strong>。因為它的階段性任務已經結束了。下次如果有新需求，請記得切回 main 並拉取最新進度後，<strong>再開一個全新的分支</strong>！
-                 </Callout>
-              </div>
-           </div>
-
-        </div>
-      </section>
-
-      <Card className="bg-indigo-50 border-indigo-200 mt-6 p-5">
-         <h3 className="font-bold text-indigo-900 mb-2 flex items-center gap-2">
-           <span className="text-xl">💡</span> 重要觀念：本地分支 vs 雲端分支
-         </h3>
-         <p className="text-sm text-indigo-800 mb-4 leading-relaxed">
-           請記住：<strong>你在電腦上用 checkout 建立的分支，只有你自己看得到！</strong> 雲端（GitHub）此時還不知道有這個宇宙的存在。這就是為什麼只在本地新增分支時，別人是無法拉取 (pull) 到你的進度的。
-         </p>
-         <div className="bg-white p-4 rounded-lg border border-indigo-100 shadow-sm">
-           <div className="font-bold text-sm text-slate-800 mb-2">要把分支「上傳並在雲端建立」，你需要執行：</div>
-           <code className="text-xs text-indigo-600 bg-indigo-50 px-2 py-1 rounded block mb-2 font-mono">git push -u origin &lt;你的分支名&gt;</code>
-           <Callout variant="warning" title="角括號不要打進去" className="mb-3">
-             <code className="bg-amber-100 px-1 rounded">&lt;你的分支名&gt;</code> 要整個換成實際的分支名，例如 <code className="bg-amber-100 px-1 rounded">git push -u origin feat/login</code>。如果連角括號一起打，會出現 <code className="bg-amber-100 px-1 rounded">error: src refspec ... does not match</code>。
-           </Callout>
-           <p className="text-sm text-slate-600 mb-1">按 Enter 後，終端機會滾動一串進度訊息，長得像這樣：</p>
-           <CommandBlock
-             variant="output"
-             command={'Enumerating objects: 5, done.\nCounting objects: 100% (5/5), done.\nWriting objects: 100% (3/3), done.\n * [new branch]      feat/login -> feat/login'}
-             className="mb-3"
-           />
-           <p className="text-sm text-slate-600 mb-3">最後看到 <code className="bg-slate-100 px-1 rounded text-xs">* [new branch] 分支名 -&gt; 分支名</code> 就是成功了。第一次 push 時，Windows 可能會彈出要你登入 GitHub 的視窗——這是正常的，登入一次就會記住。</p>
-           <ul className="text-sm text-slate-600 space-y-1 list-disc pl-4">
-             <li><code className="bg-slate-100 px-1 rounded text-xs">-u</code> (set-upstream) 的意思是「建立上下游連線」。</li>
-             <li>這告訴 Git：「請在 GitHub 也建立一個一模一樣的分支，並把它們綁定在一起」。</li>
-             <li>綁定之後，未來你在這個分支只要簡單打 <code className="bg-slate-100 px-1 rounded text-xs">git push</code>，它就會知道要推送到雲端的對應分支了！</li>
-           </ul>
-         </div>
-      </Card>
-      {/* Team Parallel Dev Graph */}
-      <div className="mt-8">
-        <Card className="bg-white border-slate-200">
-           <h3 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
-             <GitBranch size={18} className="text-indigo-600" /> 團隊協作的大局觀：多模組平行開發
-           </h3>
-           <p className="text-sm text-slate-600 mb-2">在真實的公司專案中，主線 (main) 就像火車的主幹道，而大家會各自開分支 (Branch) 進行平行開發，完成後再合併回來（產品迭代），周而復始。</p>
-           
-           <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 mb-6">
-             <h4 className="font-bold text-blue-800 text-sm mb-1">💡 觀念釐清：分支是「階段性服務」</h4>
-             <p className="text-xs text-blue-700">分支是為了解決某個特定的功能 (Feature) 或修復 (Bug) 而短暫存在的。當任務完成並合併 (Merge) 回主線後，該分支的使命就結束了，通常會被刪除或封存。長期讓兩個分支平行存在而不合併，是非常危險且容易產生大量衝突的不良設計。</p>
-           </div>
-           
-           <div className="w-full overflow-x-auto">
-             <div style={{ minWidth: '600px' }}>
-               <svg
-                 viewBox="0 0 700 256"
-                 xmlns="http://www.w3.org/2000/svg"
-                 className="w-full h-auto"
-                 style={{ maxHeight: '256px' }}
-               >
-                 {/* Main Line */}
-                 <line x1="0" y1="128" x2="700" y2="128" stroke="#cbd5e1" strokeWidth="6" />
-
-                 {/* Pink (UI) Branch: y=48 */}
-                 <path d="M 100 128 C 130 128, 140 48, 180 48 L 320 48 C 360 48, 370 128, 400 128" fill="none" stroke="#ec4899" strokeWidth="5" />
-
-                 {/* Blue (API) Branch: y=168 */}
-                 <path d="M 260 128 C 290 128, 300 168, 340 168 L 360 168 C 380 168, 390 128, 400 128" fill="none" stroke="#3b82f6" strokeWidth="5" />
-
-                 {/* Yellow (DB) Branch: y=218 */}
-                 <path d="M 100 128 C 130 128, 140 218, 180 218 L 450 218 C 500 218, 510 128, 550 128" fill="none" stroke="#eab308" strokeWidth="5" />
-
-                 {/* v1.0 Base */}
-                 <circle cx="100" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
-                 <text x="100" y="152" fill="#475569" fontSize="12" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.0</text>
-
-                 {/* Pink Nodes */}
-                 <circle cx="180" cy="48" r="8" fill="#ec4899" stroke="white" strokeWidth="3" />
-                 <text x="180" y="32" fill="#be185d" fontSize="12" textAnchor="middle" fontWeight="bold">feat/ui</text>
-                 <circle cx="320" cy="48" r="8" fill="#ec4899" stroke="white" strokeWidth="3" />
-
-                 {/* Blue Nodes */}
-                 <circle cx="340" cy="168" r="8" fill="#3b82f6" stroke="white" strokeWidth="3" />
-                 <text x="340" y="190" fill="#1d4ed8" fontSize="12" textAnchor="middle" fontWeight="bold">feat/api</text>
-
-                 {/* Yellow Nodes */}
-                 <circle cx="180" cy="218" r="8" fill="#eab308" stroke="white" strokeWidth="3" />
-                 <text x="180" y="240" fill="#a16207" fontSize="12" textAnchor="middle" fontWeight="bold">feat/db</text>
-                 <circle cx="450" cy="218" r="8" fill="#eab308" stroke="white" strokeWidth="3" />
-                 <text x="450" y="240" fill="#475569" fontSize="13" textAnchor="middle">耗時較長的開發</text>
-
-                 {/* Merge Nodes */}
-                 <circle cx="400" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
-                 <text x="400" y="152" fill="#475569" fontSize="13" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.1 (UI+API)</text>
-
-                 <circle cx="550" cy="128" r="10" fill="#6366f1" stroke="white" strokeWidth="4" />
-                 <text x="550" y="152" fill="#475569" fontSize="13" textAnchor="middle" fontWeight="bold" fontFamily="monospace">v1.2 (DB)</text>
-               </svg>
-             </div>
-           </div>
-        </Card>
-      </div>
-
-      <Quiz
-        questions={[
-          {
-            q: 'PR（Pull Request）的本質最接近下面哪一種說法？',
-            options: [
-              '把你分支上的內容直接寫進 main，是一個強制執行的動作',
-              '請求維護者把你的分支合併進主線，決定權在對方手上',
-              '就是 git pull 的另一種說法，把遠端進度拉到本地',
-            ],
-            answer: 1,
-            explain: '名字裡雖然有 Pull，但 PR 完全不是「拉取」，而是「請求對方拉進去」——你只是提出申請，維護者看過、審查過，才會按下 Merge。這跟直接 push 完全不同層次：push 是直接寫入，前提是你本來就有寫入權限（沒有就會被 GitHub 拒絕）；PR 則是需要對方同意的請求，這正是團隊協作裡權限控管的關鍵設計。',
-          },
-          
-          {
-            q: 'Merge 和 PR 兩個詞常被搞混，它們的層次差別是什麼？',
-            options: [
-              '兩者是同一件事，只是叫法不同',
-              'Merge 是 Git 本身的合併動作；PR 是 GitHub（平台）提供的協作流程，內部最終也是靠 Merge 完成',
-              'PR 是本地指令，Merge 只能在網頁上點擊完成',
-            ],
-            answer: 1,
-            explain: 'Merge 是 Git 這個版本控制系統的底層動作，把兩條分支的歷史接在一起，本地執行 git merge 也做得到，跟有沒有 GitHub 帳號無關。PR 則是 GitHub（或其他平台）在 Merge 之上包裝出來的協作流程——審查、留言、CI 檢查通過後，維護者按下的「Merge pull request」按鈕，內部做的其實就是一次 Merge。搞懂這層次差異，才不會誤以為地端也需要「發 PR」才能合併分支。',
-          },
-        ]}
-      />
-    </div>
-  );
+// Copied from m3-real-outputs.txt with only the account and repo substitutions.
+const outputs = {
+  "clean": "On branch main\nYour branch is up to date with 'origin/main'.\n\nnothing to commit, working tree clean",
+  "branch": "Switched to a new branch 'feat/day3'",
+  "commit": "[feat/day3 2e61ef9] 新增 Day 3 筆記\n 1 file changed, 1 insertion(+)\n create mode 100644 day3.md",
+  "push": "Enumerating objects: 4, done.\nCounting objects: 100% (4/4), done.\nDelta compression using up to 16 threads\nCompressing objects: 100% (2/2), done.\nWriting objects: 100% (3/3), 534 bytes | 534.00 KiB/s, done.\nTotal 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)\nremote: Resolving deltas: 100% (1/1), completed with 1 local object.\nremote:\nremote: Create a pull request for 'feat/day3' on GitHub by visiting:\nremote:      https://github.com/<你的帳號>/git-journal/pull/new/feat/day3\nremote:\nTo https://github.com/<你的帳號>/git-journal.git\n * [new branch]      feat/day3 -> feat/day3\nbranch 'feat/day3' set up to track 'origin/feat/day3'.",
+  "switchMain": "Switched to branch 'main'\nYour branch is up to date with 'origin/main'.",
+  "pull": "remote: Enumerating objects: 1, done.\nremote: Counting objects: 100% (1/1), done.\nremote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)\nFrom https://github.com/<你的帳號>/git-journal\n   e6760a9..58fc040  main       -> origin/main\nUpdating e6760a9..58fc040\nFast-forward\n day3.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 day3.md",
+  "log": "*   58fc040 Merge pull request #1 from <你的帳號>/feat/day3\n|\\\n| * 2e61ef9 新增 Day 3 筆記\n|/\n* e6760a9 Part 1 的日誌",
+  "deleteBranch": "Deleted branch feat/day3 (was 2e61ef9)."
 };
+
+export const Lesson7PR = () => (
+  <div className="min-w-0 space-y-6 animate-fade-in break-words [overflow-wrap:anywhere] [&_pre]:whitespace-pre-wrap">
+    <header><SectionTitle title="L7 分支上雲與自己的 PR" subtitle="在自己的 repo 上傳 Day 3 分支、提出合併申請，再把合併成果下載回電腦。" /><p className="text-sm text-slate-600">先準備：完成 L6 並登入自己的 GitHub；原本 git-journal 在 main 且沒有待保存的改動。</p></header>
+    <Card className="space-y-3 bg-indigo-50">
+      <h3 className="font-bold">我先示範：申請單與收進相簿是兩個動作</h3>
+      <p><strong>PR（Pull Request）</strong> 是「這本分支相簿拍好了，請收進主相簿」的申請單。Create pull request 只是送出申請；按 <strong>Merge pull request</strong> 並確認，才真的把照片收進主相簿。</p>
+      <p><strong>pull</strong> 是把雲端的新照片下載下來，並整理進目前的本機相簿。本課在網頁合併後，電腦的 main 不會自動更新，所以最後需要 pull。</p>
+      <div className="grid sm:grid-cols-2 gap-3 text-center" aria-label="上傳分支後用 PR 申請收進雲端 main，再下載回本機 main">
+        <div className="rounded bg-purple-50 p-3">自己的 feat/day3<br />push 上傳 → PR 申請 → Merge 收進雲端 main</div>
+        <div className="rounded bg-blue-50 p-3">自己的本機 main<br />pull 下載 ← 雲端 main</div>
+      </div>
+      <p>團隊也會各自在分支準備內容再收進 main；這次所有分支都在你自己的 repo，申請與合併都由你完成。我先上傳分支，是因為 GitHub 要先收到分支照片，才有內容可比較。</p>
+    </Card>
+    <Callout title="先停一下，說出答案再繼續"><p>按 Create pull request 後，main 就有 Day 3 了嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>還沒有；這只是申請單，要完成 Merge 與 Confirm merge 才收進去。若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
+    <Card className="space-y-3">
+      <h3 className="font-bold">一起選：申請單的方向</h3>
+      <p>我先指出 compare 是「提供照片的分支」，這次填 feat/day3；你補 base，也就是「要收進哪本相簿」。</p>
+      <details><summary className="cursor-pointer">核對方向</summary><p>base = main ← compare = feat/day3；兩邊都在你自己的 git-journal。</p></details>
+    </Card>
+    <Callout title="先停一下，說出答案再繼續"><p>網頁已合併，但電腦看不到 day3.md，要再次開 PR 嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不用；先回電腦的 main，再 pull 下載。能分清「申請合併」與「下載成果」再開始；不確定就回看上方兩格圖。</p></details></Callout>
+    <SectionTitle title="🔥 換你了：在自己的 git-journal 開第一張 PR" />
+    <Card className="space-y-3">
+      <h3 className="font-bold">1. 開分支，保存 Day 3</h3>
+      <p>回原本 git-journal 的 VSCode，終端機路徑應以 git-journal 結尾。每次一條指令，等提示符回來再繼續；$ 與 PS 路徑不用打，輸出框不用輸入。</p>
+      <CommandBlock command="git status" comment="先確定從已上傳、乾淨的 main 開始" />
+      <CommandBlock variant="output" command={outputs.clean} />
+      <p>若不是 main 或還有待保存的改動，先回 L6 完成收尾。</p>
+      <CommandBlock command="git switch -c feat/day3" comment="另開一本分支相簿，讓 Day 3 先在這裡準備" />
+      <CommandBlock variant="output" command={outputs.branch} />
+      <p>在 VSCode 左側檔案總管的 GIT-JOURNAL 上按右鍵 → New File，輸入 day3.md，會出現空白編輯區。貼上下方一行，最後按 Enter 留行尾換行，再 Ctrl+S（Mac：Cmd+S）；分頁的未儲存圓點會消失。</p>
+      <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day3.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 3：學會把分支送上雲端</pre></div>
+      <FalseAlarm signal="LF will be replaced by CRLF" title="Windows 可能出現換行提醒">如果訊息提到 day3.md 並出現這段，表示換行格式提醒，可以繼續；沒有訊息也正常。</FalseAlarm>
+      <CommandBlock command="git add day3.md" comment="只挑這次新建的筆記放上拍照台" />
+      <Callout title="挑選後的畫面">通常沒有訊息；若出現上方 CRLF 換行提醒也正常。等提示符回來即可繼續。</Callout>
+      <FalseAlarm signal="~" title="記得帶 -m，避免進入 Vim">若漏了 -m 而看到滿是 ~ 的編輯器，按 Esc，輸入 :q! 再 Enter 離開；:wq 是保存訊息並離開。離開後先看 status，仍有 Changes to be committed 才重做帶 -m 的指令。</FalseAlarm>
+      <CommandBlock command={'git commit -m "新增 Day 3 筆記"'} comment="保存分支照片，GitHub 才能收到這次紀錄" />
+      <CommandBlock variant="output" command={outputs.commit} />
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">2. 把分支上傳到自己的雲端相簿</h3>
+      <FalseAlarm signal="remote: Create a pull request for 'feat/day3' on GitHub by visiting:" title="這是成功後的提示，不是錯誤">進度中的 Counting、Writing 與 remote: 都正常。這句附的是開申請單的連結，並沒有替你建立 PR。小相簿通常幾秒到一分鐘，等提示符回來，不要重按 Enter。</FalseAlarm>
+      <CommandBlock command="git push -u origin feat/day3" comment="讓 GitHub 收到新分支；-u 記住這個分支以後上傳的目的地" />
+      <CommandBlock variant="output" command={outputs.push} />
+      <p>編號、數量與速度會不同；feat/day3 → feat/day3 表示分支已上傳。若出現登入視窗，依 L6 在瀏覽器登入並授權自己的帳號，不要在終端機輸入網站密碼。</p>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">3. 填自己的 PR 申請單</h3>
+      <p>回 GitHub 自己的 git-journal 頁面重新整理，會看到黃色 had recent pushes 提示與 <strong>Compare &amp; pull request</strong> 按鈕，點它會開申請表。</p>
+      <Screenshot id="L7-compare-banner" alt="自己的 git-journal 顯示 feat/day3 最近上傳與 Compare & pull request 按鈕" caption="你會看到 feat/day3 的黃色提示，按 Compare & pull request 進入申請表。" />
+      <p>若黃色提示已消失，點上方 Pull requests → New pull request，會出現比較分支的頁面；照下面核對 base 與 compare，再按 Create pull request 進入表單。</p>
+      <Callout title="送出前先檢查方向">頁面 repo 必須是 <code>&lt;你的帳號&gt;/git-journal</code>，其中佔位文字代表你自己的帳號，不是要輸入角括號。核對 <strong>base = main ← compare = feat/day3</strong>，下方變更應只有 day3.md。方向相反時先改正，不要送出。</Callout>
+      <p>標題填「新增 Day 3 筆記」，描述填「新增 day3.md，記錄第一次分支上雲」。表單會保留你輸入的文字。</p>
+      <Screenshot id="L7-pr-form" alt="自己的 repo 的 PR 表單，base main、compare feat/day3" caption="你會看到自己的 git-journal、base main 與 compare feat/day3，以及 Day 3 的標題和描述。" />
+      <p>按 <strong>Create pull request</strong>，會進入一張標示 Open 的 PR 頁面，並取得編號，例如 #1。這時申請已送出，尚未收進 main。</p>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">4. 自己合併，再刪除雲端分支名稱</h3>
+      <p>在剛開的 PR 頁往下找到合併按鈕，先確認文字是 <strong>Merge pull request</strong>。若是 Squash and merge 或 Rebase and merge，點旁邊下拉箭頭改選 Create a merge commit，讓按鈕成為 Merge pull request。</p>
+      <p>按 <strong>Merge pull request</strong>，會展開確認區；保留預填說明，再按 <strong>Confirm merge</strong>，頁面會顯示 Merged。</p>
+      <Screenshot id="L7-pr-merge-button" alt="PR 頁的 Merge pull request 與 Confirm merge 確認區" caption="你會看到合併確認區；按 Confirm merge 後，PR 狀態會變成 Merged。" />
+      <p>若提示有衝突而無法合併，先停下來核對這次是否只新增 day3.md，別跳到刪分支。</p>
+      <p>看到 Merged 後按 <strong>Delete branch</strong>。它刪除的是雲端 feat/day3 的名稱，已收進 main 的照片仍在，本機的同名分支也還在。</p>
+      <Screenshot id="L7-branch-delete" alt="已合併 PR 下方的 Delete branch 按鈕" caption="你會看到已合併的 PR 與 Delete branch；按下後會顯示分支已刪除。" />
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">5. 下載雲端 main，補全最後兩步</h3>
+      <FalseAlarm signal="Switched to branch 'main'" title="切回去時 day3.md 暫時不見了？">本機 main 還是合併前的照片，所以檔案暫時不在；下一步下載後就會出現。即使顯示 up to date，也只是和電腦上次知道的雲端狀態比較。</FalseAlarm>
+      <CommandBlock command="git switch main" comment="先站回主相簿，才把雲端主相簿的新照片收進來" />
+      <CommandBlock variant="output" command={outputs.switchMain} />
+      <FalseAlarm signal="Fast-forward" title="這是把 main 向前更新，不是錯誤">pull 會跑 remote: 進度，再顯示更新了哪些檔案。小相簿通常幾秒到一分鐘；等提示符回來，不要重按 Enter。</FalseAlarm>
+      <CommandBlock command="git pull" comment="下載網頁剛合併好的 main，讓本機也看得到 day3.md" />
+      <CommandBlock variant="output" command={outputs.pull} />
+      <p>打開 day3.md 應看到剛寫的筆記。接下來先自己寫出「用每張照片一行、帶分支線條翻紀錄」的指令，再展開核對，只執行一次。</p>
+      <FalseAlarm signal={': 或 (END)'} title="紀錄畫面停住時">這是分頁閱讀畫面（pager），按英文小寫 q 回到指令列。短內容可能直接結束。</FalseAlarm>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對翻相簿指令</summary>
+        <CommandBlock command="git log --oneline --graph" comment="核對 Day 3 與 GitHub 建立的合併照片" />
+        <CommandBlock variant="output" command={outputs.log} />
+      </details>
+      <p>Merge pull request #1 是 GitHub 在你確認合併時建立的照片，線條連回 Day 3 與原本 main。編號與 PR 號碼可能不同；實測把 Part 1 簡化成一筆「Part 1 的日誌」，你的下方會保留 L2–L5 的完整紀錄，不用改成範例。</p>
+      <p>最後要刪除<strong>本機</strong>已合併的 feat/day3 名稱。回想 L4，先寫出指令再核對。</p>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對收尾指令</summary>
+        <CommandBlock command="git branch -d feat/day3" comment="照片已在 main，清掉本機用完的分支名稱" />
+        <CommandBlock variant="output" command={outputs.deleteBranch} />
+      </details>
+      <Callout variant="success">完成訊號：GitHub 的 PR 是 Merged，本機 main 有 day3.md，紀錄有合併照片，刪除分支顯示 Deleted branch。若沒看到這些，回到對應步驟核對，再進 L8。</Callout>
+      <p>獨立判斷，不必另建分支：自己的旅行清單若在 feat/packing 準備好，要收進 main，申請表兩個欄位怎麼選？收進後電腦又怎麼取得？先自己說出順序；不確定再回看第 3、5 步。</p>
+    </Card>
+    <Quiz questions={[
+      { q: 'Create pull request 按完，哪個動作才真的把照片收進 main？', options: ['再 push 一次', 'Merge pull request，再 Confirm merge', 'Delete branch'], answer: 1, explain: 'PR 是申請單，Merge 與確認才完成收進主相簿。' },
+      { q: '診斷題：base = feat/day3、compare = main，看起來兩邊都有選，能直接送出嗎？', options: ['能，方向不影響', '不能，應該 main 接收 feat/day3', '先刪 main'], answer: 1, explain: 'base 是接收方，compare 是提供內容的分支；本課要 main ← feat/day3。' },
+      { q: '診斷題：網頁已 Merged，本機 main 沒有 day3.md，下一步？', options: ['重新開 PR', '在本機 main 執行 pull', '重新 init'], answer: 1, explain: '網頁合併不會自動改電腦，pull 才下載並整理到目前的相簿。' },
+      { q: '反向判斷：自己的旅行清單 main 只落後雲端，沒有新分支要合併，還需要 PR 嗎？', options: ['每次下載都要 PR', '不用，只需 pull 同步', '先把雲端分支刪掉'], answer: 1, explain: 'PR 處理把分支收進另一分支的申請；下載已有成果用 pull。' },
+    ]} />
+  </div>
+);

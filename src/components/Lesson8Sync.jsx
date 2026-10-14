@@ -1,894 +1,173 @@
-import { useState, useRef } from 'react';
-import { SectionTitle, InstructionalText, CommandBlock, Callout, NoOutputHint, Card, Badge, Quiz, TerminalSim } from './Shared';
-import { ArrowRight, Github, Map, Laptop, Download, PlusCircle, CheckCircle, FileText, Search, GitCommit, Cloud, ArrowLeft, AlertCircle, User } from 'lucide-react';
+import { SectionTitle, Card, Callout, Quiz, CommandBlock, NoOutputHint, FalseAlarm, Screenshot } from './Shared';
 
-const MAX_STEP = 6;
-
-// StepAction — 一個步驟卡的「按鈕」在挑戰模式下切換成狀態徽章，
-// 用包裝的方式接上既有的 step 狀態機，不改動原本的按鈕邏輯。
-const StepAction = ({ state, challengeMode, onClick, activeClass }) => {
-  if (challengeMode) {
-    if (state === 'current') {
-      return <span className="px-3 py-1 rounded text-xs font-bold text-white bg-purple-500 animate-pulse shrink-0">🎯 請輸入</span>;
-    }
-    if (state === 'done') {
-      return <span className="px-3 py-1 rounded text-xs font-bold text-white bg-green-500 shrink-0">完成</span>;
-    }
-    return <span className="px-3 py-1 rounded text-xs font-bold text-slate-400 bg-slate-100 shrink-0">待完成</span>;
-  }
-  return (
-    <button onClick={onClick} disabled={state !== 'current'} className={`px-3 py-1 rounded text-xs font-bold text-white shrink-0 ${state === 'done' ? 'bg-green-500' : state === 'current' ? activeClass : 'bg-slate-300'}`}>
-      {state === 'done' ? '完成' : '執行'}
-    </button>
-  );
+// Copied from m3-real-outputs.txt with only the account and repo substitutions.
+const outputs = {
+  "clone": "Cloning into 'git-journal-laptop'...\nremote: Enumerating objects: 9, done.\nremote: Counting objects: 100% (9/9), done.\nremote: Compressing objects: 100% (4/4), done.\nremote: Total 9 (delta 2), reused 7 (delta 1), pack-reused 0 (from 0)\nReceiving objects: 100% (9/9), done.\nResolving deltas: 100% (2/2), done.",
+  "day4Commit": "[main c4e3323] 新增 Day 4 筆記\n 1 file changed, 1 insertion(+)\n create mode 100644 day4.md",
+  "day4Push": "Enumerating objects: 4, done.\nCounting objects: 100% (4/4), done.\nDelta compression using up to 16 threads\nCompressing objects: 100% (2/2), done.\nWriting objects: 100% (3/3), 552 bytes | 552.00 KiB/s, done.\nTotal 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)\nremote: Resolving deltas: 100% (1/1), completed with 1 local object.\nTo https://github.com/<你的帳號>/git-journal.git\n   58fc040..c4e3323  main -> main",
+  "day4Pull": "remote: Enumerating objects: 4, done.\nremote: Counting objects: 100% (4/4), done.\nremote: Compressing objects: 100% (1/1), done.\nremote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0 (from 0)\nFrom https://github.com/<你的帳號>/git-journal\n   58fc040..c4e3323  main       -> origin/main\nUpdating 58fc040..c4e3323\nFast-forward\n day4.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 day4.md",
+  "localTitle": "warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it\n[main f3a48d9] 在電腦上改標題\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+  "rejected": "To https://github.com/<你的帳號>/git-journal.git\n ! [rejected]        main -> main (fetch first)\nerror: failed to push some refs to 'https://github.com/<你的帳號>/git-journal.git'\nhint: Updates were rejected because the remote contains work that you do not\nhint: have locally. This is usually caused by another repository pushing to\nhint: the same ref. If you want to integrate the remote changes, use\nhint: 'git pull' before pushing again.\nhint: See the 'Note about fast-forwards' in 'git push --help' for details.",
+  "conflictPull": "remote: Enumerating objects: 5, done.\nremote: Counting objects: 100% (5/5), done.\nremote: Compressing objects: 100% (2/2), done.\nremote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)\nFrom https://github.com/<你的帳號>/git-journal\n   c4e3323..4b75a42  main       -> origin/main\nAuto-merging README.md\nCONFLICT (content): Merge conflict in README.md\nAutomatic merge failed; fix conflicts and then commit the result.",
+  "conflictStatus": "On branch main\nYour branch and 'origin/main' have diverged,\nand have 1 and 1 different commits each, respectively.\n  (use \"git pull\" if you want to integrate the remote branch with yours)\n\nYou have unmerged paths.\n  (fix conflicts and run \"git commit\")\n  (use \"git merge --abort\" to abort the merge)\n\nUnmerged paths:\n  (use \"git add <file>...\" to mark resolution)\n\tboth modified:   README.md\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")",
+  "resolveCommit": "[main d0e7843] 解決標題衝突",
+  "resolvePush": "Enumerating objects: 8, done.\nCounting objects: 100% (8/8), done.\nDelta compression using up to 16 threads\nCompressing objects: 100% (3/3), done.\nWriting objects: 100% (4/4), 819 bytes | 819.00 KiB/s, done.\nTotal 4 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)\nremote: Resolving deltas: 100% (2/2), completed with 1 local object.\nTo https://github.com/<你的帳號>/git-journal.git\n   4b75a42..d0e7843  main -> main",
+  "log": "*   d0e7843 解決標題衝突\n|\\\n| * 4b75a42 在網頁上改標題\n* | f3a48d9 在電腦上改標題\n|/\n* c4e3323 新增 Day 4 筆記\n*   58fc040 Merge pull request #1 from <你的帳號>/feat/day3\n|\\\n| * 2e61ef9 新增 Day 3 筆記\n|/\n* e6760a9 Part 1 的日誌",
+  "markers": "<<<<<<< HEAD\n# Amy 的 Git 學習日誌（電腦版）\n=======\n# Amy 的 Git 學習日誌（網頁版）\n>>>>>>> 4b75a429a6793edb9bbf8220db2d778c93b00b46"
 };
 
-const CloneSimulation = () => {
-  const [step, setStep] = useState(0); // 0: init, 1: clone, 2: cd, 3: status, 4: add/commit, 5: push
-  const [logs, setLogs] = useState([{ prefix: '$', text: '準備開始情境 B：下載現有專案。' }]);
-  const repoUrl = "https://github.com/company/cool-project.git";
-  const terminalRef = useRef(null);
-  const scrollToTerminal = () => {
-    terminalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  };
-
-  // 第二輪挑戰模式：學員親手在模擬終端機打指令
-  const [challengeMode, setChallengeMode] = useState(false);
-  const [challengeIdx, setChallengeIdx] = useState(0);
-  const [challengeAttempts, setChallengeAttempts] = useState(0);
-  const [challengeDone, setChallengeDone] = useState(false);
-
-  const addLog = (text, type = 'info', prefix = '>') => {
-    setLogs(prev => [...prev, { text, type, prefix }]);
-  };
-
-  const handleClone = () => {
-    if (step >= 1) return;
-    addLog(`git clone ${repoUrl}`, 'input', '$');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog(`Cloning into 'cool-project'...`, 'info');
-    }, 300);
-    setTimeout(() => {
-      addLog(`remote: Enumerating objects: 42, done.`, 'info');
-      addLog(`Receiving objects: 100% (42/42), 12.3 KiB | 6.15 MiB/s, done.`, 'info');
-      addLog(`Unpacking objects: 100% (42/42), done.`, 'success');
-      addLog('（真實 clone 會跑一連串像上面這樣的百分比進度，跑完就是成功）', 'info');
-      setStep(1);
-    }, 1200);
-  };
-
-  const handleCd = () => {
-    if (step >= 2) return;
-    addLog('cd cool-project', 'input', '$');
-    scrollToTerminal();
-    setTimeout(() => {
-      setStep(2);
-    }, 200);
-  };
-
-  const handleStatus = () => {
-    if (step >= 3) return;
-    addLog('git status', 'input', 'cool-project $');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog('On branch main', 'info');
-      addLog('Your branch is up to date with "origin/main".', 'info');
-      addLog('nothing to commit, working tree clean', 'success');
-      setStep(3);
-    }, 300);
-  };
-
-  const handleCommit = () => {
-    if (step !== 4) return;
-    addLog('git commit -m "Add new feature"', 'input', 'cool-project $');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog('[main 7f8g9h] Add new feature', 'success');
-      setStep(5);
-    }, 400);
-  };
-
-  const handleAdd = () => {
-    if (step >= 4) return; // step 4 以上才算 Add 完成
-    addLog('（旁白：假設你剛剛新增了一個檔案 new_feature.txt——這行是劇情設定，不是要你打的指令）', 'info');
-    addLog('git add .', 'input', 'cool-project $');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog('（沒有任何輸出——這是正常的，代表成功了）', 'info');
-      setStep(4);
-    }, 300);
-  };
-
-  const handlePush = () => {
-    if (step >= 6) return;
-    addLog('git push', 'input', 'cool-project $');
-    scrollToTerminal();
-    setTimeout(() => {
-      addLog(`To ${repoUrl}`, 'success');
-      addLog(`   1a2b3c..7f8g9h  main -> main`, 'success');
-      setStep(6);
-    }, 800);
-  };
-
-  const reset = () => {
-    setStep(0);
-    setLogs([{ prefix: '$', text: '已重置。' }]);
-    setChallengeMode(false);
-    setChallengeIdx(0);
-    setChallengeAttempts(0);
-    setChallengeDone(false);
-  };
-
-  const normalize = (raw) => raw.trim().replace(/\s+/g, ' ');
-
-  const CHALLENGE_STEPS = [
-    {
-      label: 'git clone <網址>',
-      match: (lower, normalized) => lower.startsWith('git clone ') && normalized.slice('git clone '.length).trim().length > 0,
-      run: () => handleClone(),
-      delay: 1400,
-      hint1: '提示：先把雲端的專案完整下載下來。',
-      hint2: '指令以 git clone 開頭，後面接專案網址',
-    },
-    {
-      label: 'cd 資料夾名稱',
-      match: (lower, normalized) => lower.startsWith('cd ') && normalized.slice(3).trim().length > 0,
-      run: () => handleCd(),
-      delay: 400,
-      hint1: '提示：下載完別忘記「走進去」那個資料夾。',
-      hint2: '指令是 cd 加上資料夾名稱（例如 cd cool-project）',
-    },
-    {
-      label: 'git status',
-      match: (lower) => lower === 'git status',
-      run: () => handleStatus(),
-      delay: 500,
-      hint1: '提示：先確認一下目前工作區乾不乾淨。',
-      hint2: '指令是 git status',
-    },
-    {
-      label: 'git add .',
-      match: (lower) => lower === 'git add .' || lower === 'git add -a',
-      run: () => handleAdd(),
-      delay: 500,
-      hint1: '提示：把修改過的檔案放進暫存區。',
-      hint2: '指令是 git add .（也接受 git add -A）',
-    },
-    {
-      label: 'git commit -m "..."',
-      match: (lower, normalized) => lower.startsWith('git commit -m') && normalized.slice('git commit -m'.length).trim().length > 0,
-      run: () => handleCommit(),
-      delay: 600,
-      hint1: '提示：正式對這次修改拍照存檔，記得寫上說明文字。',
-      hint2: '指令以 git commit -m 開頭，後面接你的說明文字',
-    },
-    {
-      label: 'git push',
-      match: (lower) => lower === 'git push',
-      run: () => handlePush(),
-      delay: 1000,
-      hint1: '提示：把存檔推上雲端（clone 時 origin 已經設定好了）。',
-      hint2: '指令是 git push',
-    },
-  ];
-
-  const startChallenge = () => {
-    setChallengeMode(true);
-    setChallengeIdx(0);
-    setChallengeAttempts(0);
-    setChallengeDone(false);
-    setStep(0);
-    setLogs([{ prefix: '>', text: '挑戰開始！第 1 步：把雲端的專案下載下來（忘記指令可以往上看步驟卡）', type: 'info' }]);
-  };
-
-  const abandonChallenge = () => {
-    setChallengeMode(false);
-    setChallengeIdx(0);
-    setChallengeAttempts(0);
-    setChallengeDone(false);
-    setStep(MAX_STEP);
-    setLogs([{ prefix: '$', text: '已回到按鈕模式（第一輪已完成）。' }]);
-  };
-
-  const handleTerminalCommand = (raw) => {
-    if (challengeDone) return;
-    const normalized = normalize(raw);
-    if (!normalized) return;
-    const lower = normalized.toLowerCase();
-    const current = CHALLENGE_STEPS[challengeIdx];
-    if (!current) return;
-
-    if (current.match(lower, normalized)) {
-      setChallengeAttempts(0);
-      current.run(normalized);
-      const idx = challengeIdx;
-      const isLast = idx === CHALLENGE_STEPS.length - 1;
-      setTimeout(() => {
-        if (isLast) {
-          addLog('🎉 挑戰完成！你已經不需要按鈕了——真實終端機對你來說不再陌生。', 'success');
-          setChallengeDone(true);
-        } else {
-          addLog(`✅ 正確！下一步：${CHALLENGE_STEPS[idx + 1].label}`, 'success');
-          setChallengeIdx(idx + 1);
-        }
-      }, current.delay);
-    } else {
-      addLog(raw, 'input', 'cool-project $');
-      const attempts = challengeAttempts + 1;
-      setChallengeAttempts(attempts);
-      addLog(attempts >= 2 ? current.hint2 : current.hint1, 'warning');
-    }
-  };
-
-  return (
-    <div className="space-y-6 animate-fade-in">
-      <SectionTitle title="L8. 情境 B：參與現有專案" subtitle="下載、修改、上傳的三部曲" />
-
-      {/* 進入狀態提示 */}
-      <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-2 shadow-md mb-2">
-        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">⚡ 進入狀態：讀完再動</div>
-        <div className="flex items-start gap-3">
-          <span className="text-green-400 text-base leading-none mt-0.5">💻</span>
-          <p className="text-sm text-slate-300">Clone 完記得 <code className="bg-slate-700 px-1 rounded">cd 專案名稱</code> 進入資料夾，否則後續指令都找不到專案。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-blue-400 text-base leading-none mt-0.5">🔍</span>
-          <p className="text-sm text-slate-300">進入專案後，養成先 <code className="bg-slate-700 px-1 rounded">git status</code> 的習慣，確認工作區乾淨再開始修改（見下方速查表）。</p>
-        </div>
+export const Lesson8Sync = () => (
+  <div className="min-w-0 space-y-6 animate-fade-in break-words [overflow-wrap:anywhere] [&_pre]:whitespace-pre-wrap">
+    <header><SectionTitle title="L8 兩台電腦的同步" subtitle="用兩個資料夾練習上傳、下載，再解決自己在網頁與電腦改同一行的衝突。" /><p className="text-sm text-slate-600">先準備：完成 L7，git-journal 在乾淨的 main；自己的 GitHub 已有 Day 3 且仍登入。</p></header>
+    <Card className="space-y-3 bg-indigo-50">
+      <h3 className="font-bold">我先示範：換電腦，先拿回整本相簿</h3>
+      <p><strong>clone</strong> 是把整本雲端相簿下載到新電腦，包含檔案與存檔紀錄，也會記住 origin 地址。這次用第二個資料夾 git-journal-laptop 模擬第二台電腦，不用真的換機器。</p>
+      <div className="grid sm:grid-cols-3 gap-3 text-center" aria-label="第二個資料夾上傳到 GitHub，第一個資料夾再下載">
+        <div className="rounded bg-purple-50 p-3">第二個視窗<br />git-journal-laptop<br />拍 Day 4 → push 上傳</div>
+        <div className="rounded bg-indigo-50 p-3">自己的 GitHub<br />git-journal<br />雲端相簿</div>
+        <div className="rounded bg-blue-50 p-3">第一個視窗<br />git-journal<br />pull 下載 → 看見 Day 4</div>
       </div>
-
-      <InstructionalText title="什麼時候會用到？">
-        <p>這是最常見的工作場景！你剛進公司，主管丟給你一個 GitHub 網址，你要把程式碼下載到電腦裡開始工作。</p>
-      </InstructionalText>
-
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="space-y-6">
-          <Card className="bg-slate-50">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold text-slate-700 flex items-center gap-2"><Download size={18} /> 操作步驟</h3>
-              <button onClick={reset} className="text-xs text-slate-500 hover:text-purple-600 underline">重新開始</button>
-            </div>
-            <Callout variant="info" className="mb-3" title="以下是示意模擬">
-              點「執行」可以看到邏輯流程。<strong>實際操作請在你電腦真正的 Terminal 裡輸入同樣的指令。</strong>關於 Push 的實際練習，請等到 E2。
-            </Callout>
-
-            <div className="space-y-3">
-              {/* Step 1 */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 0 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 0 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700 truncate mr-2" title={`$ git clone ${repoUrl}`}>$ git clone ...cool-project.git</div>
-                  <StepAction state={step > 0 ? 'done' : step === 0 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleClone} activeClass="bg-purple-600 hover:bg-purple-700" />
-                </div>
-                <div className="text-xs text-slate-500 mt-2">把雲端的專案完整打包下載到電腦。這會自動建立 .git 與 origin 連結！</div>
-              </div>
-
-              {/* Step 2 */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 1 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 1 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700">$ cd cool-project</div>
-                  <StepAction state={step > 1 ? 'done' : step === 1 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleCd} activeClass="bg-purple-600 hover:bg-purple-700" />
-                </div>
-                <div className="text-xs text-red-500 font-bold mt-2">⚠️ 新手最常忘記這步！下載完記得用 cd (change directory) 進入資料夾，否則你後面的指令都會找不到 git！</div>
-              </div>
-
-              {/* Step 3 */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 2 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 2 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700">$ git status</div>
-                  <StepAction state={step > 2 ? 'done' : step === 2 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleStatus} activeClass="bg-purple-600 hover:bg-purple-700" />
-                </div>
-                <div className="text-xs text-slate-500 mt-2">好習慣：養成隨時看 status 的習慣，確認目前狀態是否乾淨。</div>
-              </div>
-
-              {/* Step 4a: git add */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 3 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 3 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700">$ git add .</div>
-                  <StepAction state={step > 3 ? 'done' : step === 3 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleAdd} activeClass="bg-purple-600 hover:bg-purple-700" />
-                </div>
-                <div className="text-xs text-slate-500 mt-2">把修改過的檔案放進「暫存區」，準備好存檔。（實際操作中這步不能省！）</div>
-              </div>
-
-              {step === 4 && (
-                <Callout variant="info" title="沒消息就是好消息">
-                  真實終端裡 <code>git add</code> 成功時<strong>不會顯示任何訊息</strong>。想確認可以輸入 <code>git status</code>，看到檔案變成綠色（Changes to be committed）就對了。
-                </Callout>
-              )}
-
-              {/* Step 4b: git commit */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 4 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 4 ? 'bg-green-50 border-green-200 opacity-60' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700">$ git commit -m "Add new feature"</div>
-                  <StepAction state={step > 4 ? 'done' : step === 4 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handleCommit} activeClass="bg-purple-600 hover:bg-purple-700" />
-                </div>
-                <div className="text-xs text-slate-500 mt-2">正式建立快照！<code>-m</code> 後面是這次存檔的說明文字。</div>
-              </div>
-
-              {/* Step 5 */}
-              <div className={`p-3 border rounded-lg transition-all ${step === 5 ? 'bg-white border-purple-300 shadow-md ring-2 ring-purple-50' : step > 5 ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200 opacity-40'}`}>
-                <div className="flex items-center justify-between">
-                  <div className="font-mono text-sm text-slate-700">$ git push</div>
-                  <StepAction state={step > 5 ? 'done' : step === 5 ? 'current' : 'pending'} challengeMode={challengeMode} onClick={handlePush} activeClass="bg-purple-600 hover:bg-purple-700 animate-pulse" />
-                </div>
-                <div className="text-xs text-slate-500 mt-2">因為 Clone 時已經有 origin 連結了，所以以後修改完直接 push 即可！</div>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Visual Feedback */}
-        <div className="flex items-center justify-center bg-slate-100 rounded-xl border border-slate-200 p-8 relative overflow-hidden">
-          {step === 6 && <div className="absolute inset-0 bg-green-50/50 z-0 animate-fade-in pointer-events-none"></div>}
-          
-          <div className="relative flex items-center gap-20 z-10 w-full justify-center">
-             {/* Local Folder */}
-             <div className="flex flex-col items-center relative">
-               <div className={`w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-500 ${step >= 1 ? 'bg-purple-600 text-white ring-4 ring-purple-200' : 'bg-white text-slate-300 border border-slate-200'}`}>
-                 <Laptop size={40} />
-               </div>
-               {step >= 1 && (
-                 <div className="absolute -left-6 top-1 flex flex-col gap-0.5 animate-fade-in">
-                   <div className="flex items-center gap-1 bg-white rounded px-1.5 py-0.5 shadow-sm border border-slate-200 text-xs text-slate-600 font-mono">
-                     <FileText size={8} className="text-blue-500 shrink-0" />code.js
-                   </div>
-                 </div>
-               )}
-               {step === 2 && (
-                 <div className="absolute -bottom-2 bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-yellow-200">
-                   已進入資料夾
-                 </div>
-               )}
-               {step === 3 && (
-                 <div className="absolute -bottom-2 bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-blue-200 flex items-center gap-1">
-                   <Search size={10} /> 狀態乾淨
-                 </div>
-               )}
-               {step === 4 && (
-                 <div className="absolute -bottom-2 bg-indigo-100 text-indigo-700 text-xs px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-indigo-200">
-                   已暫存 (git add)
-                 </div>
-               )}
-               {step === 5 && (
-                 <div className="absolute -bottom-2 bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-bold animate-fade-in whitespace-nowrap border border-green-200">
-                   已修改並存檔
-                 </div>
-               )}
-               <span className="mt-4 font-bold text-slate-600">Local (你的電腦)</span>
-             </div>
-
-             {/* Connection Line */}
-             <div className="absolute left-10 right-10 top-10 h-1 bg-slate-200 -z-10 rounded-full">
-               <div className={`h-full rounded-full transition-all duration-1000 ease-out bg-purple-500 ${step >= 1 ? 'w-full opacity-50' : 'w-0'} ${step === 6 ? 'opacity-100 bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]' : ''}`}></div>
-             </div>
-             
-             {step === 1 && (
-               <div className="absolute top-7 left-1/2 -translate-x-1/2 z-20 animate-pulse text-purple-600">
-                 <ArrowRight size={24} className="rotate-180" />
-               </div>
-             )}
-             
-             {step === 6 && (
-               <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 animate-fade-in px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200 flex items-center gap-1">
-                 <CheckCircle size={14} /> 更新成功！
-               </div>
-             )}
-
-             {/* GitHub Repo */}
-             <div className="flex flex-col items-center relative">
-               <div className="w-20 h-20 rounded-2xl bg-slate-800 text-white flex items-center justify-center shadow-lg">
-                 <Github size={40} />
-               </div>
-               <span className="mt-4 font-bold text-slate-600">Remote (GitHub)</span>
-             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8" ref={terminalRef}>
-        <TerminalSim
-          logs={logs}
-          promptLabel={step >= 2 ? "cool-project $" : "~ $"}
-          height="h-48"
-          onCommand={challengeMode && !challengeDone ? handleTerminalCommand : undefined}
-        />
-      </div>
-
-      {step === MAX_STEP && !challengeMode && (
-        <Callout variant="success" title="第一輪完成！你已經看懂整個流程了。" className="mt-4">
-          <p className="mb-3">現在換第二輪——這次不能按按鈕了，改成你自己在下面的終端機裡打指令。把「第一次打指令」的緊張感，先在這個安全的地方消耗掉。</p>
-          <button
-            type="button"
-            onClick={startChallenge}
-            className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold shadow"
-          >
-            🔄 第二輪挑戰：這次換你打指令
-          </button>
-        </Callout>
-      )}
-
-      {challengeMode && !challengeDone && (
-        <div className="flex justify-end mt-2">
-          <button type="button" onClick={abandonChallenge} className="text-xs text-slate-500 hover:text-red-600 underline">
-            放棄挑戰，回到按鈕模式
-          </button>
-        </div>
-      )}
-
-      {challengeDone && (
-        <Callout variant="success" title="🎉 挑戰完成" className="mt-4">
-          你已經不需要按鈕了——真實終端機對你來說不再陌生。
-        </Callout>
-      )}
-
-      <Quiz
-        questions={[
-          {
-            q: 'Clone 完一個專案後，直接在原本的資料夾位置打 git status 卻顯示找不到 git repository，最可能是忘了做什麼？',
-            options: [
-              '忘記先 cd 進入 clone 下來的資料夾，指令還停在外層目錄',
-              'git clone 指令本身失敗了，需要重新下載',
-              'GitHub 那個 repo 其實是空的',
-            ],
-            answer: 0,
-            explain: 'git clone 會在目前位置新建一個「以專案命名」的子資料夾，並把 .git 放在那個子資料夾裡，不是放在你執行指令的當下位置。沒有 cd 進去，你的終端機根本還站在外面，當然找不到任何 git 相關資訊。這是新手最常忘記的一步。',
-          },
-          
-          
-        ]}
-      />
-    </div>
-  );
-};
-
-
-const SyncSimulation = () => {
-  // Push/Pull State
-  const [localCommits, setLocalCommits] = useState([{ id: 'c1', msg: 'Initial commit', time: '10:00' }]);
-  const [remoteCommits, setRemoteCommits] = useState([{ id: 'c1', msg: 'Initial commit', time: '10:00' }]);
-  const [logs, setLogs] = useState([{ prefix: '$', text: '同步模擬環境已就緒。' }]);
-  const [pendingChanges, setPendingChanges] = useState(false); 
-
-  // Merge/Rebase State
-
-  const addLog = (text, type = 'info', prefix = '>') => {
-    setLogs(prev => [...prev, { text, type, prefix }]);
-  };
-
-  const remoteHeadId = remoteCommits[remoteCommits.length - 1].id;
-  const localHeadId = localCommits[localCommits.length - 1].id;
-  
-  const isLocalUpToDateWithRemote = localCommits.some(c => c.id === remoteHeadId);
-  const needPull = !isLocalUpToDateWithRemote;
-  const canPush = !needPull && (localHeadId !== remoteHeadId);
-
-  const handleCommand = (cmd) => {
-    const command = cmd.trim().toLowerCase();
-    addLog(cmd, 'input', '$');
-
-    if (command.includes('git add')) {
-      if (pendingChanges) { addLog('已經有檔案在暫存區了', 'warning'); return; }
-      setPendingChanges(true);
-      addLog('修改已加入暫存區 (Staged)。', 'success');
-    } else if (command.includes('git commit')) {
-      doCommit('Update via terminal');
-    } else if (command.startsWith('git push')) {
-      doPush();
-    } else if (command.startsWith('git pull')) {
-      doPull();
-    } else {
-      addLog(`未知指令。試試 git add ., git commit -m "msg", git push, git pull`, 'error');
-    }
-  };
-
-  const doCommit = (msg = 'Updated feature') => {
-    if (!pendingChanges) {
-      addLog('nothing to commit, working tree clean', 'error');
-      return;
-    }
-    const lastIdNum = parseInt(localCommits[localCommits.length - 1].id.substring(1));
-    const newId = `c${lastIdNum + 1}`;
-    
-    const newCommit = { id: newId, msg: msg, time: new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}) };
-    setLocalCommits([...localCommits, newCommit]);
-    setPendingChanges(false);
-    addLog(`[main ${newId}] ${msg}`, 'success', '');
-  };
-
-  const doPush = () => {
-    if (needPull) {
-      addLog('To https://github.com/project.git', 'error', '');
-      addLog(' ! [rejected]        main -> main (fetch first)', 'error', '');
-      addLog("error: failed to push some refs to 'https://github.com/project.git'", 'error', '');
-      addLog('hint: Updates were rejected because the remote contains work that you do not have locally.', 'error', '');
-      return;
-    }
-    if (!canPush) {
-      addLog('Everything up-to-date', 'info');
-      return;
-    }
-    setRemoteCommits([...localCommits]);
-    addLog('To https://github.com/project.git', 'success');
-    addLog(`   ${remoteHeadId}..${localHeadId}  main -> main`, 'success');
-  };
-
-  const doPull = () => {
-    if (!needPull) {
-      addLog('Already up to date.', 'info');
-      return;
-    }
-    const localExclusive = localCommits.filter(lc => !remoteCommits.some(rc => rc.id === lc.id));
-    const newLocalState = [...remoteCommits, ...localExclusive];
-    
-    setLocalCommits(newLocalState);
-    if (localExclusive.length === 0) {
-      addLog(`Updating ${localHeadId}..${remoteHeadId}`, 'success');
-      addLog('Fast-forward', 'success', '');
-    } else {
-      addLog("Merge made by the 'ort' strategy.", 'success');
-    }
-  };
-
-  const simulateTeammatePush = () => {
-    const lastRemoteIdNum = parseInt(remoteCommits[remoteCommits.length - 1].id.substring(1));
-    const nextId = `c${lastRemoteIdNum + 10}`; 
-    const newCommit = { id: nextId, msg: 'Teammate fixed bug', time: new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'}) };
-    
-    setRemoteCommits([...remoteCommits, newCommit]);
-    addLog('模擬：同事剛好上傳了新的 Commit (ID: ' + nextId + ')。', 'warning', 'System');
-  };
-
-
-  return (
-    <div className="animate-fade-in space-y-12">
-      <SectionTitle title="L8. 遠端同步與衝突" subtitle="Push 與 Pull 的日常拔河，以及兩條宇宙的碰撞" />
-
-      {/* 進入狀態提示 */}
-      <div className="bg-slate-800 rounded-xl px-5 py-4 flex flex-col gap-3 shadow-md mb-2">
-        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">⚡ 進入狀態：讀完再動</div>
-        <div className="flex items-start gap-3">
-          <span className="text-yellow-400 text-base leading-none mt-0.5">🔑</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">你的 GitHub 帳號必須已經連線（gh auth login 完成）。</strong>否則 Push 時會出現 403 Permission Denied 或要求密碼。<code className="bg-slate-700 px-1 rounded">gh auth login</code> 會問你一連串問題（GitHub.com／HTTPS／用瀏覽器登入），照畫面一步步選即可。還沒完成的話，請先回到 <a href="#push" className="underline font-bold text-white hover:text-green-300">L6 GitHub 與第一次 push</a>。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-orange-400 text-base leading-none mt-0.5">🚧</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">若看到 <code className="bg-slate-700 px-1 rounded">Permission denied (publickey)</code></strong>——你的電腦在用 SSH 連 GitHub，本教程全程用 HTTPS，請到錯誤急診室查「Permission denied (publickey)」這一條。另外，用 HTTPS 第一次 push 時，Windows 可能彈出要你登入 GitHub 的視窗——這是正常的，登入一次就會記住。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-blue-400 text-base leading-none mt-0.5">⬇️</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">黃金法則：先 Pull 再 Push。</strong>每次開始工作前，先 <code className="bg-slate-700 px-1 rounded">git pull</code> 把同事的最新進度同步下來，再開始你的修改，能大幅減少衝突的機率。輸入後看到 <code className="bg-slate-700 px-1 rounded">Already up to date.</code> 表示本來就最新（沒事）；看到 <code className="bg-slate-700 px-1 rounded">Fast-forward</code> 加一串檔案清單，表示有抓到更新（也正常）。</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <span className="text-red-400 text-base leading-none mt-0.5">💥</span>
-          <p className="text-sm text-slate-300"><strong className="text-white">衝突（Conflict）不是 Bug，是正常現象。</strong>遇到衝突別慌，打開 VSCode，它會用顏色高亮標示出衝突的行，讓你選擇保留哪一方。</p>
-        </div>
-      </div>
-
-      {/* Part 1: Push and Pull */}
-      <section>
-        <div className="flex items-center gap-2 mb-4">
-          <Badge color="indigo">Part 1</Badge>
-          <h3 className="text-xl font-bold text-slate-800">先 Pull 再 Push 的黃金法則</h3>
-        </div>
-        
-        <InstructionalText title="為什麼不讓我上傳？" icon={<Cloud size={18} className="text-blue-600" />}>
-          <p>你的電腦 (Local) 和 GitHub (Remote) 是兩個分開的資料庫。</p>
-          <ul className="list-disc pl-5 mt-2 space-y-1 text-sm">
-            <li><strong>Git Push (推)</strong>：把你電腦上「多出來」的 Commit 記錄上傳。</li>
-            <li><strong>Git Pull (拉)</strong>：把 GitHub 上「別人上傳」的 Commit 下載並合併回來。</li>
-            <li>如果你沒拉取最新進度就想上傳，Git 為了保護別人的程式碼不被你覆蓋，會直接<strong>拒絕 (Rejected)</strong> 你的 Push！</li>
-          </ul>
-        </InstructionalText>
-
-        <Callout variant="warning" title="真實操作可能遇到的錯誤" className="mb-4">
-          執行 <code className="bg-amber-100 px-1 rounded">git pull</code> 時如果出現 <code className="bg-amber-100 px-1 rounded">fatal: Need to specify how to reconcile divergent branches</code>——這是新版 Git 在問你要用哪種方式合併。執行下面這行指令（<a href="#setup" className="underline font-bold hover:text-amber-950">L0 行前準備</a>建議的設定）後，再 <code className="bg-amber-100 px-1 rounded">git pull</code> 一次即可。
-        </Callout>
-        <CommandBlock command="git config --global pull.rebase false" comment="只需要設定一次，之後每次 pull 都適用" />
-        <NoOutputHint className="mb-4" />
-        <Callout variant="warning" title="設定完之後 pull 可能出現的黑畫面" className="mb-8">
-          設成 false 之後，如果遠端和你的進度有分歧，<code className="bg-amber-100 px-1 rounded">git pull</code> 可能會跳出一個滿是 <code className="bg-amber-100 px-1 rounded">~</code> 符號的黑畫面（它是 Vim 編輯器），要你確認合併訊息。不要慌：按 <code className="bg-amber-100 px-1 rounded">Esc</code>，輸入 <code className="bg-amber-100 px-1 rounded">:wq</code>，按 <code className="bg-amber-100 px-1 rounded">Enter</code>，就會完成合併。這招和本章下方 Part 2 的「🆘 Vim 救命卡」是同一套逃生術。
-        </Callout>
-
-        <div className="grid lg:grid-cols-3 gap-8 items-start mb-8">
-          {/* Left Column: Controls & Terminal */}
-          <div className="lg:col-span-1 space-y-4 order-2 lg:order-1">
-            <Card className="bg-slate-50 border-slate-200 shadow-none">
-              <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">你的本地操作</h3>
-              
-              <div className="space-y-3">
-                <div className="relative">
-                  <button 
-                    onClick={() => { 
-                      if(pendingChanges) { addLog('已經有修改了，請先 Commit', 'warning'); return; }
-                      setPendingChanges(true); 
-                      addLog('你修改了檔案', 'info', 'Editor'); 
-                    }}
-                    className="w-full bg-white text-slate-700 border border-slate-300 shadow-sm hover:bg-slate-50 active:scale-95 px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 justify-between group"
-                  >
-                    <span className="flex items-center gap-2"><FileText size={16} className="text-blue-500"/> 1. 修改檔案</span>
-                    {pendingChanges && <CheckCircle size={16} className="text-green-500" />}
-                  </button>
-                </div>
-
-                <button 
-                  onClick={() => doCommit()}
-                  disabled={!pendingChanges}
-                  className={`w-full flex items-center gap-2 justify-between transition-all font-medium px-4 py-2 rounded-lg ${pendingChanges ? 'bg-indigo-600 text-white shadow hover:bg-indigo-700 active:scale-95' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
-                >
-                  <span className="flex items-center gap-2"><GitCommit size={16} /> 2. 暫存 + 存檔 (add + commit)</span>
-                </button>
-                <Callout variant="info" className="text-sm">
-                  模擬中合併為一步，實際 Terminal 需先 <code className="bg-blue-100 px-1 rounded">git add .</code> 再 <code className="bg-blue-100 px-1 rounded">git commit -m "..."</code>
-                </Callout>
-
-                <hr className="border-slate-200 my-4" />
-                
-                <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">與雲端同步</h3>
-
-                <button 
-                  onClick={doPull}
-                  disabled={!needPull}
-                  className={`w-full flex items-center gap-2 justify-between transition-all font-medium px-4 py-2 rounded-lg ${needPull ? 'bg-green-600 text-white shadow hover:bg-green-700 active:scale-95 ring-2 ring-green-300 ring-offset-1' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
-                >
-                  <div className="flex items-center gap-2">
-                    <ArrowLeft size={16} /> Git Pull (下載)
-                  </div>
-                  {needPull && <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full animate-bounce">需更新</span>}
-                </button>
-
-                <button 
-                  onClick={doPush}
-                  disabled={!canPush || needPull}
-                  className={`w-full flex items-center gap-2 justify-between transition-all font-medium px-4 py-2 rounded-lg ${canPush && !needPull ? 'bg-blue-600 text-white shadow hover:bg-blue-700 active:scale-95' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
-                >
-                  <div className="flex items-center gap-2">
-                    <ArrowRight size={16} /> Git Push (上傳)
-                  </div>
-                  {canPush && !needPull && <span className="bg-blue-400 text-white text-[10px] px-1.5 py-0.5 rounded-full">可上傳</span>}
-                </button>
-
-                <Callout variant="info" className="text-sm">
-                  真實終端裡 push 會滾動 <code className="bg-blue-100 px-1 rounded">Enumerating objects...</code>、<code className="bg-blue-100 px-1 rounded">Writing objects: 100%</code> 的進度行，還有 <code className="bg-blue-100 px-1 rounded">remote:</code> 開頭的訊息——那些都是 GitHub 的正常回應，不是錯誤。
-                </Callout>
-
-                <hr className="border-slate-200 my-4" />
-                
-                <button 
-                  onClick={simulateTeammatePush}
-                  className="w-full bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 px-4 py-2 rounded-lg font-medium flex items-center gap-2 text-sm justify-center"
-                >
-                  <User size={14} /> (惡作劇) 模擬同事先 Push
-                </button>
-              </div>
-            </Card>
-          </div>
-
-          {/* Right Column: Visualization */}
-          <div className="lg:col-span-2 order-1 lg:order-2 bg-slate-50 rounded-2xl border border-slate-200 p-6 shadow-inner min-h-[500px] flex flex-col relative">
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 h-full">
-              {/* Local Timeline */}
-              <div className="md:col-span-2 flex flex-col relative">
-                <div className="flex items-center gap-2 mb-6 text-indigo-700 font-bold border-b border-indigo-100 pb-2">
-                  <Laptop size={20} />
-                  <h3>Local (你的電腦)</h3>
-                </div>
-                
-                <div className="relative flex-1 space-y-4 px-2">
-                  <div className="absolute left-6 top-2 bottom-0 w-0.5 bg-slate-200 -z-10"></div>
-                  
-                  {localCommits.map((c) => {
-                    const isUnpushed = !remoteCommits.find(rc => rc.id === c.id);
-                    return (
-                      <div key={c.id} className={`flex items-start gap-3 animate-fade-in-up transition-all duration-500`}>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs z-10 shadow-md shrink-0 border-4 border-slate-50
-                          ${isUnpushed ? 'bg-indigo-500 ring-2 ring-indigo-200' : 'bg-slate-400'}
-                        `}>
-                          {c.id}
-                        </div>
-                        <div className={`p-3 rounded-lg text-sm border flex-1 shadow-sm transition-all
-                          ${isUnpushed 
-                            ? 'bg-white border-indigo-200 border-l-4 border-l-indigo-500' 
-                            : 'bg-slate-100 border-slate-200 text-slate-500 grayscale'}
-                        `}>
-                          <div className="font-semibold truncate">{c.msg}</div>
-                          <div className="text-xs opacity-70 flex justify-between mt-1">
-                            <span>{c.time}</span>
-                            {isUnpushed && <span className="text-indigo-600 font-bold text-[10px] bg-indigo-50 px-1 rounded">尚未上傳</span>}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  
-                  {pendingChanges && (
-                    <div className="flex items-center gap-3 animate-pulse opacity-70 mt-4">
-                      <div className="w-8 h-8 rounded-full border-2 border-dashed border-indigo-400 bg-white z-10 shrink-0"></div>
-                      <div className="p-2 rounded border border-dashed border-indigo-300 text-xs text-indigo-600 bg-indigo-50 flex-1">
-                        Working on changes...
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Action Bridge (Push/Pull State) */}
-              <div className="md:col-span-1 flex flex-row md:flex-col items-center justify-center relative z-20 py-2 md:py-0">
-                 <div className="sticky top-1/2 md:-translate-y-1/2 w-full flex flex-row md:flex-col items-center gap-2">
-                   <div className="h-0.5 w-full bg-slate-200 absolute top-1/2 -z-10 hidden md:block"></div>
-
-                   {needPull ? (
-                      <div className="group flex flex-col items-center gap-1 animate-pulse mx-auto">
-                        <div className="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center border-4 border-red-50 cursor-not-allowed rotate-90 md:rotate-0">
-                          <AlertCircle size={24} />
-                        </div>
-                        <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded shadow-sm text-center">
-                          拒絕 Push<br/>必須先 Pull
-                        </span>
-                      </div>
-                   ) : canPush ? (
-                      <button
-                        onClick={doPush}
-                        className="group flex flex-col items-center gap-1 animate-bounce mx-auto"
-                      >
-                        <div className="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-200 hover:scale-110 transition-transform cursor-pointer border-4 border-white rotate-90 md:rotate-0">
-                          <ArrowRight size={24} />
-                        </div>
-                        <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded shadow-sm">
-                          點擊上傳
-                        </span>
-                      </button>
-                   ) : (
-                      <div className="group flex flex-col items-center gap-1 opacity-40 mx-auto">
-                        <div className="w-12 h-12 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center border-4 border-white cursor-not-allowed">
-                          <CheckCircle size={20} />
-                        </div>
-                        <span className="text-xs text-slate-400 bg-slate-100 px-1 rounded">已同步</span>
-                      </div>
-                   )}
-                 </div>
-              </div>
-
-              {/* Remote Timeline */}
-              <div className="md:col-span-2 flex flex-col relative">
-                <div className="flex items-center gap-2 mb-6 text-purple-700 font-bold border-b border-purple-100 pb-2">
-                  <Cloud size={20} />
-                  <h3>Remote (GitHub)</h3>
-                </div>
-                
-                <div className="relative flex-1 space-y-4 px-2">
-                  <div className="absolute left-6 top-2 bottom-0 w-0.5 bg-slate-200 -z-10"></div>
-
-                  {remoteCommits.map((c) => (
-                    <div key={c.id} className="flex items-start gap-3 animate-fade-in-up">
-                      <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white text-xs z-10 shadow-md shrink-0 border-4 border-slate-50">
-                        {c.id}
-                      </div>
-                      <div className="p-3 rounded-lg text-sm border bg-white border-purple-100 shadow-sm flex-1">
-                        <div className="font-semibold text-slate-700 truncate">{c.msg}</div>
-                        <div className="text-xs text-slate-400 mt-1">Cloud</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <Callout variant="info" title="💡 這台終端機可以真的打指令！" className="mb-3">
-          全站只有這裡的終端機可以真的輸入！試試看打 <code className="bg-blue-100 px-1 rounded">git add .</code>。（真實終端裡打 git add 若冒出黃字 <code className="bg-blue-100 px-1 rounded">warning: LF will be replaced by CRLF</code>，是正常的換行提醒，不是錯誤。）
-        </Callout>
-        <TerminalSim logs={logs} onCommand={handleCommand} height="h-48" />
-      </section>
-
-      <Quiz
-        questions={[
-          {
-            q: '你打了 git push，結果終端機顯示「Rejected! Remote contains work that you do not have.」，第一步該怎麼做？',
-            options: [
-              '加上 --force 再 push 一次，把遠端蓋過去',
-              '先 git pull，把遠端上你沒有的進度同步下來，再 push',
-              '這代表帳號沒連線，重新 gh auth login',
-            ],
-            answer: 1,
-            explain: 'Rejected 代表遠端有你本地沒有的 commit，Git 是在保護那些內容不被你覆蓋，不是連線問題。用 --force 硬推會把同事的 commit 直接抹掉，是新手最危險的直覺反應。正確做法就是章節開頭的黃金法則：先 pull 再 push——把遠端進度拉下來合併好，才有資格再上傳。',
-          },
-          
-          
-        ]}
-      />
-    </div>
-  );
-};
-
-
-export const Lesson8Sync = () => {
-
-return (<div className="space-y-6 animate-fade-in">
-<SectionTitle title="L8 兩台電腦的同步" />
-<SyncSimulation /><CloneSimulation />
-    <InstructionalText title="在開始之前，你必須先知道你處於哪個「情境」" icon={<Map size={18} className="text-indigo-600" />}>
-      <p>初學者最常犯的錯誤，就是亂下指令。在你要輸入任何 <code>git</code> 指令前，請先問自己一個問題：<br />
-      <strong>「這個專案是全新的（我剛剛在電腦裡開的資料夾），還是已經存在於 GitHub 上了？」</strong></p>
-    </InstructionalText>
-
-    <div className="grid md:grid-cols-2 gap-8 relative">
-      {/* 裝飾分隔線 */}
-      <div className="hidden md:block absolute left-1/2 top-4 bottom-4 w-px bg-slate-200 -translate-x-1/2"></div>
-      <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white border border-slate-200 items-center justify-center text-xs font-bold text-slate-400 z-10">VS</div>
-
-      <Card className="bg-indigo-50/50 border-indigo-100 hover:shadow-lg transition-all relative overflow-hidden group">
-        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-          <PlusCircle size={100} />
-        </div>
-        <div className="relative z-10">
-          <Badge color="indigo">情境 A</Badge>
-          <h3 className="text-xl font-bold text-indigo-900 mt-3 mb-2 flex items-center gap-2">
-            自己當造物主：從零開始
-          </h3>
-          <p className="text-sm text-indigo-700 mb-6 h-10">
-            你自己在電腦裡寫好了一些 Code，現在你想把它們推上 GitHub 備份。
-          </p>
-
-        </div>
+      <p>我先 clone，因為新電腦還沒有相簿；之後只下載新照片就用 pull。兩個資料夾各有自己的書桌與相簿，改一邊不會自動改另一邊。</p>
+    </Card>
+    <Callout title="先停一下，說出答案再繼續"><p>第二個資料夾剛 commit，第一個資料夾會馬上多出 Day 4 嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不會；第二邊要先 push，第一邊再 pull。若答不出來，回看上方三格圖並再說一次，確認有把握再往下。</p></details></Callout>
+    <Card className="space-y-3">
+      <h3 className="font-bold">一起選：同一行有兩種標題時</h3>
+      <p>我先提供前半段：網頁保存「網頁版」，電腦保存「電腦版」，兩邊都改第 1 行。你接手決定：能直接把電腦照片蓋上去嗎？</p>
+      <details><summary className="cursor-pointer">核對處理順序</summary><p>不能略過雲端的新照片；上傳會被拒。先 pull，遇到同一行衝突就像 L5，選好文字、add、commit，最後再 push。</p></details>
+    </Card>
+    <Callout title="先停一下，說出答案再繼續"><p>看到衝突時，Current 永遠代表第一台電腦嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不是，Current 是目前正在操作的這份相簿，Incoming 是這次收進來的版本。本課會在第一個視窗處理。能指出自己站在哪裡，再進真機；不確定可回 L5 看兩份候選文字。</p></details></Callout>
+    <SectionTitle title="🔥 換你了：讓自己的兩份相簿同步" />
+    <Card className="space-y-3">
+      <h3 className="font-bold">1. 在旁邊下載第二份相簿</h3>
+      <p>在原本 git-journal 的 VSCode 選 Terminal → New Terminal。確認新終端機的 PowerShell 提示符路徑以 git-journal 結尾；$ 與 PS 路徑不用打，每次一條指令，輸出框也不用輸入。</p>
+      <CommandBlock command="cd .." comment="往上一層，回到裝著 git-journal 的資料夾，避免把第二份塞在第一份裡" />
+      <NoOutputHint>提示符的路徑會少掉最後的 git-journal。例如原本是 PS C:\Users\Amy\Documents\git-journal&gt;，現在應是 PS C:\Users\Amy\Documents&gt;；這些是位置示意，不用照打。</NoOutputHint>
+      <p>若路徑不是預期的父資料夾，先停下核對。下方 <code>&lt;你的帳號&gt;</code> 要<strong>整個換成自己的帳號，角括號不要打</strong>。例如帳號是 amy-example，完整指令是 <code className="break-all">git clone https://github.com/amy-example/git-journal.git git-journal-laptop</code>；請換成自己的網址。</p>
+      <FalseAlarm signal="Cloning into 'git-journal-laptop'..." title="下載時會跑進度，不是卡住">接著會看到 remote:、Receiving objects 與 Resolving deltas。小相簿通常幾秒到一分鐘，等提示符回來，不要重按 Enter；數量與編號因自己的紀錄而不同。</FalseAlarm>
+      <CommandBlock command="git clone https://github.com/<你的帳號>/git-journal.git git-journal-laptop" comment="下載自己的整本雲端相簿，並把新資料夾命名為 git-journal-laptop" />
+      <CommandBlock variant="output" command={outputs.clone} />
+      <Callout variant="warning" title="下載前後的檢查">若看到 destination path 'git-journal-laptop' already exists and is not an empty directory.，先確認是否已做過，不要刪舊成果或一直重試。若看到 Repository not found，核對自己的帳號、repo 網址與 L6 登入授權；其他訊息到側邊欄「急診室」對照。</Callout>
+      <p>下載完成，父資料夾裡會多出 git-journal-laptop。<strong>clone 不會自動把終端機移進新資料夾</strong>，接著用新視窗開它。</p>
+      <p>在 VSCode 選 File → New Window，再在<strong>新視窗</strong>選 File → Open Folder → 選 git-journal-laptop。左側應顯示 GIT-JOURNAL-LAPTOP，並看得到 README.md 與 day1.md～day3.md。接著選 Terminal → New Terminal，提示符路徑必須以 git-journal-laptop 結尾。</p>
+      <p>保留第一個 git-journal 視窗。真的換新電腦時，還要先完成 L0 的工具與 Git 身份設定、L6 的登入授權；本次同一台電腦共用那些設定。</p>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">2. 在第二個視窗保存並上傳 Day 4</h3>
+      <p>確認左側是 GIT-JOURNAL-LAPTOP。在它上面按右鍵 → New File，輸入 day4.md。編輯區貼上下方內容，最後按 Enter 留行尾換行，再按 Ctrl+S（Mac：Cmd+S）；左側多出 day4.md，分頁的未儲存圓點消失。</p>
+      <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day4.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 4：在第二台電腦寫日誌</pre></div>
+      <FalseAlarm signal="LF will be replaced by CRLF" title="Windows 可能出現換行提醒">訊息若提到 day4.md 並出現這段，並不是失敗，可以繼續；沒有訊息也正常。</FalseAlarm>
+      <CommandBlock command="git add day4.md" comment="把第二個資料夾的新筆記放上拍照台" />
+      <Callout title="挑選後的畫面">通常沒有訊息；若出現上方 CRLF 換行提醒也正常。等提示符回來即可繼續。</Callout>
+      <FalseAlarm signal="~" title="記得帶 -m">漏掉 -m 而進入 Vim 時，按 Esc，輸入 :q! 再 Enter 離開；:wq 是保存訊息並離開。離開後先看 status，仍有 Changes to be committed 才重做帶 -m 的指令。</FalseAlarm>
+      <CommandBlock command={'git commit -m "新增 Day 4 筆記"'} comment="先在第二份相簿保存照片，才有內容可以上傳" />
+      <CommandBlock variant="output" command={outputs.day4Commit} />
+      <p>補全練習：clone 已記住 main 的目的地。請先寫出把新照片上傳的指令，想好再展開，只執行一次。</p>
+      <FalseAlarm signal="Enumerating objects: 4, done." title="接下來是正常上傳進度">小相簿通常幾秒到一分鐘，會看到 Counting、Writing 與 main → main；等提示符回來，不要重按 Enter。若跳出瀏覽器登入，登入自己的帳號並授權，不要在終端機輸入網站密碼。</FalseAlarm>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對上傳指令</summary>
+        <CommandBlock command="git push" comment="把第二份相簿的 Day 4 送到自己的 GitHub" />
+        <CommandBlock variant="output" command={outputs.day4Push} />
+      </details>
+      <p>回自己的 GitHub main 頁重新整理，應看到 day4.md。這只證明雲端收到了；第一個資料夾還沒下載。</p>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">3. 回第一個視窗，自己補上下載步驟</h3>
+      <p>切回左側顯示 GIT-JOURNAL 的第一個 VSCode 視窗。第 1 步用來 clone 的終端機還在父資料夾，請選 Terminal → New Terminal 另開一個，<strong>確認提示符以 git-journal 結尾</strong>，不要在父資料夾操作。</p>
+      <p>先寫出「把雲端新照片帶回目前 main」的指令，再展開核對。這次由你選方法，不需要再下載整本新相簿。</p>
+      <FalseAlarm signal="Fast-forward" title="這是正常更新">前面會跑 remote: 下載進度，接著列出 day4.md。小相簿通常幾秒到一分鐘；等提示符回來再繼續，不要重按 Enter。</FalseAlarm>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對下載指令</summary>
+        <CommandBlock command="git pull" comment="把第二個視窗已上傳的 Day 4 下載到第一個資料夾" />
+        <CommandBlock variant="output" command={outputs.day4Pull} />
+      </details>
+      <Callout variant="success">完成訊號：第一個視窗出現 day4.md，打開後內容是「Day 4：在第二台電腦寫日誌」。接下來都留在第一個視窗；第二個視窗先不要改檔案。</Callout>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">4. 在網頁與第一個視窗，各改同一行</h3>
+      <p>到自己的 GitHub git-journal 頁，分支選 main，點 README.md，再點鉛筆 Edit this file；會出現可輸入文字的編輯區。把<strong>第 1 行整行</strong>換成下方文字。</p>
+      <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">網頁檔案內容：<strong>README.md</strong></p><pre className="whitespace-pre-wrap break-all"># Amy 的 Git 學習日誌（網頁版）</pre></div>
+      <p>按 Commit changes 開啟確認框，訊息填「在網頁上改標題」，選 <strong>Commit directly to the main branch</strong>，再按框內 Commit changes。頁面回到檔案內容時，應看到「網頁版」。Amy 沿用 L5 的練習文字。</p>
+      <Screenshot id="L8-web-edit" alt="自己的 main 在 GitHub 編輯 README.md，並直接 Commit changes 到 main" caption="你會看到 README.md 的網頁編輯區與 Commit changes 確認框；保存後標題有「網頁版」。" />
+      <p>現在回<strong>第一個 git-journal 視窗，先不要 pull</strong>，讓它保留原有照片。打開 README.md，把同一個第 1 行換成下方文字並 Ctrl+S；編輯區應看到「電腦版」。</p>
+      <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">電腦檔案內容：<strong>README.md</strong></p><pre className="whitespace-pre-wrap break-all"># Amy 的 Git 學習日誌（電腦版）</pre></div>
+      <p>沿用 L5 的 -am：-a 挑入已被 Git 記錄的檔案修改，-m 寫照片說明。這次請確認只改 README.md；新檔案不能靠 -a 加入。</p>
+      <FalseAlarm signal="warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it">這是 Windows 換行提醒，不是保存失敗；原本已用 CRLF 或 Mac 可能沒有這行。</FalseAlarm>
+      <CommandBlock command={'git commit -am "在電腦上改標題"'} comment="保存電腦版，讓兩邊同一行各有一張新照片" />
+      <CommandBlock variant="output" command={outputs.localTitle} />
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">5. 觀察上傳被拒，再下載兩邊的改動</h3>
+      <FalseAlarm signal=" ! [rejected]        main -> main (fetch first)" title="這次上傳被拒是預期練習，照片沒有壞">雲端相簿有電腦還沒有的新照片，所以這次上傳沒有完成。error: failed to push some refs 是這次被拒的結果，不要一直重推；下一步先下載。這不是每次 push 都可忽略的訊息。</FalseAlarm>
+      <CommandBlock command="git push" comment="觀察 Git 如何避免直接蓋掉電腦還沒收到的網頁照片" />
+      <CommandBlock variant="output" command={outputs.rejected} />
+      <p>接下來 pull 會收到網頁版。因為你也改了同一行，Git 不能替你決定哪個標題較好。</p>
+      <FalseAlarm signal="CONFLICT (content): Merge conflict in README.md" title="這次會停下來，等你選標題">看到 Automatic merge failed 時不要重複 pull；往下看 status 和 README.md 的候選文字。小相簿通常幾秒到一分鐘，先等下載進度結束、提示符回來。</FalseAlarm>
+      <FalseAlarm signal="~" title="如果兩邊改的是不同行，pull 可能打開 Vim">不同位置的改動可能自動合併，接著打開合併訊息編輯器。若看到滿是 ~ 的 Vim，保留預填說明，按 Esc，輸入 <strong>:wq</strong> 再 Enter，保存並離開；不要一直按 Enter。這次同一行衝突通常不會開它。</FalseAlarm>
+      <CommandBlock command="git pull" comment="下載網頁的照片，讓 Git 指出無法自動選擇的同一行" />
+      <CommandBlock variant="output" command={outputs.conflictPull} />
+      <CommandBlock command="git status" comment="確認現在等待處理的是 README.md" />
+      <CommandBlock variant="output" command={outputs.conflictStatus} />
+      <p>have diverged 表示兩邊各有自己新增的照片；both modified: README.md 表示這個檔案兩邊都改過。輸出的 &lt;file&gt; 是整個替換成檔名的佔位符，不要輸入角括號。現在是在合併中，不用再照 status 裡的提示重複 pull。</p>
+      <p>若沒有 CONFLICT，先核對第 4 步是否兩邊都改同一行、都已保存；若已自動合併，不要硬加衝突標記。若出現 fatal: Need to specify how to reconcile divergent branches.，或只顯示不能向前更新，表示 Git 設定與本課不同；先把原文交給講師確認，不要強行覆蓋。</p>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">6. 像 L5 一樣，在 VSCode 選出最後的文字</h3>
+      <p>第一個視窗打開 README.md，會看到這段檔案內容，不是要輸入的指令：</p>
+      <CommandBlock variant="output" command={outputs.markers} />
+      <ul className="list-disc pl-5 space-y-2">
+        <li>HEAD 是現在站的位置；上半段 Current 是這份電腦相簿的「電腦版」。</li>
+        <li>======= 分開兩份候選文字；下半段 Incoming 是下載回來的「網頁版」。</li>
+        <li>最底下這次是<strong>一長串代碼</strong>，不是 L5 的分支名。它是雲端版本那張照片的 commit id（存檔編號），你的代碼可能不同。</li>
+      </ul>
+      <p>Accept Current Change 只留電腦版；Accept Incoming Change 只留網頁版；Accept Both Changes 會留兩行，不會替你組成一句。這次先按 Accept Both Changes，標記會消失、留下兩行，再整理成下方這一行。</p>
+      <p>若沒出現按鈕，直接在文字編輯區把整段五行（包括三個標記行）換成下方一行，結果相同。</p>
+      <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">解決後的檔案內容：<strong>README.md</strong></p><pre className="whitespace-pre-wrap break-all"># Amy 的 Git 學習日誌</pre></div>
+      <p>保留行尾換行，按 Ctrl+S（Mac：Cmd+S）。完成訊號：只有整理好的標題，沒有 &lt;&lt;&lt;&lt;&lt;&lt;&lt;、======= 或 &gt;&gt;&gt;&gt;&gt;&gt;&gt;，也沒有兩個重複標題。</p>
+    </Card>
+    <Card className="space-y-3">
+      <h3 className="font-bold">7. 補全三步：標示處理完成、保存、上傳</h3>
+      <p>先把下面三個答案都收起，自己寫出這三步的指令，commit 說明用「解決標題衝突」。想好後逐一展開核對，每條只執行一次；需要提醒可回 L5 第 5 步。</p>
+      <FalseAlarm signal="LF will be replaced by CRLF" title="挑入 README.md 時可能再看到換行提醒">這只是 Windows 換行格式提醒，沒有訊息也正常；它不表示還有衝突。</FalseAlarm>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對第 1 步：告訴 Git 已處理好</summary>
+        <CommandBlock command="git add README.md" comment="挑入整理好的內容，標示這個檔案已解決" />
+        <Callout title="挑選後的畫面">通常沒有訊息；若出現上方 CRLF 換行提醒也正常。等提示符回來即可繼續。</Callout>
+      </details>
+      <FalseAlarm signal="~" title="保存時記得帶 -m">若漏掉 -m 進入 Vim，按 Esc，輸入 :q! 再 Enter 離開編輯；:wq 是保存訊息並離開。合併可能有預填訊息，離開後先用 status 核對：若已 clean，不要重複 commit；仍在合併中才執行帶 -m 的指令。</FalseAlarm>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對第 2 步：保存合併照片</summary>
+        <CommandBlock command={'git commit -m "解決標題衝突"'} comment="把你選好的結果保存成連接兩邊紀錄的照片" />
+        <CommandBlock variant="output" command={outputs.resolveCommit} />
+      </details>
+      <FalseAlarm signal="Enumerating objects: 8, done." title="這次會正常上傳合併成果">接著有 Counting、Writing 與 main → main；小相簿通常幾秒到一分鐘，等提示符回來，不要重按 Enter。</FalseAlarm>
+      <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對第 3 步：把成果送回雲端</summary>
+        <CommandBlock command="git push" comment="讓雲端也保存已解決衝突的標題" />
+        <CommandBlock variant="output" command={outputs.resolvePush} />
+      </details>
+      <FalseAlarm signal={': 或 (END)'} title="紀錄畫面停住時">這是分頁閱讀畫面（pager），按英文小寫 q 回到指令列，短內容也可能直接結束。</FalseAlarm>
+      <CommandBlock command="git log --oneline --graph" comment="核對合併照片連到電腦與網頁的兩筆標題紀錄" />
+      <CommandBlock variant="output" command={outputs.log} />
+      <p>最上面是「解決標題衝突」，下面兩條線保留了「在網頁上改標題」與「在電腦上改標題」。實測把 Part 1 簡化成一筆，你的下面會有 L2–L5 的完整照片；編號與 PR 號碼也可能不同。</p>
+      <Callout variant="success">完成訊號：第一個資料夾的標題沒有衝突標記，紀錄保留兩邊改動，push 成功；重新整理自己的 GitHub README.md，應看到「# Amy 的 Git 學習日誌」。第二個資料夾尚未下載這次標題，這是正常的。</Callout>
+    </Card>
+    <Card className="space-y-3 bg-green-50">
+      <h3 className="font-bold">獨立練習：換一個下載入口，自己驗收</h3>
+      <p>現在換回 GIT-JOURNAL-LAPTOP 視窗，不新增檔案、不改文字。先自己決定怎麼讓第二份相簿也收到剛才的合併照片；不看指令做一次，卡住再回第 3 步。</p>
+      <p>你會看到下載進度與更新的 README.md，等提示符回來再檢查。完成訊號：這份 README.md 也有相同標題；翻紀錄能找到「解決標題衝突」。這證明你選對了視窗與下載方法。若有未保存改動，先處理完再同步。</p>
+    </Card>
+    <Quiz questions={[
+      { q: 'clone 完後，終端機還在父資料夾，能直接在那裡操作日誌嗎？', options: ['可以，Git 會自己找', '先在新視窗開 git-journal-laptop，確認新終端機位置', '再 clone 一次'], answer: 1, explain: 'clone 會建資料夾，但不會把原本終端機移進去；必須確認正在操作哪份相簿。' },
+      { q: '診斷題：第二個視窗 commit 後，第一個視窗 pull 卻沒有新內容，可能少了哪一步？', options: ['第二個視窗還沒 push', '第一個視窗還沒 init', '少刪一個分支'], answer: 0, explain: '雲端要先收到照片，另一份相簿才下載得到；commit 只保存在目前電腦的那份相簿。' },
+      { q: '診斷題：看到 rejected (fetch first)，一直重推會解決嗎？', options: ['會，按多次就好', '不會，要先下載並處理雲端的新照片', '先刪 README.md'], answer: 1, explain: '被拒是因為雲端有本機沒有的照片；這次下載後有同一行衝突，要選文字、add、commit 再上傳。' },
+      { q: '衝突標記底下是一長串代碼，代表什麼？', options: ['GitHub 密碼', '雲端版本的存檔編號', '一定是壞檔'], answer: 1, explain: '它指出下載回來那張照片的 commit id；仍然是比較上、下兩份文字，像 L5 一樣處理。' },
+      { q: '反向判斷：你的旅行清單早已在這台電腦下載過，只是落後雲端，應再 clone 嗎？', options: ['每次都 clone', '在既有資料夾 pull 就好', '重新 init'], answer: 1, explain: 'clone 是第一次拿整本相簿；已有相簿要更新，確認書桌乾淨後用 pull。' },
+    ]} />
+    <SectionTitle title="新專案用 init、雲上已有用 clone" />
+    <div className="grid md:grid-cols-2 gap-6">
+      <Card className="space-y-3 bg-indigo-50/50 border-indigo-100">
+        <h3 className="font-bold text-indigo-900">新專案：從第一張照片開始</h3>
+        <p>自己剛建的資料夾，還沒有任何 Git 紀錄，用 init 建相簿，再挑檔案、拍照。要第一次上雲，回 L6 建空的雲端相簿並記住地址。</p>
       </Card>
-
-      {/* 情境 B */}
-      <Card className="bg-purple-50/50 border-purple-100 hover:shadow-lg transition-all relative overflow-hidden group">
-        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-          <Download size={100} />
-        </div>
-        <div className="relative z-10">
-          <Badge color="purple">情境 B</Badge>
-          <h3 className="text-xl font-bold text-purple-900 mt-3 mb-2 flex items-center gap-2">
-            加入大部隊：參與現有專案
-          </h3>
-          <p className="text-sm text-purple-700 mb-6 h-10">
-            專案已經存在於 GitHub 上（例如公司的專案，或是別人的開源專案），你要下載下來開發。
-          </p>
-
-        </div>
+      <Card className="space-y-3 bg-purple-50/50 border-purple-100">
+        <h3 className="font-bold text-purple-900">雲上已有：第一次拿到這台電腦</h3>
+        <p>自己的雲端相簿已有紀錄，新電腦用 clone 整本下載；它已包含相簿與地址，不用再 init 或 remote add。已下載過、只是要更新，就在那份資料夾 pull。</p>
       </Card>
     </div>
-    
-    <Callout variant="info" className="justify-center text-center">
-      <span className="font-bold">接下來的兩個章節，我們將分別帶你實際演練這兩條路線！點下方的「下一章」按鈕繼續。</span>
-    </Callout>
-
-    <Quiz
-      questions={[
-        {
-          q: '公司請你加入一個已經在 GitHub 上存在的專案，你打開終端機後，第一個該打的指令是什麼？',
-          options: [
-            'git init，先把自己的資料夾初始化',
-            'git clone <URL>，把整個專案下載到本機',
-            'git push -u origin main，先把自己的東西推上去',
-          ],
-          answer: 1,
-          explain: '這是情境 B：專案已經存在雲端，你要做的是「下載」而不是「新建」。git init 是情境 A 專用（從零開始的全新專案），在這裡用會建立一個和 GitHub 上專案完全無關的空倉庫。git push 更是本末倒置——你連專案內容都還沒有，根本沒東西可推。',
-        },
-        {
-          q: '情境 A（從零開始）和情境 B（加入現有專案），兩者最關鍵的差別是什麼？',
-          options: [
-            '情境 A 用 git，情境 B 用 GitHub，是兩套不同的工具',
-            '情境 A 從「本機沒有任何 Git 紀錄」開始要用 git init 建立，情境 B 從「雲端已有專案」開始要用 git clone 下載',
-            '情境 A 只能自己一個人用，情境 B 才能多人協作',
-          ],
-          answer: 1,
-          explain: '差別在於「起點」：情境 A 是你電腦裡先有程式碼、Git 世界裡完全沒有這個專案的痕跡，所以要 git init 從無到有建立版本控制，再手動連結遠端 (remote add)。情境 B 是雲端已經有現成的專案，git clone 會直接把整個歷史和遠端連結都幫你設定好。兩者都是同一套 Git，情境 A 之後一樣能多人協作。',
-        },
-        {
-          q: '拿到一個新的開發任務，在打任何 git 指令之前，你應該先判斷什麼？',
-          options: [
-            '先判斷這個專案的程式語言是什麼',
-            '先判斷「這個專案是我剛在電腦裡新建的，還是已經存在於 GitHub 上了」，決定走情境 A 還是情境 B',
-            '先判斷公司用的是 GitHub 還是 GitLab',
-          ],
-          answer: 1,
-          explain: '這正是本章的核心提醒：初學者最常犯的錯就是不分情境亂下指令，例如專案明明已經在 GitHub 上，卻對著它打 git init。先判斷「新專案 vs 已存在的專案」，才能決定接下來該走哪一條路線，避免搞出兩個互不相關的版本歷史。',
-        },
-      ]}
-    />
-
-</div>);
-};
+  </div>
+);
