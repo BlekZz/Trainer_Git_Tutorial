@@ -217,6 +217,7 @@ PR 描述範本（教材提供可複製版）：
 - QA：所有新 tab 可點；舊 hash 轉址正確；progress bar 只計主線章；`rg "BlekZz" src/` 只命中 `config.js`；Screenshot 佔位框在缺檔時正常顯示
 
 ### M2 Part 1 單機（2–3 天）
+> ✅ 2026-10-14 完成（c92c99e codex 初稿、b108474 稽核修正、9a7c82d 錄製腳本）。驗收：build 過；eslint 6（既有）；L2–L5 共 40 個 output 區塊逐行比對 `dev/script/real-outputs-part1*.sh` 實跑紀錄（Git 2.55.0.windows.5、init.defaultBranch=main、core.autocrlf=true），僅 L5 `-m "解決標題衝突"` 2 行為指定差異；禁用詞／舊章名／佔位 0；quiz 4/4/5/4/4、每章有「換你了」；dev server 375px 無橫向捲動、console 0 error；Screenshot 佔位框實測顯示（img lazy，捲到才換成佔位框）。rubric 稽核（codex fresh-context，唯讀）high 0／medium 2／low 3，五項全修。未做：「乾淨 Windows PowerShell 實跑」只在 Git Bash 錄輸出，PowerShell 端的引號與 `ls` 行為未真機走一次。
 - 寫 L1–L5；L4 補 `git merge`／刪分支；L5 新寫本機衝突真機練習（含預期 CONFLICT 原文、VSCode 衝突畫面說明、Accept Current/Incoming 按鈕白話）
 - 每章附「🔥 換你了」真機區＋章末 quiz；Part 1 結尾 CFU
 - VSCode 畫面（Source Control 面板、衝突的 Accept 按鈕）在文中放 `<Screenshot>` 佔位，id 依 §7.2
