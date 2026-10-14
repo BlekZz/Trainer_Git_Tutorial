@@ -300,3 +300,31 @@ export const TerminalSim = ({ logs, onCommand, promptLabel = "~/project (main)",
     </div>
   );
 };
+
+// Screenshot — GitHub／VSCode 操作截圖（Sprint §7）
+// id 對應 public/screenshots/<id>.png；檔案還沒補時顯示「截圖待補」佔位框，讓文字可先寫、圖後補。
+// caption 一律寫「你會看到…」。點圖會在新分頁開原圖放大看。
+export const Screenshot = ({ id, alt, caption, className = '' }) => {
+  const [missing, setMissing] = useState(false);
+  const src = `${import.meta.env.BASE_URL}screenshots/${id}.png`;
+  return (
+    <figure className={`my-4 ${className}`}>
+      {missing ? (
+        <div className="rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+          截圖待補：<span className="font-mono">{id}</span>
+        </div>
+      ) : (
+        <a href={src} target="_blank" rel="noreferrer" title="點一下開新分頁看大圖">
+          <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            onError={() => setMissing(true)}
+            className="block max-w-full h-auto rounded-lg border border-slate-200 shadow-sm"
+          />
+        </a>
+      )}
+      {caption && <figcaption className="mt-2 text-xs text-slate-500 leading-relaxed">{caption}</figcaption>}
+    </figure>
+  );
+};
