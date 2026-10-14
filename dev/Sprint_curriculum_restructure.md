@@ -224,6 +224,7 @@ PR 描述範本（教材提供可複製版）：
 - QA：L2→L5 的每條指令在乾淨 Windows PowerShell 實跑一次，輸出與教材 `variant="output"` 比對（tutor-audit-accuracy）；rubric 1–10 稽核 high 項 = 0
 
 ### M3 Part 2 上雲（2 天）
+> ✅ 2026-10-14 完成（2fffe81 錄製腳本、78a4610 codex 初稿、稽核修正 b2af976）。真機輸出：`dev/script/real-outputs-part2.sh` 以測試帳號 blakelee0918 對 GitHub 實跑（fixture repo `blakelee0918/git-journal-rec`，per-process token、不改全域 git/gh 設定），進度行依 `\r` 收斂成終端最後畫面。驗收：build 過；eslint 6（既有）；23 個 output 區塊逐行比對 0 不符（`git log -1 --oneline` 範例為唯一未實錄行，格式同 Part 1 實錄的 --oneline）；Fork／403／禁用詞 0；§7.2 L6–L8 截圖 id 10/10；quiz 4/4/5；375px 無橫向捲動、console 0 error。rubric 稽核（codex 唯讀）high 1／medium 2，全修：ErrorRoom SSH 救援網址改 git-journal、Repository not found 改為自有 repo 三步核對（Fork 原因降為 E2 註記）、L8 獨立練習完成訊號改兩邊 `git log -1 --oneline` 比對。實錄觀察：遠端衝突的下方標記是完整 commit id 而非分支名；兩邊改不同行時 pull 會開 Vim 寫合併訊息。未做：GitHub 網頁步驟的按鈕文字未在真實網頁逐一核對（M5 截圖時一併核對回填）。
 - L6（GitHub 註冊／gh auth login 從 Ch0 移入）、L7（自己的 PR + pull）、L8（雙資料夾同步＋遠端衝突＋init/clone 判斷卡）
 - Ch6 push/pull 模擬改用真機原文輸出（T5）
 - 每個 GitHub 網頁操作步驟放 `<Screenshot>` 佔位（§7.2 清單）
