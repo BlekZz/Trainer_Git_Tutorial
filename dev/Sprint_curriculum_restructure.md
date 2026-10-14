@@ -1,7 +1,7 @@
-# Plan_curriculum_restructure — 課綱重排（先單機、再上雲、協作選修）＋作業重設計＋說人話
+# Sprint_curriculum_restructure — 課綱重排（先單機、再上雲、協作選修）＋作業重設計＋說人話
 
-> 狀態：Plan（待裁定 §6 後改名 `Sprint_curriculum_restructure.md` 開工）
-> 建立：2026-10-14（claude）｜依據：全站 Ch0–Ch8 + ErrorRoom 逐檔閱讀；教學法框架 `~/.claude/coldbench/skills/tutor-sop`（前身 tutorial-design）＋ `tutor-core/references/curriculum-planning.md`（學習階梯、認知負荷）
+> 狀態：Sprint（§6 全數裁定）｜**尚未開工——等 Blake 指示開始時間，未指示前不得動 src/**
+> 建立：2026-10-14（claude，由 Plan_curriculum_restructure 改名）｜依據：全站 Ch0–Ch8 + ErrorRoom 逐檔閱讀；教學法框架 `~/.claude/coldbench/skills/tutor-sop`（前身 tutorial-design）＋ `tutor-core/references/curriculum-planning.md`（學習階梯、認知負荷）
 
 ---
 
@@ -97,7 +97,18 @@ Part 4  選修（不計分，標「學完作業再來」）
 
 ## 3. 作業重設計
 
-### 3.1 推薦方案：「我的 Git 日誌」——全程只在學員自己的 repo
+### 3.0 固定資訊（教材內引用一律以此為準）
+
+| 項目 | 值 |
+|---|---|
+| 講師 GitHub 帳號 | `BlekZz`（https://github.com/BlekZz） |
+| 學員在 PR 描述要寫的 mention | `@BlekZz` |
+| 講師收件匣（所有作業 PR 一頁列出） | https://github.com/pulls?q=is%3Apr+mentions%3ABlekZz （GitHub 搜尋 `is:pr mentions:BlekZz`；只看待審加 `is:open`） |
+| 作業 repo 名稱 | `git-journal`（全班統一，方便講師辨識） |
+
+> 帳號若更換，只改這張表＋`src` 內集中常數（M1 建立 `src/config.js` 的 `INSTRUCTOR_GITHUB`），教材文字不得寫死帳號。
+
+### 3.1 定案方案：「我的 Git 日誌」——全程只在學員自己的 repo，用 @mention 交件
 
 學員**從空資料夾開始**（不同於 L2–L8 範例的表面情境，符合 fading 的 far transfer），只拿到一份任務清單、不給逐步指令：
 
@@ -106,11 +117,22 @@ Part 4  選修（不計分，標「學完作業再來」）
 3. 開 `feat/...` 分支加內容，**本機** merge 回 main
 4. 刻意製造並解決一次衝突（留下 merge commit）
 5. 在 GitHub 建**自己的** repo，push main
-6. 再開一個分支 push 上去，在**自己的 repo** 開 PR、寫描述、自己 Merge
-7. 本機 `git pull`，確認本機與 GitHub 一致
-8. **繳交**：只交一個網址 `https://github.com/<帳號>/git-journal`（繳交管道見 §6-D）
+6. 再開一個 `feat/...` 分支 push 上去，在**自己的 repo** 開 PR（base = 自己的 `main`）
+7. **繳交＝PR 描述欄寫 `@BlekZz 請 review`**（附固定描述範本，見下）——這就是交件，不另填表單
+8. 講師 review：
+   - **Approve** → 驗收通過，學員自己按 **Merge pull request**
+   - **Request changes** → 學員本機修改 → commit → push 到同一分支（PR 自動更新）→ 留言「已修改，請再看一次」
+9. Merge 後本機 `git checkout main` + `git pull`，確認本機與 GitHub 一致
 
-**驗收（講師在 GitHub 網頁 5 分鐘內可判定，學員也能自我檢核）**：
+PR 描述範本（教材提供可複製版）：
+```
+@BlekZz 請 review 我的 Git 作業
+
+- 這個 PR 新增了：<一句話>
+- 我在作業中解決過一次衝突：<是哪個檔案>
+```
+
+**驗收（講師打開 PR 頁即可判定；學員也能用同一張表自我檢核）**：
 
 | 檢核項 | 在哪裡看 | 對應能力 |
 |---|---|---|
@@ -118,15 +140,18 @@ Part 4  選修（不計分，標「學完作業再來」）
 | ≥3 個 commit，訊息有意義、作者頭像正確（email 綁定） | Commits 頁 | L0/L2/L3 |
 | `.gitignore` 存在且生效 | 檔案列表 | L3 |
 | 有一個 merge commit（本機 merge＋衝突解決） | Commits／Insights → Network 圖 | L4/L5 |
-| Pull requests → Closed 裡有 1 個 Merged 的 PR | PR 頁 | L7 |
-| main 最新 commit 與學員本機 `git log -1` 相同（學員截圖） | 截圖 | L7/L8 |
+| PR base 是學員自己的 `main`、描述有 `@BlekZz` | PR 頁頂部 | L7 |
+| 講師 Approve 後由學員 Merge（PR 狀態 Merged，時間線先 Approved 後 merged） | PR 時間線 | L7 |
+| Merge 後 main 最新 commit 與學員本機 `git log -1` 相同（學員在 PR 留言貼截圖） | PR 留言 | L7/L8 |
 
-- 可選：給講師一支批次核對腳本（`gh api repos/<u>/git-journal/pulls?state=closed` 等）——等 §6-D 確定繳交管道再做。
 - 網站內放一張「交作業前自我檢核」checklist（沿用 Ch0 checklist 元件），學員逐項打勾。
+- 可選（M4 視需要）：講師批次腳本，用 `gh search prs --mentions BlekZz --json url,state` 列出全部作業與狀態。
 
-**為什麼好**：不會 403、不需要別人 merge、學員能自證完成；PR 的核心觀念（「請求把分支合進 main，按下 Merge 才算數」）完整保留，只拿掉「兩個 owner」這層協作複雜度。
+**為什麼好**：全程一個 repo、不會 403、不會發錯地方；講師用一條搜尋收齊所有作業；學員完整體驗「發 PR → 被 review →（修改）→ 核准 → 自己 merge」一輪，且你的 repo 不會累積永不 merge 的 PR。
 
-### 3.2 替代方案（不推薦，列出供比較）
+**未實測前提（M4 第一件事）**：(1) public repo 的 PR 描述 @mention 非 collaborator 會發通知給被提及者；(2) 非 collaborator 可以在 public repo 的 PR 按 Approve / Request changes；(3) `mentions:BlekZz` 搜尋能列出這些 PR。任一不成立 → 退回方案：學員 Settings → Collaborators 邀請 `BlekZz`、PR 右欄 Reviewers 指定 `BlekZz`（講師端用 `gh api user/repository_invitations` 批次接受）。
+
+### 3.2 未採用方案（留存比較）
 
 | 方案 | 優 | 劣 |
 |---|---|---|
@@ -136,7 +161,7 @@ Part 4  選修（不計分，標「學完作業再來」）
 
 ## 4. 說人話：比喻統一與用語規範
 
-### 4.1 推薦主比喻：「相簿」（一套貫穿全課）
+### 4.1 定案主比喻：「相簿」（一套貫穿全課）
 
 選它的理由：遊戲存檔解釋不了**暫存區**（Git 最難懂、學員最常卡的概念），相簿可以；而且「雲端相簿」對一般人比「YouTube」更準（YouTube 暗示公開發表，GitHub 對初學者的主要價值是備份與同步）。
 
@@ -171,52 +196,106 @@ Part 4  選修（不計分，標「學完作業再來」）
 
 > 驗收共通：每節點結束跑 `npm run build`（必過）＋該節點的 QA；內容節點交 fresh-context agent 依 tutor-sop rubric 1–10 稽核（不自驗）。
 
+
+### 開工前置（Blake 準備，M0 前到位）
+- [ ] 一個**學員測試帳號**（GitHub 新帳號、不含真實個資）——M3／M4 實跑與 M5 截圖用；學員視角的截圖一律用它，避免露出 Blake 的 email／私人 repo
+- [ ] Chrome 準備兩個 profile：測試帳號登入一個、`BlekZz` 登入一個（截 review 端畫面用）
+
 ### M0 準備（0.5 天）
 - 跑 `/init-tutorial`（或 `/init-skill` 選 tutor 套組）把 tutor-core / tutor-sop 與 audit agents 裝進本專案
-- 修 CLAUDE.md 失效路徑（T8）→ 指向已安裝的 tutor-sop；把 §4.2 用語規範加入「教學內容鐵律」
+- 修 CLAUDE.md 失效路徑（T8）→ 指向已安裝的 tutor-sop；把 §4.2 用語規範、§3.0 固定資訊、§7.1 截圖規範摘要加入 CLAUDE.md
 - QA：CLAUDE.md 引用路徑 `ls` 存在；`.claude/skills/tutor-sop/SKILL.md` 存在
 
-### M1 骨架與導覽（1 天）
+### M1 骨架、導覽與共用元件（1 天）
 - `App.jsx` tabs 改為 Part 0–4 分組（L0…L8、作業、選修、急診室），hash id 用新名；舊 hash（`#pathA` 等）轉址到對應新章避免舊連結失效
 - 新章先以「搬移舊素材」建立空殼（依 §2.1），內容尚不改寫
-- QA：所有新 tab 可點；舊 hash 轉址正確；progress bar 計算只含主線章
+- 新增 `src/config.js`（`INSTRUCTOR_GITHUB = 'BlekZz'`、作業 repo 名、收件匣搜尋網址）——教材文字一律引用常數
+- `Shared.jsx` 新增 `<Screenshot src alt caption />`：caption 一律「你會看到…」句式、圖片可點開放大、手機寬度不溢出；檔案不存在時顯示「截圖待補：<id>」佔位框（讓 M2–M4 能先寫文字、M5 再補圖）
+- QA：所有新 tab 可點；舊 hash 轉址正確；progress bar 只計主線章；`rg "BlekZz" src/` 只命中 `config.js`；Screenshot 佔位框在缺檔時正常顯示
 
 ### M2 Part 1 單機（2–3 天）
 - 寫 L1–L5；L4 補 `git merge`／刪分支；L5 新寫本機衝突真機練習（含預期 CONFLICT 原文、VSCode 衝突畫面說明、Accept Current/Incoming 按鈕白話）
 - 每章附「🔥 換你了」真機區＋章末 quiz；Part 1 結尾 CFU
+- VSCode 畫面（Source Control 面板、衝突的 Accept 按鈕）在文中放 `<Screenshot>` 佔位，id 依 §7.2
 - QA：L2→L5 的每條指令在乾淨 Windows PowerShell 實跑一次，輸出與教材 `variant="output"` 比對（tutor-audit-accuracy）；rubric 1–10 稽核 high 項 = 0
 
 ### M3 Part 2 上雲（2 天）
 - L6（GitHub 註冊／gh auth login 從 Ch0 移入）、L7（自己的 PR + pull）、L8（雙資料夾同步＋遠端衝突＋init/clone 判斷卡）
 - Ch6 push/pull 模擬改用真機原文輸出（T5）
-- QA：用一個測試帳號從零實跑 L6–L8 全流程；rejected / conflict 原文截取比對
+- 每個 GitHub 網頁操作步驟放 `<Screenshot>` 佔位（§7.2 清單）
+- QA：用測試帳號從零實跑 L6–L8 全流程；rejected / conflict 原文截取比對；過程中記下每個 GitHub 畫面的實際按鈕文字，回填文案
 
 ### M4 作業與選修（1 天）
-- 作業頁：任務清單＋自我檢核 checklist＋繳交說明（依 §6-D）；講師驗收表（§3.1）放 README 教學者專區
+- **第一件事：驗證 §3.1 三個未實測前提**（測試帳號開 PR @BlekZz → BlekZz 是否收到通知、能否 Approve／Request changes、`mentions:BlekZz` 搜得到）。記錄觀察到的訊號（通知信主旨、PR 時間線文字）。任一不成立 → 改用 §3.1 退回方案，再繼續
+- 作業頁：任務清單＋PR 描述範本（可複製）＋自我檢核 checklist＋「被 Request changes 怎麼辦」；講師驗收表（§3.1）與收件匣網址放 README 教學者專區
 - 舊 Ch8 Fork 流程搬 E2、rebase 搬 E1；修 Ch8 quiz 事實錯誤（S6）
-- QA：拿一個測試帳號完成作業，講師依驗收表 5 分鐘內判定通過
+- QA：測試帳號完整做一次作業（含一次 Request changes 來回），BlekZz 依驗收表判定通過；收件匣搜尋能看到該 PR
 
-### M5 說人話全站掃（1 天）
+### M5 GitHub／VSCode 操作截圖（1 天）
+- 依 §7.2 清單截圖（規範 §7.1），補滿 M2–M4 留下的所有佔位
+- QA：`rg "截圖待補"` 渲染結果為 0（在 dev server 逐章檢查無佔位框）；每張圖 fresh-context agent 對照圖說「你會看到…」是否與圖相符；人工檢查無真實 email／token／私人 repo 名入鏡；圖片總量 ≤ 5 MB
+
+### M6 說人話全站掃（1 天）
 - 依 §4 比喻對照表全站替換；術語首次定義檢查；章首黑框改寫（T3）；語氣（T4）；事實修正（T5）；ErrorRoom 一塊一指令（T6）；L0 刪 Node（T7）
 - QA：`rg` 檢查舊比喻詞（平行宇宙／時光機儀表板／敲門／搶劫／MMO／黑話）在主線章 0 命中（選修章可例外）；fresh-context agent 做「零基礎讀者」角色閱讀，回報任何看不懂的句子
 
-### M6 驗收與部署（0.5 天）
+### M7 驗收與部署（0.5 天）
 - `npm run build`、`npm run deploy`（部署前確認）
 - 找 1 位零基礎同事走完 L0→作業（沿用舊 Sprint 未完成的人工驗收項）
 
 ### 最終驗收 Checklist
 - [ ] 學員在 Part 1 全程不需要 GitHub 帳號即可完成所有真機練習
 - [ ] 主線（L0–L8＋作業）不出現 Fork、跨 owner PR、403、rebase
-- [ ] 作業可由學員自證完成；講師依 §3.1 表 5 分鐘內判定
+- [ ] 作業交件＝自己 repo 的 PR 內 @BlekZz；講師用收件匣搜尋看到 PR 並能 review；學員 Approve 後自己 merge
+- [ ] §3.1 三個前提已實測，觀察訊號記錄在本檔 §8
 - [ ] 每章都有真機 You Do 區與章末 quiz
 - [ ] 全站單一比喻系統；必定義術語清單每項都有白話首次定義
 - [ ] 模擬終端輸出全部為真機原文
+- [ ] 所有 GitHub 網頁操作步驟都有截圖，無截圖佔位框殘留，無敏感資訊入鏡
+- [ ] 講師帳號只出現在 `src/config.js`
 - [ ] `npm run build` 通過；舊 hash 連結轉址正確
 - [ ] 零基礎同事實測走完、卡點已回填急診室
 
-## 6. 待裁（開工前需 Blake 決定）
+## 6. 裁定紀錄
 
-- **A. 作業方案**：✅ 2026-10-14 Blake 裁定 3.1「我的 Git 日誌」
-- **B. 主比喻**：✅ 2026-10-14 Blake 裁定 相簿
-- **C. 行前準備**：✅ 2026-10-14 Blake 裁定 刪 Node.js、GitHub 登入移到 L6
-- **D. 繳交管道**（討論中）：Blake 提案「Fork → 自己 merge 自己的 PR → 再發 PR 給 Blake，不 merge 只 review」；claude 建議「自己 repo 開 PR、描述欄 @BlekZz 請求 review → Blake review → 學員 approve 後自己 merge；Blake 用 `is:pr mentions:BlekZz` 搜尋當收件匣」。@mention 通知與非 collaborator review 的行為**未實測**，M4 用測試帳號驗證，失敗則退回「學員加 Blake 為 collaborator 並指定 reviewer」。
+- **A. 作業方案**：✅ 2026-10-14 「我的 Git 日誌」（§3.1）
+- **B. 主比喻**：✅ 2026-10-14 相簿（§4.1）
+- **C. 行前準備**：✅ 2026-10-14 刪 Node.js、GitHub 登入移到 L6
+- **D. 繳交管道**：✅ 2026-10-14 自己 repo 的 PR 描述 @BlekZz 請求 review → 講師 review → Approve 後學員自己 merge；講師以 `is:pr mentions:BlekZz` 當收件匣（Blake 原提案「Fork → 自 merge → 再發 PR 給講師不 merge」因 Fork 預設 base 指向上游易發錯、跳過 init、講師 repo 累積 open PR 而未採用）。附帶要求：講師帳號留存記錄（§3.0）、GitHub 操作頁面截圖作為教學一部分（§7、M5）
+
+## 7. 截圖
+
+### 7.1 規範（依 tutor-sop「截圖／錄影操作協定」）
+- 工具：claude-in-chrome `computer` 截圖；≥3 步連續操作另錄 `gif_creator`，關鍵停留點仍補靜態圖
+- 學員視角用**測試帳號**；講師視角（review、收件匣）用 `BlekZz`
+- 一張圖只標**一個**動作點（紅框或箭頭）；圖內需要照打的文字，正文必須另有可複製文字版
+- 必遮：email、token、通知內容中的他人資訊、無關的私人 repo
+- 檔案：`public/screenshots/<章>-<步驟slug>-<before|after|N>.png`（如 `L6-new-repo-after.png`），WebP／壓縮 PNG，單張 ≤ 200 KB
+- 圖說寫「你會看到…」，不寫「如圖所示」；每張圖在 §7.2 記錄截圖日期（GitHub 改版時可批次定位重截）
+
+### 7.2 截圖清單（M2–M4 寫文時放佔位，M5 補圖）
+
+| id | 畫面 | 帳號 | 用在 |
+|---|---|---|---|
+| L2-vscode-source-control | VSCode 左側 Source Control 面板顯示變更檔案 | — | L2 |
+| L5-vscode-conflict | VSCode 衝突區塊＋Accept Current / Incoming / Both 按鈕 | — | L5 |
+| L6-signup | github.com 註冊頁 | 測試 | L6 |
+| L6-gh-auth-device | `gh auth login` 開出的瀏覽器驗證碼頁＋Authorize | 測試 | L6 |
+| L6-new-repo-form | New repository 表單（三個初始化選項都不勾） | 測試 | L6 |
+| L6-new-repo-after | 空 repo 頁＋HTTPS 網址複製按鈕 | 測試 | L6 |
+| L6-after-push | push 後 repo 頁出現檔案 | 測試 | L6 |
+| L7-compare-banner | 黃色「had recent pushes」＋Compare & pull request | 測試 | L7、作業 |
+| L7-pr-form | Open a pull request 表單（base 是自己的 main） | 測試 | L7、作業 |
+| L7-pr-merge-button | PR 頁 Merge pull request／Confirm merge | 測試 | L7、作業 |
+| L7-branch-delete | merge 後 Delete branch 按鈕 | 測試 | L7 |
+| L8-web-edit | GitHub 網頁直接編輯檔案＋Commit changes | 測試 | L8 |
+| HW-pr-mention | PR 描述欄寫 `@BlekZz 請 review` | 測試 | 作業 |
+| HW-review-approve | 講師端 Files changed → Review changes → Approve | BlekZz | 作業（講師視角說明） |
+| HW-review-request-changes | 學員端看到 Changes requested 的樣子 | 測試 | 作業 |
+| HW-approved-timeline | 學員端 PR 時間線顯示 Approved | 測試 | 作業 |
+| HW-inbox-search | 講師收件匣 `is:pr mentions:BlekZz` 搜尋結果 | BlekZz | README 教學者專區 |
+| HW-commits-page | Commits 頁（含 merge commit） | 測試 | 作業自我檢核 |
+
+## 8. 實測紀錄（M4 填寫）
+
+（尚無）
