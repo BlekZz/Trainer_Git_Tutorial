@@ -314,3 +314,11 @@ PR 描述範本（教材提供可複製版）：
 
 - 附帶事實：無 branch protection 時 `reviewDecision` 為空字串——Approve 只顯示在 PR 時間線，PR 頁頂不會有「Approved」狀態徽章；作業驗收表「時間線先 Approved 後 merged」的寫法正確，教材不要說「PR 會顯示已核准狀態」。
 - 附帶事實：本機 `gh`（OAuth token，scopes gist/read:org/repo）`gh api notifications?all=true` 回 0 筆——讀不到通知，講師收件匣一律用網頁 `is:pr mentions:BlekZz` 或 `gh search prs --mentions BlekZz`，不用 notifications API。
+
+### 8.2 作業全流程實跑（2026-10-14，M4 QA，`dev/script/homework-e2e.sh`）
+學員＝測試帳號 blakelee0918（per-process token），講師＝gh active 帳號 BlekZz。fixture：`blakelee0918/git-homework` PR #1（已 merge，保留供 M5 截圖）。
+- §3.1 第 1–9 步全部通過：3 commit、`.gitignore` 生效（notes.tmp 不在 status）、本機 merge＋衝突 merge commit、push main、feat 分支 PR（base＝自己的 main）、描述首行 `@BlekZz 請 review 我的 Git 作業`。
+- 講師搜尋：`gh search prs --mentions BlekZz --repo blakelee0918/git-homework` 命中 PR #1。
+- **Request changes 非 collaborator 可用**（補 §8.1 未測項）：reviews API → `BlekZz CHANGES_REQUESTED NONE`，修正後 `BlekZz APPROVED NONE`。
+- 學員同分支 push 修正後 PR 自動更新（PR commits=2）；timeline：`committed > mentioned > subscribed > reviewed > committed > commented > reviewed > merged > closed`；`state=MERGED mergedBy=blakelee0918`。
+- Merge 後本機 `git pull`，本機 HEAD＝GitHub main（`1ef2aa5…` 兩邊一致）；main 共 12 commit、2 個 merge commit。
