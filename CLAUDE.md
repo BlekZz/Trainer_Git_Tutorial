@@ -1,7 +1,7 @@
 # Trainer_Git_Tutorial — 專案規則
 
 React + Vite 教學網站（GitHub Pages 部署）。受眾：**從未用過 terminal 的實習生**。
-教學設計原則的完整版見全域 skill `~/.claude/coldbench/skills/tutorial-design/SKILL.md`。
+教學設計原則的完整版見 cold bench skill `~/.claude/coldbench/skills/tutor-sop/SKILL.md`（前身 tutorial-design）。
 
 ## 教學內容鐵律（改任何章節前必讀）
 
@@ -20,12 +20,12 @@ React + Vite 教學網站（GitHub Pages 部署）。受眾：**從未用過 ter
 
 - 改完跑 `npm run build`（必過）。ESLint 有 6 個既有錯誤（Chapter0Setup 的 NextButton
   render 內宣告，react-hooks/static-components），非新引入者可忽略。
-- 內容改動交付前：用 tutorial-design skill 內的 6 條 rubric 派 fresh-context agent 稽核。
+- 內容改動交付前：用 tutor-sop skill 內的 rubric 派 fresh-context agent 稽核。
 
 ## 知識歸檔路由表
 
 | 類型 | 去處 |
 |---|---|
-| 教學設計原則（跨專案） | `~/.claude/coldbench/skills/tutorial-design/SKILL.md` |
+| 教學設計原則（跨專案） | `~/.claude/coldbench/skills/tutor-sop/SKILL.md` |
 | 本專案內容慣例 | 本檔「教學內容鐵律」段 |
 | Sprint / 規格 / 改進提案 | `dev/` |
