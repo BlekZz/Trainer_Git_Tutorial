@@ -1,7 +1,7 @@
 # Trainer_Git_Tutorial — 專案規則
 
 React + Vite 教學網站（GitHub Pages 部署）。受眾：**從未用過 terminal 的實習生**。
-教學設計原則的完整版見 cold bench skill `~/.claude/coldbench/skills/tutor-sop/SKILL.md`（前身 tutorial-design）。
+教學設計原則的完整版見 cold bench skill `<Hub>/coldbench/skills/tutor-sop/SKILL.md`（前身 tutorial-design）。
 
 ## 教學內容鐵律（改任何章節前必讀）
 
@@ -26,6 +26,6 @@ React + Vite 教學網站（GitHub Pages 部署）。受眾：**從未用過 ter
 
 | 類型 | 去處 |
 |---|---|
-| 教學設計原則（跨專案） | `~/.claude/coldbench/skills/tutor-sop/SKILL.md` |
+| 教學設計原則（跨專案） | `<Hub>/coldbench/skills/tutor-sop/SKILL.md` |
 | 本專案內容慣例 | 本檔「教學內容鐵律」段 |
 | Sprint / 規格 / 改進提案 | `dev/` |
