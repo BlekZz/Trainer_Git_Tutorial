@@ -135,7 +135,6 @@ const App = () => {
   const nextTab = currentIndex < tabs.length - 1 ? tabs[currentIndex + 1] : null;
 
   const activeMeta = tabs[currentIndex];
-  const chapterNo = chapterIds.indexOf(activeTab);
 
   const go = (id) => { setNavOpen(false); navigateTo(id); };
 
@@ -248,7 +247,7 @@ const App = () => {
       <div className="lg:pl-72">
         {/* 上方細列：目前位置與進度 */}
         <header className="sticky top-0 z-20 border-b border-line bg-paper/90 backdrop-blur">
-          <div className="mx-auto flex h-14 max-w-[46rem] items-center gap-3 px-4 md:px-8">
+          <div className="mx-auto flex h-14 max-w-[60rem] items-center gap-3 px-4 md:px-8 xl:px-10">
             <button type="button" onClick={() => setNavOpen(true)} aria-expanded={navOpen} aria-controls="mobile-nav" className="-ml-2 flex h-11 w-11 items-center justify-center rounded-md text-slate-700 hover:bg-slate-200/60 lg:hidden" aria-label="打開課程目錄">
               <Menu size={20} aria-hidden="true" />
             </button>
@@ -256,13 +255,11 @@ const App = () => {
               <span className="hidden sm:inline">{activeMeta.group}<span className="mx-2 text-slate-300">/</span></span>
               <span className="font-medium text-ink">{activeMeta.label}</span>
             </p>
-            {chapterNo >= 0 && (
-              <span className="shrink-0 text-xs text-slate-500">第 {chapterNo + 1} 課<span className="hidden sm:inline">，主線共 {chapterIds.length} 課</span></span>
-            )}
+            <span className="shrink-0 text-xs text-slate-500 lg:hidden">已讀 {progressCount} / {chapterIds.length}</span>
           </div>
         </header>
 
-        <main id="main" tabIndex={-1} className="mx-auto max-w-[46rem] px-4 pb-16 pt-8 md:px-8 md:pt-12 focus:outline-none">
+        <main id="main" tabIndex={-1} className="mx-auto max-w-[60rem] px-4 pb-16 pt-8 md:px-8 md:pt-12 xl:px-10 focus:outline-none">
           <div className="lesson">
             {activeTab === 'setup' && <Lesson0Setup />}
             {activeTab === 'concept' && <Lesson1Concept />}

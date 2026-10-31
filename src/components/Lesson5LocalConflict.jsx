@@ -1,4 +1,5 @@
 import { SectionTitle, Card, Callout, Quiz, CommandBlock, NoOutputHint, FalseAlarm, Screenshot } from './Shared';
+import { ConflictDiagram } from './Diagrams';
 
 export const Lesson5LocalConflict = () => (
   <div className="min-w-0 space-y-6 animate-fade-in break-words">
@@ -7,10 +8,13 @@ export const Lesson5LocalConflict = () => (
     <Card className="space-y-3 bg-indigo-50">
       <h3 className="font-bold">我先示範：兩本相簿對同一行拍了不同樣子</h3>
       <p><strong>衝突（conflict）</strong> 是兩份改動無法自動選出要保留哪份的情況，需要你決定最後的內容。不需要兩個人或 GitHub，自己在兩個分支改同一行就能練。</p>
-      <div className="grid sm:grid-cols-2 gap-3 text-center" aria-label="兩個標題由共同版本分開，再由人決定合併結果">
-        <div className="rounded-lg bg-slate-100 p-3">main<br /># Amy 的 Git 日誌</div>
-        <div className="rounded-lg bg-indigo-50 p-3">feat/title<br /># 我的 Git 學習日誌</div>
-      </div>
+      <ConflictDiagram
+        label="兩個標題由共同版本分開，再由人決定合併結果：原本是 # 我的 Git 日誌；main 改成 # Amy 的 Git 日誌，feat/title 改成 # 我的 Git 學習日誌；合併時由你整理成 # Amy 的 Git 學習日誌"
+        common="# 我的 Git 日誌"
+        ours={{ branch: 'main', line: '# Amy 的 Git 日誌' }}
+        theirs={{ branch: 'feat/title', line: '# 我的 Git 學習日誌' }}
+        result="# Amy 的 Git 學習日誌"
+      />
       <p>兩邊原本都是「# 我的 Git 日誌」。我想保留名字與「學習」兩種資訊，所以合併時會整理成「# Amy 的 Git 學習日誌」，而不是讓 Git 猜。</p>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>兩本相簿對同一行各存一種標題，Git 能替你決定喜歡哪句嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不能；需要由你選出或重寫最終文字，再保存合併結果。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>

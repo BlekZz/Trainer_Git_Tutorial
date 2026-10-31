@@ -1,4 +1,6 @@
 import { SectionTitle, Card, Callout, Quiz, CommandBlock, NoOutputHint, FalseAlarm, Screenshot, SuccessCheck } from './Shared';
+import { FlowDiagram } from './Diagrams';
+import { Laptop, Cloud } from 'lucide-react';
 
 // Copied from m3-real-outputs.txt with only the account and repo substitutions.
 const outputs = {
@@ -14,6 +16,14 @@ export const Lesson6Push = () => (
       <h3 className="font-bold">我先示範：相簿拍好了，送到哪裡？</h3>
       <p><strong>GitHub</strong> 是雲端相簿，像 Google 相簿，可以備份、分享自己的存檔紀錄。<strong>push</strong> 就是把電腦裡已拍好的照片上傳到雲端相簿；只有 commit，照片還留在電腦。</p>
       <p><strong>remote</strong> 是電腦記住的雲端相簿地址，<strong>origin</strong> 是我們替這個地址取的小名。Repository（簡稱 repo）是放檔案與存檔紀錄的地方，本課就在自己的帳號建立一個。</p>
+      <FlowDiagram
+        label="電腦裡的本機相簿用 commit 保存照片，push 透過 origin 地址上傳到 GitHub 的雲端相簿"
+        steps={[
+          { icon: Laptop, title: '你的電腦', lines: ['本機相簿 git-journal', 'commit：照片還留在電腦'] },
+          { icon: Cloud, title: '自己的 GitHub', lines: ['雲端相簿（repo）', '可以備份、分享'], tone: 'cloud' },
+        ]}
+        links={['push 上傳（地址小名 origin）']}
+      />
       <p>我會先建空的雲端相簿，再讓電腦記住它的地址，最後上傳已拍好的照片。這樣 L2–L5 的成果就能接著用，不必重新建立本機相簿。</p>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>剛 commit 完就關掉電腦，GitHub 已經有那張照片了嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>還沒有；commit 保存在電腦，push 才上傳。若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>

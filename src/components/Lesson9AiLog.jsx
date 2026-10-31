@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { SquareTerminal, Bot, ListChecks } from 'lucide-react';
+import { FlowDiagram } from './Diagrams';
 import { SectionTitle, Card, Callout, Quiz, CommandBlock, FalseAlarm, SuccessCheck } from './Shared';
 
 // Real output: Git 2.56 replica of the L2–L8 git-journal history (account substituted).
@@ -67,6 +69,15 @@ export const Lesson9AiLog = () => (
       <p>假設你下個月接手同事的專案，同事已經調到別的組。最快的方法不是一個個打開檔案，而是<strong>翻相簿</strong>：每張照片的日期與說明串起來，就是這個專案的進度表。</p>
       <p>照片一多，人讀起來很累，這時可以把整串紀錄交給 AI，請它整理成「每天做了什麼、為什麼」。AI 只能讀到你寫的說明，所以說明寫得越清楚，它整理得越準；說明含糊，它只能猜，甚至自己編理由。</p>
       <p>這一課用你自己的 git-journal 實際試一次：先把紀錄印成一行一張照片，再交給 AI 整理，最後核對 AI 說的是不是真的。</p>
+      <FlowDiagram
+        label="先把紀錄印成一行一張照片，再交給 AI 整理，最後核對 AI 說的是不是真的"
+        steps={[
+          { icon: SquareTerminal, tag: '步驟 1', title: '印出紀錄', lines: ['一行一張照片'] },
+          { icon: Bot, tag: '步驟 2', title: '交給 AI 整理', lines: ['每天做了什麼、為什麼'], tone: 'accent' },
+          { icon: ListChecks, tag: '步驟 3', title: '核對', lines: ['AI 說的是不是真的'], tone: 'success' },
+        ]}
+        links={['複製', '回頭對照']}
+      />
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>AI 整理專案進度時，讀的是你的檔案內容，還是照片說明？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>本課交給它的是照片說明與日期。說明沒寫到的原因，AI 不會知道。若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
     <Card className="space-y-3">

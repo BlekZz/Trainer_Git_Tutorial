@@ -37,6 +37,11 @@
   .skip-link:focus {
     @apply not-sr-only fixed left-4 top-4 z-[100] rounded-md bg-ink px-4 py-2 text-sm font-medium text-white;
   }
+  /* 主欄加寬後，桌機內文放大一級，維持每行約 45–50 個中文字的舒適行長 */
+  @media (min-width: 1024px) {
+    .lesson { font-size: 1.0625rem; }
+  }
+  .lesson p + p { margin-top: 0.75em; }
   .nav-scroll { scrollbar-width: thin; scrollbar-color: #CBD1D8 transparent; }
   /* 「換你了」步驟線：連續的步驟卡之間以直線串起，最後一張不畫尾線 */
   .step-card { position: relative; }

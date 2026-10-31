@@ -1,4 +1,6 @@
 import { SectionTitle, Card, Callout, Quiz, CommandBlock, NoOutputHint, FalseAlarm, Screenshot, SuccessCheck } from './Shared';
+import { FlowDiagram } from './Diagrams';
+import { Laptop, Cloud, Monitor } from 'lucide-react';
 
 // Copied from m3-real-outputs.txt with only the account and repo substitutions.
 const outputs = {
@@ -22,11 +24,15 @@ export const Lesson8Sync = () => (
     <Card className="space-y-3 bg-indigo-50">
       <h3 className="font-bold">我先示範：換電腦，先拿回整本相簿</h3>
       <p><strong>clone</strong> 是把整本雲端相簿下載到新電腦，包含檔案與存檔紀錄，也會記住 origin 地址。這次用第二個資料夾 git-journal-laptop 模擬第二台電腦，不用真的換機器。</p>
-      <div className="grid sm:grid-cols-3 gap-3 text-center" aria-label="第二個資料夾上傳到 GitHub，第一個資料夾再下載">
-        <div className="rounded-lg bg-indigo-50 p-3">第二個視窗<br />git-journal-laptop<br />拍 Day 4 → push 上傳</div>
-        <div className="rounded bg-indigo-50 p-3">自己的 GitHub<br />git-journal<br />雲端相簿</div>
-        <div className="rounded-lg bg-slate-100 p-3">第一個視窗<br />git-journal<br />pull 下載 → 看見 Day 4</div>
-      </div>
+      <FlowDiagram
+        label="第二個資料夾上傳到 GitHub，第一個資料夾再下載"
+        steps={[
+          { icon: Laptop, title: '第二個視窗', lines: ['git-journal-laptop', '拍 Day 4'], tone: 'accent' },
+          { icon: Cloud, title: '自己的 GitHub', lines: ['git-journal', '雲端相簿'], tone: 'cloud' },
+          { icon: Monitor, title: '第一個視窗', lines: ['git-journal', '看見 Day 4'] },
+        ]}
+        links={['push 上傳', 'pull 下載']}
+      />
       <p>我先 clone，因為新電腦還沒有相簿；之後只下載新照片就用 pull。兩個資料夾各有自己的書桌與相簿，改一邊不會自動改另一邊。</p>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>第二個資料夾剛 commit，第一個資料夾會馬上多出 Day 4 嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不會；第二邊要先 push，第一邊再 pull。若答不出來，回看上方三格圖並再說一次，確認有把握再往下。</p></details></Callout>

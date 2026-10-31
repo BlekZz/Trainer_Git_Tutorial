@@ -1,4 +1,6 @@
 import { SectionTitle, Card, Callout, Quiz, CommandBlock, FalseAlarm, Screenshot, SuccessCheck } from './Shared';
+import { FlowDiagram } from './Diagrams';
+import { Laptop, Cloud } from 'lucide-react';
 
 // Copied from m3-real-outputs.txt with only the account and repo substitutions.
 const outputs = {
@@ -19,10 +21,16 @@ export const Lesson7PR = () => (
       <h3 className="font-bold">我先示範：申請單與收進相簿是兩個動作</h3>
       <p><strong>PR（Pull Request）</strong> 是「這本分支相簿拍好了，請收進主相簿」的申請單。Create pull request 只是送出申請；按 <strong>Merge pull request</strong> 並確認，才真的把照片收進主相簿。</p>
       <p><strong>pull</strong> 是把雲端的新照片下載下來，並整理進目前的本機相簿。本課在網頁合併後，電腦的 main 不會自動更新，所以最後需要 pull。</p>
-      <div className="grid sm:grid-cols-2 gap-3 text-center" aria-label="上傳分支後用 PR 申請收進雲端 main，再下載回本機 main">
-        <div className="rounded-lg bg-indigo-50 p-3">自己的 feat/day3<br />push 上傳 → PR 申請 → Merge 收進雲端 main</div>
-        <div className="rounded-lg bg-slate-100 p-3">自己的本機 main<br />pull 下載 ← 雲端 main</div>
-      </div>
+      <FlowDiagram
+        label="上傳分支後用 PR 申請收進雲端 main，再下載回本機 main"
+        steps={[
+          { icon: Laptop, tag: '電腦', title: '自己的 feat/day3', tone: 'accent' },
+          { icon: Cloud, tag: 'GitHub', title: '雲端 feat/day3', tone: 'cloud' },
+          { icon: Cloud, tag: 'GitHub', title: '雲端 main', tone: 'cloud' },
+          { icon: Laptop, tag: '電腦', title: '自己的本機 main' },
+        ]}
+        links={['push 上傳', 'PR 申請 → Merge 收進', 'pull 下載']}
+      />
       <p>團隊也會各自在分支準備內容再收進 main；這次所有分支都在你自己的 repo，申請與合併都由你完成。我先上傳分支，是因為 GitHub 要先收到分支照片，才有內容可比較。</p>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>按 Create pull request 後，main 就有 Day 3 了嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>還沒有；這只是申請單，要完成 Merge 與 Confirm merge 才收進去。若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>

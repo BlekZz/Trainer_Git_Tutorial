@@ -1,4 +1,5 @@
 import { SectionTitle, Card, Callout, Quiz, CommandBlock, FalseAlarm } from './Shared';
+import { BranchDiagram } from './Diagrams';
 
 export const Lesson4Branch = () => (
   <div className="min-w-0 space-y-6 animate-fade-in break-words">
@@ -14,10 +15,7 @@ export const Lesson4Branch = () => (
     <Callout title="先停一下，說出答案再繼續"><p>想把 Day 2 收進主相簿，合併前應站在哪一本？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>main；合併會改變你目前站著的相簿。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
     <Card className="space-y-3">
       <h3 className="font-bold">一起看分支圖，補出最後一步</h3>
-      <div className="grid sm:grid-cols-2 gap-3 text-center" aria-label="分支與合併概念圖">
-        <div className="rounded-lg bg-slate-100 p-4">main：Day 1 ＋ 忽略清單<br />↓ 留在原照片</div>
-        <div className="rounded-lg bg-indigo-50 p-4">feat/day2：從同一張開始<br />↓ 多拍 Day 2</div>
-      </div>
+      <BranchDiagram label="分支與合併概念圖：main 有 Day 1 與忽略清單，留在原照片；feat/day2 從同一張開始，多拍 Day 2；最後一步要把 feat/day2 接回 main" />
       <p>前半我帶：另開相簿 → 拍 Day 2 → 回 main。最後請你補：要讓 main 也有 Day 2，還缺什麼？</p>
       <details><summary className="cursor-pointer">核對</summary><p>把 feat/day2 合併進 main。只是切回 main 不會自動帶入另一邊的照片。</p></details>
     </Card>

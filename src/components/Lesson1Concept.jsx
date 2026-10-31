@@ -1,4 +1,6 @@
 import { SectionTitle, Card, Callout, Quiz } from './Shared';
+import { FlowDiagram } from './Diagrams';
+import { FileText, Camera, Images } from 'lucide-react';
 
 export const Lesson1Concept = () => (
   <div className="min-w-0 space-y-6 animate-fade-in break-words">
@@ -12,14 +14,16 @@ export const Lesson1Concept = () => (
       <p><strong>暫存區</strong> 是挑出這一次要保存哪些改動的地方，像拍照前擺好文件的拍照台。</p>
       <p><strong>commit</strong> 是附上一句說明、保存一個版本的動作與紀錄，像按快門後相簿多了一張照片。</p>
       <p>我先在書桌寫日誌，只把這次想保存的內容擺上拍照台，再按快門。只在編輯器按儲存，還沒有替 Git 相簿添照片。</p>
-      <figure className="rounded-xl bg-white p-4 border border-indigo-100" aria-label="書桌、拍照台、相簿三個區域">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
-          <div className="rounded-lg bg-slate-100 p-3"><strong>① 書桌</strong><p>工作資料夾：正在改的檔案</p><p className="text-sm mt-2">↓ 挑選改動（add）</p></div>
-          <div className="rounded-lg bg-amber-50 p-3"><strong>② 拍照台</strong><p>暫存區：這次要拍的內容</p><p className="text-sm mt-2">↓ 按快門（commit）</p></div>
-          <div className="rounded-lg bg-green-50 p-3"><strong>③ 相簿</strong><p>存檔紀錄：已保存的版本</p><p className="text-sm mt-2">翻相簿（log）</p></div>
-        </div>
-        <figcaption className="text-sm mt-3 text-slate-600">這是概念圖，不是要輸入的指令。拍照台保存的是挑選當下的內容，後來又修改就要重新挑選。</figcaption>
-      </figure>
+      <FlowDiagram
+        label="書桌、拍照台、相簿三個區域：書桌的改動經 add 挑選到拍照台，再經 commit 保存進相簿，用 log 翻相簿"
+        steps={[
+          { icon: FileText, tag: '①', title: '書桌', lines: ['工作資料夾：正在改的檔案'] },
+          { icon: Camera, tag: '②', title: '拍照台', lines: ['暫存區：這次要拍的內容'], tone: 'accent' },
+          { icon: Images, tag: '③', title: '相簿', lines: ['存檔紀錄：已保存的版本', '翻相簿（log）'], tone: 'success' },
+        ]}
+        links={['挑選改動（add）', '按快門（commit）']}
+        caption="這是概念圖，不是要輸入的指令。拍照台保存的是挑選當下的內容，後來又修改就要重新挑選。"
+      />
       <p><strong>branch（分支）</strong> 是從某張照片開始另開一本相簿，讓一組新想法有自己的後續紀錄。</p>
       <p><strong>merge（合併）</strong> 是把另一本相簿的成果收進目前這本相簿。</p>
       <p>我們把主相簿叫做 <strong>main</strong>。相簿只是比喻，電腦不會真的多出一本紙相簿或複製整個資料夾。</p>
