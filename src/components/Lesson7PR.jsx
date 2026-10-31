@@ -1,4 +1,4 @@
-import { SectionTitle, Card, Callout, Quiz, CommandBlock, FalseAlarm, Screenshot } from './Shared';
+import { SectionTitle, Card, Callout, Quiz, CommandBlock, FalseAlarm, Screenshot, SuccessCheck } from './Shared';
 
 // Copied from m3-real-outputs.txt with only the account and repo substitutions.
 const outputs = {
@@ -56,6 +56,11 @@ export const Lesson7PR = () => (
       <CommandBlock command="git push -u origin feat/day3" comment="讓 GitHub 收到新分支；-u 記住這個分支以後上傳的目的地" />
       <CommandBlock variant="output" command={outputs.push} />
       <p>編號、數量與速度會不同；feat/day3 → feat/day3 表示分支已上傳。若出現登入視窗，依 L6 在瀏覽器登入並授權自己的帳號，不要在終端機輸入網站密碼。</p>
+      <SuccessCheck
+        terminal={[<>倒數第二行是 <code>* [new branch] feat/day3 -&gt; feat/day3</code></>, '整段沒有 error、rejected 或 fatal']}
+        web={['repo 首頁上方出現黃色 feat/day3 had recent pushes 提示', '左上分支選單切到 feat/day3，看得到 day3.md']}
+        fail="先在終端機執行 git status，確認站在 feat/day3 且 Day 3 已 commit；沒有 commit 就沒有東西可上傳。"
+      />
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">3. 填自己的 PR 申請單</h3>
@@ -73,6 +78,11 @@ export const Lesson7PR = () => (
       <p>按 <strong>Merge pull request</strong>，會展開確認區；保留預填說明，再按 <strong>Confirm merge</strong>，頁面會顯示 Merged。</p>
       <Screenshot id="L7-pr-merge-button" alt="PR 頁的 Merge pull request 與 Confirm merge 確認區" caption="你會看到合併確認區；按 Confirm merge 後，PR 狀態會變成 Merged。" />
       <Screenshot id="L7-pr-merged" alt="PR 頁顯示紫色 Merged 標籤與 Pull request successfully merged and closed" caption="成功的判斷：PR 標題旁的狀態變成紫色 Merged，下方出現 Pull request successfully merged and closed。沒看到這兩個就還沒合併成功。" />
+      <SuccessCheck
+        title="合併成功的話你會看到"
+        web={['PR 標題旁的狀態是紫色 Merged（Open 是綠色，代表還沒合併）', 'repo 首頁分支選 main，看得到 day3.md', '首頁上方那列的說明變成 Merge pull request #1 …']}
+        fail="狀態仍是綠色 Open → 回到 PR 頁再按一次 Merge pull request，並記得按 Confirm merge。這時終端機還不會有任何變化，第 5 步才下載。"
+      />
       <p>若提示有衝突而無法合併，先停下來核對這次是否只新增 day3.md，別跳到刪分支。</p>
       <p>看到 Merged 後按 <strong>Delete branch</strong>。它刪除的是雲端 feat/day3 的名稱，已收進 main 的照片仍在，本機的同名分支也還在。</p>
       <Screenshot id="L7-branch-delete" alt="已合併 PR 下方的 Delete branch 按鈕" caption="你會看到已合併的 PR 與 Delete branch；按下後會顯示分支已刪除。" />
@@ -97,7 +107,12 @@ export const Lesson7PR = () => (
         <CommandBlock command="git branch -d feat/day3" comment="照片已在 main，清掉本機用完的分支名稱" />
         <CommandBlock variant="output" command={outputs.deleteBranch} />
       </details>
-      <Callout variant="success">完成訊號：GitHub 的 PR 是 Merged，本機 main 有 day3.md，紀錄有合併照片，刪除分支顯示 Deleted branch。若沒看到這些，回到對應步驟核對，再進 L8。</Callout>
+      <SuccessCheck
+        title="完成訊號：電腦和 GitHub 對得上"
+        terminal={['VSCode 左側出現 day3.md', <>log 最上面一行是 Merge pull request #1，記下它的 7 碼編號（範例是 <code>58fc040</code>）</>, '刪除分支顯示 Deleted branch feat/day3']}
+        web={['PR 狀態是紫色 Merged', 'repo 首頁（分支選 main）檔案列表上方右側的 7 碼編號，和終端機 log 最上面那行相同']}
+        fail="終端機沒有 Merge pull request 那行 → 確認自己在 main 並已 pull；編號不同 → 再 pull 一次後重比。都對上才進 L8。"
+      />
       <p>獨立判斷，不必另建分支：自己的旅行清單若在 feat/packing 準備好，要收進 main，申請表兩個欄位怎麼選？收進後電腦又怎麼取得？先自己說出順序；不確定再回看第 3、5 步。</p>
     </Card>
     <Quiz questions={[

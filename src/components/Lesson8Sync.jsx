@@ -1,4 +1,4 @@
-import { SectionTitle, Card, Callout, Quiz, CommandBlock, NoOutputHint, FalseAlarm, Screenshot } from './Shared';
+import { SectionTitle, Card, Callout, Quiz, CommandBlock, NoOutputHint, FalseAlarm, Screenshot, SuccessCheck } from './Shared';
 
 // Copied from m3-real-outputs.txt with only the account and repo substitutions.
 const outputs = {
@@ -67,7 +67,12 @@ export const Lesson8Sync = () => (
         <CommandBlock command="git push" comment="把第二份相簿的 Day 4 送到自己的 GitHub" />
         <CommandBlock variant="output" command={outputs.day4Push} />
       </details>
-      <p>回自己的 GitHub main 頁重新整理，應看到 day4.md。這只證明雲端收到了；第一個資料夾還沒下載。</p>
+      <SuccessCheck
+        terminal={[<>最後一行是 <code>58fc040..c4e3323  main -&gt; main</code>（編號會不同），箭號右邊的 c4e3323 就是 Day 4 這張照片</>, '沒有 error 或 rejected']}
+        web={['main 的檔案列表多出 day4.md', '列表上方右側的 7 碼編號，等於終端機箭號右邊那組']}
+        fail="終端機沒有 main -> main → 往上找 error 那行，到急診室查原文；網頁沒有 day4.md → 確認是在第二個視窗（GIT-JOURNAL-LAPTOP）commit 並 push。"
+      />
+      <p>這只證明雲端收到了；第一個資料夾還沒下載。</p>
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">3. 回第一個視窗，自己補上下載步驟</h3>
@@ -78,7 +83,12 @@ export const Lesson8Sync = () => (
         <CommandBlock command="git pull" comment="把第二個視窗已上傳的 Day 4 下載到第一個資料夾" />
         <CommandBlock variant="output" command={outputs.day4Pull} />
       </details>
-      <Callout variant="success">完成訊號：第一個視窗出現 day4.md，打開後內容是「Day 4：在第二台電腦寫日誌」。接下來都留在第一個視窗；第二個視窗先不要改檔案。</Callout>
+      <SuccessCheck
+        title="完成訊號：第一個資料夾追上雲端"
+        terminal={[<>pull 輸出有 <code>Fast-forward</code> 與 <code>create mode 100644 day4.md</code></>, <>Updating 後面箭號右邊的編號（範例 c4e3323），等於第 2 步 push 的那組</>, '第一個視窗左側出現 day4.md，內容是「Day 4：在第二台電腦寫日誌」']}
+        web={['GitHub main 首頁上方右側的 7 碼編號，和上面那組相同']}
+        fail="顯示 Already up to date 卻沒有 day4.md → 第二個視窗可能還沒 push 成功，回第 2 步看網頁有沒有 day4.md。接下來都留在第一個視窗；第二個視窗先不要改檔案。"
+      />
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">4. 在網頁與第一個視窗，各改同一行</h3>
@@ -144,7 +154,12 @@ export const Lesson8Sync = () => (
       <CommandBlock command="git log --oneline --graph" comment="核對合併照片連到電腦與網頁的兩筆標題紀錄" />
       <CommandBlock variant="output" command={outputs.log} />
       <p>最上面是「解決標題衝突」，下面兩條線保留了「在網頁上改標題」與「在電腦上改標題」。實測把 Part 1 簡化成一筆，你的下面會有 L2–L5 的完整照片；編號與 PR 號碼也可能不同。</p>
-      <Callout variant="success">完成訊號：第一個資料夾的標題沒有衝突標記，紀錄保留兩邊改動，push 成功；重新整理自己的 GitHub README.md，應看到「# Amy 的 Git 學習日誌」。第二個資料夾尚未下載這次標題，這是正常的。</Callout>
+      <SuccessCheck
+        title="完成訊號：衝突解決並上傳"
+        terminal={['README.md 沒有衝突標記', <>push 最後一行是 <code>4b75a42..d0e7843  main -&gt; main</code>（編號會不同）</>, 'log 最上面是「解決標題衝突」，下面兩條線分別是網頁與電腦的改標題']}
+        web={['README.md 顯示「# Amy 的 Git 學習日誌」', '首頁上方右側的 7 碼編號，等於 log 最上面那行的編號']}
+        fail="push 又被拒 → 代表雲端又有新照片，先 pull 再處理；網頁標題沒變 → 確認 push 那行沒有 error。第二個資料夾尚未下載這次標題，這是正常的。"
+      />
     </Card>
     <Card className="space-y-3 bg-green-50">
       <h3 className="font-bold">獨立練習：換一個下載入口，自己驗收</h3>
