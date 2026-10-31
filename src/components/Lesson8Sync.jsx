@@ -75,7 +75,7 @@ export const Lesson8Sync = () => (
       </details>
       <SuccessCheck
         terminal={[<>最後一行是 <code>58fc040..c4e3323  main -&gt; main</code>（編號會不同），兩個點 <code>..</code> 右邊那組 c4e3323 就是 Day 4 這張照片</>, '沒有 error 或 rejected']}
-        web={['main 的檔案列表多出 day4.md', '列表上方右側的 7 碼編號，等於終端機 <code>..</code> 右邊那組']}
+        web={['main 的檔案列表多出 day4.md', <>列表上方右側的 7 碼編號，等於終端機 <code>..</code> 右邊那組</>]}
         fail="終端機沒有 main -> main → 往上找 error 那行，到急診室查原文；網頁沒有 day4.md → 確認是在第二個視窗（GIT-JOURNAL-LAPTOP）commit 並 push。"
       />
       <p>這只證明雲端收到了；第一個資料夾還沒下載。</p>
