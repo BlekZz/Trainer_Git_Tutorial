@@ -72,6 +72,7 @@ export const Lesson7PR = () => (
       <p>在剛開的 PR 頁往下找到合併按鈕，先確認文字是 <strong>Merge pull request</strong>。若是 Squash and merge 或 Rebase and merge，點旁邊下拉箭頭改選 Create a merge commit，讓按鈕成為 Merge pull request。</p>
       <p>按 <strong>Merge pull request</strong>，會展開確認區；保留預填說明，再按 <strong>Confirm merge</strong>，頁面會顯示 Merged。</p>
       <Screenshot id="L7-pr-merge-button" alt="PR 頁的 Merge pull request 與 Confirm merge 確認區" caption="你會看到合併確認區；按 Confirm merge 後，PR 狀態會變成 Merged。" />
+      <Screenshot id="L7-pr-merged" alt="PR 頁顯示紫色 Merged 標籤與 Pull request successfully merged and closed" caption="成功的判斷：PR 標題旁的狀態變成紫色 Merged，下方出現 Pull request successfully merged and closed。沒看到這兩個就還沒合併成功。" />
       <p>若提示有衝突而無法合併，先停下來核對這次是否只新增 day3.md，別跳到刪分支。</p>
       <p>看到 Merged 後按 <strong>Delete branch</strong>。它刪除的是雲端 feat/day3 的名稱，已收進 main 的照片仍在，本機的同名分支也還在。</p>
       <Screenshot id="L7-branch-delete" alt="已合併 PR 下方的 Delete branch 按鈕" caption="你會看到已合併的 PR 與 Delete branch；按下後會顯示分支已刪除。" />

@@ -89,8 +89,8 @@ export const Homework = () => {
       <SectionTitle title="交件之後會發生什麼" subtitle="講師看申請單，你負責把通過的照片收進主相簿。" />
       <Card className="space-y-3">
         <h3 className="font-bold">收到 Request changes：修改原本這張申請單</h3>
-        <p>在 PR 的 Conversation 時間線讀講師的修改意見；若有逐行留言，到 Files changed 看對應位置。你會看到要求修改的審查紀錄與說明。</p>
-        <Screenshot id="HW-review-request-changes" alt="PR 時間線上的 Changes requested 審查紀錄與講師修改意見" caption="你會看到講師要求修改的紀錄；先讀清楚要調整的檔案與內容。" />
+        <p>在 PR 的 Conversation 時間線讀講師的修改意見；若有逐行留言，到 Files changed 看對應位置。你會看到「講師帳號 suggested changes」這一行，下面是修改意見（GitHub 用 suggested changes 表示要求修改）。</p>
+        <Screenshot id="HW-review-request-changes" alt="PR 時間線上講師的 suggested changes 審查紀錄與修改意見" caption="你會看到講師要求修改的紀錄；先讀清楚要調整的檔案與內容。" />
         <FalseAlarm signal="LF will be replaced by CRLF" title="保存修改前的提醒">這是 Windows 換行提醒，可以繼續；沒有這行也正常。若忘了 commit 的 -m 而進入滿是 ~ 的 Vim，按 Esc → :q! → Enter 離開（:wq 是保存並離開），再確認保存狀態，避免重複 commit。</FalseAlarm>
         <p>回本機 <code>{HOMEWORK_REPO_NAME}</code>，確認正在這張 PR 的同一個分支。依意見修改，再像 <LessonLink href="#first-commit">L2</LessonLink> 挑入改動並 commit；不要另外開 PR。</p>
         <FalseAlarm signal="Enumerating objects:" title="上傳時會出現正常進度">接著會跑 Counting、Writing 等進度；數量會隨你的修改不同。</FalseAlarm>
@@ -100,7 +100,7 @@ export const Homework = () => {
       </Card>
       <Card className="space-y-3">
         <h3 className="font-bold">收到 Approve：自己合併，再同步回電腦</h3>
-        <p>到 PR 的 Conversation 時間線確認<strong>講師的核准紀錄</strong>。核准只表示講師看過；此時 PR 仍是 Open，照片還沒收進 main。</p>
+        <p>到 PR 的 Conversation 時間線確認<strong>講師的核准紀錄</strong>：時間線出現「講師帳號 approved these changes」這一行。核准只表示講師看過；此時 PR 仍是 Open，照片還沒收進 main。</p>
         <Screenshot id="HW-approved-timeline" alt="PR 時間線中講師的 Approved 核准紀錄，PR 尚未合併" caption="你會看到 PR 時間線裡講師的核准紀錄；接著才由你完成合併。" />
         <p>找到 <strong>Merge pull request</strong>；若按鈕是 Squash and merge 或 Rebase and merge，用旁邊箭頭改選 Create a merge commit。按 Merge pull request 會展開確認區，再按 <strong>Confirm merge</strong>，PR 狀態會成為 Merged，時間線會留下自己的合併紀錄。忘了畫面位置可回 <LessonLink href="#pr">L7</LessonLink>。</p>
         <p>回本機 <code>{HOMEWORK_REPO_NAME}</code>，先確認改動已保存、上傳完成。每次一條指令，$ 提示符不用輸入。</p>

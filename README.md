@@ -77,12 +77,12 @@ gh search prs --mentions BlekZz --json url,state
 #### 審查與退修流程
 
 1. 從收件匣開啟 PR，先核對 owner、Public、base 與描述，再依上表查看既有 commit 紀錄。
-2. 點 **Files changed**，會看到本次 PR 的檔案差異；點 **Review changes**，會開啟審查表單。
+2. 點 **Files changed**，會看到本次 PR 的檔案差異；點右上綠色 **Submit review**，會開啟 Finish your review 審查表單（舊版介面叫 Review changes）。
 3. 符合前五項時選 **Approve**，按 **Submit review**；PR 的 Conversation 時間線會留下講師核准紀錄。Public repo 的非 collaborator 也能核准；不要叫學員找頁頂的 Approved 徽章，核准顯示在時間線。
 4. 需要修正時，在審查表單寫清楚檔案、問題與預期結果，選 **Request changes** 並按 **Submit review**；學員會看到要求修改的審查紀錄。學員在原分支修改、commit、push 後，原 PR 自動更新，再留言「已修改，請再看一次」；講師到 **PR 的 Commits 分頁**確認修正 commit，並在 Files changed 重新審查內容。
 5. 核准後讓學員按 **Merge pull request → Confirm merge**；PR 成為 Merged。學員回本機 main 同步，並在原 PR 留言附上本機與 GitHub main 最新 commit 編號相同的截圖，講師補查最後兩項。
 
-![你會看到 Files changed 的 Review changes 表單與 Approve 選項](public/screenshots/HW-review-approve.png)
+![你會看到 Files changed 的 Submit review 審查表單與 Approve 選項](public/screenshots/HW-review-approve.png)
 
 ### 🚀 快速開始（本機開發）
 
