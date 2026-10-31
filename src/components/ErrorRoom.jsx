@@ -16,7 +16,7 @@ const TransferHint = () => (
 export const ErrorRoom = () => (
   <div className="space-y-6">
     <SectionTitle title="錯誤急診室" subtitle="用畫面上的原文找原因，再選對應的解法。" />
-    <Callout title="怎麼查">按 Ctrl+F（Mac：Cmd+F），貼上錯誤中的幾個英文單字搜尋。只做符合你情況的那張卡，不要整頁依序執行；$ 不用輸入。所有 &lt;佔位文字&gt; 都要整個換掉，角括號不要打進去。</Callout>
+    <Callout title="怎麼查">按 Ctrl+F（Mac：Cmd+F），貼上錯誤中的幾個英文單字搜尋。只做符合你情況的那張卡，不要整頁依序執行；$ 不用輸入。所有 &lt;佔位符&gt; 都要整個換掉，角括號不要打進去。</Callout>
 
     <ErrorCard error={"The term 'git' is not recognized\n'git' is not recognized as an internal or external command\ncommand not found: git"} translation="電腦目前找不到 Git，可能是還沒安裝，或安裝後終端機尚未重開。">
       <p>上方是不同終端機可能顯示的原文片段，不會一次出現三種。先把 VSCode 與終端機完全關閉再重開；仍找不到時，回 L0 確認 Git 安裝。</p>
@@ -118,7 +118,7 @@ export const ErrorRoom = () => (
       <p>SSH 是用電腦金鑰驗證的連線方式；HTTPS 是本課搭配登入授權使用的網址方式。先查 origin，也就是 Git 記住的雲端地址。</p>
       <CommandBlock command="git remote -v" comment="查看 origin 是否以 git@github.com: 開頭" />
       <CommandBlock variant="output" command={'origin  git@github.com:你的帳號/git-journal.git (fetch)\norigin  git@github.com:你的帳號/git-journal.git (push)'} />
-      <p>若符合這個情況，在 GitHub 開啟你真正要同步的專案，從 Code → HTTPS 複製網址，再替換下一條的整個佔位文字。例如 https://github.com/amy/git-journal.git，別照抄範例帳號。</p>
+      <p>若符合這個情況，在 GitHub 開啟你真正要同步的專案，從 Code → HTTPS 複製網址，再替換下一條的整個佔位符。例如 https://github.com/amy/git-journal.git，別照抄範例帳號。</p>
       <CommandBlock command="git remote set-url origin <你複製的HTTPS網址>" comment="保留同一個專案，只改連線網址" />
       <NoOutputHint />
       <p>再用上面的 remote -v 核對兩行都變成正確的 https:// 網址，再試原本的操作。若失敗的是 clone，尚無專案可改設定，直接用正確的 HTTPS 網址重試 clone。</p>

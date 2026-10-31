@@ -99,7 +99,7 @@ export const Lesson5LocalConflict = () => (
       <FalseAlarm signal={': 或 (END)'} title="畫面停住、不能繼續輸入指令？">這是分頁閱讀畫面（pager），不是當機；按英文小寫 q 回到指令列。短內容也可能直接結束。</FalseAlarm>
       <CommandBlock command={"git log --oneline --graph"} comment="--graph 用線條畫出兩邊照片如何匯合" />
       <CommandBlock variant="output" command={"*   a43e379 (HEAD -> main) 解決標題衝突\n|\\  \n| * 5d010e5 (feat/title) 標題改成學習日誌\n* | c10b022 標題加上名字\n|/  \n* b2dbb59 新增 Day 2 筆記\n* 846a6e1 忽略 tmp 檔\n* fea9562 新增 Day 1 筆記\n* 187430f 新增日誌標題"} />
-      <p>最上面是合併照片；往下兩條線分別有兩次改標題的照片，再接回 Day 2。編號會不同，有些設定也會附上 HEAD 與分支名稱；重點是兩條線匯合、兩份紀錄都在。</p>
+      <p>最上面是合併照片；往下兩條線分別有兩次改標題的照片，再接回 Day 2。(HEAD -&gt; main) 是你現在的位置，(feat/title) 是還沒刪掉的分支名稱；編號會不同，重點是兩條線匯合、兩份紀錄都在。</p>
       <CommandBlock command={"git status"} comment="最後核對沒有待處理的合併或改動" />
       <CommandBlock variant="output" command={"On branch main\nnothing to commit, working tree clean"} />
       <Callout variant="success">完成訊號：main 的 README.md 是「# Amy 的 Git 學習日誌」，紀錄有合併照片，status 顯示 working tree clean。這份 git-journal 留給 L6 繼續使用。</Callout>

@@ -63,7 +63,7 @@ export const Lesson6Push = () => (
       <Screenshot id="L6-gh-auth-device" alt="GitHub 瀏覽器驗證碼輸入與 Authorize 授權畫面" caption="你會看到驗證碼欄位，接著是 Authorize 授權畫面；完成後回終端機。" />
       <CommandBlock command="gh auth status" comment="確認目前授權的確是自己的帳號" />
       <Callout title="等待查詢結果">通常幾秒內會看到 Logged in to github.com account 後面接自己的帳號，Git operations protocol 應為 https。✓ 與顏色都是正常的成功提示，等提示符回來再繼續。</Callout>
-      <Callout variant="warning" title="登入有卡住時">看到 The term 'gh' is not recognized，回 L0 確認已安裝 gh 並重開 VSCode；看到 You are not logged into any GitHub hosts，回到上面的登入步驟。若顯示的帳號不是自己，先停下來確認瀏覽器登入者，不要建立 repo。其他錯誤可到側邊欄「急診室」對照原文。</Callout>
+      <Callout variant="warning" title="登入有卡住時">看到 The term 'gh' is not recognized，回 L0 確認已安裝 gh 並重開 VSCode；看到 You are not logged into any GitHub hosts，回到上面的登入步驟。若顯示的帳號不是自己，先停下來確認瀏覽器登入者，不要建立 repo。其他錯誤可到側邊欄「錯誤急診室」對照原文。</Callout>
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">3. 建立完全空白的雲端相簿</h3>
@@ -88,7 +88,7 @@ export const Lesson6Push = () => (
       <p>這次記住的是 main 的目的地。看到 main → main 與最後的設定訊息，表示自己的雲端 main 已建立。</p>
       <SuccessCheck
         terminal={[<>倒數兩行是 <code>* [new branch] main -&gt; main</code> 與 <code>branch 'main' set up to track 'origin/main'.</code></>, '整段沒有 error、rejected 或 fatal 字樣', '提示符回來，可以再輸入指令']}
-        fail="先不要重打 remote add 或重建 repo。看到 rejected → 回第 3 步確認三個初始化選項都沒選；看到 Repository not found → 用 git remote -v 核對網址與帳號；其他訊息到側邊欄「急診室」查原文。"
+        fail="先不要重打 remote add 或重建 repo。看到 rejected → 回第 3 步確認三個初始化選項都沒選；看到 Repository not found → 用 git remote -v 核對網址與帳號；其他訊息到側邊欄「錯誤急診室」查原文。"
       />
     </Card>
     <Card className="space-y-3">

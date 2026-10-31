@@ -15,11 +15,12 @@ export const Elective3Misc = () => (
       <FalseAlarm signal={"warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行。</FalseAlarm>
       <CommandBlock command="git stash" comment="暫放既有檔案的未完成改動，讓你能先處理別的事" />
       <CommandBlock variant="output" command={"warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it\nSaved working directory and index state WIP on main: d54230c 新增日誌標題"} />
+      <p className="text-sm text-slate-600">冒號後面是你最後一張照片的編號與說明，和範例不同是正常的。</p>
       <p>有改動可收時，終端機會說已保存工作資料夾與暫存區的狀態，既有檔案會回到上次 commit 的內容。只有確認這次有新增暫放紀錄，才做下面的 pop。若終端機說沒有可保存的改動，不要 pop，否則可能取回以前留下的另一筆紀錄。這時先停下，檢查是否改了既有檔案並儲存。</p>
       <p><strong>stash pop</strong> 是取回最近一次暫放的改動，成功套用後移除那筆暫放紀錄。這次先留在原分支、不改其他內容，直接取回剛才的文字。</p>
       <CommandBlock command="git stash pop" comment="把剛才暫放的改動放回書桌" />
-      <CommandBlock variant="output" command={"On branch main\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   README.md\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\nDropped refs/stash@{0} (21df21f818f378043c0592ddf1a5df42e29484a8)"} />
-      <p>成功時會列出回到工作資料夾的改動，並說明已移除那筆暫放紀錄；打開 README.md，應看到剛才寫的文字。它仍未 commit。若沒有暫放紀錄可取，Git 會告訴你沒有找到紀錄。</p>
+      <CommandBlock variant="output" command={"On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   README.md\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\nDropped refs/stash@{0} (21df21f818f378043c0592ddf1a5df42e29484a8)"} />
+      <p>成功時會列出回到工作資料夾的改動，並說明已移除那筆暫放紀錄；中間那幾行括號提示不用照做。打開 README.md，應看到剛才寫的文字。它仍未 commit。若沒有暫放紀錄可取，Git 會告訴你沒有找到紀錄。</p>
       <Callout title="取回時出現 CONFLICT">若你在別的內容上取回，可能發生衝突；Git 會保留暫放紀錄。不要重複 pop，先依 L5 或急診室處理衝突，再確認文字已保留。</Callout>
     </Card>
     <Card className="space-y-3">
@@ -41,8 +42,8 @@ export const Elective3Misc = () => (
       <p><strong>amend</strong> 是以新的版本取代最後一次存檔；即使只改說明，照片編號也會改變。這節只處理尚未 push 的最後一次 commit，push 就是上傳到雲端。</p>
       <Callout variant="warning" title="只在尚未上傳，而且拍照台是空的時候做">若最後一次存檔已 push，先不要改它。若拍照台有其他改動，amend 會連那些內容一起收進去；先用下方 status 確認。還沒有任何 commit 時也不能 amend。</Callout>
       <CommandBlock command="git status" comment="確認沒有已挑選、會被意外收進照片的改動" />
-      <CommandBlock variant="output" command={"On branch main\nnothing to commit, working tree clean"} />
-      <p>會列出目前分支與檔案狀態；看到 nothing to commit, working tree clean 表示書桌與拍照台都乾淨。若看到 Changes to be committed，先停下，按 L3 把不該收進去的改動移出暫存區；這不會丟掉檔案內容。</p>
+      <CommandBlock variant="output" command={"On branch main\nYour branch is ahead of 'origin/main' by 1 commit.\n  (use \"git push\" to publish your local commits)\n\nnothing to commit, working tree clean"} />
+      <p>會列出目前分支與檔案狀態；看到 nothing to commit, working tree clean 表示書桌與拍照台都乾淨；第二行的 ahead of 'origin/main' 表示最後一張照片還沒上傳，正好可以 amend。若第二行是 up to date，代表它已經 push 過，先不要 amend。若看到 Changes to be committed，先停下，按 L3 把不該收進去的改動移出暫存區；這不會丟掉檔案內容。</p>
       <FalseAlarm signal="~" title="保留 -m，避免進入文字編輯器">若漏掉 -m 而進入 Vim，按 Esc、輸入 :q! 再 Enter 離開；:wq 是保存訊息後離開。離開後先核對最後一次存檔的說明，不要直接重做。</FalseAlarm>
       <CommandBlock command={'git commit --amend -m "新訊息"'} comment="把引號內換成你要的說明，引號保留" />
       <CommandBlock variant="output" command={"[main f4392f5] 新訊息\n Date: Sun Nov 1 06:08:36 2026 +0800\n 1 file changed, 1 insertion(+)\n create mode 100644 day1.md"} />

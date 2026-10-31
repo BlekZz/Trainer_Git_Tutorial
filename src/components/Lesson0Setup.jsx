@@ -44,10 +44,10 @@ const PromptBlock = ({ text }) => {
 };
 
 const SCREENSHOT_PROMPT =
-  '我是完全沒有寫過程式的新手，正在準備上一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。以下附上我電腦資訊的截圖，請你先根據截圖判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。';
+  '我是完全沒有寫過程式的新手，正在準備參加一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。以下附上我電腦資訊的截圖，請你先根據截圖判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。';
 
 const TEXT_PROMPT =
-  '我是完全沒有寫過程式的新手，正在準備上一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。請你先根據我貼在最後面的電腦資訊判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。以下是我的電腦資訊：';
+  '我是完全沒有寫過程式的新手，正在準備參加一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。請你先根據我貼在最後面的電腦資訊判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。以下是我的電腦資訊：';
 
 const STEP_TITLES = [
   '判別你的電腦',
@@ -100,7 +100,7 @@ const CHECKLIST_ITEMS = [
   { id: 'git', label: 'Git 安裝完成', verify: '終端機輸入 git -v 顯示 git version 2.x.x' },
   { id: 'gh', label: 'GitHub CLI（gh）安裝完成', verify: '終端機輸入 gh --version 顯示版本號' },
   { id: 'identity', label: '存檔作者設定完成', verify: 'git config user.name 與 git config user.email 顯示自己的名字與信箱' },
-  { id: 'config', label: '兩條預設設定完成', verify: '已在終端機貼過 pull.rebase false 與 init.defaultBranch main 兩行設定' },
+  { id: 'config', label: '兩條預設設定完成', verify: '已在終端機貼過 pull.rebase false 與 init.defaultBranch main 兩條預設設定' },
 ];
 
 const NextButton = ({ label, onClick, disabled = false }) => (

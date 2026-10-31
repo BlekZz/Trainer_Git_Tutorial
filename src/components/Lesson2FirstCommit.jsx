@@ -92,7 +92,7 @@ export const Lesson2FirstCommit = () => {
         <CommandBlock command="git status" comment="確認更名後已站在 main" />
         <CommandBlock variant="output" command={'On branch main\n\nNo commits yet\n\nnothing to commit (create/copy files and use "git add" to track)'} />
       </details>
-      <Callout title="真的遇到錯誤時">看到「git is not recognized」或 PowerShell 的「The term 'git' is not recognized」→ 回 L0 確認安裝並重開 VSCode。看到「fatal: not a git repository」→ 確認開的是 git-journal，且已完成這裡的 init。其他訊息到側邊欄「急診室」對照原文。</Callout>
+      <Callout title="真的遇到錯誤時">看到「git is not recognized」或 PowerShell 的「The term 'git' is not recognized」→ 回 L0 確認安裝並重開 VSCode。看到「fatal: not a git repository」→ 確認開的是 git-journal，且已完成這裡的 init。其他訊息到側邊欄「錯誤急診室」對照原文。</Callout>
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">2. 建立標題，挑選，再保存</h3>

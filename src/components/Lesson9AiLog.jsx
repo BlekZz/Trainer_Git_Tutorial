@@ -124,7 +124,7 @@ export const Lesson9AiLog = () => (
     <Card className="space-y-3">
       <h3 className="font-bold">實際工作時：AI 可以自己讀紀錄</h3>
       <p>這一課你手動複製貼上。工作上常見的 AI 程式工具（例如 Claude Code、Cursor、GitHub Copilot）打開專案資料夾後，可以自己讀 Git 紀錄。你只要問「讀這個專案的 git log，告訴我最近兩週做了什麼、為什麼這樣改」，它就會自己翻相簿回答。</p>
-      <p>不管用哪種工具，規則都一樣：AI 讀得到改了什麼，但「為什麼這樣改」只能靠你留下的說明。每一次 -m 後面的那句話，都是寫給下一個接手的人和 AI 看的。</p>
+      <p>不管用哪種工具，規則都一樣：能讀整個專案的 AI 工具看得到改了什麼，但「為什麼這樣改」只能靠你留下的說明。每一次 -m 後面的那句話，都是寫給下一個接手的人和 AI 看的。</p>
     </Card>
     <Quiz questions={[
       { q: 'git log --format=reference 每一行包含什麼？', options: ['檔案的完整內容', '照片編號、說明與日期', '你的 GitHub 密碼'], answer: 1, explain: '每行是一張照片：編號 (說明, 日期)，方便整段交給人或 AI 閱讀。' },

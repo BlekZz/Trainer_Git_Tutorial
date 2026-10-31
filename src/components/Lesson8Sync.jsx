@@ -46,13 +46,13 @@ export const Lesson8Sync = () => (
     <Card className="space-y-3">
       <h3 className="font-bold">1. 在旁邊下載到第二個資料夾</h3>
       <p>在原本 git-journal 的 VSCode 選 Terminal → New Terminal。確認新終端機的 PowerShell 提示符路徑以 git-journal 結尾。$ 與 PS 路徑不用打，每次一條指令，輸出框也不用輸入。</p>
-      <CommandBlock command="cd .." comment="往上一層，回到裝著 git-journal 的資料夾，避免把第二份塞在第一份裡" />
+      <CommandBlock command="cd .." comment="往上一層，回到裝著 git-journal 的資料夾，避免把第二個資料夾塞在第一個裡面" />
       <NoOutputHint>提示符的路徑會少掉最後的 git-journal。例如原本是 PS C:\Users\Amy\Documents\git-journal&gt;，現在應是 PS C:\Users\Amy\Documents&gt;；這些是位置示意，不用照打。</NoOutputHint>
       <p>若路徑不是預期的父資料夾，先停下核對。下方 <code>&lt;你的帳號&gt;</code> 要<strong>整個換成自己的帳號，角括號不要打</strong>。例如帳號是 amy-example，完整指令是 <code className="break-all">git clone https://github.com/amy-example/git-journal.git git-journal-laptop</code>；請換成自己的網址。</p>
       <FalseAlarm signal="Cloning into 'git-journal-laptop'..." title="下載時會跑進度，不是卡住">接著會看到 remote:、Receiving objects 與 Resolving deltas。小相簿通常幾秒到一分鐘，等提示符回來，不要重按 Enter；數量與編號因自己的紀錄而不同。</FalseAlarm>
       <CommandBlock command="git clone https://github.com/<你的帳號>/git-journal.git git-journal-laptop" comment="下載自己的整本雲端相簿，並把新資料夾命名為 git-journal-laptop" />
       <CommandBlock variant="output" command={outputs.clone} />
-      <Callout variant="warning" title="下載前後的檢查">若看到 destination path 'git-journal-laptop' already exists and is not an empty directory.，先確認是否已做過，不要刪舊成果或一直重試。若看到 Repository not found，核對自己的帳號、repo 網址與 L6 登入授權。其他訊息到側邊欄「急診室」對照。</Callout>
+      <Callout variant="warning" title="下載前後的檢查">若看到 destination path 'git-journal-laptop' already exists and is not an empty directory.，先確認是否已做過，不要刪舊成果或一直重試。若看到 Repository not found，核對自己的帳號、repo 網址與 L6 登入授權。其他訊息到側邊欄「錯誤急診室」對照。</Callout>
       <p>下載完成，父資料夾裡會多出 git-journal-laptop。<strong>clone 不會自動把終端機移進新資料夾</strong>，接著用新視窗開它。</p>
       <p>在 VSCode 選 File → New Window，再在<strong>新視窗</strong>選 File → Open Folder → 選 git-journal-laptop。左側應顯示 GIT-JOURNAL-LAPTOP，並看得到 README.md 與 day1.md～day3.md。接著選 Terminal → New Terminal，提示符路徑必須以 git-journal-laptop 結尾。</p>
       <p>保留第一個 git-journal 視窗。真的換新電腦時，還要先完成 L0 的工具與 Git 身分設定、L6 的登入授權；本次同一台電腦共用那些設定。</p>
