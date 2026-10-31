@@ -9,21 +9,21 @@ export const Lesson3DiffRestore = () => (
       <p><strong>diff（差異）</strong> 是列出修改前後文字差異的清單。預設比較書桌與拍照台；本課一開始拍照台和最新照片相同。</p>
       <p>我不急著丟掉文字，先看清楚改了哪一行。<strong>restore（還原）</strong> 是照著保存的樣子恢復內容；不帶 --staged 時，預設照拍照台恢復書桌。<strong>--staged</strong> 表示這次只調整拍照台，不動書桌。</p>
     </Card>
-    <Callout title="先停一下，說出答案再繼續"><p>想保留新文字，只是不想這次拍進去，要動書桌還是拍照台？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>只動拍照台，使用帶 --staged 的還原。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
+    <Callout title="先停一下，說出答案再繼續"><p>想保留新文字，只是不想這次拍進去，要動書桌還是拍照台？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>只動拍照台，使用帶 --staged 的還原。若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
     <Card className="space-y-3">
       <h3 className="font-bold">一起判斷：先補選擇，再看理由</h3>
       <p>第一題：打錯了且還沒 add，確定不要這段文字 → 我會還原書桌。</p>
       <p>第二題：文字正確但剛才挑錯檔案 → 你會還原哪裡？</p>
       <details><summary className="cursor-pointer">核對</summary><p>還原拍照台。取消挑選不等於刪掉內容。</p></details>
     </Card>
-    <Callout title="先停一下，說出答案再繼續"><p>診斷題：想保留剛寫的筆記，只打不帶 --staged 的 restore，對嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不對，它會覆寫書桌。先想清楚要丟文字，還是只取消挑選。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
+    <Callout title="先停一下，說出答案再繼續"><p>診斷題：想保留剛寫的筆記，只打不帶 --staged 的 restore，對嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不對，它會覆寫書桌。先想清楚要丟文字，還是只取消挑選。若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
     <SectionTitle kicker="換你了" title="在自己的 git-journal 看見差異" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 改一行，再看差異</h3>
       <p>在 VSCode 開啟 day1.md，把唯一一行改成下面這行，保留行尾換行並儲存。你會看到新文字；先不要 add。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day1.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 1：學會 git init 和 git add</pre></div>
       <FalseAlarm signal={"warning: in the working copy of 'day1.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
-      <FalseAlarm signal={': 或 (END)'} title="畫面停住、不能繼續輸入指令？">這是分頁閱讀畫面（pager），不是當機；按英文小寫 q 回到指令列。短內容也可能直接結束。</FalseAlarm>
+      <FalseAlarm signal={': 或 (END)'} title="畫面停住、不能繼續輸入指令？">這是分頁閱讀畫面（pager），不是當機；按英文小寫 q 回到指令列。內容短時，畫面也可能不停住，直接回到指令列。</FalseAlarm>
       <CommandBlock command={"git diff"} comment="先檢查到底改了什麼，避免丟錯內容" />
       <CommandBlock variant="output" command={"warning: in the working copy of 'day1.md', LF will be replaced by CRLF the next time Git touches it\ndiff --git a/day1.md b/day1.md\nindex d103947..8f38f68 100644\n--- a/day1.md\n+++ b/day1.md\n@@ -1 +1 @@\n-Day 1：學會 git init\n+Day 1：學會 git init 和 git add"} />
       <p>單個 <strong>-</strong> 開頭的內容行是原本的文字，單個 <strong>+</strong> 開頭的是新文字；不是要輸入的符號。--- 與 +++ 標明比對檔案，@@ 標明行號範圍。本例只換了第 1 行。</p>
@@ -43,7 +43,7 @@ export const Lesson3DiffRestore = () => (
       <CommandBlock command={"git restore --staged day1.md"} comment="拿下拍照台，保留書桌上的新文字" />
       <NoOutputHint>回 VSCode 看 day1.md，仍有「和 git add」；Source Control 的檔案回到 Changes，不在 Staged Changes。</NoOutputHint>
       <p>一般寫法是 <code>git restore --staged &lt;file&gt;</code> 或 <code>git restore &lt;file&gt;</code>；把整個 &lt;file&gt; 換成檔名、角括號不要打，上方就是完整例子。</p>
-      <p>補全練習：現在連這段練習文字也不要了，應用哪種 restore？先回答，再展開；這次不是要保留文字。</p>
+      <p>補全練習：現在連這段練習文字也不要了，應該用哪種 restore？先回答，再展開；這次不是要保留文字。</p>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對並收回練習改動</summary>
         <Callout variant="danger">下一條會覆寫 day1.md，丟掉「和 git add」。只在你確定不要這段練習改動時執行。</Callout>
         <CommandBlock command={"git restore day1.md"} comment="恢復 L2 的筆記，讓後續練習從相同狀態開始" />
@@ -54,7 +54,7 @@ export const Lesson3DiffRestore = () => (
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">3. .gitignore：列出不想入鏡的新檔案</h3>
-      <p><strong>.gitignore</strong> 是列出哪些尚未被 Git 記錄的檔案要略過的文字清單，像寫下「哪些東西不要放上拍照台」。它不會刪除檔案，也不會替已拍過的檔案取消紀錄。</p>
+      <p><strong>.gitignore</strong> 是一份文字清單，列出哪些尚未被 Git 記錄的檔案要略過，像寫下「哪些東西不要放上拍照台」。它不會刪除檔案，也不會替已拍過的檔案取消紀錄。</p>
       <p>用左側檔案總管 New File 建立 notes.tmp，寫「練習用臨時筆記」並儲存；左側會多出這個檔案。裡面不要放真實密碼。</p>
       <CommandBlock command={"git status"} comment="先看還沒設定忽略時的狀態" />
       <CommandBlock variant="output" command={"On branch main\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tnotes.tmp\n\nnothing added to commit but untracked files present (use \"git add\" to track)"} />
@@ -64,11 +64,11 @@ export const Lesson3DiffRestore = () => (
       <p>* 表示任意檔名，所以所有以 .tmp 結尾的新檔案都會被略過。</p>
       <CommandBlock command={"git status"} comment="確認 notes.tmp 不再列出，但忽略規則本身仍待保存" />
       <CommandBlock variant="output" command={"On branch main\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\t.gitignore\n\nnothing added to commit but untracked files present (use \"git add\" to track)"} />
-      <p>回到 VSCode 檔案總管，notes.tmp 仍在，只是可能顯示灰色。它消失的是 Git 待挑選項目，不是你的檔案。</p>
+      <p>回到 VSCode 檔案總管，notes.tmp 仍在，只是可能顯示灰色。消失的是 Git 待挑選清單裡的 notes.tmp，不是你的檔案。</p>
       <FalseAlarm signal={"warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
       <CommandBlock command={"git add .gitignore"} comment="把忽略清單本身放上拍照台" />
       <CommandBlock variant="output" command={"warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it"} />
-      <Callout variant="warning" title="記得帶 -m">commit 一律寫成 <code>git commit -m "說明"</code>。萬一漏了 -m、畫面變成滿是 ~ 的編輯器（Vim）：按 Esc，輸入 <code>:q!</code> 再按 Enter 離開，然後用 git status 確認後重打一次。</Callout>
+      <Callout variant="warning" title="記得帶 -m">commit 一律寫成 <code>git commit -m "說明"</code>。萬一漏了 -m、畫面變成滿是 ~ 的編輯器（Vim），按 Esc，輸入 <code>:q!</code> 再按 Enter 離開。離開後用 git status 確認，再重打一次。</Callout>
       <p>這次請你補完存檔，訊息是「忽略 tmp 檔」。想好後展開核對。</p>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對保存忽略清單的指令</summary>
         <CommandBlock command={"git commit -m \"忽略 tmp 檔\""} comment="讓以後的自己知道為什麼新增這份清單" />
@@ -87,11 +87,11 @@ export const Lesson3DiffRestore = () => (
         <div className="rounded-lg bg-white border border-green-300 p-3">
           <p className="font-bold text-sm text-green-800 mb-1">清楚：動作＋對象，必要時加原因</p>
           <pre className="font-mono text-sm whitespace-pre-wrap">新增 Day 1 筆記{'\n'}忽略 tmp 檔，避免臨時筆記進相簿{'\n'}標題改成學習日誌</pre>
-          <p className="text-sm mt-2 text-slate-600">AI 能整理出「先寫筆記、再排除暫存檔、最後改標題」的進度與理由。</p>
+          <p className="text-sm mt-2 text-slate-600">AI 能整理出「先寫筆記、再排除臨時檔案、最後改標題」的進度與理由。</p>
         </div>
       </div>
-      <p>寫法只有一條：<strong>讓沒參與的人只讀這一句，也知道這張照片做了什麼</strong>。原因不明顯時，用「，為了…」「，避免…」補半句。不必背前綴分類，也不用寫長文。</p>
-      <p>換個表面試一次：在同一資料夾建立 scratch.tmp，寫一句旅行草稿並儲存。先預測它會不會出現在 Git 的待挑選清單，再用 status 核對；需要時看下一框。</p>
+      <p>寫法只有一條：<strong>讓沒參與的人只讀這一句，也知道這張照片做了什麼</strong>。原因不明顯時，用「，為了……」「，避免……」補半句。不必背前綴分類，也不用寫長文。</p>
+      <p>換個檔案再試一次：在同一資料夾建立 scratch.tmp，寫一句旅行草稿並儲存。先預測它會不會出現在 Git 的待挑選清單，再用 status 核對；需要時看下面的輸出範例。</p>
       <CommandBlock command={"git status"} comment="核對新的 .tmp 檔也被同一條規則略過" />
       <CommandBlock variant="output" command={"On branch main\nnothing to commit, working tree clean"} />
       <Callout variant="success">完成訊號：day1.md 恢復 L2 的原句，.gitignore 已保存，notes.tmp 與 scratch.tmp 留在檔案總管但不列在 status。L4 沿用這份 git-journal。</Callout>
@@ -101,7 +101,7 @@ export const Lesson3DiffRestore = () => (
     "q": "尚未 add 的練習修改確定不要了，哪個操作合適？",
     "options": [
       "git restore day1.md",
-      "再 commit 一次就會自動撤銷",
+      "再 commit 一次就會自動復原",
       "刪除整個 repo"
     ],
     "answer": 0,

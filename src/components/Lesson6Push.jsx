@@ -14,7 +14,7 @@ export const Lesson6Push = () => (
     <header><SectionTitle title="L6 GitHub 與第一次 push" subtitle="把 Part 1 的 git-journal 上傳到自己的 GitHub 雲端相簿。" /><p className="text-sm text-slate-600">先準備：完成 L5，git-journal 在 main 且沒有待保存的改動；完成 L0 的 gh 安裝。</p></header>
     <Card className="space-y-3 bg-indigo-50">
       <h3 className="font-bold">我先示範：相簿拍好了，送到哪裡？</h3>
-      <p><strong>GitHub</strong> 是雲端相簿，像 Google 相簿，可以備份、分享自己的存檔紀錄。<strong>push</strong> 就是把電腦裡已拍好的照片上傳到雲端相簿；只有 commit，照片還留在電腦。</p>
+      <p><strong>GitHub</strong> 是雲端相簿，像 Google 相簿，可以備份、分享自己的存檔紀錄。<strong>push</strong> 就是把電腦裡已拍好的照片上傳到雲端相簿；只做 commit 的話，照片還留在電腦。</p>
       <p><strong>remote</strong> 是電腦記住的雲端相簿地址，<strong>origin</strong> 是我們替這個地址取的小名。Repository（簡稱 repo）是放檔案與存檔紀錄的地方，本課就在自己的帳號建立一個。</p>
       <FlowDiagram
         label="電腦裡的本機相簿用 commit 保存照片，push 透過 origin 地址上傳到 GitHub 的雲端相簿"
@@ -48,7 +48,7 @@ export const Lesson6Push = () => (
     <Card className="space-y-3">
       <h3 className="font-bold">2. 讓電腦取得你的登入授權</h3>
       <p>VSCode 選 File → Open Folder，開原本的 git-journal；選 Terminal → New Terminal，下方會出現 PowerShell，提示符路徑應以 git-journal 結尾。每次只打一條，按 Enter，等提示符回來再繼續。<strong>$ 與 PS 路徑不用打</strong>；輸出框也不用輸入。</p>
-      <Callout variant="warning" title="這條會變成問答選單">下面按 Enter 後會出現選單，用上下方向鍵移動、Enter 確認，不是用滑鼠點。若單題要求 Yes / No，選 Yes（或依提示輸入 Y）。看到選項是正常的。</Callout>
+      <Callout variant="warning" title="這條會變成問答選單">下面這條指令按 Enter 後會出現選單，用上下方向鍵移動、Enter 確認，不是用滑鼠點。若單題要求 Yes / No，選 Yes（或依提示輸入 Y）。看到選項是正常的。</Callout>
       <FalseAlarm signal="Press Enter to open github.com in your browser..." title="這是等你開瀏覽器，不是當機">看到這句時按一次 Enter。若瀏覽器沒開，把終端機顯示的網址貼到瀏覽器；要取消這輪登入可按 Ctrl+C，回到提示符後再試。</FalseAlarm>
       <CommandBlock command="gh auth login" comment="授權這台電腦使用自己的 GitHub 帳號" />
       <Callout title="接下來會看到什麼">終端機會依序詢問帳號、連線方式與登入方法；照下面選。完成瀏覽器操作通常需一兩分鐘，等待時不要反覆按 Enter。</Callout>
@@ -63,12 +63,12 @@ export const Lesson6Push = () => (
       <Screenshot id="L6-gh-auth-device" alt="GitHub 瀏覽器驗證碼輸入與 Authorize 授權畫面" caption="你會看到驗證碼欄位，接著是 Authorize 授權畫面；完成後回終端機。" />
       <CommandBlock command="gh auth status" comment="確認目前授權的確是自己的帳號" />
       <Callout title="等待查詢結果">通常幾秒內會看到 Logged in to github.com account 後面接自己的帳號，Git operations protocol 應為 https。✓ 與顏色都是正常的成功提示，等提示符回來再繼續。</Callout>
-      <Callout variant="warning" title="登入有卡住時">看到 The term 'gh' is not recognized，回 L0 確認已安裝 gh 並重開 VSCode；看到 You are not logged into any GitHub hosts，回到上面的登入步驟。若顯示的帳號不是自己，先停下來確認瀏覽器登入者，不要建立 repo；其他錯誤可到側邊欄「急診室」對照原文。</Callout>
+      <Callout variant="warning" title="登入有卡住時">看到 The term 'gh' is not recognized，回 L0 確認已安裝 gh 並重開 VSCode；看到 You are not logged into any GitHub hosts，回到上面的登入步驟。若顯示的帳號不是自己，先停下來確認瀏覽器登入者，不要建立 repo。其他錯誤可到側邊欄「急診室」對照原文。</Callout>
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">3. 建立完全空白的雲端相簿</h3>
       <p>前往 <a href="https://github.com/new" target="_blank" rel="noreferrer" className="text-indigo-600 underline">github.com/new</a>，會看到 New repository 表單。Owner 選自己的帳號，Repository name 填 <strong>git-journal</strong>。可選 Private，只供自己練習。</p>
-      <Callout variant="warning" title="這次三個初始化選項全部不要選">Add README 保持 Off；Add .gitignore 保持 No .gitignore、Add license 保持 No license。否則雲端相簿已經有一張你電腦沒有的照片，第一次上傳會被拒絕。若名稱已被使用，先確認是否之前已做過本課，不要刪掉已有的成果。</Callout>
+      <Callout variant="warning" title="這次三個初始化選項全部不要選">Add README 保持 Off；Add .gitignore 保持 No .gitignore；Add license 保持 No license。否則雲端相簿已經有一張你電腦沒有的照片，第一次上傳會被拒絕。若名稱已被使用，先確認是否之前已做過本課，不要刪掉已有的成果。</Callout>
       <Screenshot id="L6-new-repo-form" alt="自己的 git-journal 建立表單，README 為 Off、.gitignore 為 No .gitignore、license 為 No license" caption="你會看到自己的帳號與 git-journal 名稱，三個初始化選項都沒有加入檔案。" />
       <p>按 Create repository，會進入空 repo 的 Quick setup 頁。選 <strong>HTTPS</strong>，按網址旁的複製按鈕；不要選 SSH，也不用貼頁面下方整串指令。</p>
       <Screenshot id="L6-new-repo-after" alt="空白 git-journal 頁面的 HTTPS 網址與複製按鈕" caption="你會看到以 https://github.com/ 開頭、以 git-journal.git 結尾的網址。" />
@@ -80,7 +80,7 @@ export const Lesson6Push = () => (
       <NoOutputHint />
       <CommandBlock command="git remote -v" comment="上傳前先核對 origin 是否指向自己的 git-journal" />
       <CommandBlock variant="output" command={outputs.remote} />
-      <p>fetch 與 push 兩行分別顯示下載、上傳使用的地址，都應是自己的帳號。若看到 error: remote origin already exists.，代表地址小名已存在，不要重複新增；用這裡的查詢核對，地址不同就先停下來請講師協助。</p>
+      <p>fetch 與 push 兩行分別顯示下載、上傳使用的地址，都應是自己的帳號。若看到 error: remote origin already exists.，代表地址小名已存在，不要重複新增；用上面的 git remote -v 核對，地址不同就先停下來請講師協助。</p>
       <FalseAlarm signal="Enumerating objects: 5, done." title="上傳會跑百分比，這是正常進度">Counting、Compressing、Writing 與 Total 是整理及傳送照片的進度。小相簿通常幾秒到一分鐘；等 main → main 與提示符回來，不要重按 Enter。數量、編號與速度會不同，實測範例的 Part 1 紀錄有簡化，你的完整相簿會有更多照片。</FalseAlarm>
       <Callout title="第一次 push 可能再開登入視窗">若跳出瀏覽器登入，登入自己的帳號並依畫面授權，再回終端機等待完成。<strong>不要在終端機輸入 GitHub 網站密碼</strong>；若終端機要求 Password，按 Ctrl+C，回第 2 步確認 HTTPS 與授權 Yes 後再試。</Callout>
       <CommandBlock command="git push -u origin main" comment="上傳 main；-u 的意思是「記住以後 push 都送到這裡」" />
@@ -105,7 +105,7 @@ export const Lesson6Push = () => (
       <p>檔案出現在網頁還不夠，要確認雲端的<strong>最新一張照片</strong>就是電腦上的那張。每張照片都有一組存檔編號，兩邊比對前 7 碼最可靠。</p>
       <CommandBlock command="git log -1 --oneline" comment="只看本機最新一張照片的編號與說明" />
       <CommandBlock variant="output" command={"e6760a9 (HEAD -> main, origin/main) Part 1 的日誌"} />
-      <p>你的編號與說明會不同。括號裡同時出現 <code>HEAD -&gt; main</code> 和 <code>origin/main</code>，表示本機 main 和電腦記得的雲端 main 指向同一張照片。接著看 GitHub repo 首頁：檔案列表上方那一列，右側有一組 7 碼編號（例如 <code>e6760a9 · now</code>）與 <strong>Commits</strong> 數量；視窗太窄看不到編號時，把瀏覽器放大。範例說明是簡化過的「Part 1 的日誌」，照 L2–L5 做的你會看到 L5 的「解決標題衝突」。</p>
+      <p>你的編號與說明會不同。括號裡同時出現 <code>HEAD -&gt; main</code> 和 <code>origin/main</code>，表示本機 main 和電腦記得的雲端 main 指向同一張照片。接著看 GitHub repo 首頁：檔案列表上方那一列，右側有一組 7 碼編號（例如 <code>e6760a9 · now</code>）與 <strong>Commits</strong> 數量。視窗太窄看不到編號時，把瀏覽器視窗放大。範例說明是簡化過的「Part 1 的日誌」，如果你照 L2–L5 做，會看到 L5 的「解決標題衝突」。</p>
       <SuccessCheck
         title="完成訊號：兩邊對得上"
         terminal={[<>git status 顯示 <code>up to date with 'origin/main'</code> 與 <code>working tree clean</code></>, 'git log -1 --oneline 開頭的 7 碼編號']}

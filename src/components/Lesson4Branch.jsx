@@ -9,23 +9,23 @@ export const Lesson4Branch = () => (
       <h3 className="font-bold">我先示範：另開一本相簿，試寫 Day 2</h3>
       <p><strong>branch（分支）</strong> 是從某張照片開始另開一本相簿，讓新想法有自己的後續紀錄。<strong>HEAD</strong> 就是「你現在站在哪一本相簿的哪一頁」。</p>
       <p>我會先從 main 另開 feat/day2，把 Day 2 拍好再切回 main；這樣 main 的照片還是原樣。<strong>merge（合併）</strong> 是把另一本相簿的成果收進目前這本，所以要先站回 main 再收。</p>
-      <p>分支保存的是照片紀錄，尚未保存的書桌改動可能跟著你走或擋住切換；本課每次切換前都先完成存檔。</p>
+      <p>分支保存的是照片紀錄，尚未保存的書桌改動可能跟著你走或擋住切換。本課每次切換前都先完成存檔。</p>
       <p className="text-sm">較舊的教材用 git checkout 做切換，作用對應這裡的 git switch；本課統一用 switch。</p>
     </Card>
-    <Callout title="先停一下，說出答案再繼續"><p>想把 Day 2 收進主相簿，合併前應站在哪一本？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>main；合併會改變你目前站著的相簿。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
+    <Callout title="先停一下，說出答案再繼續"><p>想把 Day 2 收進主相簿，合併前應站在哪一本？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>main；合併會改變你目前站著的相簿。若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
     <Card className="space-y-3">
       <h3 className="font-bold">一起看分支圖，補出最後一步</h3>
       <BranchDiagram label="分支與合併概念圖：main 有 Day 1 與忽略清單，留在原照片；feat/day2 從同一張開始，多拍 Day 2；最後一步要把 feat/day2 接回 main" />
       <p>前半我帶：另開相簿 → 拍 Day 2 → 回 main。最後請你補：要讓 main 也有 Day 2，還缺什麼？</p>
       <details><summary className="cursor-pointer">核對</summary><p>把 feat/day2 合併進 main。只是切回 main 不會自動帶入另一邊的照片。</p></details>
     </Card>
-    <Callout title="先停一下，說出答案再繼續"><p>只切回 main，看到 day2.md 不見了，要重新建立它嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不用；它還在 feat/day2 的照片裡。接下來合併成果才會出現在 main。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
+    <Callout title="先停一下，說出答案再繼續"><p>只切回 main，看到 day2.md 不見了，要重新建立它嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不用；它還在 feat/day2 的照片裡。接下來合併成果才會出現在 main。若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
     <SectionTitle kicker="換你了" title="在 git-journal 開分支再合併" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 先確認書桌乾淨，再另開相簿</h3>
       <CommandBlock command={"git status"} comment="先確認沒有會被帶到另一個分支的改動" />
       <CommandBlock variant="output" command={"On branch main\nnothing to commit, working tree clean"} />
-      <Callout title="不是 clean 就先停這一步">回 L3 核對是否已保存 .gitignore、還原 day1.md。看到「Your local changes to the following files would be overwritten by checkout」時，表示 Git 正在擋住可能覆寫的切換；保留需要的改動並完成存檔後再切，不要直接丟棄它們。完整錯誤原文和處理方式可到急診室查。</Callout>
+      <Callout title="不是 clean 就先停這一步">回 L3 核對是否已保存 .gitignore、還原 day1.md。看到「Your local changes to the following files would be overwritten by checkout」時，表示 Git 正在擋住可能覆寫的切換。保留需要的改動並完成存檔後再切換，不要直接丟棄這些改動。完整錯誤原文和處理方式可到急診室查。</Callout>
       <CommandBlock command={"git switch -c feat/day2"} comment="-c 表示建立新分支並立刻切過去" />
       <CommandBlock variant="output" command={"Switched to a new branch 'feat/day2'"} />
       <p>feat/day2 是這本相簿的名字，不是磁碟上的資料夾路徑。此時 HEAD 站在 feat/day2；main 仍在原本的照片。</p>
@@ -33,7 +33,7 @@ export const Lesson4Branch = () => (
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day2.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 2：學會分支</pre></div>
       <p>這次多接手一步：請自己完成「放上拍照台 → 按快門」兩步，檔案是 day2.md，照片說明用「新增 Day 2 筆記」。先寫出兩條指令，再依序輸入；卡住才展開提示。</p>
       <FalseAlarm signal={"warning: in the working copy of 'day2.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
-      <Callout variant="warning" title="記得帶 -m">commit 一律寫成 <code>git commit -m "說明"</code>。萬一漏了 -m、畫面變成滿是 ~ 的編輯器（Vim）：按 Esc，輸入 <code>:q!</code> 再按 Enter 離開，然後用 git status 確認後重打一次。</Callout>
+      <Callout variant="warning" title="記得帶 -m">commit 一律寫成 <code>git commit -m "說明"</code>。萬一漏了 -m，畫面變成滿是 ~ 的編輯器（Vim）：按 Esc，輸入 <code>:q!</code> 再按 Enter 離開。離開後用 git status 確認，再重打一次。</Callout>
       <p>完成後會看到以 [feat/day2 編號] 開頭的保存訊息，下方說明一個檔案新增了一行；完整輸出在提示裡可核對。</p>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">提示：先挑選檔案</summary>
       <CommandBlock command={"git add day2.md"} comment="挑選這次要保存的分支成果" />
@@ -46,13 +46,13 @@ export const Lesson4Branch = () => (
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">2. 回到 main，把成果收進來</h3>
-      <p>再多接手一步：請先自己排出「切回 main → 合併 feat/day2 → 刪除已合併分支名稱」三步。合併與刪分支是第一次學，第一次請展開提示 2、3；熟悉後再收起提示，自己重述順序。閱讀下一個提醒後再操作，不必重做已完成的指令。</p>
+      <p>再多接手一步：請先自己排出「切回 main → 合併 feat/day2 → 刪除已合併分支名稱」三步。合併與刪分支是第一次學，請展開提示 2、3；熟悉後再收起提示，自己重述順序。閱讀下一個提醒後再操作，不必重做已完成的指令。</p>
       <FalseAlarm signal="day2.md 不見了" title="切回 main 後，檔案清單會變短">這是你在 VSCode 會觀察到的現象，不是終端機錯誤訊息。main 還沒有那張照片，day2.md 仍在另一本相簿，沒有被刪除。</FalseAlarm>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">提示 1：先站回 main</summary>
       <CommandBlock command={"git switch main"} comment="回到準備接收成果的主相簿" />
       <CommandBlock variant="output" command={"Switched to branch 'main'"} />
       </details>
-      <p>看 VSCode 左側檔案總管，day2.md 會消失，README.md 與 day1.md 仍在；開著的 day2.md 分頁可能暫留，請以檔案清單為準。這裡不用 ls，因此 Windows 與 Mac 都能直接對照。</p>
+      <p>看 VSCode 左側檔案總管，day2.md 會消失，README.md 與 day1.md 仍在。開著的 day2.md 分頁可能暫留，請以檔案清單為準。這裡不用 ls，因此 Windows 與 Mac 都能直接對照。</p>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">提示 2：收進另一邊的成果</summary>
       <CommandBlock command={"git merge feat/day2"} comment="把 feat/day2 的照片收進目前的 main" />
       <CommandBlock variant="output" command={"Updating 846a6e1..b2dbb59\nFast-forward\n day2.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 day2.md"} />
@@ -66,7 +66,7 @@ export const Lesson4Branch = () => (
       <FalseAlarm signal={': 或 (END)'} title="分支清單若停在閱讀畫面">這是分頁閱讀畫面，不是當機；按英文小寫 q 回到指令列。清單短時也可能直接結束。</FalseAlarm>
       <CommandBlock command={"git branch"} comment="確認目前只剩主相簿名稱" />
       <CommandBlock variant="output" command={"* main"} />
-      <p>* 是目前所在分支。完成訊號：只列出 * main，day2.md 還在，L5 就從這裡繼續。</p>
+      <p>* 標示目前所在分支。完成訊號：只列出 * main，day2.md 還在，L5 就從這裡繼續。</p>
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">減少提示：換檔名，你會怎麼做？</h3>

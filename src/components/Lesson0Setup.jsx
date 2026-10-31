@@ -44,10 +44,10 @@ const PromptBlock = ({ text }) => {
 };
 
 const SCREENSHOT_PROMPT =
-  '我是完全沒有寫過程式的新手，正在準備一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。以下附上我電腦資訊的截圖，請你先根據截圖判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。';
+  '我是完全沒有寫過程式的新手，正在準備上一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。以下附上我電腦資訊的截圖，請你先根據截圖判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。';
 
 const TEXT_PROMPT =
-  '我是完全沒有寫過程式的新手，正在準備一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。請你先根據我貼在最後面的電腦資訊判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。以下是我的電腦資訊：';
+  '我是完全沒有寫過程式的新手，正在準備上一堂 Git 入門課，需要在我的電腦上安裝這三樣工具：VSCode、Git、GitHub CLI（gh）。請你先根據我貼在最後面的電腦資訊判斷我的作業系統與版本，再開始一步一步引導我安裝。請注意：每次只給我一個步驟，等我回報結果之後再給下一步；如果我的系統版本太舊、裝不了最新版，請直接告訴我該改裝哪一個舊版本，並附上那個版本的下載連結；請全程用繁體中文、用不懂程式的人也聽得懂的方式說明。以下是我的電腦資訊：';
 
 const STEP_TITLES = [
   '判別你的電腦',
@@ -100,7 +100,7 @@ const CHECKLIST_ITEMS = [
   { id: 'git', label: 'Git 安裝完成', verify: '終端機輸入 git -v 顯示 git version 2.x.x' },
   { id: 'gh', label: 'GitHub CLI（gh）安裝完成', verify: '終端機輸入 gh --version 顯示版本號' },
   { id: 'identity', label: '存檔作者設定完成', verify: 'git config user.name 與 git config user.email 顯示自己的名字與信箱' },
-  { id: 'config', label: '兩行一次性設定完成', verify: '已在終端機貼過 pull.rebase false 與 init.defaultBranch main 兩行設定' },
+  { id: 'config', label: '兩條預設設定完成', verify: '已在終端機貼過 pull.rebase false 與 init.defaultBranch main 兩行設定' },
 ];
 
 const NextButton = ({ label, onClick, disabled = false }) => (
@@ -151,7 +151,7 @@ export const Lesson0Setup = () => {
 
         {/* ── 步驟 1：判別你的電腦 ── */}
         <StepCard step={step} setStep={setStep} idx={0}>
-          <p className="text-sm text-slate-600">後面每一步的指令都會依你的系統自動切換，所以先選對系統很重要。<strong>不確定的話，看鍵盤左下角</strong>：有 <code className="bg-slate-100 px-1 rounded">⌘ Command</code> 鍵的是 Mac；有 <code className="bg-slate-100 px-1 rounded">Ctrl</code> 鍵 + Windows 標誌鍵的是 Windows。</p>
+          <p className="text-sm text-slate-600">後面每一步的指令都會依你的系統自動切換，所以先選對系統很重要。<strong>不確定的話，看鍵盤左下角</strong>：有 <code className="bg-slate-100 px-1 rounded">⌘ Command</code> 鍵的是 Mac；有 <code className="bg-slate-100 px-1 rounded">Ctrl</code> 鍵和 Windows 鍵的是 Windows。</p>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
@@ -184,7 +184,7 @@ export const Lesson0Setup = () => {
 
         {/* ── 步驟 2：印出你的電腦規格 ── */}
         <StepCard step={step} setStep={setStep} idx={1}>
-          <p className="text-sm text-slate-600">終端機是用文字指令操作電腦的視窗。先打開終端機：{isWin ? <>按 <code className="bg-slate-100 px-1 rounded">Windows 鍵</code>，搜尋 <code className="bg-slate-100 px-1 rounded">powershell</code>，點「Windows PowerShell」打開藍色視窗。</> : <>按 <code className="bg-slate-100 px-1 rounded">⌘ + 空白鍵</code> 打開 Spotlight，輸入 <code className="bg-slate-100 px-1 rounded">Terminal</code>（終端機）按 Enter。</>}然後輸入這行指令，把你電腦的規格印出來：</p>
+          <p className="text-sm text-slate-600">終端機是用文字指令操作電腦的視窗。先打開終端機：{isWin ? <>按 <code className="bg-slate-100 px-1 rounded">Windows 鍵</code>，搜尋 <code className="bg-slate-100 px-1 rounded">powershell</code>，點「Windows PowerShell」打開藍色視窗。</> : <>按 <code className="bg-slate-100 px-1 rounded">⌘ + 空白鍵</code> 打開 Spotlight，輸入 <code className="bg-slate-100 px-1 rounded">Terminal</code>（終端機）按 Enter。</>}然後輸入下面的指令，把你電腦的規格印出來：</p>
           <p className="text-sm text-slate-600">下面的 $ 是提示符，不用輸入；按複製只會複製指令，每次貼一條再按 Enter。</p>
           {isWin ? (
             <>
@@ -215,7 +215,7 @@ export const Lesson0Setup = () => {
               <p>輸出裡的重點：</p>
               <ul className="list-disc pl-5 space-y-1">
                 <li><code className="bg-slate-100 px-1 rounded">ProductVersion</code>：你的 macOS 版本號，越舊越可能要裝舊版工具</li>
-                <li>最後一行是晶片：<code className="bg-slate-100 px-1 rounded">arm64</code> = Apple 晶片（M1/M2/M3...）、<code className="bg-slate-100 px-1 rounded">x86_64</code> = Intel 晶片——之後下載安裝檔會用到</li>
+                <li>第二條指令印出的是晶片：<code className="bg-slate-100 px-1 rounded">arm64</code> = Apple 晶片（M1/M2/M3……）、<code className="bg-slate-100 px-1 rounded">x86_64</code> = Intel 晶片——之後下載安裝檔會用到</li>
               </ul>
             </div>
           )}
@@ -257,7 +257,7 @@ export const Lesson0Setup = () => {
               <PromptBlock text={TEXT_PROMPT} />
               <Callout variant="warning" title="複製終端機文字的安全方法">
                 {isWin ? (
-                  <p>用<strong>滑鼠選取</strong>你要的文字，然後<strong>按滑鼠右鍵</strong>（或按 Enter）就會複製。先選取再複製；沒有選取文字時，Ctrl+C 通常是中斷目前指令。</p>
+                  <p>用<strong>滑鼠選取</strong>你要的文字，然後<strong>按滑鼠右鍵</strong>（或按 Enter）就會複製。沒有選取文字時，Ctrl+C 通常是中斷目前指令。</p>
                 ) : (
                   <p>用滑鼠選取你要的文字，按 <code className="bg-amber-100 px-1 rounded">⌘ + C</code> 複製即可，Mac 的終端機這樣操作是安全的。</p>
                 )}
@@ -288,22 +288,22 @@ export const Lesson0Setup = () => {
               ) : (
                 <p>到 <a href="https://code.visualstudio.com/" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">code.visualstudio.com</a> 下載 .zip，解壓縮後<strong>把 App 圖示直接拖進「應用程式」資料夾</strong>——Mac 沒有安裝精靈，拖過去就是裝好了。</p>
               )}
-              <p className="mt-1 text-slate-600">裝好後打開 VSCode，點左側四個方塊圖示（延伸模組），搜尋並安裝 <strong>Git Graph</strong> 外掛——它能讓你「看見」Git 的時間線。</p>
+              <p className="mt-1 text-slate-600">裝好後打開 VSCode，點左側四個方塊圖示（延伸模組）。搜尋並安裝 <strong>Git Graph</strong> 外掛，它能讓你「看見」Git 的時間線。</p>
             </div>
             <div className="border border-slate-200 rounded-lg p-3 bg-white">
               <p className="font-bold text-slate-800 mb-1">② Git（幫你保存與比較檔案版本的工具）</p>
               {isWin ? (
                 <p>到 <a href="https://git-scm.com/downloads" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">git-scm.com/downloads</a> 下載 Windows 版，安裝過程<strong>一直按「Next」就好</strong>，不需要改任何預設選項。</p>
               ) : (
-                <p>Mac 通常內建觸發式安裝：打開終端機輸入 <code className="bg-slate-100 px-1 rounded">git --version</code>，若跳出視窗詢問是否安裝「Command Line Developer Tools」，點<strong>安裝</strong>並等它跑完（可能要幾分鐘），再輸入一次看到版本號就是裝好了。</p>
+                <p>Mac 通常內建觸發式安裝。打開終端機輸入 <code className="bg-slate-100 px-1 rounded">git --version</code>。若跳出視窗詢問是否安裝「Command Line Developer Tools」，點<strong>安裝</strong>並等它跑完（可能要幾分鐘）。跑完後再輸入一次，看到版本號就是裝好了。</p>
               )}
             </div>
             <div className="border border-slate-200 rounded-lg p-3 bg-white">
               <p className="font-bold text-slate-800 mb-1">③ GitHub CLI（gh，把電腦和 GitHub 帳號連起來的小工具）</p>
               {isWin ? (
-                <p>到 <a href="https://github.com/cli/cli/releases" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">GitHub CLI Releases</a> 找最新版本，在 <strong>Assets</strong> 列表（通常要點開展開）中下載<strong>檔名結尾是 <code className="bg-slate-100 px-1 rounded">windows_amd64.msi</code></strong> 的檔案並安裝。</p>
+                <p>到 <a href="https://github.com/cli/cli/releases" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">GitHub CLI Releases</a> 找最新版本，在 <strong>Assets</strong> 列表（通常要點一下才會展開）中下載<strong>檔名結尾是 <code className="bg-slate-100 px-1 rounded">windows_amd64.msi</code></strong> 的檔案並安裝。</p>
               ) : (
-                <p>先確認晶片（步驟 2 的 <code className="bg-slate-100 px-1 rounded">arm64</code> = Apple 晶片、<code className="bg-slate-100 px-1 rounded">x86_64</code> = Intel），再到 <a href="https://github.com/cli/cli/releases" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">GitHub CLI Releases</a> 的 Assets 列表下載對應的 .pkg：Apple 晶片選檔名含 <code className="bg-slate-100 px-1 rounded">macOS_arm64</code>、Intel 選 <code className="bg-slate-100 px-1 rounded">macOS_amd64</code>，雙擊安裝。</p>
+                <p>先確認晶片（步驟 2 的 <code className="bg-slate-100 px-1 rounded">arm64</code> = Apple 晶片、<code className="bg-slate-100 px-1 rounded">x86_64</code> = Intel）。再到 <a href="https://github.com/cli/cli/releases" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">GitHub CLI Releases</a> 的 Assets 列表下載對應的 .pkg：Apple 晶片選檔名含 <code className="bg-slate-100 px-1 rounded">macOS_arm64</code>、Intel 選 <code className="bg-slate-100 px-1 rounded">macOS_amd64</code>，雙擊安裝。</p>
               )}
             </div>
           </div>
@@ -325,7 +325,7 @@ export const Lesson0Setup = () => {
           <CommandBlock variant="output" command="git version 2.x.x" />
           <CommandBlock command="gh --version" comment="第二關：GitHub CLI" />
           <CommandBlock variant="output" command="gh version 2.x.x" />
-          <p className="text-sm text-slate-600">最後做兩條<strong>預設設定</strong>（在任何資料夾輸入都可以，一條一條按 Enter）。分支是從某個版本另開的一本相簿，main 是主相簿的名稱；pull 是下載雲端的新照片並整理進目前這本相簿。L4 與 L8 會帶你實際操作，現在先設定它們的預設做法。</p>
+          <p className="text-sm text-slate-600">最後做兩條<strong>預設設定</strong>（在任何資料夾輸入都可以，一條一條按 Enter）。分支是從某張照片開始另開的一本相簿，main 是主相簿的名稱；pull 是下載雲端的新照片並整理進目前這本相簿。L4 與 L8 會帶你實際操作，現在先設定它們的預設做法。</p>
           <CommandBlock
             command="git config --global pull.rebase false"
             comment="本機與雲端各有新照片時，保留兩邊紀錄再合在一起"
@@ -378,7 +378,7 @@ export const Lesson0Setup = () => {
           這兩條設定成功時不會印出文字：<strong>指令成功時，往往什麼都不會顯示</strong>。畫面安安靜靜跳回可輸入狀態，就代表它做完了。
         </Callout>
 
-        <Callout variant="info" title="`$` 是什麼？" className="mt-3">
+        <Callout variant="info" title="「$」是什麼？" className="mt-3">
           指令開頭的 <code>$</code> 代表「這是要打在終端機的指令」，輸入時不用打 <code>$</code>——用上面的複製按鈕會自動幫你去掉。
         </Callout>
 
@@ -386,7 +386,7 @@ export const Lesson0Setup = () => {
           這兩行指令在終端機的<strong>任何資料夾</strong>輸入都可以，不需要先 <code>cd</code> 進某個專案。
         </p>
 
-        <p className="text-sm text-slate-600 mt-3">敲完上面兩行後，輸入這行確認設定是否成功——注意對比：<strong>這條有輸出</strong>（回你設定的值），上面那兩條沒有：</p>
+        <p className="text-sm text-slate-600 mt-3">敲完上面兩行後，輸入下面這行確認設定是否成功。注意對比：<strong>這條有輸出</strong>（回你設定的值），上面那兩條沒有。</p>
         <CommandBlock command="git config user.name" comment="會回你剛剛設定的名字，只有一行" />
         <CommandBlock variant="output" command="Your Name" />
         <p className="text-sm text-slate-600">實際應顯示你填的名字，接著核對信箱：</p>
@@ -439,7 +439,7 @@ export const Lesson0Setup = () => {
                 href="#concept"
                 className="inline-flex items-center gap-1.5 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-green-700 transition-colors no-underline"
               >
-                前往 L1：觀念與準備
+                前往 L1：觀念
                 <ArrowRight size={15} aria-hidden="true" />
               </a>
             </Callout>

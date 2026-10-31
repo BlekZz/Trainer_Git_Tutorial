@@ -39,7 +39,7 @@ export const Lesson7PR = () => (
       <p>我先指出 compare 是「提供照片的分支」，這次填 feat/day3；你補 base，也就是「要收進哪本相簿」。</p>
       <details><summary className="cursor-pointer">核對方向</summary><p>base = main ← compare = feat/day3；兩邊都在你自己的 git-journal。</p></details>
     </Card>
-    <Callout title="先停一下，說出答案再繼續"><p>網頁已合併，但電腦看不到 day3.md，要再次開 PR 嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不用；先回電腦的 main，再 pull 下載。能分清「申請合併」與「下載成果」再開始；不確定就回看上方兩格圖。</p></details></Callout>
+    <Callout title="先停一下，說出答案再繼續"><p>網頁已合併，但電腦看不到 day3.md，要再次開 PR 嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不用；先回電腦的 main，再 pull 下載。能分清「申請合併」與「下載成果」再開始；不確定就回看上方的流程圖。</p></details></Callout>
     <SectionTitle kicker="換你了" title="在自己的 git-journal 開第一張 PR" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 開分支，保存 Day 3</h3>
@@ -49,12 +49,12 @@ export const Lesson7PR = () => (
       <p>若不是 main 或還有待保存的改動，先回 L6 完成收尾。</p>
       <CommandBlock command="git switch -c feat/day3" comment="另開一本分支相簿，讓 Day 3 先在這裡準備" />
       <CommandBlock variant="output" command={outputs.branch} />
-      <p>在 VSCode 左側檔案總管的 GIT-JOURNAL 上按右鍵 → New File，輸入 day3.md，會出現空白編輯區。貼上下方一行，最後按 Enter 留行尾換行，再 Ctrl+S（Mac：Cmd+S）；分頁的未儲存圓點會消失。</p>
+      <p>在 VSCode 左側檔案總管的 GIT-JOURNAL 上按右鍵 → New File，輸入 day3.md，會出現空白編輯區。貼上下方一行，最後按 Enter 留行尾換行，再按 Ctrl+S（Mac：Cmd+S）；分頁的未儲存圓點會消失。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day3.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 3：學會把分支送上雲端</pre></div>
-      <FalseAlarm signal="LF will be replaced by CRLF" title="Windows 可能出現換行提醒">如果訊息提到 day3.md 並出現這段，表示換行格式提醒，可以繼續；沒有訊息也正常。</FalseAlarm>
+      <FalseAlarm signal="LF will be replaced by CRLF" title="Windows 可能出現換行提醒">如果訊息提到 day3.md 並出現這段，這是換行格式提醒，可以繼續；沒有訊息也正常。</FalseAlarm>
       <CommandBlock command="git add day3.md" comment="只挑這次新建的筆記放上拍照台" />
       <Callout title="挑選後的畫面">通常沒有訊息；若出現上方 CRLF 換行提醒也正常。等提示符回來即可繼續。</Callout>
-      <FalseAlarm signal="~" title="記得帶 -m，避免進入 Vim">若漏了 -m 而看到滿是 ~ 的編輯器，按 Esc，輸入 :q! 再 Enter 離開；:wq 是保存訊息並離開。離開後先看 status，仍有 Changes to be committed 才重做帶 -m 的指令。</FalseAlarm>
+      <FalseAlarm signal="~" title="記得帶 -m，避免進入 Vim">若漏了 -m 而看到滿是 ~ 的編輯器，按 Esc，輸入 :q! 再按 Enter 離開；:wq 是保存訊息並離開。離開後先看 status，仍有 Changes to be committed 才重做帶 -m 的指令。</FalseAlarm>
       <CommandBlock command={'git commit -m "新增 Day 3 筆記"'} comment="保存分支照片，GitHub 才能收到這次紀錄" />
       <CommandBlock variant="output" command={outputs.commit} />
     </Card>
@@ -109,7 +109,7 @@ export const Lesson7PR = () => (
         <CommandBlock command="git log --oneline --graph" comment="核對 Day 3 與 GitHub 建立的合併照片" />
         <CommandBlock variant="output" command={outputs.log} />
       </details>
-      <p>Merge pull request #1 是 GitHub 在你確認合併時建立的照片，線條連回 Day 3 與原本 main。編號與 PR 號碼可能不同；實測把 Part 1 簡化成一筆「Part 1 的日誌」，你的下方會保留 L2–L5 的完整紀錄，不用改成範例。</p>
+      <p>Merge pull request #1 是 GitHub 在你確認合併時建立的照片，線條連回 Day 3 與原本 main。編號與 PR 號碼可能不同。實測範例把 Part 1 簡化成一筆「Part 1 的日誌」，你的下方會保留 L2–L5 的完整紀錄，不用改成範例。</p>
       <p>最後要刪除<strong>本機</strong>已合併的 feat/day3 名稱。回想 L4，先寫出指令再核對。</p>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對收尾指令</summary>
         <CommandBlock command="git branch -d feat/day3" comment="照片已在 main，清掉本機用完的分支名稱" />
@@ -128,7 +128,7 @@ export const Lesson7PR = () => (
       { q: 'Create pull request 按完，哪個動作才真的把照片收進 main？', options: ['再 push 一次', 'Merge pull request，再 Confirm merge', 'Delete branch'], answer: 1, explain: 'PR 是申請單，Merge 與確認才完成收進主相簿。' },
       { q: '診斷題：base = feat/day3、compare = main，看起來兩邊都有選，能直接送出嗎？', options: ['能，方向不影響', '不能，應該 main 接收 feat/day3', '先刪 main'], answer: 1, explain: 'base 是接收方，compare 是提供內容的分支；本課要 main ← feat/day3。' },
       { q: '診斷題：網頁已 Merged，本機 main 沒有 day3.md，下一步？', options: ['重新開 PR', '在本機 main 執行 pull', '重新 init'], answer: 1, explain: '網頁合併不會自動改電腦，pull 才下載並整理到目前的相簿。' },
-      { q: '反向判斷：自己的旅行清單 main 只落後雲端，沒有新分支要合併，還需要 PR 嗎？', options: ['每次下載都要 PR', '不用，只需 pull 同步', '先把雲端分支刪掉'], answer: 1, explain: 'PR 處理把分支收進另一分支的申請；下載已有成果用 pull。' },
+      { q: '反向判斷：自己的旅行清單 main 只落後雲端，沒有新分支要合併，還需要 PR 嗎？', options: ['每次下載都要 PR', '不用，只需 pull 同步', '先把雲端分支刪掉'], answer: 1, explain: 'PR 用來申請把分支收進另一分支；下載已有成果用 pull。' },
     ]} />
   </div>
 );

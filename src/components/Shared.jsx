@@ -242,7 +242,7 @@ export const NoOutputHint = ({ children, className = '' }) => (
 // FalseAlarm — 「看起來像錯誤，其實完全正常」的統一提醒框
 // signal: 學員實際會在畫面上看到的嚇人文字（等寬字型顯示）
 // <FalseAlarm signal={'warning: LF will be replaced by CRLF in xxx.md'}>這只是換行符號提醒…</FalseAlarm>
-export const FalseAlarm = ({ signal, title = '看到這個不用慌 — 這不是錯誤', children, className = '' }) => (
+export const FalseAlarm = ({ signal, title = '看到這個不用慌——這不是錯誤', children, className = '' }) => (
   <div className={`rounded-lg border border-amber-200 bg-amber-50/60 p-4 md:p-5 ${className}`}>
     <p className="font-bold text-amber-900 text-sm mb-2 flex items-center gap-2">
       <AlertTriangle size={16} className="text-amber-600 shrink-0" aria-hidden="true" />
@@ -379,7 +379,7 @@ export const TerminalSim = ({ logs, onCommand, promptLabel = "~/project (main)",
             value={input}
             onChange={(e) => setInput(e.target.value)}
             className="bg-transparent border-none outline-none flex-1 text-white placeholder-slate-400 min-w-0"
-            placeholder="輸入指令試試看..."
+            placeholder="輸入指令試試看……"
           />
         </form>
       ) : (

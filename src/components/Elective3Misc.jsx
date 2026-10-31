@@ -10,10 +10,10 @@ export const Elective3Misc = () => (
     <Card className="space-y-3">
       <h3 className="font-bold">1. 還沒拍好照片，先把改動暫放：stash</h3>
       <p><strong>stash</strong> 是把尚未保存成版本的改動暫時收起來，稍後再取回；它不會在分支相簿裡新增照片。適合內容只改到一半、又需要先切換分支的時候。</p>
-      <p>先在練習相簿中修改一個已被 Git 記錄的檔案，例如 README.md，按 Ctrl+S（Mac：Cmd+S）儲存，但先不要 commit。<strong>commit</strong> 是保存一個版本，像替這次內容拍照。</p>
+      <p>先在練習相簿中修改一個已被 Git 記錄的檔案，例如 README.md。按 Ctrl+S（Mac：Cmd+S）儲存，但先不要 commit。<strong>commit</strong> 是保存一個版本，像替這次內容拍照。</p>
       <Callout variant="warning" title="先確認改的是既有檔案">這條 stash 預設不收新建、尚未被 Git 記錄的檔案，也不收被忽略的檔案。若要保留新檔，先按 L2 完成一次存檔；不要以為 stash 會收走整張書桌。</Callout>
       <CommandBlock command="git stash" comment="暫放既有檔案的未完成改動，讓你能先處理別的事" />
-      <p>有改動可收時，終端機會說已保存工作資料夾與暫存區的狀態，既有檔案會回到上次 commit 的內容。只有確認這次有新增暫放紀錄，才做下面的 pop；若說沒有可保存的改動，先停下檢查是否改了既有檔案並儲存，不要 pop，否則可能取回以前留下的另一筆紀錄。</p>
+      <p>有改動可收時，終端機會說已保存工作資料夾與暫存區的狀態，既有檔案會回到上次 commit 的內容。只有確認這次有新增暫放紀錄，才做下面的 pop。若終端機說沒有可保存的改動，不要 pop，否則可能取回以前留下的另一筆紀錄。這時先停下，檢查是否改了既有檔案並儲存。</p>
       <p><strong>stash pop</strong> 是取回最近一次暫放的改動，成功套用後移除那筆暫放紀錄。這次先留在原分支、不改其他內容，直接取回剛才的文字。</p>
       <CommandBlock command="git stash pop" comment="把剛才暫放的改動放回書桌" />
       <p>成功時會列出回到工作資料夾的改動，並說明已移除那筆暫放紀錄；打開 README.md，應看到剛才寫的文字。它仍未 commit。若沒有暫放紀錄可取，Git 會告訴你沒有找到紀錄。</p>
@@ -27,11 +27,11 @@ export const Elective3Misc = () => (
         <p>先替目前位置開一本分支相簿，讓成果有名稱可找；若有未存的改動，再照 L2 保存。不要直接回 main。</p>
         <CommandBlock command="git switch -c rescue-notes" comment="用尚未使用過的名稱保留現在的位置" />
         <CommandBlock variant="output" command={"Switched to a new branch 'rescue-notes'"} />
-        <p>若名稱已存在，換一個未用過的名稱再試；不要刪掉既有分支。保存完成後才能繼續。</p>
+        <p>若名稱已存在，換一個未用過的名稱再試；不要刪掉既有分支。保存完成後，才做下面的 git switch main。</p>
       </details>
       <CommandBlock command="git switch main" comment="回到 main 相簿目前的版本" />
       <CommandBlock variant="output" command={"Switched to branch 'main'"} />
-      <p>也可能附帶與雲端的同步狀態；若已在 main，會說已經在這個分支。若 Git 說改動會被覆蓋而拒絕切換，先照 L2 保存或照本頁第一節暫放，不要強制切換。</p>
+      <p>輸出也可能附帶與雲端的同步狀態；若已在 main，Git 會說已經在這個分支。若 Git 說改動會被覆蓋而拒絕切換，先照 L2 保存或照本頁第一節暫放，不要強制切換。</p>
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">3. 只改最後一張照片的說明：amend</h3>

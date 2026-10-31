@@ -88,12 +88,12 @@ export const Lesson9AiLog = () => (
     <SectionTitle kicker="換你了" title="請 AI 整理你的 Git 日誌" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 把紀錄印成一行一張照片</h3>
-      <p>回到<strong>第一個 git-journal</strong> 的 VSCode 視窗（左側顯示 GIT-JOURNAL，不是 GIT-JOURNAL-LAPTOP）。選 Terminal → New Terminal，確認提示符以 git-journal 結尾；$ 不用打，輸出框不用輸入。</p>
+      <p>回到<strong>第一個 git-journal</strong> 的 VSCode 視窗（左側顯示 GIT-JOURNAL，不是 GIT-JOURNAL-LAPTOP）。選 Terminal → New Terminal，確認提示符以 git-journal 結尾；$ 和輸出框的內容都不用輸入。</p>
       <p>先把終端機面板往上拉大（拖曳面板上緣），等一下才能一次選取整段紀錄。</p>
       <FalseAlarm signal={': 或 (END)'} title="畫面停住、不能繼續輸入指令？">紀錄較長時會進入分頁閱讀畫面（pager），不是當機。按空白鍵往下翻，按英文小寫 q 回到指令列。短內容可能直接結束。</FalseAlarm>
       <CommandBlock command="git log --format=reference" comment="每張照片印成一行：編號 (說明, 日期)，方便整段複製" />
       <CommandBlock variant="output" command={logOutput} />
-      <p>這是照著 L2–L8 實際操作得到的輸出；你的編號、日期會不同（和 L6–L8 的範例編號也不同，那些來自另一次實測），Merge pull request 那行會是你的帳號。由上往下是由新到舊；每一行就是一張照片，括號裡是你當時寫的說明和日期。</p>
+      <p>這是照著 L2–L8 實際操作得到的輸出，編號也和 L6–L8 的範例不同（那些來自另一次實測）。你的編號、日期會不同，Merge pull request 那行會是你的帳號。由上往下是由新到舊；每一行就是一張照片，括號裡是你當時寫的說明和日期。</p>
       <SuccessCheck
         terminal={['最上面一行是 L8 的「解決標題衝突」，最下面一行是 L2 的「新增日誌標題」', '大約十幾行，每行都是「編號 (說明, 日期)」']}
         web={['repo 首頁點右上角的 Commits，看到的是同一串說明——接手的人在網頁上讀到的就是這些字']}
@@ -103,12 +103,12 @@ export const Lesson9AiLog = () => (
     <Card className="space-y-3">
       <h3 className="font-bold">2. 複製紀錄，交給 AI</h3>
       <p>用滑鼠在終端機從第一行選到最後一行，按 Ctrl+C（Mac：Cmd+C）複製。VSCode 終端機有選取文字時，Ctrl+C 是複製；沒選取時是中斷指令，不會刪任何東西，重選一次即可。</p>
-      <Callout variant="warning" title="貼進 AI 之前">本課的日誌是練習內容，可以貼。<strong>公司或客戶的專案紀錄</strong>，先問主管能不能放進哪個 AI 工具；紀錄裡若有密碼、客戶名稱等資訊也不要貼。</Callout>
+      <Callout variant="warning" title="貼進 AI 之前">本課的日誌是練習內容，可以貼。<strong>公司或客戶的專案紀錄</strong>，先問主管能不能貼、可以貼進哪個 AI 工具；紀錄裡若有密碼、客戶名稱等資訊也不要貼。</Callout>
       <p>打開公司允許使用的 AI 對話工具（例如 ChatGPT、Claude、Gemini），把下面整段指示貼進對話框。最後一行 <code>&lt;把 git log 的輸出整段貼在這裡&gt;</code> 要<strong>整個換掉</strong>：刪掉這行，貼上剛才複製的紀錄，角括號不要留下。</p>
       <CopyBox label="貼到 AI 對話框，不是終端機" text={prompt} />
       <p>送出後，AI 會回一段整理。下面是示範回答，你的 AI 用字一定不同，重點是內容：</p>
       <div className="rounded-lg border border-slate-200 bg-slate-50 p-3"><p className="text-xs font-bold text-slate-500 mb-2">示範回答（每次都會不同）</p><pre className="text-sm whitespace-pre-wrap">{sampleAnswer}</pre></div>
-      <Callout variant="success" title="成功的話你會看到">AI 依日期列出 Day 1～Day 4 與改標題的經過，日期和你的紀錄對得上；而且它指出兩筆「解決標題衝突」分不出差別。沒指出也正常，AI 每次回答不同；第 3 步你會自己核對。</Callout>
+      <Callout variant="success" title="成功的話你會看到">AI 依日期列出 Day 1～Day 4 與改標題的經過，日期和你的紀錄對得上。如果它還指出兩筆「解決標題衝突」分不出差別，也符合預期；沒指出也正常，AI 每次回答不同，第 3 步你會自己核對。</Callout>
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">3. 核對 AI 說的是不是真的</h3>

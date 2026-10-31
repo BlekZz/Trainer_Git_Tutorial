@@ -45,14 +45,14 @@ export const Lesson8Sync = () => (
     <SectionTitle kicker="換你了" title="讓自己的兩份相簿同步" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 在旁邊下載第二份相簿</h3>
-      <p>在原本 git-journal 的 VSCode 選 Terminal → New Terminal。確認新終端機的 PowerShell 提示符路徑以 git-journal 結尾；$ 與 PS 路徑不用打，每次一條指令，輸出框也不用輸入。</p>
+      <p>在原本 git-journal 的 VSCode 選 Terminal → New Terminal。確認新終端機的 PowerShell 提示符路徑以 git-journal 結尾。$ 與 PS 路徑不用打，每次一條指令，輸出框也不用輸入。</p>
       <CommandBlock command="cd .." comment="往上一層，回到裝著 git-journal 的資料夾，避免把第二份塞在第一份裡" />
       <NoOutputHint>提示符的路徑會少掉最後的 git-journal。例如原本是 PS C:\Users\Amy\Documents\git-journal&gt;，現在應是 PS C:\Users\Amy\Documents&gt;；這些是位置示意，不用照打。</NoOutputHint>
       <p>若路徑不是預期的父資料夾，先停下核對。下方 <code>&lt;你的帳號&gt;</code> 要<strong>整個換成自己的帳號，角括號不要打</strong>。例如帳號是 amy-example，完整指令是 <code className="break-all">git clone https://github.com/amy-example/git-journal.git git-journal-laptop</code>；請換成自己的網址。</p>
       <FalseAlarm signal="Cloning into 'git-journal-laptop'..." title="下載時會跑進度，不是卡住">接著會看到 remote:、Receiving objects 與 Resolving deltas。小相簿通常幾秒到一分鐘，等提示符回來，不要重按 Enter；數量與編號因自己的紀錄而不同。</FalseAlarm>
       <CommandBlock command="git clone https://github.com/<你的帳號>/git-journal.git git-journal-laptop" comment="下載自己的整本雲端相簿，並把新資料夾命名為 git-journal-laptop" />
       <CommandBlock variant="output" command={outputs.clone} />
-      <Callout variant="warning" title="下載前後的檢查">若看到 destination path 'git-journal-laptop' already exists and is not an empty directory.，先確認是否已做過，不要刪舊成果或一直重試。若看到 Repository not found，核對自己的帳號、repo 網址與 L6 登入授權；其他訊息到側邊欄「急診室」對照。</Callout>
+      <Callout variant="warning" title="下載前後的檢查">若看到 destination path 'git-journal-laptop' already exists and is not an empty directory.，先確認是否已做過，不要刪舊成果或一直重試。若看到 Repository not found，核對自己的帳號、repo 網址與 L6 登入授權。其他訊息到側邊欄「急診室」對照。</Callout>
       <p>下載完成，父資料夾裡會多出 git-journal-laptop。<strong>clone 不會自動把終端機移進新資料夾</strong>，接著用新視窗開它。</p>
       <p>在 VSCode 選 File → New Window，再在<strong>新視窗</strong>選 File → Open Folder → 選 git-journal-laptop。左側應顯示 GIT-JOURNAL-LAPTOP，並看得到 README.md 與 day1.md～day3.md。接著選 Terminal → New Terminal，提示符路徑必須以 git-journal-laptop 結尾。</p>
       <p>保留第一個 git-journal 視窗。真的換新電腦時，還要先完成 L0 的工具與 Git 身份設定、L6 的登入授權；本次同一台電腦共用那些設定。</p>
@@ -61,10 +61,10 @@ export const Lesson8Sync = () => (
       <h3 className="font-bold">2. 在第二個視窗保存並上傳 Day 4</h3>
       <p>確認左側是 GIT-JOURNAL-LAPTOP。在它上面按右鍵 → New File，輸入 day4.md。編輯區貼上下方內容，最後按 Enter 留行尾換行，再按 Ctrl+S（Mac：Cmd+S）；左側多出 day4.md，分頁的未儲存圓點消失。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day4.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 4：在第二台電腦寫日誌</pre></div>
-      <FalseAlarm signal="LF will be replaced by CRLF" title="Windows 可能出現換行提醒">訊息若提到 day4.md 並出現這段，並不是失敗，可以繼續；沒有訊息也正常。</FalseAlarm>
+      <FalseAlarm signal="LF will be replaced by CRLF" title="Windows 可能出現換行提醒">訊息若提到 day4.md 並出現這段，這不是失敗，可以繼續；沒有訊息也正常。</FalseAlarm>
       <CommandBlock command="git add day4.md" comment="把第二個資料夾的新筆記放上拍照台" />
       <Callout title="挑選後的畫面">通常沒有訊息；若出現上方 CRLF 換行提醒也正常。等提示符回來即可繼續。</Callout>
-      <FalseAlarm signal="~" title="記得帶 -m">漏掉 -m 而進入 Vim 時，按 Esc，輸入 :q! 再 Enter 離開；:wq 是保存訊息並離開。離開後先看 status，仍有 Changes to be committed 才重做帶 -m 的指令。</FalseAlarm>
+      <FalseAlarm signal="~" title="記得帶 -m">漏掉 -m 而進入 Vim 時，按 Esc，輸入 :q! 再按 Enter 離開；:wq 是保存訊息並離開。離開後先看 status，仍有 Changes to be committed 才重做帶 -m 的指令。</FalseAlarm>
       <CommandBlock command={'git commit -m "新增 Day 4 筆記"'} comment="先在第二份相簿保存照片，才有內容可以上傳" />
       <CommandBlock variant="output" command={outputs.day4Commit} />
       <p>補全練習：clone 已記住 main 的目的地。請先寫出把新照片上傳的指令，想好再展開，只執行一次。</p>
@@ -82,7 +82,7 @@ export const Lesson8Sync = () => (
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">3. 回第一個視窗，自己補上下載步驟</h3>
-      <p>切回左側顯示 GIT-JOURNAL 的第一個 VSCode 視窗。第 1 步用來 clone 的終端機還在父資料夾，請選 Terminal → New Terminal 另開一個，<strong>確認提示符以 git-journal 結尾</strong>，不要在父資料夾操作。</p>
+      <p>切回左側顯示 GIT-JOURNAL 的第一個 VSCode 視窗。第 1 步用來 clone 的終端機還在父資料夾。請選 Terminal → New Terminal 另開一個，<strong>確認提示符以 git-journal 結尾</strong>，不要在父資料夾操作。</p>
       <p>先寫出「把雲端新照片帶回目前 main」的指令，再展開核對。這次由你選方法，不需要再下載整本新相簿。</p>
       <FalseAlarm signal="Fast-forward" title="這是正常更新">前面會跑 remote: 下載進度，接著列出 day4.md。小相簿通常幾秒到一分鐘；等提示符回來再繼續，不要重按 Enter。</FalseAlarm>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對下載指令</summary>
@@ -103,10 +103,10 @@ export const Lesson8Sync = () => (
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">網頁檔案內容：<strong>README.md</strong></p><pre className="whitespace-pre-wrap break-all"># Amy 的 Git 學習日誌（網頁版）</pre></div>
       <p>按 Commit changes 開啟確認框，訊息填「在網頁上改標題」，選 <strong>Commit directly to the main branch</strong>，再按框內 Commit changes。頁面回到檔案內容時，應看到「網頁版」。Amy 沿用 L5 的練習文字。</p>
       <Screenshot id="L8-web-edit" alt="自己的 main 在 GitHub 編輯 README.md，並直接 Commit changes 到 main" caption="你會看到 README.md 的網頁編輯區與 Commit changes 確認框；保存後標題有「網頁版」。" />
-      <p>現在回<strong>第一個 git-journal 視窗，先不要 pull</strong>，讓它保留原有照片。打開 README.md，把同一個第 1 行換成下方文字並 Ctrl+S；編輯區應看到「電腦版」。</p>
+      <p>現在回<strong>第一個 git-journal 視窗，先不要 pull</strong>，讓它保留原有照片。打開 README.md，把同一個第 1 行換成下方文字並按 Ctrl+S；編輯區應看到「電腦版」。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">電腦檔案內容：<strong>README.md</strong></p><pre className="whitespace-pre-wrap break-all"># Amy 的 Git 學習日誌（電腦版）</pre></div>
       <p>沿用 L5 的 -am：-a 挑入已被 Git 記錄的檔案修改，-m 寫照片說明。這次請確認只改 README.md；新檔案不能靠 -a 加入。</p>
-      <FalseAlarm signal="warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it">這是 Windows 換行提醒，不是保存失敗；原本已用 CRLF 或 Mac 可能沒有這行。</FalseAlarm>
+      <FalseAlarm signal="warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it">這是 Windows 換行提醒，不是保存失敗；在 Mac 上，或檔案原本已用 CRLF 時，可能沒有這行。</FalseAlarm>
       <CommandBlock command={'git commit -am "在電腦上改標題"'} comment="保存電腦版，讓兩邊同一行各有一張新照片" />
       <CommandBlock variant="output" command={outputs.localTitle} />
     </Card>
@@ -117,13 +117,13 @@ export const Lesson8Sync = () => (
       <CommandBlock variant="output" command={outputs.rejected} />
       <p>接下來 pull 會收到網頁版。因為你也改了同一行，Git 不能替你決定哪個標題較好。</p>
       <FalseAlarm signal="CONFLICT (content): Merge conflict in README.md" title="這次會停下來，等你選標題">看到 Automatic merge failed 時不要重複 pull；往下看 status 和 README.md 的候選文字。小相簿通常幾秒到一分鐘，先等下載進度結束、提示符回來。</FalseAlarm>
-      <FalseAlarm signal="~" title="如果兩邊改的是不同行，pull 可能打開 Vim">不同位置的改動可能自動合併，接著打開合併訊息編輯器。若看到滿是 ~ 的 Vim，保留預填說明，按 Esc，輸入 <strong>:wq</strong> 再 Enter，保存並離開；不要一直按 Enter。這次同一行衝突通常不會開它。</FalseAlarm>
+      <FalseAlarm signal="~" title="如果兩邊改的是不同行，pull 可能打開 Vim">不同位置的改動可能自動合併，接著打開合併訊息編輯器。若看到滿是 ~ 的 Vim，保留預填說明，按 Esc，輸入 <strong>:wq</strong> 再按 Enter，保存並離開；不要一直按 Enter。這次同一行衝突通常不會開它。</FalseAlarm>
       <CommandBlock command="git pull" comment="下載網頁的照片，讓 Git 指出無法自動選擇的同一行" />
       <CommandBlock variant="output" command={outputs.conflictPull} />
       <CommandBlock command="git status" comment="確認現在等待處理的是 README.md" />
       <CommandBlock variant="output" command={outputs.conflictStatus} />
-      <p>have diverged 表示兩邊各有自己新增的照片；both modified: README.md 表示這個檔案兩邊都改過。輸出的 &lt;file&gt; 是整個替換成檔名的佔位符，不要輸入角括號。現在是在合併中，不用再照 status 裡的提示重複 pull。</p>
-      <p>若沒有 CONFLICT，先核對第 4 步是否兩邊都改同一行、都已保存；若已自動合併，不要硬加衝突標記。若出現 fatal: Need to specify how to reconcile divergent branches.，或只顯示不能向前更新，表示 Git 設定與本課不同；先把原文交給講師確認，不要強行覆蓋。</p>
+      <p>have diverged 表示兩邊各有自己新增的照片；both modified: README.md 表示這個檔案兩邊都改過。輸出裡的 &lt;file&gt; 是佔位符，要整個換成檔名，不要輸入角括號。現在是在合併中，不用再照 status 裡的提示重複 pull。</p>
+      <p>若沒有 CONFLICT，先核對第 4 步是否兩邊都改同一行、都已保存；若已自動合併，不要硬加衝突標記。若出現 fatal: Need to specify how to reconcile divergent branches.，或只顯示不能向前更新，表示 Git 設定與本課不同。先把原文交給講師確認，不要強行覆蓋。</p>
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">6. 像 L5 一樣，在 VSCode 選出最後的文字</h3>
@@ -141,13 +141,13 @@ export const Lesson8Sync = () => (
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">7. 補全三步：標示處理完成、保存、上傳</h3>
-      <p>先把下面三個答案都收起，自己寫出這三步的指令，commit 說明用「解決標題衝突」。想好後逐一展開核對，每條只執行一次；需要提醒可回 L5 第 5 步。</p>
+      <p>先不要展開下面三個答案，自己寫出這三步的指令，commit 說明用「解決標題衝突」。想好後逐一展開核對，每條只執行一次；需要提醒可回 L5 第 5 步。</p>
       <FalseAlarm signal="LF will be replaced by CRLF" title="挑入 README.md 時可能再看到換行提醒">這只是 Windows 換行格式提醒，沒有訊息也正常；它不表示還有衝突。</FalseAlarm>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對第 1 步：告訴 Git 已處理好</summary>
         <CommandBlock command="git add README.md" comment="挑入整理好的內容，標示這個檔案已解決" />
         <Callout title="挑選後的畫面">通常沒有訊息；若出現上方 CRLF 換行提醒也正常。等提示符回來即可繼續。</Callout>
       </details>
-      <FalseAlarm signal="~" title="保存時記得帶 -m">若漏掉 -m 進入 Vim，按 Esc，輸入 :q! 再 Enter 離開編輯；:wq 是保存訊息並離開。合併可能有預填訊息，離開後先用 status 核對：若已 clean，不要重複 commit；仍在合併中才執行帶 -m 的指令。</FalseAlarm>
+      <FalseAlarm signal="~" title="保存時記得帶 -m">若漏掉 -m 進入 Vim，按 Esc，輸入 :q! 再按 Enter 離開編輯；:wq 是保存訊息並離開。合併可能有預填訊息。離開後先用 status 核對：若已 clean，不要重複 commit；仍在合併中才執行帶 -m 的指令。</FalseAlarm>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對第 2 步：保存合併照片</summary>
         <CommandBlock command={'git commit -m "解決標題衝突"'} comment="把你選好的結果保存成連接兩邊紀錄的照片" />
         <CommandBlock variant="output" command={outputs.resolveCommit} />
@@ -160,7 +160,7 @@ export const Lesson8Sync = () => (
       <FalseAlarm signal={': 或 (END)'} title="紀錄畫面停住時">這是分頁閱讀畫面（pager），按英文小寫 q 回到指令列，短內容也可能直接結束。</FalseAlarm>
       <CommandBlock command="git log --oneline --graph" comment="核對合併照片連到電腦與網頁的兩筆標題紀錄" />
       <CommandBlock variant="output" command={outputs.log} />
-      <p>最上面是「解決標題衝突」，下面兩條線保留了「在網頁上改標題」與「在電腦上改標題」。實測把 Part 1 簡化成一筆，你的下面會有 L2–L5 的完整照片；編號與 PR 號碼也可能不同。</p>
+      <p>最上面是「解決標題衝突」，下面兩條線保留了「在網頁上改標題」與「在電腦上改標題」。實測範例把 Part 1 簡化成一筆，你的紀錄下面會有 L2–L5 的完整照片；編號與 PR 號碼也可能不同。</p>
       <SuccessCheck
         title="完成訊號：衝突解決並上傳"
         terminal={['README.md 沒有衝突標記', <>push 最後一行是 <code>4b75a42..d0e7843  main -&gt; main</code>（編號會不同）</>, 'log 最上面是「解決標題衝突」，下面兩條線分別是網頁與電腦的改標題']}
@@ -171,7 +171,7 @@ export const Lesson8Sync = () => (
     <Card className="space-y-3 bg-green-50">
       <h3 className="font-bold">獨立練習：換一個下載入口，自己驗收</h3>
       <p>現在換回 GIT-JOURNAL-LAPTOP 視窗，不新增檔案、不改文字。先自己決定怎麼讓第二份相簿也收到剛才的合併照片；不看指令做一次，卡住再回第 3 步。</p>
-      <p>你會看到下載進度，等提示符回來再檢查。注意：這次 README.md 的文字可能和原本一模一樣（解完衝突的標題剛好等於舊標題），真正更新的是「紀錄」，所以不能只看檔案內容判斷。若有未保存改動，先處理完再同步。</p>
+      <p>你會看到下載進度，等提示符回來再檢查。注意：這次 README.md 的文字可能和原本一模一樣（解完衝突的標題剛好等於舊標題）。真正更新的是「紀錄」，所以不能只看檔案內容判斷。若有未保存改動，先處理完再同步。</p>
       <p>完成訊號：在<strong>兩個</strong>視窗的終端機各輸入一次 <code>git log -1 --oneline</code>（只顯示最新一張照片），兩邊印出的編號要一模一樣。編號以你自己第一個資料夾顯示的為準，下面只是範例：</p>
       <CommandBlock command="git log -1 --oneline" comment="兩個資料夾各輸入一次，比對最前面的編號" />
       <CommandBlock variant="output" command={"d0e7843 解決標題衝突"} />

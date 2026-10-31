@@ -31,9 +31,9 @@ const tabs = [
   { id: 'sync', label: 'L8 兩台電腦的同步', group: 'Part 2 上雲與協作', icon: <Download size={16} /> },
   { id: 'ai-log', label: 'L9 讓 AI 讀懂你的紀錄', group: 'Part 2 上雲與協作', icon: <Bot size={16} /> },
   { id: 'homework', label: '作業：我的 Git 日誌', group: 'Part 3 作業', icon: <CheckCircle size={16} /> },
-  { id: 'e1-rebase', label: 'E1 Merge vs Rebase', group: 'Part 4 選修', icon: <GitBranch size={16} /> },
+  { id: 'e1-rebase', label: 'E1 Merge 與 Rebase', group: 'Part 4 選修', icon: <GitBranch size={16} /> },
   { id: 'e2-fork', label: 'E2 參與別人的專案', group: 'Part 4 選修', icon: <Users size={16} /> },
-  { id: 'e3-misc', label: 'E3 stash 與其他', group: 'Part 4 選修', icon: <Wrench size={16} /> },
+  { id: 'e3-misc', label: 'E3 暫放改動、回到分支、修改存檔說明', group: 'Part 4 選修', icon: <Wrench size={16} /> },
   { id: 'errors', label: '錯誤急診室', group: '急診室', icon: <Ambulance size={16} /> },
 ];
 const groups = ["Part 0 準備","Part 1 單機","Part 2 上雲與協作","Part 3 作業","Part 4 選修","急診室"];

@@ -26,15 +26,15 @@ export const Elective2Fork = () => {
   return (
     <div className="space-y-6 animate-fade-in break-words">
       <header>
-        <SectionTitle title="E2 參與別人的專案" subtitle="把別人的雲端相簿複製到自己名下，做好改動，再申請收回原相簿。" />
+        <SectionTitle title="E2 參與別人的專案" subtitle="把別人的雲端相簿複製到自己名下，做好改動，再申請把改動收進原相簿。" />
         <p className="text-sm text-slate-600">選修，不計分，學完作業再來；先完成 L6 的 GitHub 登入與 L7 的 PR 練習。</p>
       </header>
       <Card className="space-y-3">
         <h3 className="font-bold">這次多了誰的相簿？</h3>
-        <p><strong>repo</strong> 是一個專案的檔案與保存紀錄，這裡把它想成相簿。<strong>Fork</strong> 是在 GitHub 上把別人的專案複製到自己帳號下，保留它與原專案的關係。<strong>upstream（上游）</strong> 是這份副本所來自的原專案。</p>
-        <p><strong>clone</strong> 是把雲端相簿下載成電腦上的一份；Fork 發生在 GitHub，clone 才會在你的電腦產生資料夾。<strong>PR（Pull Request）</strong> 是請對方把你準備好的成果收進主相簿的申請單。</p>
+        <p><strong>repo</strong> 是一個專案的檔案與保存紀錄，這裡把它想成相簿。<strong>Fork</strong> 是在 GitHub 上把別人的專案複製到自己帳號下，保留它與原專案的關係。<strong>upstream（上游）</strong>是這份副本來自的原專案。</p>
+        <p><strong>clone</strong> 是把雲端相簿下載成電腦上的一份；Fork 發生在 GitHub，clone 才會在你的電腦產生資料夾。<strong>PR（Pull Request）</strong>是請對方把你準備好的成果收進主相簿的申請單。</p>
         <p>我先 Fork，再 clone 自己那份，因為我能上傳到自己的雲端相簿。做好後，申請方向是「我的 Fork → 原專案」；與 L7 不同，這次是否收進原專案由維護者決定。</p>
-        <p><strong>Collaborator（協作者）</strong> 是被專案擁有者邀請一起操作專案的人；能不能上傳仍要看獲得的權限。本練習不需要對方邀請你。</p>
+        <p><strong>Collaborator（協作者）</strong>是被專案擁有者邀請一起操作專案的人；能不能上傳仍要看獲得的權限。本練習不需要對方邀請你。</p>
         <details><summary className="cursor-pointer text-indigo-700">先想：Fork 完成，電腦就會多一個資料夾嗎？</summary><p>不會，還要 clone。能分清兩者再往下；不確定就回看上面的定義。</p></details>
       </Card>
       <Card className="space-y-3">
@@ -45,7 +45,7 @@ export const Elective2Fork = () => {
       </Card>
       <Card className="space-y-3">
         <div className="flex gap-3"><h3 className="font-bold">2. 把自己的副本下載到電腦</h3><StepCheck stepId={2} done={done} onToggle={toggleStep} /></div>
-        <p>用 VSCode 的 File → Open Folder 開啟你平常放練習的資料夾，選 Terminal → New Terminal。這次要下載另一個專案，不要在 git-journal 裡操作；已有 Trainer_Git_Tutorial 資料夾時，另選一個空資料夾再開始。</p>
+        <p>這次要下載另一個專案，不要在 git-journal 裡操作；已有 Trainer_Git_Tutorial 資料夾時，另選一個空資料夾再開始。用 VSCode 的 File → Open Folder 開啟你平常放練習的資料夾，選 Terminal → New Terminal。</p>
         <p>把下面的「你的帳號」換成實際 GitHub 帳號。每個區塊只複製一條，$ 不用輸入；後面的「你的帳號名」也都要換成同一個帳號。</p>
         <FalseAlarm signal="Cloning into 'Trainer_Git_Tutorial'..." title="下載時會跑進度，不是錯誤">接著可能看到 remote:、Receiving objects:、Resolving deltas: 等行；依網速可能花幾秒到幾分鐘。等提示符回來，不要重按 Enter 或關視窗。</FalseAlarm>
         <CommandBlock command="git clone https://github.com/你的帳號/Trainer_Git_Tutorial.git" comment="下載自己剛 Fork 的相簿，保留原本的保存紀錄" />
@@ -59,12 +59,12 @@ export const Elective2Fork = () => {
       </Card>
       <Card className="space-y-3">
         <div className="flex gap-3"><h3 className="font-bold">3. 在分支相簿寫一份筆記</h3><StepCheck stepId={3} done={done} onToggle={toggleStep} /></div>
-        <p><strong>branch（分支）</strong> 是從某張照片開始另開一本相簿，讓新內容先不影響 main。這裡用你的帳號替分支命名。</p>
+        <p><strong>branch（分支）</strong>是從某張照片開始另開一本相簿，讓新內容先不影響 main。這裡用你的帳號替分支命名。</p>
         <CommandBlock command="git switch -c feat/你的帳號名" comment="另開分支保存這次筆記" />
         <CommandBlock variant="output" command={"Switched to a new branch 'feat/你的帳號名'"} />
         <p>在 VSCode 左側 learner-commits 資料夾上按右鍵 → New File，輸入「你的帳號名.md」，例如 amy-notes.md。若同名檔已存在，先停下檢查是否做過本練習，不要覆蓋別人的筆記。</p>
         <p>編輯區寫一句這次學到的事，例如「我學會了先確認 PR 要送到誰的相簿。」再按 Enter 留行尾換行，按 Ctrl+S（Mac：Cmd+S）；分頁的未儲存圓點會消失。</p>
-        <p><strong>暫存區</strong> 是挑選下一次存檔要包含哪些改動的地方，也就是拍照台；<strong>commit</strong> 是保存一個版本，像拍一張附說明的照片。</p>
+        <p><strong>暫存區</strong>是挑選下一次存檔要包含哪些改動的地方，也就是拍照台；<strong>commit</strong> 是保存一個版本，像拍一張附說明的照片。</p>
         <FalseAlarm signal="LF will be replaced by CRLF" title="Windows 可能提醒換行格式">出現這段表示換行格式提醒，可以繼續；沒有訊息也正常。</FalseAlarm>
         <CommandBlock command="git add learner-commits/你的帳號名.md" comment="只挑自己的筆記放上拍照台，檔名要與剛建的檔案相同" />
         <NoOutputHint />
@@ -86,8 +86,8 @@ export const Elective2Fork = () => {
         <p>在自己的 Fork 點 Compare &amp; pull request；若提示已消失，從原專案的 Pull requests → New pull request → compare across forks 進入比較頁。</p>
         <p><strong>base repository</strong> 是要收下成果的專案，選 {TUTORIAL_REPO}；<strong>base</strong> 是收下成果的分支，選 main。<strong>head repository</strong> 是提供成果的專案，選你的 Fork；<strong>compare</strong> 是提供成果的分支，選 feat/你的帳號名。</p>
         <details><summary className="cursor-pointer text-indigo-700">一起補完：base 是原專案，那 head 應該是誰的？</summary><p>你自己的 Fork。下方差異應只有你的筆記；若帶出其他人的改動，先停下核對兩邊選項。</p></details>
-        <p>按 Create pull request 進入表單，標題寫「新增我的學習筆記」，描述說明改了哪個檔案、學到什麼，再按 Create pull request。你會進入帶編號的 PR 頁；顯示 Open 代表已送出，還沒收進原相簿。</p>
-        <p><strong>Code Review</strong> 是請人檢查這次改動。<strong>Request changes</strong> 表示希望你調整內容；照留言在同一分支修改，重做第 3 步的 add、commit 與第 4 步的 push，原 PR 會更新，不用重開。</p>
+        <p>按 Create pull request 進入表單。標題寫「新增我的學習筆記」，描述說明改了哪個檔案、學到什麼，再按 Create pull request。你會進入帶編號的 PR 頁；顯示 Open 代表已送出，還沒收進原相簿。</p>
+        <p><strong>Code Review</strong> 是請人檢查這次改動。<strong>Request changes</strong> 表示希望你調整內容。照留言在同一分支修改，重做第 3 步的 add、commit 與第 4 步的 push，原 PR 會更新，不用重開。</p>
         <p><strong>Approve</strong> 表示審查者同意內容；<strong>Merge</strong> 才是把成果收進原相簿。若被 Close，表示申請關閉但未必有合併，以 PR 的 Merged 狀態判斷。維護者可能不接受或尚未處理，不能保證時間或結果。</p>
       </Card>
       <Card className="space-y-3">
@@ -97,10 +97,10 @@ export const Elective2Fork = () => {
         <p>先確認自己的筆記已 commit 並 push，沒有未保存的改動，再切回 main。</p>
         <CommandBlock command="git switch main" comment="回到主相簿再下載更新" />
         <CommandBlock variant="output" command={"Switched to branch 'main'"} />
-        <p>可能另附同步狀態；若說切換會覆蓋改動，先按 L2 保存，不要強制切換。</p>
+        <p>輸出可能另附同步狀態；若 Git 說切換會覆蓋改動，先按 L2 保存，不要強制切換。</p>
         <FalseAlarm signal="remote: Enumerating objects:" title="下載會顯示進度">通常等幾秒到一分鐘，不要重按 Enter。若進入滿是 ~ 的 Vim，按 Esc、輸入 :q! 再 Enter 離開並檢查狀態；:wq 是保存合併說明後離開。若有 CONFLICT，按 L5 處理。</FalseAlarm>
         <CommandBlock command="git pull" comment="把已同步到 Fork 的照片下載回本機 main" />
-        <p>有更新時會列出下載與檔案變更摘要；已同步時顯示 Already up to date.。打開 learner-commits，核對 main 裡已包含自己的筆記，再標記完成。</p>
+        <p>有更新時會列出下載與檔案變更摘要；已同步時顯示「Already up to date.」。打開 learner-commits，核對 main 裡已包含自己的筆記，再標記完成。</p>
       </Card>
       <Quiz questions={[
         { q: '已 clone 公開專案，就一定能上傳到原專案嗎？', options: ['可以，下載就有寫入權限', '不一定，能閱讀不代表能上傳', '只要分支改名就可以'], answer: 1, explain: 'clone 不會授予寫入權限；這次透過自己的 Fork 上傳，再用 PR 請維護者合併。' },
