@@ -5,7 +5,7 @@ import { useState } from 'react';
 const simulation = [
   {
     "cmd": "git init",
-    "out": "Initialized empty Git repository in C:/Users/lolz_/Desktop/Projects/Trainer_Git_Tutorial/Claude Temp Files/m2-work/git-journal/.git/",
+    "out": "Initialized empty Git repository in C:/Users/Amy/Documents/git-journal/.git/",
     "why": "建立這個資料夾的相簿。"
   },
   {
@@ -80,8 +80,8 @@ export const Lesson2FirstCommit = () => {
       <p>選 Terminal → New Terminal，下方出現輸入面板；Windows 的路徑應以 git-journal 結尾。若不是，關掉舊終端機，再從剛開好的資料夾新增終端機。Mac 提示符外觀不同，操作一樣。</p>
       <p><strong>$ 不用打</strong>，也不要輸入畫面原有的 PS 路徑。下面深色框的輸出是讓你對照，不是要再輸入。</p>
       <CommandBlock command={"git init"} comment="在目前資料夾建立保存紀錄的地方" />
-      <CommandBlock variant="output" command={"Initialized empty Git repository in C:/Users/lolz_/Desktop/Projects/Trainer_Git_Tutorial/Claude Temp Files/m2-work/git-journal/.git/"} />
-      <p>你會多一個通常隱藏的 .git 資料夾；那是相簿紀錄，不要手動刪改。上面的完整路徑是講師測試位置，你的應指向自己的 git-journal。</p>
+      <CommandBlock variant="output" command={"Initialized empty Git repository in C:/Users/Amy/Documents/git-journal/.git/"} />
+      <p>你會多一個通常隱藏的 .git 資料夾；那是相簿紀錄，不要手動刪改。路徑裡的 Amy 是範例使用者名稱，你會看到自己的名稱與資料夾位置；<strong>成功的判斷：開頭是 Initialized empty Git repository，結尾是 git-journal/.git/</strong>。</p>
       <CommandBlock command={"git status"} comment="先看空相簿與空書桌的狀態" />
       <CommandBlock variant="output" command={"On branch main\n\nNo commits yet\n\nnothing to commit (create/copy files and use \"git add\" to track)"} />
       <p>No commits yet 表示還沒拍照。On branch main 表示目前是主相簿；若是 master，展開下面的更名步驟再繼續。</p>
