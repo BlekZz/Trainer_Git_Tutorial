@@ -78,7 +78,7 @@ export const Lesson5LocalConflict = () => (
         <li><strong>Accept Incoming Change</strong>：只留 feat/title 的「# 我的 Git 學習日誌」。</li>
         <li><strong>Accept Both Changes</strong>：兩行都留下，不會自動幫你組合成一句。</li>
       </ul>
-      <Screenshot id="L5-vscode-conflict" alt="README.md 的兩個衝突標題與 VSCode 接受目前、傳入或雙方變更按鈕" caption="你會看到 main 與 feat/title 的標題分成兩段，上方提供接受其中一邊或兩邊的選項。" />
+      <Screenshot id="L5-vscode-conflict" alt="VSCode 中 README.md 的衝突標記與 Accept Current／Incoming／Both Changes 按鈕" caption="你會看到兩段標題被 <<<<<<<、=======、>>>>>>> 包住：上半段是 main（Current），下半段是 feat/title（Incoming）。紅框頂端那行小字就是 Accept Current／Incoming／Both 按鈕。" />
       <p>這次請先按 Accept Both Changes，編輯區會留下兩行標題、移除分隔標記；再把兩行整理成下面這一行。若沒看到按鈕，直接在文字編輯區把整段五行（包含三個標記行）換成這一行，結果相同。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>README.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all"># Amy 的 Git 學習日誌</pre></div>
       <p>按 Ctrl+S（Mac：Cmd+S）。完成訊號：檔案只有這行標題與行尾換行，沒有 &lt;&lt;&lt;&lt;&lt;&lt;&lt;、======= 或 &gt;&gt;&gt;&gt;&gt;&gt;&gt;。只刪掉標記、卻不看最後的文字，不算完成判斷。</p>
