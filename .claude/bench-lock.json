@@ -1,0 +1,23 @@
+{
+  "schema": "bench-lock/v1",
+  "items": {
+    "skill:taste": {
+      "source": "coldbench/skills/taste",
+      "source_repo": "git@github.com:BlekZz/Private_Blake_OS_Hub.git",
+      "bench_commit": "619ff5769d077cb49f29c829117ba7639cb08b7e",
+      "content_hash": "bl1:845dabe149026aeaaac3500d7ead4e06045b9bedbead436bc1f92f6dc34ee8a7",
+      "pinned": false,
+      "acked": null,
+      "synced_at": "2026-10-15T14:21:07+08:00"
+    },
+    "skill:ui-ux-pro-max": {
+      "source": "coldbench/skills/ui-ux-pro-max",
+      "source_repo": "git@github.com:BlekZz/Private_Blake_OS_Hub.git",
+      "bench_commit": "619ff5769d077cb49f29c829117ba7639cb08b7e",
+      "content_hash": "bl1:db7661be7d8fdff9371c83c9f684b6ec681705f6666e827b45ebc5f3c034f15a",
+      "pinned": false,
+      "acked": null,
+      "synced_at": "2026-10-15T14:21:07+08:00"
+    }
+  }
+}

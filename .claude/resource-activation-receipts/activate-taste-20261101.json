@@ -1,0 +1,71 @@
+{
+  "schema": "library-project-activation-receipt/v1",
+  "id": "activate-taste-20261101",
+  "operation": "create",
+  "sourceRepo": "git@github.com:BlekZz/Private_Blake_OS_Hub.git",
+  "sourceCommit": "64600edc4d84bef333cf96df3bcb7050a5b71dfd",
+  "source": "coldbench/skills/taste",
+  "sourceTreeSha256": "82eec69270fd1e11cb8f19dd42052b0d0b285bf4d7562c97f41c21d68954bedd",
+  "beforeTreeSha256": null,
+  "afterTreeSha256": "82eec69270fd1e11cb8f19dd42052b0d0b285bf4d7562c97f41c21d68954bedd",
+  "migration": null,
+  "projectionStatus": "not-run",
+  "files": [
+    {
+      "path": ".claude/skills/taste/LICENSES.md",
+      "sha256": "44b929f1599cebcf30eaf2d01f4a8d129bdfde09862c0176e5af29ef1ae714d6"
+    },
+    {
+      "path": ".claude/skills/taste/SKILL.md",
+      "sha256": "a67c94b0e134b8fa901fe6b04bbeb5376b9f19a8df2893dfc95fc3ca80ab4525"
+    },
+    {
+      "path": ".claude/skills/taste/SOURCES.md",
+      "sha256": "1562cc4aeb5ec30fe248411051c7378662ba65f8620e2a5dfab781c58df6940b"
+    },
+    {
+      "path": ".claude/skills/taste/references/brandkit.md",
+      "sha256": "40964017428de75a6274a4c8f39caf0b8ed2adac0b23899c4b60987a3ee82ecf"
+    },
+    {
+      "path": ".claude/skills/taste/references/brutalist-skill.md",
+      "sha256": "e3f7b29faab75b3601870a8bcdb11fd905b4bcd4f1e3c3bd2e4641042fe07c95"
+    },
+    {
+      "path": ".claude/skills/taste/references/gpt-tasteskill.md",
+      "sha256": "d002d19b480fe9ddd9b9e4480d491341074869b58fcc220aa287e0c33d62f92e"
+    },
+    {
+      "path": ".claude/skills/taste/references/image-to-code-skill.md",
+      "sha256": "eed98dfd1e48471f2f3a0d0dd5169d7870f519a750f0d500f8c31d87aa2d9839"
+    },
+    {
+      "path": ".claude/skills/taste/references/imagegen-frontend-mobile.md",
+      "sha256": "ee67036798f3435b88930cf4faa907b908201614d8c26c8bf29a1a7cd244f21e"
+    },
+    {
+      "path": ".claude/skills/taste/references/imagegen-frontend-web.md",
+      "sha256": "6b5c2256522fdba1e3313eafa3d743b960a7b13ec029d3e6586e04b23327c1f8"
+    },
+    {
+      "path": ".claude/skills/taste/references/minimalist-skill.md",
+      "sha256": "cec9f4c60d9c92585e4712b38c2b712b07c058c3d5787dfea6f1077ab713f84d"
+    },
+    {
+      "path": ".claude/skills/taste/references/redesign-skill.md",
+      "sha256": "97ec712c39229b25601486f9f38d436a8ffe882bfdd8c7ed2b8a5211ee0b4bdc"
+    },
+    {
+      "path": ".claude/skills/taste/references/soft-skill.md",
+      "sha256": "b0bcbf58ba877f0c47917dd0fe7141c8727fa7d7414dd9439d7a204f67ad7956"
+    },
+    {
+      "path": ".claude/skills/taste/references/stitch-skill.md",
+      "sha256": "46bdb08fee2dded38b6ba0a051230a502d6ac6e4044afd47592cb40c256028b5"
+    },
+    {
+      "path": ".claude/skills/taste/references/taste-skill.md",
+      "sha256": "aa194351b246b8b4799099d4ed7b033d29eab6e6e3d58d8d2172978be7b3ec89"
+    }
+  ]
+}

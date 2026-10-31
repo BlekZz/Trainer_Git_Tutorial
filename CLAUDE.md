@@ -32,3 +32,11 @@ React + Vite 教學網站（GitHub Pages 部署）。受眾：**從未用過 ter
 | 教學設計原則（跨專案） | `<Hub>/coldbench/skills/tutor-sop/SKILL.md` |
 | 本專案內容慣例 | 本檔「教學內容鐵律」段 |
 | Sprint / 規格 / 改進提案 | `dev/` |
+
+## Active Skills
+> Shared manifest — written by /init-skill (coldbench or upstream). Re-run to update / restore.
+
+| Skill | Source | Reason |
+|---|---|---|
+| ui-ux-pro-max | coldbench/skills/ui-ux-pro-max | 視覺稽核：對比、觸控、icon 等優先序規則與繁中字型配對資料 |
+| taste | coldbench/skills/taste | 全站視覺修整的設計主力：既有站升級流程（redesign-skill）與反 AI 預設外觀清單 |
