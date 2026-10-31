@@ -124,7 +124,7 @@ export const Homework = () => {
         <p>實際看到證據才打勾。前 5 項交件前核對，最後 2 項等講師核准、自己合併並同步後再勾。勾選只協助你盤點，不會代替送出 PR。</p>
         <p className="text-sm text-slate-600">勾選會保存在此瀏覽器，下次回來可繼續；若瀏覽器不允許儲存，本次仍可勾選，但離開後可能不保留。</p>
         <button type="button" onClick={() => updateChecks({})} className="text-sm text-indigo-700 underline">全部重設</button>
-        <Screenshot id="HW-commits-page" alt="作業 repo 的 Commits 頁列出有意義的存檔說明、作者頭像與合併紀錄" caption="你會看到自己的存檔紀錄、作者頭像，以及本機解決衝突留下的合併照片。" />
+        <Screenshot id="HW-commits-page" alt="作業 repo 的 Commits 頁，作者 Amy 旁的頭像是灰色空白" caption="這張是反面教材：作者名稱旁的頭像是灰色空白，代表 commit 的 email 沒有綁定你的 GitHub 帳號。你的應該顯示自己的頭像，作者名稱也能點進你的帳號；若是灰色空白，回 L0 把 email 改成 GitHub 帳號的 email，之後的新 commit 就會正確。" />
         <div className="space-y-2">
           {checklist.map((item) => (
             <label key={item.id} className={`flex items-start gap-3 border rounded-lg px-3 py-2.5 cursor-pointer transition-colors ${checks[item.id] ? 'bg-green-50 border-green-300' : 'bg-white border-slate-200 hover:border-indigo-300'}`}>

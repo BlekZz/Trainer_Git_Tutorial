@@ -58,8 +58,8 @@ export const Lesson6Push = () => (
     <Card className="space-y-3">
       <h3 className="font-bold">3. 建立完全空白的雲端相簿</h3>
       <p>前往 <a href="https://github.com/new" target="_blank" rel="noreferrer" className="text-indigo-600 underline">github.com/new</a>，會看到 New repository 表單。Owner 選自己的帳號，Repository name 填 <strong>git-journal</strong>。可選 Private，只供自己練習。</p>
-      <Callout variant="warning" title="這次三個初始化選項全部不要選">Add README 不要勾／保持關閉；Add .gitignore 與 license 保持 None。否則雲端相簿已經有一張你電腦沒有的照片，第一次上傳會被拒絕。若名稱已被使用，先確認是否之前已做過本課，不要刪掉已有的成果。</Callout>
-      <Screenshot id="L6-new-repo-form" alt="自己的 git-journal 建立表單，README 關閉、gitignore 與 license 為 None" caption="你會看到自己的帳號與 git-journal 名稱，三個初始化選項都沒有加入檔案。" />
+      <Callout variant="warning" title="這次三個初始化選項全部不要選">Add README 保持 Off；Add .gitignore 保持 No .gitignore、Add license 保持 No license。否則雲端相簿已經有一張你電腦沒有的照片，第一次上傳會被拒絕。若名稱已被使用，先確認是否之前已做過本課，不要刪掉已有的成果。</Callout>
+      <Screenshot id="L6-new-repo-form" alt="自己的 git-journal 建立表單，README 為 Off、.gitignore 為 No .gitignore、license 為 No license" caption="你會看到自己的帳號與 git-journal 名稱，三個初始化選項都沒有加入檔案。" />
       <p>按 Create repository，會進入空 repo 的 Quick setup 頁。選 <strong>HTTPS</strong>，按網址旁的複製按鈕；不要選 SSH，也不用貼頁面下方整串指令。</p>
       <Screenshot id="L6-new-repo-after" alt="空白 git-journal 頁面的 HTTPS 網址與複製按鈕" caption="你會看到以 https://github.com/ 開頭、以 git-journal.git 結尾的網址。" />
     </Card>

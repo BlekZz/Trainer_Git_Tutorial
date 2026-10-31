@@ -372,6 +372,7 @@ export const Lesson0Setup = () => {
           />
           <NoOutputHint />
         </div>
+        <p className="text-sm text-slate-700 mt-2"><strong>信箱請用你之後要註冊 GitHub 的同一個。</strong>GitHub 靠這個信箱認出存檔是你做的；不一樣的話，你的存檔在 GitHub 上會顯示灰色空白頭像（作業頁有範例圖）。</p>
 
         <Callout variant="success" title="沒消息就是好消息" className="mt-3">
           這兩條設定成功時不會印出文字：<strong>指令成功時，往往什麼都不會顯示</strong>。畫面安安靜靜跳回可輸入狀態，就代表它做完了。
