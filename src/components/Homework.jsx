@@ -70,7 +70,7 @@ export const Homework = () => {
           <li><strong>開一個 feat/... 分支加內容，在本機 merge 回 main。</strong> 斜線後自己取名，例如 feat/reflection；... 不用照打。完成後 main 要看得到分支的內容。 <LessonLink href="#branch">回 L4：分支與本機合併</LessonLink></li>
           <li><strong>刻意製造並解決一次衝突，留下 merge commit。</strong> 讓兩個分支對同一行各有已保存的改動。看到 CONFLICT 或 both modified 時，先截圖保留，再選出最後內容並保存合併照片。檔案裡不能留下衝突標記。交件時附上截圖、衝突檔名、解決衝突的 merge commit 網址與一句保留內容說明。兩個 parent 只能證明合併，不能證明曾有衝突。 <LessonLink href="#local-conflict">回 L5：本機衝突</LessonLink></li>
           <li><strong>在 GitHub 建立自己的 Public repo，push main。</strong> 名稱用 <code>{HOMEWORK_REPO_NAME}</code>，建立空的雲端相簿再上傳；首頁應看得到自己的日誌與紀錄。 <LessonLink href="#push">回 L6：第一次上雲</LessonLink></li>
-          <li><strong>再開一個新的 feat/... 分支新增內容，push 後開 PR。</strong> PR 在自己的 repo；方向是 <strong>base = 自己的 main ← compare = 這次的新分支</strong>。先保留 Open，等講師看過。 <LessonLink href="#pr">回 L7：分支上雲與 PR</LessonLink></li>
+          <li><strong>再開一個新的 feat/... 分支新增內容，push 後準備開 PR，描述照「在 PR 描述寫…請 review」那一項寫好再送出。</strong> PR 在自己的 repo；方向是 <strong>base = 自己的 main ← compare = 這次的新分支</strong>。先保留 Open，等講師看過。 <LessonLink href="#pr">回 L7：分支上雲與 PR</LessonLink></li>
           <li><strong>請 AI 讀你的作業紀錄，整理進度。</strong> 在作業資料夾用 L9 的方法印出紀錄、交給 AI，請它依日期整理每天做了什麼。逐行對照紀錄，刪掉 AI 自己補的原因；它說不清楚的那一筆，想一句更好的寫法。AI 整理的進度和你想的那句寫法，都填進下面 PR 範本的最後兩項。 <LessonLink href="#ai-log">回 L9：讓 AI 讀懂你的紀錄</LessonLink></li>
           <li><strong>在 PR 描述寫 {INSTRUCTOR_MENTION} 請 review。</strong> 用下面範本填好新增內容、忽略檔案、衝突的完整證據與 AI 整理的進度，再送出 PR；這就是交件，不用另填表單。提及講師會通知對方。 <LessonLink href="#pr">回 L7：填 PR 描述</LessonLink></li>
           <li><strong>等講師 review，再依結果處理。</strong> Approve 後自己 Merge；Request changes 就在同一分支修正、保存、上傳，並留言「已修改，請再看一次」。細節見下方「交件之後會發生什麼」。 <LessonLink href="#pr">回 L7：合併申請</LessonLink>、<LessonLink href="#sync">回 L8：同步成果</LessonLink></li>
@@ -119,6 +119,7 @@ export const Homework = () => {
         <FalseAlarm signal={': 或 (END)'} title="翻紀錄時若停在閱讀畫面">按英文小寫 q 回到指令列；短內容可能直接結束。</FalseAlarm>
         <CommandBlock command="git log -1" comment="查看本機 main 最新一張照片的完整編號" />
         <CommandBlock variant="output" command={'commit ad7762015c5b5906ccb6c6fbc3204863d7f71293\nMerge: 739a155 2cc13d7\nAuthor: Amy <amy@example.com>\nDate:   Wed Oct 14 15:42:38 2026 +0800\n\n    Merge pull request #1 from amy/feat/day5'} />
+        <p className="text-sm text-slate-600">編號後面若多了 (HEAD -&gt; main, origin/main) 這類括號，是目前位置的標記，不影響比對。</p>
         <p>這是 Git 2.55 的實錄範例，你的編號、作者、日期與說明會不同。比對第一行 commit 後的完整編號；<code>Merge:</code> 行表示這是一筆 merge commit。到 GitHub repo 首頁選 main，再進 Commits 打開最新一筆，比對完整編號是否相同。這裡要找的是網頁合併後的新照片，不是 PR 分支最後一筆。同步方法忘了可回 <LessonLink href="#sync">L8</LessonLink>。</p>
         <p>截圖快捷鍵可回 <LessonLink href="#setup">L0：行前準備</LessonLink>。將本機紀錄與 GitHub main 最新 commit 的兩張截圖貼上或拖入原 PR 留言框 → 等上傳完成 → 按 Preview 確認兩張圖片都顯示 → 按 Comment。你會看到含兩張截圖的留言；這才完成最後的同步驗收。</p>
       </Card>

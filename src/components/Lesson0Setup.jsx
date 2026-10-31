@@ -253,7 +253,7 @@ export const Lesson0Setup = () => {
           </button>
           {showTextPrompt && (
             <div className="space-y-3 border-l-2 border-indigo-200 pl-4">
-              <p className="text-sm text-slate-600">先複製下面的提示詞貼給 AI，<strong>再把系統版本與晶片資訊接在後面</strong>：</p>
+              <p className="text-sm text-slate-600">先複製下面的提示詞，貼到 AI 的輸入框（<strong>先不要送出</strong>），再把系統版本與晶片資訊接在後面，一起送出：</p>
               <PromptBlock text={TEXT_PROMPT} />
               <Callout variant="warning" title="複製終端機文字的安全方法">
                 {isWin ? (
@@ -295,7 +295,7 @@ export const Lesson0Setup = () => {
               {isWin ? (
                 <p>到 <a href="https://git-scm.com/downloads" target="_blank" rel="noreferrer" className="text-indigo-600 underline hover:text-indigo-800">git-scm.com/downloads</a> 下載 Windows 版，安裝過程<strong>一直按「Next」就好</strong>，不需要改任何預設選項。</p>
               ) : (
-                <p>Mac 通常內建觸發式安裝。打開終端機輸入 <code className="bg-slate-100 px-1 rounded">git --version</code>。若跳出視窗詢問是否安裝「Command Line Developer Tools」，點<strong>安裝</strong>並等它跑完（可能要幾分鐘）。跑完後再輸入一次，看到版本號就是裝好了。</p>
+                <p>Mac 通常不用另外下載：第一次輸入 git 指令時，系統會自己跳出安裝視窗。打開終端機輸入 <code className="bg-slate-100 px-1 rounded">git --version</code>。若跳出視窗詢問是否安裝「Command Line Developer Tools」，點<strong>安裝</strong>並等它跑完（可能要幾分鐘）。跑完後再輸入一次，看到版本號就是裝好了。</p>
               )}
             </div>
             <div className="border border-slate-200 rounded-lg p-3 bg-white">
@@ -345,7 +345,7 @@ export const Lesson0Setup = () => {
         </StepCard>
 
 <StepCard step={step} setStep={setStep} idx={5}>
-    {/* --- 設置身份 --- */}
+    {/* --- 設置身分 --- */}
     <div className="mt-8">
       <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
         <Key size={20} className="text-amber-500" /> 設定這台電腦的存檔作者

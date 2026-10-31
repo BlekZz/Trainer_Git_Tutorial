@@ -90,7 +90,7 @@ export const Lesson3DiffRestore = () => (
           <p className="text-sm mt-2 text-slate-600">AI 能整理出「先寫筆記、再排除臨時檔案、最後改標題」的進度與理由。</p>
         </div>
       </div>
-      <p>寫法只有一條：<strong>讓沒參與的人只讀這一句，也知道這張照片做了什麼</strong>。原因不明顯時，用「，為了……」「，避免……」補半句。不必背前綴分類，也不用寫長文。</p>
+      <p>寫法只有一條：<strong>讓沒參與的人只讀這一句，也知道這張照片做了什麼</strong>。原因不明顯時，用「，為了……」「，避免……」補半句。不必背 feat:、fix: 這類開頭標籤，也不用寫長文。</p>
       <p>換個檔案再試一次：在同一資料夾建立 scratch.tmp，寫一句旅行草稿並儲存。先預測它會不會出現在 Git 的待挑選清單，再用 status 核對；需要時看下面的輸出範例。</p>
       <CommandBlock command={"git status"} comment="核對新的 .tmp 檔也被同一條規則略過" />
       <CommandBlock variant="output" command={"On branch main\nnothing to commit, working tree clean"} />

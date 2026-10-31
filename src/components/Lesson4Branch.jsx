@@ -31,7 +31,7 @@ export const Lesson4Branch = () => (
       <p>feat/day2 是這本相簿的名字，不是磁碟上的資料夾路徑。此時 HEAD 站在 feat/day2；main 仍在原本的照片。</p>
       <p>用 VSCode 左側 New File 建立 day2.md，寫下方這一行、留行尾換行並儲存；左側會多出 day2.md。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>day2.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all">Day 2：學會分支</pre></div>
-      <p>這次多接手一步：請自己完成「放上拍照台 → 按快門」兩步，檔案是 day2.md，照片說明用「新增 Day 2 筆記」。先寫出兩條指令，再依序輸入；卡住才展開提示。</p>
+      <p>這次提示少一點：請自己完成「放上拍照台 → 按快門」兩步，檔案是 day2.md，照片說明用「新增 Day 2 筆記」。先寫出兩條指令，再依序輸入；卡住才展開提示。</p>
       <FalseAlarm signal={"warning: in the working copy of 'day2.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
       <Callout variant="warning" title="記得帶 -m">commit 一律寫成 <code>git commit -m "說明"</code>。萬一漏了 -m，畫面變成滿是 ~ 的編輯器（Vim）：按 Esc，輸入 <code>:q!</code> 再按 Enter 離開。離開後用 git status 確認，再重打一次。</Callout>
       <p>完成後會看到以 [feat/day2 編號] 開頭的保存訊息，下方說明一個檔案新增了一行；完整輸出在提示裡可核對。</p>
@@ -46,7 +46,7 @@ export const Lesson4Branch = () => (
     </Card>
     <Card className="space-y-3">
       <h3 className="font-bold">2. 回到 main，把成果收進來</h3>
-      <p>再多接手一步：請先自己排出「切回 main → 合併 feat/day2 → 刪除已合併分支名稱」三步。合併與刪分支是第一次學，請展開提示 2、3；熟悉後再收起提示，自己重述順序。閱讀下一個提醒後再操作，不必重做已完成的指令。</p>
+      <p>提示再少一點：請先自己排出「切回 main → 合併 feat/day2 → 刪除已合併分支名稱」三步。合併與刪分支是第一次學，請展開提示 2、3；熟悉後再收起提示，自己重述順序。閱讀下一個提醒後再操作，不必重做已完成的指令。</p>
       <FalseAlarm signal="day2.md 不見了" title="切回 main 後，檔案清單會變短">這是你在 VSCode 會觀察到的現象，不是終端機錯誤訊息。main 還沒有那張照片，day2.md 仍在另一本相簿，沒有被刪除。</FalseAlarm>
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">提示 1：先站回 main</summary>
       <CommandBlock command={"git switch main"} comment="回到準備接收成果的主相簿" />

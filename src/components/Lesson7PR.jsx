@@ -75,7 +75,7 @@ export const Lesson7PR = () => (
       <p>回 GitHub 自己的 git-journal 頁面重新整理，會看到黃色 had recent pushes 提示與 <strong>Compare &amp; pull request</strong> 按鈕，點它會開申請表。</p>
       <Screenshot id="L7-compare-banner" alt="自己的 git-journal 顯示 feat/day3 最近上傳與 Compare & pull request 按鈕" caption="你會看到 feat/day3 的黃色提示，按 Compare & pull request 進入申請表。" />
       <p>若黃色提示已消失，點上方 Pull requests → New pull request，會出現比較分支的頁面；照下面核對 base 與 compare，再按 Create pull request 進入表單。</p>
-      <Callout title="送出前先檢查方向">頁面 repo 必須是 <code>&lt;你的帳號&gt;/git-journal</code>，其中佔位文字代表你自己的帳號，不是要輸入角括號。核對 <strong>base = main ← compare = feat/day3</strong>，下方變更應只有 day3.md。方向相反時先改正，不要送出。</Callout>
+      <Callout title="送出前先檢查方向">頁面 repo 必須是 <code>&lt;你的帳號&gt;/git-journal</code>，其中佔位符代表你自己的帳號，不是要輸入角括號。核對 <strong>base = main ← compare = feat/day3</strong>，下方變更應只有 day3.md。方向相反時先改正，不要送出。</Callout>
       <p>標題填「新增 Day 3 筆記」，描述填「新增 day3.md，記錄第一次分支上雲」。表單會保留你輸入的文字。</p>
       <Screenshot id="L7-pr-form" alt="自己的 repo 的 PR 表單，base main、compare feat/day3" caption="你會看到自己的 git-journal、base main 與 compare feat/day3，以及 Day 3 的標題和描述。" />
       <p>按 <strong>Create pull request</strong>，會進入一張標示 Open 的 PR 頁面，並取得編號，例如 #1。這時申請已送出，尚未收進 main。</p>
@@ -108,6 +108,7 @@ export const Lesson7PR = () => (
       <details className="space-y-3"><summary className="cursor-pointer text-indigo-700">核對翻相簿指令</summary>
         <CommandBlock command="git log --oneline --graph" comment="核對 Day 3 與 GitHub 建立的合併照片" />
         <CommandBlock variant="output" command={outputs.log} />
+      <p className="text-sm text-slate-600">編號後面若多了 (HEAD -&gt; main, origin/main) 這類括號，是目前位置的標記，不影響比對。</p>
       </details>
       <p>Merge pull request #1 是 GitHub 在你確認合併時建立的照片，線條連回 Day 3 與原本 main。編號與 PR 號碼可能不同。實測範例把 Part 1 簡化成一筆「Part 1 的日誌」，你的下方會保留 L2–L5 的完整紀錄，不用改成範例。</p>
       <p>最後要刪除<strong>本機</strong>已合併的 feat/day3 名稱。回想 L4，先寫出指令再核對。</p>

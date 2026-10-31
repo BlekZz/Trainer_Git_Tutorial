@@ -46,7 +46,7 @@ export const Lesson5LocalConflict = () => (
       <CommandBlock variant="output" command={"Switched to branch 'main'"} />
       <p>README.md 會恢復「# 我的 Git 日誌」，這是 main 的照片。把第 1 行改成下方文字並儲存；不要新增成第 2 行。</p>
       <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-3"><p className="text-sm mb-2">檔案內容：<strong>README.md</strong>（貼到編輯區，不是終端機）</p><pre className="whitespace-pre-wrap break-all"># Amy 的 Git 日誌</pre></div>
-      <FalseAlarm signal={"warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it"}>這仍是換行提醒，可以接著做合併。</FalseAlarm>
+      <FalseAlarm signal={"warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it"}>這仍是換行提醒，可以接著保存這張照片。</FalseAlarm>
       <CommandBlock command={"git commit -am \"標題加上名字\""} comment="保存 main 的另一個標題，形成兩邊都改同一行的情況" />
       <CommandBlock variant="output" command={"warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it\n[main c10b022] 標題加上名字\n 1 file changed, 1 insertion(+), 1 deletion(-)"} />
     </Card>
@@ -98,7 +98,7 @@ export const Lesson5LocalConflict = () => (
       <p>這次多一張連接兩邊紀錄的合併照片。上方編號只是例子；說明文字就是你在 -m 後輸入的內容。</p>
       <FalseAlarm signal={': 或 (END)'} title="畫面停住、不能繼續輸入指令？">這是分頁閱讀畫面（pager），不是當機；按英文小寫 q 回到指令列。短內容也可能直接結束。</FalseAlarm>
       <CommandBlock command={"git log --oneline --graph"} comment="--graph 用線條畫出兩邊照片如何匯合" />
-      <CommandBlock variant="output" command={"*   a43e379 解決標題衝突\n|\\  \n| * 5d010e5 標題改成學習日誌\n* | c10b022 標題加上名字\n|/  \n* b2dbb59 新增 Day 2 筆記\n* 846a6e1 忽略 tmp 檔\n* fea9562 新增 Day 1 筆記\n* 187430f 新增日誌標題"} />
+      <CommandBlock variant="output" command={"*   a43e379 (HEAD -> main) 解決標題衝突\n|\\  \n| * 5d010e5 (feat/title) 標題改成學習日誌\n* | c10b022 標題加上名字\n|/  \n* b2dbb59 新增 Day 2 筆記\n* 846a6e1 忽略 tmp 檔\n* fea9562 新增 Day 1 筆記\n* 187430f 新增日誌標題"} />
       <p>最上面是合併照片；往下兩條線分別有兩次改標題的照片，再接回 Day 2。編號會不同，有些設定也會附上 HEAD 與分支名稱；重點是兩條線匯合、兩份紀錄都在。</p>
       <CommandBlock command={"git status"} comment="最後核對沒有待處理的合併或改動" />
       <CommandBlock variant="output" command={"On branch main\nnothing to commit, working tree clean"} />

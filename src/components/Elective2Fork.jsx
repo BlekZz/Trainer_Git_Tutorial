@@ -62,7 +62,7 @@ export const Elective2Fork = () => {
         <p><strong>branch（分支）</strong>是從某張照片開始另開一本相簿，讓新內容先不影響 main。這裡用你的帳號替分支命名。</p>
         <CommandBlock command="git switch -c feat/你的帳號名" comment="另開分支保存這次筆記" />
         <CommandBlock variant="output" command={"Switched to a new branch 'feat/你的帳號名'"} />
-        <p>在 VSCode 左側 learner-commits 資料夾上按右鍵 → New File，輸入「你的帳號名.md」，例如 amy-notes.md。若同名檔已存在，先停下檢查是否做過本練習，不要覆蓋別人的筆記。</p>
+        <p>在 VSCode 左側 learner-commits 資料夾上按右鍵 → New File，輸入「你的帳號名.md」，例如帳號是 amy，就輸入 amy.md。若同名檔已存在，先停下檢查是否做過本練習，不要覆蓋別人的筆記。</p>
         <p>編輯區寫一句這次學到的事，例如「我學會了先確認 PR 要送到誰的相簿。」再按 Enter 留行尾換行，按 Ctrl+S（Mac：Cmd+S）；分頁的未儲存圓點會消失。</p>
         <p><strong>暫存區</strong>是挑選下一次存檔要包含哪些改動的地方，也就是拍照台；<strong>commit</strong> 是保存一個版本，像拍一張附說明的照片。</p>
         <FalseAlarm signal="LF will be replaced by CRLF" title="Windows 可能提醒換行格式">出現這段表示換行格式提醒，可以繼續；沒有訊息也正常。</FalseAlarm>
@@ -98,7 +98,7 @@ export const Elective2Fork = () => {
         <CommandBlock command="git switch main" comment="回到主相簿再下載更新" />
         <CommandBlock variant="output" command={"Switched to branch 'main'"} />
         <p>輸出可能另附同步狀態；若 Git 說切換會覆蓋改動，先按 L2 保存，不要強制切換。</p>
-        <FalseAlarm signal="remote: Enumerating objects:" title="下載會顯示進度">通常等幾秒到一分鐘，不要重按 Enter。若進入滿是 ~ 的 Vim，按 Esc、輸入 :q! 再 Enter 離開並檢查狀態；:wq 是保存合併說明後離開。若有 CONFLICT，按 L5 處理。</FalseAlarm>
+        <FalseAlarm signal="remote: Enumerating objects:" title="下載會顯示進度">通常等幾秒到一分鐘，不要重按 Enter。若進入滿是 ~ 的 Vim，按 Esc、輸入 :wq 再 Enter，保留合併說明並離開；:q! 是放棄編輯。離開後檢查狀態。若有 CONFLICT，按 L5 處理。</FalseAlarm>
         <CommandBlock command="git pull" comment="把已同步到 Fork 的照片下載回本機 main" />
         <p>有更新時會列出下載與檔案變更摘要；已同步時顯示「Already up to date.」。打開 learner-commits，核對 main 裡已包含自己的筆記，再標記完成。</p>
       </Card>

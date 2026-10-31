@@ -1,4 +1,5 @@
 import { Card, SectionTitle, Callout, CommandBlock, NoOutputHint, FalseAlarm } from './Shared';
+import { HOMEWORK_REPO_NAME } from '../config';
 
 const ErrorCard = ({ error, translation, children }) => (
   <Card className="space-y-3">
@@ -131,7 +132,7 @@ export const ErrorRoom = () => (
       <p>在瀏覽器用同一個帳號打開該網址，確認專案存在且能閱讀。核對網址中的帳號、專案名稱，再依 L6 核對終端機登入。E2 要先完成 Fork，自己的副本網址才會存在。</p>
       <CommandBlock command="git remote -v" comment="已有本機相簿時，檢查記住的地址；clone 失敗則直接核對貼上的網址" />
       <CommandBlock variant="output" command={'origin  https://github.com/你的帳號/git-journal.git (fetch)\norigin  https://github.com/你的帳號/git-journal.git (push)'} />
-      <p>專案名依你正在操作的相簿不同；作業應是 git-homework，E2 應是 Trainer_Git_Tutorial。若地址錯誤，依上一張 SSH 卡的 set-url 步驟改成正確 HTTPS 網址。</p>
+      <p>專案名依你正在操作的相簿不同；作業應是 {HOMEWORK_REPO_NAME}，E2 應是 Trainer_Git_Tutorial。若地址錯誤，依上一張 SSH 卡的 set-url 步驟改成正確 HTTPS 網址。</p>
     </ErrorCard>
 
     <ErrorCard error="error: src refspec main does not match any" translation="Git 找不到可以上傳的 main，可能還沒存過第一張照片，也可能分支名字不同。">

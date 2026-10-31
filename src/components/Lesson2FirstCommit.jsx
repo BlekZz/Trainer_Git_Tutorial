@@ -139,11 +139,11 @@ export const Lesson2FirstCommit = () => {
       <h3 className="font-bold">4. 翻相簿確認兩張照片都在</h3>
       <FalseAlarm signal={': 或 (END)'} title="畫面停住、不能繼續輸入指令？">這是分頁閱讀畫面（pager），不是當機；按英文小寫 q 回到指令列。內容短時，畫面也可能不停住，直接回到指令列。</FalseAlarm>
       <CommandBlock command={"git log"} comment="看完整存檔紀錄，由新到舊排列" />
-      <CommandBlock variant="output" command={"commit fea9562f9f8b792fa82f03d68f63f87c1ec0879d\nAuthor: Amy <amy@example.com>\nDate:   Wed Oct 14 12:39:43 2026 +0800\n\n    新增 Day 1 筆記\n\ncommit 187430fa489096190aec00fe1774935d1a378395\nAuthor: Amy <amy@example.com>\nDate:   Wed Oct 14 12:39:43 2026 +0800\n\n    新增日誌標題"} />
-      <p>Author 是你在 L0 設定的名字與信箱，Date 是你的存檔時間。範例作者 Amy 不需要照填。若畫面有 HEAD，它表示「你現在站在哪一本相簿的哪一張照片」；L4 再操作它。</p>
+      <CommandBlock variant="output" command={"commit fea9562f9f8b792fa82f03d68f63f87c1ec0879d (HEAD -> main)\nAuthor: Amy <amy@example.com>\nDate:   Wed Oct 14 12:39:43 2026 +0800\n\n    新增 Day 1 筆記\n\ncommit 187430fa489096190aec00fe1774935d1a378395\nAuthor: Amy <amy@example.com>\nDate:   Wed Oct 14 12:39:43 2026 +0800\n\n    新增日誌標題"} />
+      <p>Author 是你在 L0 設定的名字與信箱，Date 是你的存檔時間。範例作者 Amy 不需要照填。第一筆後面的 (HEAD -&gt; main) 表示「你現在站在 main 相簿的這一張照片」；L4 再操作它。</p>
       <FalseAlarm signal={': 或 (END)'} title="畫面停住、不能繼續輸入指令？">這是分頁閱讀畫面（pager），不是當機；按英文小寫 q 回到指令列。內容短時，畫面也可能不停住，直接回到指令列。</FalseAlarm>
       <CommandBlock command={"git log --oneline"} comment="讓每次存檔只占一行，方便數照片" />
-      <CommandBlock variant="output" command={"fea9562 新增 Day 1 筆記\n187430f 新增日誌標題"} />
+      <CommandBlock variant="output" command={"fea9562 (HEAD -> main) 新增 Day 1 筆記\n187430f 新增日誌標題"} />
       <Callout variant="success">完成訊號：你看到兩行紀錄，上面是「新增 Day 1 筆記」，下面是「新增日誌標題」。保留此資料夾，L3 直接接著做。</Callout>
     </Card>
     <Quiz questions={[

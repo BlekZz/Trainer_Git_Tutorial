@@ -42,7 +42,7 @@ export const Lesson6Push = () => (
         <li>到信箱收驗證碼，回網頁輸入；完成後會進入後續註冊畫面。</li>
         <li>若出現英文拼圖人機驗證，照畫面拖曳完成。詢問職業等問卷可按 Skip，不影響練習。</li>
       </ol>
-      <Callout title="兩個小提醒">帳號名稱會出現在個人網址，請選自己能辨識的名字；記住註冊 email，之後可和 L0 設定的 Git 身份核對。Git 的作者設定與 GitHub 登入是兩件事。</Callout>
+      <Callout title="兩個小提醒">帳號名稱會出現在個人網址，請選自己能辨識的名字；記住註冊 email，之後可和 L0 設定的 Git 身分核對。Git 的作者設定與 GitHub 登入是兩件事。</Callout>
       <Screenshot id="L6-signup" alt="GitHub 註冊表單的 email、密碼與帳號名稱欄位" caption="你會看到註冊表單；驗證完成後能登入自己的 GitHub 首頁。" />
     </Card>
     <Card className="space-y-3">
