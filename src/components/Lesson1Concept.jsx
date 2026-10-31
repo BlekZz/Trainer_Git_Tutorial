@@ -39,10 +39,32 @@ export const Lesson1Concept = () => (
       <p>教材指令前的 <strong>$ 不用打進去</strong>。這一課先認位置，不輸入 Git 指令；L2 才開始拍第一張照片。</p>
       <p className="font-bold text-indigo-800">自己核對：指出左側的資料夾、下方的終端機，再口頭說出「書桌 → 拍照台 → 相簿」各做什麼。</p>
     </Card>
+    <SectionTitle title="為什麼要留存檔紀錄？" subtitle="不只是備份：相簿讓你回得去、看得懂、交得出去。" />
+    <Card className="space-y-4">
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div className="rounded-lg bg-slate-50 border border-slate-200 p-3">
+          <p className="font-bold mb-1">沒有相簿：只剩檔名</p>
+          <p className="font-mono text-sm break-all">報告_v2.docx<br />報告_v3_改.docx<br />報告_最終版.docx<br />報告_最終版_真的最終.docx</p>
+          <p className="text-sm mt-2 text-slate-600">哪一份是交出去的？v3 改了什麼？為什麼又改？只能靠記憶。</p>
+        </div>
+        <div className="rounded-lg bg-green-50 border border-green-200 p-3">
+          <p className="font-bold mb-1">有相簿：每張照片都有日期與說明（理想寫法示意）</p>
+          <p className="font-mono text-sm break-all">10-21 解決網頁與電腦版標題衝突<br />10-20 新增 Day 3 筆記<br />10-17 標題改成學習日誌<br />10-14 新增日誌標題</p>
+          <p className="text-sm mt-2 text-slate-600">只有一個檔案，但每個版本都留著，而且看得出順序與原因。</p>
+        </div>
+      </div>
+      <ol className="list-decimal pl-5 space-y-2">
+        <li><strong>回得去：</strong>改壞了，可以翻回任何一張照片，不必另存一堆副本。L3 會練。</li>
+        <li><strong>看得懂：</strong>一個月後的你，翻相簿就知道專案怎麼走到今天、每一步為什麼這樣做。</li>
+        <li><strong>交得出去：</strong>接手的同事、或是你請來幫忙的 AI，讀這串紀錄就能在幾分鐘內掌握進度與決策，不用找你一一解釋。現在許多 AI 工具會直接讀 Git 紀錄來回答「這個專案做到哪了？」——即使是完全沒參與過的人，也能靠 AI 把來龍去脈理清楚。</li>
+      </ol>
+      <p>第 3 點有個前提：<strong>照片說明要寫清楚</strong>。只寫「更新」「修改」，人和 AI 都只能猜。L3 教你怎麼寫，L9 讓 AI 實際讀你自己的日誌。</p>
+    </Card>
+    <Callout title="先停一下，說出答案再繼續"><p>新同事想知道這個專案上週做了哪些決定，在有 Git 紀錄的情況下，最快的方法是什麼？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>翻存檔紀錄，或把紀錄交給 AI 整理成摘要。前提是每張照片的說明寫得夠清楚。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
     <SectionTitle title="全課地圖：先在本機練熟，再把相簿放上雲端" />
     <div className="grid sm:grid-cols-2 gap-4">
       <Card><h3 className="font-bold">Part 1｜L1–L5 本機</h3><p>觀念 → 第一次存檔 → 看差異與還原 → 分支 → 自己解衝突。</p></Card>
-      <Card><h3 className="font-bold">Part 2｜L6–L8 上雲</h3><p>到時才建立 GitHub 帳號，備份自己的相簿、提出合併申請，再練兩份資料夾之間的同步。</p></Card>
+      <Card><h3 className="font-bold">Part 2｜L6–L9 上雲與協作</h3><p>到時才建立 GitHub 帳號，備份自己的相簿、提出合併申請、練兩份資料夾之間的同步，最後讓 AI 讀你的紀錄整理進度。</p></Card>
       <Card><h3 className="font-bold">Part 3｜作業</h3><p>獨立完成自己的 Git 日誌，用學過的步驟交件。</p></Card>
       <Card><h3 className="font-bold">Part 4｜選修</h3><p>作業完成後，再學整理紀錄、參與別人的專案與進階救援。</p></Card>
     </div>
@@ -86,6 +108,16 @@ export const Lesson1Concept = () => (
     ],
     "answer": 1,
     "explain": "暫存區用來挑這次要保存的內容，不必刪除不想拍的檔案。"
+  },
+  {
+    "q": "AI 要靠 Git 紀錄幫新同事整理專案進度，哪件事影響最大？",
+    "options": [
+      "檔名取得越長越好",
+      "每張照片的說明寫清楚做了什麼",
+      "commit 越少越好"
+    ],
+    "answer": 1,
+    "explain": "AI 讀的是每張照片的日期與說明；說明含糊，整理出來的進度也只能含糊。"
   }
 ]} />
   </div>

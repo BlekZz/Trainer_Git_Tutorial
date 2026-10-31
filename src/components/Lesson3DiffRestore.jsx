@@ -76,8 +76,21 @@ export const Lesson3DiffRestore = () => (
       </details>
     </Card>
     <Card className="space-y-3 bg-blue-50">
-      <h3 className="font-bold">照片說明怎麼寫？</h3>
-      <p>保留「讓未來的自己看懂」這個原則：寫動作與對象，例如「新增 Day 1 筆記」「忽略 tmp 檔」；「更新」「好了」看不出改了什麼。這裡不必背前綴分類。</p>
+      <h3 className="font-bold">照片說明寫給誰看？未來的自己、接手的人，還有 AI</h3>
+      <p>-m 後面那句話，是這張照片唯一的文字紀錄。一個月後的你、接手的同事、你請來整理進度的 AI，都只能靠它知道「這次做了什麼、為什麼」。下面是同一串改動的兩種寫法（示意，不是要輸入的指令）：</p>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div className="rounded-lg bg-white border border-red-200 p-3">
+          <p className="font-bold text-sm text-red-800 mb-1">含糊：只看得出「有改」</p>
+          <pre className="font-mono text-sm whitespace-pre-wrap">更新{'\n'}修改{'\n'}好了</pre>
+          <p className="text-sm mt-2 text-slate-600">請 AI 整理進度，它只能回答「改了三次」，猜不出改了什麼。</p>
+        </div>
+        <div className="rounded-lg bg-white border border-green-300 p-3">
+          <p className="font-bold text-sm text-green-800 mb-1">清楚：動作＋對象，必要時加原因</p>
+          <pre className="font-mono text-sm whitespace-pre-wrap">新增 Day 1 筆記{'\n'}忽略 tmp 檔，避免臨時筆記進相簿{'\n'}標題改成學習日誌</pre>
+          <p className="text-sm mt-2 text-slate-600">AI 能整理出「先寫筆記、再排除暫存檔、最後改標題」的進度與理由。</p>
+        </div>
+      </div>
+      <p>寫法只有一條：<strong>讓沒參與的人只讀這一句，也知道這張照片做了什麼</strong>。原因不明顯時，用「，為了…」「，避免…」補半句。不必背前綴分類，也不用寫長文。</p>
       <p>換個表面試一次：在同一資料夾建立 scratch.tmp，寫一句旅行草稿並儲存。先預測它會不會出現在 Git 的待挑選清單，再用 status 核對；需要時看下一框。</p>
       <CommandBlock command={"git status"} comment="核對新的 .tmp 檔也被同一條規則略過" />
       <CommandBlock variant="output" command={"On branch main\nnothing to commit, working tree clean"} />
@@ -133,6 +146,16 @@ export const Lesson3DiffRestore = () => (
     ],
     "answer": 2,
     "explain": "動作加對象，之後翻相簿就知道這張照片做了什麼。"
+  },
+  {
+    "q": "診斷題：同事請 AI 讀你的紀錄，AI 回答「看不出 10/17 那次改了什麼」，最可能的原因？",
+    "options": [
+      "AI 壞了",
+      "那張照片的說明只寫「修改」，沒寫改了什麼",
+      "那天沒有 push"
+    ],
+    "answer": 1,
+    "explain": "AI 只能讀到照片說明；含糊的說明讓接手的人與 AI 都得猜。"
   }
 ]} />
   </div>

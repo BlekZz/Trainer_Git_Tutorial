@@ -10,13 +10,16 @@ const prDescription = `${INSTRUCTOR_MENTION} 請 review 我的 Git 作業
 - 衝突發生時的證據：<貼上 CONFLICT 或 both modified 畫面的截圖>
 - 衝突檔案：<是哪個檔案>
 - 解決衝突的 merge commit：<貼上該筆 commit 的網址>
-- 最後保留的內容：<用一句話說明保留哪邊或如何整合>`;
+- 最後保留的內容：<用一句話說明保留哪邊或如何整合>
+- AI 讀我的紀錄整理出的進度：<貼上 AI 依日期整理的進度，三到五行>
+- AI 看不懂的一筆與我的改寫：<哪一筆說明讓 AI 猜錯或說不清楚，下次你會怎麼寫；都看得懂就寫「無」>`;
 
 const checklist = [
   { id: 'owner', label: '這是我自己的 Public repo。', verify: 'repo 首頁的 owner 是自己的帳號，名稱旁標示 Public。' },
   { id: 'commits', label: '至少三筆分別記錄一天所學的 commit，作者頭像是我。', verify: 'repo 首頁選 main → Commits，逐筆打開檢查所學內容；作者連到自己的帳號，email 已綁定。.gitignore 與 merge commit 另外驗證，不計入這三筆。' },
   { id: 'ignore', label: '.gitignore 存在，而且指定檔案確實被忽略。', verify: 'repo 的 .gitignore 有 scratch.txt 規則；PR 已附截圖，同時顯示本機 scratch.txt 存在且 git status 沒有列出它。' },
   { id: 'merge', label: '我在本機合併並解決衝突，保留了 merge commit。', verify: 'PR 已附 CONFLICT 或 both modified 當下截圖、衝突檔名、解決衝突的 merge commit 網址與一句保留內容說明；repo 首頁選 main → Commits 可核對該筆內容與兩個 parent。' },
+  { id: 'ai', label: 'PR 描述附上 AI 讀自己紀錄整理出的進度。', verify: '用 git log --format=reference 輸出作業 repo 的紀錄交給 AI；摘要的每一天都對得上 Commits 頁的說明，AI 自己補的原因已刪掉或標明是推測。' },
   { id: 'pr', label: `PR 要合進自己的 main，描述有 ${INSTRUCTOR_MENTION}。`, verify: 'PR 頂部的接收方是自己的 main，描述已填新增內容、忽略檔案與衝突的完整證據。' },
   { id: 'approved', label: '收到講師 Approve 後，我才自己合併。', verify: 'PR 狀態是 Merged；時間線先有講師核准紀錄，後有自己的合併紀錄。' },
   { id: 'sync', label: '合併後，本機 main 和 GitHub main 的最新 commit 相同。', verify: '比對兩邊最新存檔編號，並在原 PR 留言附上本機紀錄與 GitHub main 的截圖。' },
@@ -56,7 +59,7 @@ export const Homework = () => {
     <div className="min-w-0 space-y-6 animate-fade-in break-words [overflow-wrap:anywhere] [&_pre]:whitespace-pre-wrap">
       <header>
         <SectionTitle title="作業：我的 Git 日誌" subtitle="獨立建立一本新的相簿，交給講師看過，再由自己合併並同步回電腦。" />
-        <p className="text-sm text-slate-600">先準備：完成 L0–L8，能操作本機 Git，並登入自己的 GitHub 帳號。</p>
+        <p className="text-sm text-slate-600">先準備：完成 L0–L9，能操作本機 Git，並登入自己的 GitHub 帳號。</p>
       </header>
       <Callout title="這次由你決定怎麼做">任務清單只列目標；先自己回想方法，卡住再用各項的回課連結。請用自己的學習內容，不必照抄課堂日誌。完成的證據是自己的 repo、PR 與存檔紀錄。</Callout>
       <Card className="space-y-4">
@@ -68,7 +71,8 @@ export const Homework = () => {
           <li><strong>刻意製造並解決一次衝突，留下 merge commit。</strong> 讓兩個分支對同一行各有已保存的改動；看到 CONFLICT 或 both modified 時，先截圖保留，再選出最後內容並保存合併照片，檔案裡不能留下衝突標記。交件時附上截圖、衝突檔名、解決衝突的 merge commit 網址與一句保留內容說明；兩個 parent 只能證明合併，不能證明曾有衝突。 <LessonLink href="#local-conflict">回 L5：本機衝突</LessonLink></li>
           <li><strong>在 GitHub 建立自己的 Public repo，push main。</strong> 名稱用 <code>{HOMEWORK_REPO_NAME}</code>，建立空的雲端相簿再上傳；首頁應看得到自己的日誌與紀錄。 <LessonLink href="#push">回 L6：第一次上雲</LessonLink></li>
           <li><strong>再開一個新的 feat/... 分支新增內容，push 後開 PR。</strong> PR 在自己的 repo；方向是 <strong>base = 自己的 main ← compare = 這次的新分支</strong>。先保留 Open，等講師看過。 <LessonLink href="#pr">回 L7：分支上雲與 PR</LessonLink></li>
-          <li><strong>在 PR 描述寫 {INSTRUCTOR_MENTION} 請 review。</strong> 用下面範本填好新增內容、忽略檔案與衝突的完整證據，再送出 PR；這就是交件，不用另填表單。提及講師會通知對方。 <LessonLink href="#pr">回 L7：填 PR 描述</LessonLink></li>
+          <li><strong>請 AI 讀你的作業紀錄，整理進度。</strong> 在作業資料夾用 L9 的方法印出紀錄、交給 AI，請它依日期整理每天做了什麼。逐行對照紀錄，刪掉 AI 自己補的原因；它說不清楚的那一筆，想一句更好的寫法。兩者都填進下面 PR 範本的最後兩項。 <LessonLink href="#ai-log">回 L9：讓 AI 讀懂你的紀錄</LessonLink></li>
+          <li><strong>在 PR 描述寫 {INSTRUCTOR_MENTION} 請 review。</strong> 用下面範本填好新增內容、忽略檔案、衝突的完整證據與 AI 整理的進度，再送出 PR；這就是交件，不用另填表單。提及講師會通知對方。 <LessonLink href="#pr">回 L7：填 PR 描述</LessonLink></li>
           <li><strong>等講師 review，再依結果處理。</strong> Approve 後自己 Merge；Request changes 就在同一分支修正、保存、上傳，並留言「已修改，請再看一次」。細節見下方「交件之後會發生什麼」。 <LessonLink href="#pr">回 L7：合併申請</LessonLink>、<LessonLink href="#sync">回 L8：同步成果</LessonLink></li>
         </ol>
       </Card>
@@ -121,7 +125,7 @@ export const Homework = () => {
       <Callout variant="warning" title="結果不同，先停在原處核對">看到 CONFLICT → 回 <LessonLink href="#local-conflict">L5</LessonLink>；看到 rejected → 回 <LessonLink href="#sync">L8</LessonLink>；看到 Repository not found → 回 <LessonLink href="#push">L6</LessonLink> 核對地址與登入。其他錯誤從側邊欄「急診室」查原文，仍不確定就把畫面交給講師；不要一直重試或重建 repo。</Callout>
       <Card className="space-y-3">
         <h3 className="font-bold">交作業前自我檢核，審查後補完最後兩項</h3>
-        <p>實際看到證據才打勾。前 5 項交件前核對，最後 2 項等講師核准、自己合併並同步後再勾。勾選只協助你盤點，不會代替送出 PR。</p>
+        <p>實際看到證據才打勾。前 6 項交件前核對，最後 2 項等講師核准、自己合併並同步後再勾。勾選只協助你盤點，不會代替送出 PR。</p>
         <p className="text-sm text-slate-600">勾選會保存在此瀏覽器，下次回來可繼續；若瀏覽器不允許儲存，本次仍可勾選，但離開後可能不保留。</p>
         <button type="button" onClick={() => updateChecks({})} className="text-sm text-indigo-700 underline">全部重設</button>
         <Screenshot id="HW-commits-page" alt="作業 repo 的 Commits 頁，作者 Amy 旁的頭像是灰色空白" caption="這張是反面教材：作者名稱旁的頭像是灰色空白，代表 commit 的 email 沒有綁定你的 GitHub 帳號。你的應該顯示自己的頭像，作者名稱也能點進你的帳號；若是灰色空白，回 L0 把 email 改成 GitHub 帳號的 email，之後的新 commit 就會正確。" />

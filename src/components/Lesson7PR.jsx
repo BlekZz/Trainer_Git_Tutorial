@@ -109,7 +109,8 @@ export const Lesson7PR = () => (
       </details>
       <SuccessCheck
         title="完成訊號：電腦和 GitHub 對得上"
-        terminal={['VSCode 左側出現 day3.md', <>log 最上面一行是 Merge pull request #1，記下它的 7 碼編號（範例是 <code>58fc040</code>）</>, '刪除分支顯示 Deleted branch feat/day3']}
+        vscode={['左側檔案總管出現 day3.md']}
+        terminal={[<>log 最上面一行是 Merge pull request #1，記下它的 7 碼編號（範例是 <code>58fc040</code>）</>, '刪除分支顯示 Deleted branch feat/day3']}
         web={['PR 狀態是紫色 Merged', 'repo 首頁（分支選 main）檔案列表上方右側的 7 碼編號，和終端機 log 最上面那行相同']}
         fail="終端機沒有 Merge pull request 那行 → 確認自己在 main 並已 pull；編號不同 → 再 pull 一次後重比。都對上才進 L8。"
       />

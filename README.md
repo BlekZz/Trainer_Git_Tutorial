@@ -42,7 +42,7 @@ Trainer_Git_Tutorial/
 
 ### 教學者專區：作業收件與審查
 
-學員完成 L0–L8 後，在新的 `git-homework` 建立自己的 Public repo，於自己的 PR 描述寫 `@BlekZz 請 review` 交件。講師核准後，由學員自己合併並同步回本機。
+學員完成 L0–L9 後，在新的 `git-homework` 建立自己的 Public repo，於自己的 PR 描述寫 `@BlekZz 請 review` 交件。講師核准後，由學員自己合併並同步回本機。
 
 [開啟講師收件匣](https://github.com/search?q=is%3Apr+mentions%3ABlekZz&type=pullrequests)（與 `src/config.js` 的 `INSTRUCTOR_INBOX_URL` 相同）。搜尋條件是 `is:pr mentions:BlekZz`；只看待審時加上 `is:open`。
 

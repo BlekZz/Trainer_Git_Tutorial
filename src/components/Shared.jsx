@@ -332,26 +332,23 @@ export const Screenshot = ({ id, alt, caption, className = '' }) => {
 // SuccessCheck — 關鍵步驟後的「成功的話你會看到…」卡片，終端機與 GitHub 網頁兩邊並列核對
 // terminal / web：字串或節點陣列，各列一個要看到的訊號；fail：沒看到時先做什麼
 // <SuccessCheck terminal={['最後一行有 main -> main']} web={['重新整理後看到檔案']} fail="先別重做，回第 4 步核對" />
-export const SuccessCheck = ({ title = '成功的話你會看到', terminal = [], web = [], fail, className = '' }) => (
+export const SuccessCheck = ({ title = '成功的話你會看到', terminal = [], vscode = [], web = [], fail, className = '' }) => {
+  const cols = [['終端機', terminal], ['VSCode 畫面', vscode], ['GitHub 網頁（按 F5 重新整理後）', web]].filter(([, items]) => items.length > 0);
+  return (
   <div className={`rounded-lg border-2 border-green-400 bg-green-50 p-3 md:p-4 ${className}`}>
     <p className="font-bold text-green-900 text-sm mb-2 flex items-center gap-2">
       <CheckCircle size={18} className="text-green-600 shrink-0" aria-hidden="true" />
       {title}
     </p>
-    <div className={`grid gap-3 ${terminal.length && web.length ? 'sm:grid-cols-2' : ''}`}>
-      {terminal.length > 0 && (
-        <div className="min-w-0 rounded-md bg-white border border-green-200 p-3">
-          <p className="text-xs font-bold text-slate-500 mb-1">終端機</p>
-          <ul className="list-disc pl-5 space-y-1 text-sm text-slate-800">{terminal.map((t, i) => <li key={i}>{t}</li>)}</ul>
+    <div className={`grid gap-3 ${cols.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+      {cols.map(([label, items]) => (
+        <div key={label} className="min-w-0 rounded-md bg-white border border-green-200 p-3">
+          <p className="text-xs font-bold text-slate-500 mb-1">{label}</p>
+          <ul className="list-disc pl-5 space-y-1 text-sm text-slate-800">{items.map((t, i) => <li key={i}>{t}</li>)}</ul>
         </div>
-      )}
-      {web.length > 0 && (
-        <div className="min-w-0 rounded-md bg-white border border-green-200 p-3">
-          <p className="text-xs font-bold text-slate-500 mb-1">GitHub 網頁（按 F5 重新整理後）</p>
-          <ul className="list-disc pl-5 space-y-1 text-sm text-slate-800">{web.map((t, i) => <li key={i}>{t}</li>)}</ul>
-        </div>
-      )}
+      ))}
     </div>
     {fail && <p className="text-sm text-green-900 mt-2"><strong>沒看到：</strong>{fail}</p>}
   </div>
-);
+  );
+};

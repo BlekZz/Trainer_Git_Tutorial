@@ -68,8 +68,8 @@ export const Lesson8Sync = () => (
         <CommandBlock variant="output" command={outputs.day4Push} />
       </details>
       <SuccessCheck
-        terminal={[<>最後一行是 <code>58fc040..c4e3323  main -&gt; main</code>（編號會不同），箭號右邊的 c4e3323 就是 Day 4 這張照片</>, '沒有 error 或 rejected']}
-        web={['main 的檔案列表多出 day4.md', '列表上方右側的 7 碼編號，等於終端機箭號右邊那組']}
+        terminal={[<>最後一行是 <code>58fc040..c4e3323  main -&gt; main</code>（編號會不同），兩個點 <code>..</code> 右邊那組 c4e3323 就是 Day 4 這張照片</>, '沒有 error 或 rejected']}
+        web={['main 的檔案列表多出 day4.md', '列表上方右側的 7 碼編號，等於終端機 <code>..</code> 右邊那組']}
         fail="終端機沒有 main -> main → 往上找 error 那行，到急診室查原文；網頁沒有 day4.md → 確認是在第二個視窗（GIT-JOURNAL-LAPTOP）commit 並 push。"
       />
       <p>這只證明雲端收到了；第一個資料夾還沒下載。</p>
@@ -85,7 +85,8 @@ export const Lesson8Sync = () => (
       </details>
       <SuccessCheck
         title="完成訊號：第一個資料夾追上雲端"
-        terminal={[<>pull 輸出有 <code>Fast-forward</code> 與 <code>create mode 100644 day4.md</code></>, <>Updating 後面箭號右邊的編號（範例 c4e3323），等於第 2 步 push 的那組</>, '第一個視窗左側出現 day4.md，內容是「Day 4：在第二台電腦寫日誌」']}
+        terminal={[<>pull 輸出有 <code>Fast-forward</code> 與 <code>create mode 100644 day4.md</code></>, <>Updating 那行兩個點 <code>..</code> 右邊的編號（範例 c4e3323），等於第 2 步 push 的那組</>]}
+        vscode={['第一個視窗左側出現 day4.md，內容是「Day 4：在第二台電腦寫日誌」']}
         web={['GitHub main 首頁上方右側的 7 碼編號，和上面那組相同']}
         fail="顯示 Already up to date 卻沒有 day4.md → 第二個視窗可能還沒 push 成功，回第 2 步看網頁有沒有 day4.md。接下來都留在第一個視窗；第二個視窗先不要改檔案。"
       />

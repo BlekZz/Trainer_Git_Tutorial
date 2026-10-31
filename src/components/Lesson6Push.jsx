@@ -78,7 +78,6 @@ export const Lesson6Push = () => (
       <p>這次記住的是 main 的目的地。看到 main → main 與最後的設定訊息，表示自己的雲端 main 已建立。</p>
       <SuccessCheck
         terminal={[<>倒數兩行是 <code>* [new branch] main -&gt; main</code> 與 <code>branch 'main' set up to track 'origin/main'.</code></>, '整段沒有 error、rejected 或 fatal 字樣', '提示符回來，可以再輸入指令']}
-        web={['原本的 Quick setup 空白頁，變成 README.md、day1.md、day2.md、.gitignore 的檔案列表']}
         fail="先不要重打 remote add 或重建 repo。看到 rejected → 回第 3 步確認三個初始化選項都沒選；看到 Repository not found → 用 git remote -v 核對網址與帳號；其他訊息到側邊欄「急診室」查原文。"
       />
     </Card>
@@ -96,11 +95,11 @@ export const Lesson6Push = () => (
       <p>檔案出現在網頁還不夠，要確認雲端的<strong>最新一張照片</strong>就是電腦上的那張。每張照片都有一組存檔編號，兩邊比對前 7 碼最可靠。</p>
       <CommandBlock command="git log -1 --oneline" comment="只看本機最新一張照片的編號與說明" />
       <CommandBlock variant="output" command={"e6760a9 (HEAD -> main, origin/main) Part 1 的日誌"} />
-      <p>你的編號與說明會不同。括號裡同時出現 <code>HEAD -&gt; main</code> 和 <code>origin/main</code>，表示本機 main 和電腦記得的雲端 main 指向同一張照片。接著看 GitHub repo 首頁：檔案列表上方那一列，右側有一組 7 碼編號（例如 <code>e6760a9 · now</code>）與 <strong>Commits</strong> 數量。</p>
+      <p>你的編號與說明會不同。括號裡同時出現 <code>HEAD -&gt; main</code> 和 <code>origin/main</code>，表示本機 main 和電腦記得的雲端 main 指向同一張照片。接著看 GitHub repo 首頁：檔案列表上方那一列，右側有一組 7 碼編號（例如 <code>e6760a9 · now</code>）與 <strong>Commits</strong> 數量；視窗太窄看不到編號時，把瀏覽器放大。範例說明是簡化過的「Part 1 的日誌」，照 L2–L5 做的你會看到 L5 的「解決標題衝突」。</p>
       <SuccessCheck
         title="完成訊號：兩邊對得上"
         terminal={[<>git status 顯示 <code>up to date with 'origin/main'</code> 與 <code>working tree clean</code></>, 'git log -1 --oneline 開頭的 7 碼編號']}
-        web={['檔案列表看得到 README.md、day1.md、day2.md 與 .gitignore', '列表上方右側的 7 碼編號，和終端機開頭一模一樣', 'Commits 數量等於你在 L2–L5 存過的照片數']}
+        web={['檔案列表看得到 README.md、day1.md、day2.md 與 .gitignore', '列表上方右側的 7 碼編號，和終端機開頭一模一樣']}
         fail="編號不同代表雲端還不是最新：往上看 push 是否有 error，處理後再 push；仍對不上就把兩邊畫面截圖交給講師。保留這個資料夾與 repo，L7 直接接著做。"
       />
       <p>獨立判斷，不必另外操作：若改天把自己的「旅行清單」相簿第一次上雲，你會先核對哪個地址？如何證明上傳完成？先說出「自己的 repo 地址、終端機成功訊息、網頁新檔案」再繼續。</p>

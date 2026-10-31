@@ -115,7 +115,8 @@ export const Lesson2FirstCommit = () => {
       <CommandBlock variant="output" command={"[main (root-commit) 187430f] 新增日誌標題\n 1 file changed, 1 insertion(+)\n create mode 100644 README.md"} />
       <SuccessCheck
         title="存檔成功的話你會看到"
-        terminal={[<>第一行是方括號開頭：<code>[main (root-commit) 一組編號] 新增日誌標題</code></>, <>第二行有 <code>1 file changed</code></>, 'VSCode 的 Source Control 面板變空，README.md 不再列在 Staged Changes']}
+        terminal={[<>第一行是方括號開頭：<code>[main (root-commit) 一組編號] 新增日誌標題</code></>, <>第二行有 <code>1 file changed</code></>]}
+        vscode={['Source Control 面板變空，README.md 不再列在 Staged Changes']}
         fail="沒有方括號那行就是還沒存進相簿：看下一段的錯誤說明，或用 git status 確認 README.md 是否還在 Changes to be committed。"
       />
       <p>root-commit 表示第一張照片，1 file changed 表示這次有一個檔案變動。看到「Author identity unknown」或「Please tell me who you are」時，回 L0 補姓名與 email 設定後重試；不需要登入 GitHub。</p>

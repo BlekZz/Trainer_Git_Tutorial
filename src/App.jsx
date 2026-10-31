@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GitGraph, Map, Play, Download, GitBranch, RefreshCw, Users, Rocket, Ambulance, CheckCircle, ArrowLeft, ArrowRight, Wrench } from 'lucide-react';
+import { GitGraph, Map, Play, Download, GitBranch, RefreshCw, Users, Rocket, Ambulance, Bot, CheckCircle, ArrowLeft, ArrowRight, Wrench } from 'lucide-react';
 
 import { Lesson0Setup } from './components/Lesson0Setup';
 import { Lesson1Concept } from './components/Lesson1Concept';
@@ -10,6 +10,7 @@ import { Lesson5LocalConflict } from './components/Lesson5LocalConflict';
 import { Lesson6Push } from './components/Lesson6Push';
 import { Lesson7PR } from './components/Lesson7PR';
 import { Lesson8Sync } from './components/Lesson8Sync';
+import { Lesson9AiLog } from './components/Lesson9AiLog';
 import { Homework } from './components/Homework';
 import { Elective1Rebase } from './components/Elective1Rebase';
 import { Elective2Fork } from './components/Elective2Fork';
@@ -25,17 +26,18 @@ const tabs = [
   { id: 'diff-restore', label: 'L3 看差異與還原', group: 'Part 1 單機', icon: <Map size={16} /> },
   { id: 'branch', label: 'L4 分支', group: 'Part 1 單機', icon: <GitBranch size={16} /> },
   { id: 'local-conflict', label: 'L5 本機衝突', group: 'Part 1 單機', icon: <RefreshCw size={16} /> },
-  { id: 'push', label: 'L6 GitHub 與第一次 push', group: 'Part 2 上雲', icon: <Rocket size={16} /> },
-  { id: 'pr', label: 'L7 分支上雲與自己的 PR', group: 'Part 2 上雲', icon: <Users size={16} /> },
-  { id: 'sync', label: 'L8 兩台電腦的同步', group: 'Part 2 上雲', icon: <Download size={16} /> },
+  { id: 'push', label: 'L6 GitHub 與第一次 push', group: 'Part 2 上雲與協作', icon: <Rocket size={16} /> },
+  { id: 'pr', label: 'L7 分支上雲與自己的 PR', group: 'Part 2 上雲與協作', icon: <Users size={16} /> },
+  { id: 'sync', label: 'L8 兩台電腦的同步', group: 'Part 2 上雲與協作', icon: <Download size={16} /> },
+  { id: 'ai-log', label: 'L9 讓 AI 讀懂你的紀錄', group: 'Part 2 上雲與協作', icon: <Bot size={16} /> },
   { id: 'homework', label: '作業：我的 Git 日誌', group: 'Part 3 作業', icon: <CheckCircle size={16} /> },
   { id: 'e1-rebase', label: 'E1 Merge vs Rebase', group: 'Part 4 選修', icon: <GitBranch size={16} /> },
   { id: 'e2-fork', label: 'E2 參與別人的專案', group: 'Part 4 選修', icon: <Users size={16} /> },
   { id: 'e3-misc', label: 'E3 stash 與其他', group: 'Part 4 選修', icon: <Wrench size={16} /> },
   { id: 'errors', label: '🚑 急診室', group: '急診室', icon: <Ambulance size={16} /> },
 ];
-const groups = ["Part 0 準備","Part 1 單機","Part 2 上雲","Part 3 作業","Part 4 選修","急診室"];
-const chapterIds = tabs.slice(0, 10).map(t => t.id);
+const groups = ["Part 0 準備","Part 1 單機","Part 2 上雲與協作","Part 3 作業","Part 4 選修","急診室"];
+const chapterIds = tabs.slice(0, 11).map(t => t.id);
 const legacyHashes = { flow: 'concept', pathA: 'first-commit', pathB: 'first-commit', team: 'pr', practice: 'e2-fork' };
 
 const getVisited = () => {
@@ -157,6 +159,7 @@ const App = () => {
           {activeTab === 'push' && <Lesson6Push />}
           {activeTab === 'pr' && <Lesson7PR />}
           {activeTab === 'sync' && <Lesson8Sync />}
+          {activeTab === 'ai-log' && <Lesson9AiLog />}
           {activeTab === 'homework' && <Homework />}
           {activeTab === 'e1-rebase' && <Elective1Rebase />}
           {activeTab === 'e2-fork' && <Elective2Fork />}
