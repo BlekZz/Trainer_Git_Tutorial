@@ -238,7 +238,7 @@ PR 描述範本（教材提供可複製版）：
 - QA：測試帳號完整做一次作業（含一次 Request changes 來回），BlekZz 依驗收表判定通過；收件匣搜尋能看到該 PR
 
 ### M5 GitHub／VSCode 操作截圖（1 天）
-> ⏸ 2026-10-14 暫停：開工即撞 Claude 用量上限（5h 窗滿、7d 97%）。已備：`dev/script/shot.py`（縮放／紅框／遮蔽／≤200KB）；fixture repo（blakelee0918/mention-test PR#1 open、git-journal-rec、git-homework PR#1 merged）。待 Blake：測試帳號 Chrome 視窗目前 3440×1249，請縮到 ~1280–1440 寬；`L2-vscode-source-control`、`L5-vscode-conflict` 為 VSCode 畫面，請 Blake 自拍放 `public/screenshots/` 再用 shot.py 統一規格。
+> ✅ 2026-11-01 完成（58bc1c2 第一批 10 張、9f47906 第二批、c14139f 補 L5）。測試帳號 blakelee0918 建公開 repo `git-journal` 實走 L6–L8 取圖，講師端用 BlekZz；2 張 VSCode 圖由 Blake 自拍。驗收：§7.2 全部 id 對到 `public/screenshots/` 檔案（缺 0），總量 876 KB；email 已遮（L7-pr-merge-button）。截圖時對齊現行 GitHub 文字：Review changes→Submit review、Changes requested→suggested changes、建 repo 選項 None→Off／No .gitignore／No license；HW-commits-page 改為「灰色空白頭像」反面教材並在 L0 補「用同一個 GitHub 信箱」。未做：每張圖的 fresh-context 圖說比對。
 - 依 §7.2 清單截圖（規範 §7.1），補滿 M2–M4 留下的所有佔位
 - QA：`rg "截圖待補"` 渲染結果為 0（在 dev server 逐章檢查無佔位框）；每張圖 fresh-context agent 對照圖說「你會看到…」是否與圖相符；人工檢查無真實 email／token／私人 repo 名入鏡；圖片總量 ≤ 5 MB
 
@@ -248,18 +248,25 @@ PR 描述範本（教材提供可複製版）：
 - QA：`rg` 檢查舊比喻詞（平行宇宙／時光機儀表板／敲門／搶劫／MMO／黑話）在主線章 0 命中（選修章可例外）；fresh-context agent 做「零基礎讀者」角色閱讀，回報任何看不懂的句子
 
 ### M7 驗收與部署（0.5 天）
+> 🟡 2026-11-01 部署完成（main dfdf5b9 → gh-pages 67efa91；線上 bundle `index-BnRK-Hr9.js` 驗證含 L9 與成功卡）。零基礎同事實測仍未做。
 - `npm run build`、`npm run deploy`（部署前確認）
 - 找 1 位零基礎同事走完 L0→作業（沿用舊 Sprint 未完成的人工驗收項）
 
+### 追加（2026-11-01，Sprint 外；依學員回饋「push／merge 後不知道有沒有成功」與「說明版本控制對 AI／接手者的價值」）
+- `SuccessCheck` 元件（Shared.jsx）：終端機／VSCode／GitHub 網頁三欄並列「成功的話你會看到」＋沒看到時的下一步；放在 L2 第一次 commit 與 L6–L8 每次上傳、合併、下載後（0f075f8）
+- 雙邊核對：終端機 `git log -1 --oneline`／`..` 右邊編號 ＝ GitHub 首頁檔案列表上方的 7 碼編號
+- AI 用途拆四處：L1「為什麼要留存檔紀錄」、L3 照片說明寫給接手者與 AI、新增 L9「讓 AI 讀懂你的紀錄」（`git log --format=reference` 真機輸出，L2–L8 重建 13 筆）、作業加「AI 整理進度」任務（dfdf5b9）
+- 稽核：fresh-context agent（Opus）依 CLAUDE.md 鐵律＋tutor-sop rubric 審，BLOCKER 0、SHOULD-FIX 5 全修
+
 ### 最終驗收 Checklist
 - [ ] 學員在 Part 1 全程不需要 GitHub 帳號即可完成所有真機練習
-- [ ] 主線（L0–L8＋作業）不出現 Fork、跨 owner PR、403、rebase
+- [ ] 主線（L0–L9＋作業）不出現 Fork、跨 owner PR、403、rebase
 - [ ] 作業交件＝自己 repo 的 PR 內 @BlekZz；講師用收件匣搜尋看到 PR 並能 review；學員 Approve 後自己 merge
 - [x] §3.1 三個前提已實測，觀察訊號記錄在本檔 §8（2026-10-14，§8.1）
 - [ ] 每章都有真機 You Do 區與章末 quiz
 - [ ] 全站單一比喻系統；必定義術語清單每項都有白話首次定義
 - [ ] 模擬終端輸出全部為真機原文
-- [ ] 所有 GitHub 網頁操作步驟都有截圖，無截圖佔位框殘留，無敏感資訊入鏡
+- [x] 所有 GitHub 網頁操作步驟都有截圖，無截圖佔位框殘留，無敏感資訊入鏡（2026-11-01，§7.2 缺 0）
 - [ ] 講師帳號只出現在 `src/config.js`
 - [ ] `npm run build` 通過；舊 hash 連結轉址正確
 - [ ] 零基礎同事實測走完、卡點已回填急診室
@@ -283,26 +290,27 @@ PR 描述範本（教材提供可複製版）：
 
 ### 7.2 截圖清單（M2–M4 寫文時放佔位，M5 補圖）
 
-| id | 畫面 | 帳號 | 用在 |
-|---|---|---|---|
-| L2-vscode-source-control | VSCode 左側 Source Control 面板顯示變更檔案 | — | L2 |
-| L5-vscode-conflict | VSCode 衝突區塊＋Accept Current / Incoming / Both 按鈕 | — | L5 |
-| L6-signup | github.com 註冊頁 | 測試 | L6 |
-| L6-gh-auth-device | `gh auth login` 開出的瀏覽器驗證碼頁＋Authorize | 測試 | L6 |
-| L6-new-repo-form | New repository 表單（三個初始化選項都不勾） | 測試 | L6 |
-| L6-new-repo-after | 空 repo 頁＋HTTPS 網址複製按鈕 | 測試 | L6 |
-| L6-after-push | push 後 repo 頁出現檔案 | 測試 | L6 |
-| L7-compare-banner | 黃色「had recent pushes」＋Compare & pull request | 測試 | L7、作業 |
-| L7-pr-form | Open a pull request 表單（base 是自己的 main） | 測試 | L7、作業 |
-| L7-pr-merge-button | PR 頁 Merge pull request／Confirm merge | 測試 | L7、作業 |
-| L7-branch-delete | merge 後 Delete branch 按鈕 | 測試 | L7 |
-| L8-web-edit | GitHub 網頁直接編輯檔案＋Commit changes | 測試 | L8 |
-| HW-pr-mention | PR 描述欄寫 `@BlekZz 請 review` | 測試 | 作業 |
-| HW-review-approve | 講師端 Files changed → Review changes → Approve | BlekZz | 作業（講師視角說明） |
-| HW-review-request-changes | 學員端看到 Changes requested 的樣子 | 測試 | 作業 |
-| HW-approved-timeline | 學員端 PR 時間線顯示 Approved | 測試 | 作業 |
-| HW-inbox-search | 講師收件匣 `is:pr mentions:BlekZz` 搜尋結果 | BlekZz | README 教學者專區 |
-| HW-commits-page | Commits 頁（含 merge commit） | 測試 | 作業自我檢核 |
+| id | 畫面 | 帳號 | 用在 | 截圖日期 |
+|---|---|---|---|---|
+| L2-vscode-source-control | VSCode 左側 Source Control 面板顯示變更檔案 | — | L2 | 2026-10-31 |
+| L5-vscode-conflict | VSCode 衝突區塊＋Accept Current / Incoming / Both 按鈕 | — | L5 | 2026-11-01 |
+| L6-signup | github.com 註冊頁 | 測試 | L6 | 2026-10-31 |
+| L6-gh-auth-device | `gh auth login` 開出的瀏覽器驗證碼頁＋Authorize | 測試 | L6 | 2026-10-31 |
+| L6-new-repo-form | New repository 表單（三個初始化選項都不勾） | 測試 | L6 | 2026-10-31 |
+| L6-new-repo-after | 空 repo 頁＋HTTPS 網址複製按鈕 | 測試 | L6 | 2026-10-31 |
+| L6-after-push | push 後 repo 頁出現檔案 | 測試 | L6 | 2026-10-31 |
+| L7-compare-banner | 黃色「had recent pushes」＋Compare & pull request | 測試 | L7、作業 | 2026-10-31 |
+| L7-pr-form | Open a pull request 表單（base 是自己的 main） | 測試 | L7、作業 | 2026-10-31 |
+| L7-pr-merge-button | PR 頁 Merge pull request／Confirm merge | 測試 | L7、作業 | 2026-10-31 |
+| L7-branch-delete | merge 後 Delete branch 按鈕 | 測試 | L7 | 2026-10-31 |
+| L7-pr-merged | PR 頁紫色 Merged＋successfully merged and closed | 測試 | L7 | 2026-10-31 |
+| L8-web-edit | GitHub 網頁直接編輯檔案＋Commit changes | 測試 | L8 | 2026-10-31 |
+| HW-pr-mention | PR 描述欄寫 `@BlekZz 請 review` | 測試 | 作業 | 2026-10-31 |
+| HW-review-approve | 講師端 Files changed → Review changes → Approve | BlekZz | 作業（講師視角說明） | 2026-10-31 |
+| HW-review-request-changes | 學員端看到 Changes requested 的樣子 | 測試 | 作業 | 2026-10-31 |
+| HW-approved-timeline | 學員端 PR 時間線顯示 Approved | 測試 | 作業 | 2026-10-31 |
+| HW-inbox-search | 講師收件匣 `is:pr mentions:BlekZz` 搜尋結果 | BlekZz | README 教學者專區 | 2026-10-31 |
+| HW-commits-page | Commits 頁（含 merge commit） | 測試 | 作業自我檢核 | 2026-10-31 |
 
 ## 8. 實測紀錄（M4 填寫）
 
