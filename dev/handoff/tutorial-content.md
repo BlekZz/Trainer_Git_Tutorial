@@ -8,3 +8,4 @@
 - 切入: dev/Sprint_curriculum_restructure.md（§5 M5–M7 與「追加」段、最終驗收 checklist）, src/components/Shared.jsx（SuccessCheck、Screenshot）, src/components/Lesson9AiLog.jsx
 - 事實: claude-in-chrome deviceId 已變：blakelee0918 = 2f7fe2e7…、BlekZz = cb45e281…（2026-10-31 以 JS 讀 meta[name=user-login] 確認）；本機 gh 兩帳號皆登入、active=BlekZz、git_protocol=ssh（2026-11-01 gh auth status）。
 - 事實: 測試帳號 fixture repo 仍在 GitHub：git-journal（Blake 同意刪，需本人在網頁 Settings 刪除；token 無 delete_repo scope）；mention-test、git-journal-rec、git-homework 保留供日後重拍與實測（Blake 2026-11-01 裁定）。本機 fixture 已刪。
+- 待裁: M6 未另派獨立「零基礎讀者」角色閱讀（由 codex 自身子稽核代替）——要不要補，由 Blake 決定。
