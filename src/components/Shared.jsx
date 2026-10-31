@@ -397,6 +397,8 @@ export const TerminalSim = ({ logs, onCommand, promptLabel = "~/project (main)",
 export const Screenshot = ({ id, alt, caption, className = '' }) => {
   const [missing, setMissing] = useState(false);
   const src = `${import.meta.env.BASE_URL}screenshots/${id}.png`;
+  // L6–L8 與作業頁的 GitHub 截圖是深色主題拍的（2026-10-31），學員多半看到淺色，圖說統一提醒
+  const isGithub = /^(L6|L7|L8|HW)-/.test(id);
   return (
     <figure className={`my-4 ${className}`}>
       {missing ? (
@@ -414,7 +416,17 @@ export const Screenshot = ({ id, alt, caption, className = '' }) => {
           />
         </a>
       )}
-      {caption && <figcaption className="mt-2 text-xs text-slate-500 leading-relaxed">{caption}</figcaption>}
+      {(caption || !missing) && (
+        <figcaption className="mt-2 text-sm text-slate-600 leading-relaxed">
+          {caption}
+          {!missing && (
+            <span className="mt-1 flex flex-wrap gap-x-3 text-xs text-slate-500">
+              {isGithub && <span>這張是 GitHub 深色主題；你的畫面可能是白底，按鈕位置和文字相同。</span>}
+              <span className="sm:hidden">點圖可放大</span>
+            </span>
+          )}
+        </figcaption>
+      )}
     </figure>
   );
 };
