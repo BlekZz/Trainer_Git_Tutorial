@@ -83,7 +83,7 @@ export const Homework = () => {
         <div className="min-w-0 rounded-lg overflow-hidden bg-slate-900 text-slate-100 shadow-md">
           <div className="flex flex-wrap items-center justify-between gap-2 bg-slate-800 px-3 py-2 text-xs">
             <span>貼到 PR 描述欄</span>
-            <button type="button" onClick={copyDescription} className="text-indigo-200 hover:text-white underline" aria-live="polite">{copyState}</button>
+            <button type="button" onClick={copyDescription} className="min-h-[36px] rounded px-2 text-indigo-200 hover:bg-white/10 hover:text-white underline" aria-live="polite">{copyState}</button>
           </div>
           <pre className="p-3 text-sm break-all">{prDescription}</pre>
         </div>

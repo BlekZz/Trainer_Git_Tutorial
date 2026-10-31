@@ -14,7 +14,7 @@ const TransferHint = () => (
 
 export const ErrorRoom = () => (
   <div className="space-y-6">
-    <SectionTitle title="🚑 錯誤訊息急診室" subtitle="用畫面上的原文找原因，再選對應的解法。" />
+    <SectionTitle title="錯誤訊息急診室" subtitle="用畫面上的原文找原因，再選對應的解法。" />
     <Callout title="怎麼查">按 Ctrl+F（Mac：Cmd+F），貼上錯誤中的幾個英文單字搜尋。只做符合你情況的那張卡，不要整頁依序執行；$ 不用輸入。所有 &lt;佔位文字&gt; 都要整個換掉，角括號不要打進去。</Callout>
 
     <ErrorCard error={"The term 'git' is not recognized\n'git' is not recognized as an internal or external command\ncommand not found: git"} translation="電腦目前找不到 Git，可能是還沒安裝，或安裝後終端機尚未重開。">

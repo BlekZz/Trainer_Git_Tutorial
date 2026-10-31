@@ -23,9 +23,9 @@ export const Lesson8Sync = () => (
       <h3 className="font-bold">我先示範：換電腦，先拿回整本相簿</h3>
       <p><strong>clone</strong> 是把整本雲端相簿下載到新電腦，包含檔案與存檔紀錄，也會記住 origin 地址。這次用第二個資料夾 git-journal-laptop 模擬第二台電腦，不用真的換機器。</p>
       <div className="grid sm:grid-cols-3 gap-3 text-center" aria-label="第二個資料夾上傳到 GitHub，第一個資料夾再下載">
-        <div className="rounded bg-purple-50 p-3">第二個視窗<br />git-journal-laptop<br />拍 Day 4 → push 上傳</div>
+        <div className="rounded-lg bg-indigo-50 p-3">第二個視窗<br />git-journal-laptop<br />拍 Day 4 → push 上傳</div>
         <div className="rounded bg-indigo-50 p-3">自己的 GitHub<br />git-journal<br />雲端相簿</div>
-        <div className="rounded bg-blue-50 p-3">第一個視窗<br />git-journal<br />pull 下載 → 看見 Day 4</div>
+        <div className="rounded-lg bg-slate-100 p-3">第一個視窗<br />git-journal<br />pull 下載 → 看見 Day 4</div>
       </div>
       <p>我先 clone，因為新電腦還沒有相簿；之後只下載新照片就用 pull。兩個資料夾各有自己的書桌與相簿，改一邊不會自動改另一邊。</p>
     </Card>
@@ -36,7 +36,7 @@ export const Lesson8Sync = () => (
       <details><summary className="cursor-pointer">核對處理順序</summary><p>不能略過雲端的新照片；上傳會被拒。先 pull，遇到同一行衝突就像 L5，選好文字、add、commit，最後再 push。</p></details>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>看到衝突時，Current 永遠代表第一台電腦嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不是，Current 是目前正在操作的這份相簿，Incoming 是這次收進來的版本。本課會在第一個視窗處理。能指出自己站在哪裡，再進真機；不確定可回 L5 看兩份候選文字。</p></details></Callout>
-    <SectionTitle title="🔥 換你了：讓自己的兩份相簿同步" />
+    <SectionTitle kicker="換你了" title="讓自己的兩份相簿同步" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 在旁邊下載第二份相簿</h3>
       <p>在原本 git-journal 的 VSCode 選 Terminal → New Terminal。確認新終端機的 PowerShell 提示符路徑以 git-journal 結尾；$ 與 PS 路徑不用打，每次一條指令，輸出框也不用輸入。</p>
@@ -183,8 +183,8 @@ export const Lesson8Sync = () => (
         <h3 className="font-bold text-indigo-900">新專案：從第一張照片開始</h3>
         <p>自己剛建的資料夾，還沒有任何 Git 紀錄，用 init 建相簿，再挑檔案、拍照。要第一次上雲，回 L6 建空的雲端相簿並記住地址。</p>
       </Card>
-      <Card className="space-y-3 bg-purple-50/50 border-purple-100">
-        <h3 className="font-bold text-purple-900">雲上已有：第一次拿到這台電腦</h3>
+      <Card className="space-y-3">
+        <h3 className="font-bold">雲上已有：第一次拿到這台電腦</h3>
         <p>自己的雲端相簿已有紀錄，新電腦用 clone 整本下載；它已包含相簿與地址，不用再 init 或 remote add。已下載過、只是要更新，就在那份資料夾 pull。</p>
       </Card>
     </div>

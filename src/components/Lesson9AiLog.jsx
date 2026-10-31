@@ -52,7 +52,7 @@ const CopyBox = ({ label, text }) => {
     <div className="min-w-0 rounded-lg overflow-hidden bg-slate-900 text-slate-100 shadow-md">
       <div className="flex flex-wrap items-center justify-between gap-2 bg-slate-800 px-3 py-2 text-xs">
         <span>{label}</span>
-        <button type="button" onClick={copy} className="text-indigo-200 hover:text-white underline" aria-live="polite">{state}</button>
+        <button type="button" onClick={copy} className="min-h-[36px] rounded px-2 text-indigo-200 hover:bg-white/10 hover:text-white underline" aria-live="polite">{state}</button>
       </div>
       <pre className="p-3 text-sm whitespace-pre-wrap break-all">{text}</pre>
     </div>
@@ -74,7 +74,7 @@ export const Lesson9AiLog = () => (
       <p>你的 git-journal 裡有兩張照片的說明都是「解決標題衝突」（L5 一次、L8 一次）。我先說結論：AI 能看出有兩次衝突。換你想：它能分出哪次是哪兩邊在衝突嗎？</p>
       <details><summary className="cursor-pointer text-indigo-700">想好再展開</summary><p>分不出來。兩句一模一樣，只能靠日期猜。如果當初寫「解決本機分支的標題衝突」「解決網頁與電腦版標題衝突」，人和 AI 一眼就懂。</p></details>
     </Card>
-    <SectionTitle title="🔥 換你了：請 AI 整理你的 Git 日誌" />
+    <SectionTitle kicker="換你了" title="請 AI 整理你的 Git 日誌" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 把紀錄印成一行一張照片</h3>
       <p>回到<strong>第一個 git-journal</strong> 的 VSCode 視窗（左側顯示 GIT-JOURNAL，不是 GIT-JOURNAL-LAPTOP）。選 Terminal → New Terminal，確認提示符以 git-journal 結尾；$ 不用打，輸出框不用輸入。</p>
@@ -110,7 +110,7 @@ export const Lesson9AiLog = () => (
       <p>補全練習：如果要重寫那兩句「解決標題衝突」，你會怎麼寫？先自己寫，再展開核對。已經上傳的舊照片說明不用改，練習的是下次的寫法。</p>
       <details><summary className="cursor-pointer text-indigo-700">核對寫法</summary><p>例如 L5 那次寫「解決本機分支的標題衝突，保留名字與學習日誌」，L8 那次寫「解決網頁與電腦版標題衝突，改回統一標題」。重點是說出哪兩邊、最後留下什麼。</p></details>
     </Card>
-    <Card className="space-y-3 bg-blue-50">
+    <Card className="space-y-3">
       <h3 className="font-bold">實際工作時：AI 可以自己讀紀錄</h3>
       <p>這一課你手動複製貼上。工作上常見的 AI 程式工具（例如 Claude Code、Cursor、GitHub Copilot）打開專案資料夾後，可以自己讀 Git 紀錄。你只要問「讀這個專案的 git log，告訴我最近兩週做了什麼、為什麼這樣改」，它就會自己翻相簿回答。</p>
       <p>不管用哪種工具，規則都一樣：AI 只能讀到你留下的說明。每一次 -m 後面的那句話，都是寫給下一個接手的人和 AI 看的。</p>

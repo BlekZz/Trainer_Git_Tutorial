@@ -20,8 +20,8 @@ export const Lesson7PR = () => (
       <p><strong>PR（Pull Request）</strong> 是「這本分支相簿拍好了，請收進主相簿」的申請單。Create pull request 只是送出申請；按 <strong>Merge pull request</strong> 並確認，才真的把照片收進主相簿。</p>
       <p><strong>pull</strong> 是把雲端的新照片下載下來，並整理進目前的本機相簿。本課在網頁合併後，電腦的 main 不會自動更新，所以最後需要 pull。</p>
       <div className="grid sm:grid-cols-2 gap-3 text-center" aria-label="上傳分支後用 PR 申請收進雲端 main，再下載回本機 main">
-        <div className="rounded bg-purple-50 p-3">自己的 feat/day3<br />push 上傳 → PR 申請 → Merge 收進雲端 main</div>
-        <div className="rounded bg-blue-50 p-3">自己的本機 main<br />pull 下載 ← 雲端 main</div>
+        <div className="rounded-lg bg-indigo-50 p-3">自己的 feat/day3<br />push 上傳 → PR 申請 → Merge 收進雲端 main</div>
+        <div className="rounded-lg bg-slate-100 p-3">自己的本機 main<br />pull 下載 ← 雲端 main</div>
       </div>
       <p>團隊也會各自在分支準備內容再收進 main；這次所有分支都在你自己的 repo，申請與合併都由你完成。我先上傳分支，是因為 GitHub 要先收到分支照片，才有內容可比較。</p>
     </Card>
@@ -32,7 +32,7 @@ export const Lesson7PR = () => (
       <details><summary className="cursor-pointer">核對方向</summary><p>base = main ← compare = feat/day3；兩邊都在你自己的 git-journal。</p></details>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>網頁已合併，但電腦看不到 day3.md，要再次開 PR 嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不用；先回電腦的 main，再 pull 下載。能分清「申請合併」與「下載成果」再開始；不確定就回看上方兩格圖。</p></details></Callout>
-    <SectionTitle title="🔥 換你了：在自己的 git-journal 開第一張 PR" />
+    <SectionTitle kicker="換你了" title="在自己的 git-journal 開第一張 PR" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 開分支，保存 Day 3</h3>
       <p>回原本 git-journal 的 VSCode，終端機路徑應以 git-journal 結尾。每次一條指令，等提示符回來再繼續；$ 與 PS 路徑不用打，輸出框不用輸入。</p>

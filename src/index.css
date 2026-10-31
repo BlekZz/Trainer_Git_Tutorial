@@ -3,7 +3,55 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
   body {
-    @apply text-slate-800 leading-relaxed;
+    @apply bg-paper text-ink antialiased;
+    line-height: 1.8;
+    font-feature-settings: 'palt' 0;
+  }
+  h1, h2, h3, h4 {
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+  code {
+    @apply font-mono text-[0.9em] rounded bg-slate-100 px-1 py-0.5 text-slate-800;
+  }
+  pre code { @apply bg-transparent p-0; }
+  summary { @apply rounded py-2; }
+  details[open] > summary { @apply mb-1; }
+  ::selection { @apply bg-indigo-100 text-indigo-900; }
+  :focus-visible {
+    outline: 2px solid #C2410C;
+    outline-offset: 2px;
+  }
+  button, summary, a { -webkit-tap-highlight-color: transparent; }
+}
+
+@layer components {
+  .skip-link {
+    @apply sr-only;
+  }
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-[100] rounded-md bg-ink px-4 py-2 text-sm font-medium text-white;
+  }
+  .nav-scroll { scrollbar-width: thin; scrollbar-color: #CBD1D8 transparent; }
+  /* 「換你了」步驟線：連續的步驟卡之間以直線串起，最後一張不畫尾線 */
+  .step-card { position: relative; }
+  .step-card .step-rail {
+    position: absolute; left: 15px; top: 40px; bottom: -1.5rem; width: 2px;
+    background: #E3E6EA;
+  }
+  .step-card:not(:has(+ .step-card)) .step-rail { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

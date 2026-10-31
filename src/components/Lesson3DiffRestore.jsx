@@ -17,7 +17,7 @@ export const Lesson3DiffRestore = () => (
       <details><summary className="cursor-pointer">核對</summary><p>還原拍照台。取消挑選不等於刪掉內容。</p></details>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>診斷題：想保留剛寫的筆記，只打不帶 --staged 的 restore，對嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不對，它會覆寫書桌。先想清楚要丟文字，還是只取消挑選。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
-    <SectionTitle title="🔥 換你了：在自己的 git-journal 看見差異" />
+    <SectionTitle kicker="換你了" title="在自己的 git-journal 看見差異" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 改一行，再看差異</h3>
       <p>在 VSCode 開啟 day1.md，把唯一一行改成下面這行，保留行尾換行並儲存。你會看到新文字；先不要 add。</p>
@@ -75,7 +75,7 @@ export const Lesson3DiffRestore = () => (
       <CommandBlock variant="output" command={"[main 846a6e1] 忽略 tmp 檔\n 1 file changed, 1 insertion(+)\n create mode 100644 .gitignore"} />
       </details>
     </Card>
-    <Card className="space-y-3 bg-blue-50">
+    <Card className="space-y-3">
       <h3 className="font-bold">照片說明寫給誰看？未來的自己、接手的人，還有 AI</h3>
       <p>-m 後面那句話，是這張照片唯一的文字紀錄。一個月後的你、接手的同事、你請來整理進度的 AI，都只能靠它知道「這次做了什麼、為什麼」。下面是同一串改動的兩種寫法（示意，不是要輸入的指令）：</p>
       <div className="grid sm:grid-cols-2 gap-3">

@@ -14,7 +14,7 @@ export const Lesson1Concept = () => (
       <p>我先在書桌寫日誌，只把這次想保存的內容擺上拍照台，再按快門。只在編輯器按儲存，還沒有替 Git 相簿添照片。</p>
       <figure className="rounded-xl bg-white p-4 border border-indigo-100" aria-label="書桌、拍照台、相簿三個區域">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
-          <div className="rounded-lg bg-blue-50 p-3"><strong>① 書桌</strong><p>工作資料夾：正在改的檔案</p><p className="text-sm mt-2">↓ 挑選改動（add）</p></div>
+          <div className="rounded-lg bg-slate-100 p-3"><strong>① 書桌</strong><p>工作資料夾：正在改的檔案</p><p className="text-sm mt-2">↓ 挑選改動（add）</p></div>
           <div className="rounded-lg bg-amber-50 p-3"><strong>② 拍照台</strong><p>暫存區：這次要拍的內容</p><p className="text-sm mt-2">↓ 按快門（commit）</p></div>
           <div className="rounded-lg bg-green-50 p-3"><strong>③ 相簿</strong><p>存檔紀錄：已保存的版本</p><p className="text-sm mt-2">翻相簿（log）</p></div>
         </div>
@@ -31,7 +31,7 @@ export const Lesson1Concept = () => (
       <details><summary className="cursor-pointer text-indigo-700">想好再展開</summary><p>按快門，附上「新增日誌」的說明。草稿繼續留在書桌，不會因為這次拍照就一起存入相簿。</p></details>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>換成旅行清單與還沒寫完的心得，只保存清單時要挑哪一份？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>只挑旅行清單，再按快門。這與檔名無關，是在選這次要保存哪些改動。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
-    <SectionTitle title="🔥 換你了：在自己的電腦準備書桌" />
+    <SectionTitle kicker="換你了" title="在自己的電腦準備書桌" />
     <Card className="space-y-3">
       <p>Windows 開啟檔案總管，到你找得到的位置（例如「文件」），右鍵空白處 → 新增 → 資料夾，取名 <strong>git-journal</strong>。Mac 在 Finder 的「文件」選「檔案 → 新增檔案夾」。完成後會看到這個空資料夾；L2 會沿用它。</p>
       <p>開啟 VSCode → File（檔案）→ Open Folder（開啟資料夾），選剛建立的 git-journal。若詢問是否信任，確認是自己剛建立的空資料夾再信任。左側檔案總管會顯示 GIT-JOURNAL，裡面暫時沒有檔案。</p>

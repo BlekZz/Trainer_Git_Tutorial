@@ -30,3 +30,5 @@ dist-ssr
 
 # Claude temp files (fixtures, scratch)
 Claude Temp Files/
+__pycache__/
+.playwright-mcp/

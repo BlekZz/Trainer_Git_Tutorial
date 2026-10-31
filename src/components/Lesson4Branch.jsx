@@ -15,14 +15,14 @@ export const Lesson4Branch = () => (
     <Card className="space-y-3">
       <h3 className="font-bold">一起看分支圖，補出最後一步</h3>
       <div className="grid sm:grid-cols-2 gap-3 text-center" aria-label="分支與合併概念圖">
-        <div className="rounded bg-blue-50 p-4">main：Day 1 ＋ 忽略清單<br />↓ 留在原照片</div>
-        <div className="rounded bg-pink-50 p-4">feat/day2：從同一張開始<br />↓ 多拍 Day 2</div>
+        <div className="rounded-lg bg-slate-100 p-4">main：Day 1 ＋ 忽略清單<br />↓ 留在原照片</div>
+        <div className="rounded-lg bg-indigo-50 p-4">feat/day2：從同一張開始<br />↓ 多拍 Day 2</div>
       </div>
       <p>前半我帶：另開相簿 → 拍 Day 2 → 回 main。最後請你補：要讓 main 也有 Day 2，還缺什麼？</p>
       <details><summary className="cursor-pointer">核對</summary><p>把 feat/day2 合併進 main。只是切回 main 不會自動帶入另一邊的照片。</p></details>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>只切回 main，看到 day2.md 不見了，要重新建立它嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>不用；它還在 feat/day2 的照片裡。接下來合併成果才會出現在 main。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
-    <SectionTitle title="🔥 換你了：在 git-journal 開分支再合併" />
+    <SectionTitle kicker="換你了" title="在 git-journal 開分支再合併" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 先確認書桌乾淨，再另開相簿</h3>
       <CommandBlock command={"git status"} comment="先確認沒有會被帶到另一個分支的改動" />

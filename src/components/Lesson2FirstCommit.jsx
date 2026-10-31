@@ -63,22 +63,22 @@ export const Lesson2FirstCommit = () => {
       <FalseAlarm signal={"warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it"}>這是 Windows 換行格式提醒，不是失敗；可以繼續。Mac 或原本已用 CRLF 的檔案可能完全沒有這行，沒有訊息也正常。</FalseAlarm>
       {current ? <>
         <p className="font-bold">步驟 {step + 1} / {simulation.length}：{current.why}</p>
-        {challenge ? <details><summary className="cursor-pointer">需要時看這一步的指令</summary><code className="break-all">{current.cmd}</code></details> : <button className="rounded bg-indigo-600 px-4 py-2 text-white break-all" onClick={() => advance(current.cmd)}>系統代打：{current.cmd}</button>}
+        {challenge ? <details><summary className="cursor-pointer">需要時看這一步的指令</summary><code className="break-all">{current.cmd}</code></details> : <button type="button" className="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 transition-colors break-all" onClick={() => advance(current.cmd)}>系統代打：{current.cmd}</button>}
       </> : <Callout variant="success">模擬完成！你已替 README.md 保存第一個版本。</Callout>}
       <div className="whitespace-pre-wrap min-w-0"><TerminalSim logs={logs} promptLabel="練習" onCommand={challenge && current ? advance : undefined} /></div>
       <p role="status" className="text-sm text-indigo-700">{feedback}</p>
       <div className="flex flex-wrap gap-3">
-        <button className="rounded border px-3 py-2" onClick={() => reset(false)}>重看按鈕示範</button>
-        <button className="rounded border px-3 py-2" onClick={() => reset(true)}>挑戰：自己輸入五步</button>
+        <button type="button" className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-ink hover:border-slate-400 hover:bg-slate-50 transition-colors" onClick={() => reset(false)}>重看按鈕示範</button>
+        <button type="button" className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-ink hover:border-slate-400 hover:bg-slate-50 transition-colors" onClick={() => reset(true)}>挑戰：自己輸入五步</button>
       </div>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>診斷題：status 的 Changes to be committed 出現 README.md，下一步要拍照還是再建資料夾？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>要拍照。那個標題表示 README.md 已在拍照台。請先完成一次挑戰，再進真機。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
-    <SectionTitle title="🔥 換你了：在自己的 git-journal 拍兩張照片" />
+    <SectionTitle kicker="換你了" title="在自己的 git-journal 拍兩張照片" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 打開自己的資料夾與終端機</h3>
       <p>沿用 L1 的空 git-journal。還沒建的話，在 Windows 檔案總管或 Mac Finder 的「文件」新增這個資料夾；會看到一個空資料夾。VSCode 選 File → Open Folder → 選它，左側會顯示 GIT-JOURNAL。</p>
       <p>選 Terminal → New Terminal，下方出現輸入面板；Windows 的路徑應以 git-journal 結尾。若不是，關掉舊終端機，再從剛開好的資料夾新增終端機。Mac 提示符外觀不同，操作一樣。</p>
-      <p><strong>$ 不用打</strong>，也不要輸入畫面原有的 PS 路徑。下面深色框的輸出是讓你對照，不是要再輸入。</p>
+      <p><strong>$ 不用打</strong>，也不要輸入畫面原有的 PS 路徑。下面標著「輸出範例」的淺灰色框是讓你對照，不是要再輸入。</p>
       <CommandBlock command={"git init"} comment="在目前資料夾建立保存紀錄的地方" />
       <CommandBlock variant="output" command={"Initialized empty Git repository in C:/Users/Amy/Documents/git-journal/.git/"} />
       <p>你會多一個通常隱藏的 .git 資料夾；那是相簿紀錄，不要手動刪改。路徑裡的 Amy 是範例使用者名稱，你會看到自己的名稱與資料夾位置；<strong>成功的判斷：開頭是 Initialized empty Git repository，結尾是 git-journal/.git/</strong>。</p>

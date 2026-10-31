@@ -23,7 +23,7 @@ export const Lesson6Push = () => (
       <details><summary className="cursor-pointer">核對最後一步</summary><p>push。前提是照片已 commit；本課沿用 L5 已保存好的相簿。</p></details>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>這次該開新的空資料夾，還是原本 git-journal？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>原本 git-journal，因為照片都在那裡。確認自己找得到 README.md、day1.md、day2.md 與 .gitignore，再開始真機操作。</p></details></Callout>
-    <SectionTitle title="🔥 換你了：讓自己的相簿第一次上雲" />
+    <SectionTitle kicker="換你了" title="讓自己的相簿第一次上雲" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 註冊並登入自己的 GitHub</h3>
       <p>已有帳號就先確認能登入，再跳到第 2 步。還沒有的話，前往 <a href="https://github.com/" target="_blank" rel="noreferrer" className="text-indigo-600 underline">github.com</a>，點 Sign up，會出現註冊表單。</p>

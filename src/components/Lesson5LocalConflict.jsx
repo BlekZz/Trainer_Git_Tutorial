@@ -8,8 +8,8 @@ export const Lesson5LocalConflict = () => (
       <h3 className="font-bold">我先示範：兩本相簿對同一行拍了不同樣子</h3>
       <p><strong>衝突（conflict）</strong> 是兩份改動無法自動選出要保留哪份的情況，需要你決定最後的內容。不需要兩個人或 GitHub，自己在兩個分支改同一行就能練。</p>
       <div className="grid sm:grid-cols-2 gap-3 text-center" aria-label="兩個標題由共同版本分開，再由人決定合併結果">
-        <div className="rounded bg-blue-50 p-3">main<br /># Amy 的 Git 日誌</div>
-        <div className="rounded bg-pink-50 p-3">feat/title<br /># 我的 Git 學習日誌</div>
+        <div className="rounded-lg bg-slate-100 p-3">main<br /># Amy 的 Git 日誌</div>
+        <div className="rounded-lg bg-indigo-50 p-3">feat/title<br /># 我的 Git 學習日誌</div>
       </div>
       <p>兩邊原本都是「# 我的 Git 日誌」。我想保留名字與「學習」兩種資訊，所以合併時會整理成「# Amy 的 Git 學習日誌」，而不是讓 Git 猜。</p>
     </Card>
@@ -20,7 +20,7 @@ export const Lesson5LocalConflict = () => (
       <details><summary className="cursor-pointer">核對這次要保存的內容</summary><p># Amy 的 Git 學習日誌。只保留一行，不需要重複兩個標題。</p></details>
     </Card>
     <Callout title="先停一下，說出答案再繼續"><p>在 VSCode 改完標題並按儲存，合併就結束了嗎？</p><details className="mt-2"><summary className="cursor-pointer">核對想法</summary><p>還沒；要 add 告訴 Git 已處理這個檔案，再 commit 保存合併照片。 若答不出來，回看上一段並再說一次，確認有把握再往下。</p></details></Callout>
-    <SectionTitle title="🔥 換你了：在 git-journal 製造並解開衝突" />
+    <SectionTitle kicker="換你了" title="在 git-journal 製造並解開衝突" />
     <Card className="space-y-3">
       <h3 className="font-bold">1. 在 feat/title 保存一種標題</h3>
       <CommandBlock command={"git status"} comment="確認從乾淨的 main 開始，方便需要時取消合併" />

@@ -68,8 +68,8 @@ const StepCard = ({ idx, step, setStep, children }) => {
   const cls = isCurrent
     ? 'bg-white border-indigo-300 shadow-md ring-2 ring-indigo-50'
     : isDone
-      ? 'bg-green-50 border-green-200 opacity-60'
-      : 'bg-slate-50 border-slate-200 opacity-40';
+      ? 'bg-green-50 border-green-200'
+      : 'bg-slate-50 border-slate-200 text-slate-500';
   return (
     <div className={`p-4 border rounded-lg transition-all ${cls}`}>
       <div className="flex items-center justify-between">
@@ -108,7 +108,7 @@ const NextButton = ({ label, onClick, disabled = false }) => (
     type="button"
     onClick={onClick}
     disabled={disabled}
-    className="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+    className="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow hover:bg-indigo-700 transition-colors disabled:bg-slate-200 disabled:text-slate-600 disabled:shadow-none disabled:cursor-not-allowed"
   >
     {label}
     <ArrowRight size={15} aria-hidden="true" />
@@ -307,7 +307,7 @@ export const Lesson0Setup = () => {
               )}
             </div>
           </div>
-          <Callout variant="danger" title="🛑 剛裝完，必須把終端機關掉重開！">
+          <Callout variant="danger" title="剛裝完，必須把終端機關掉重開！">
             剛裝好的軟體，只有<strong>新開的</strong>終端機才抓得到。如果沿用安裝前就開著的舊視窗，會出現 <code className="bg-red-100 px-1 rounded">{isWin ? "'git' is not recognized" : 'command not found'}</code> 這類錯誤——<strong>這不代表安裝失敗</strong>，把 VSCode / 終端機完全關掉再重開就好。
           </Callout>
           <Callout variant="warning" title="裝不動？別硬撐">
@@ -399,8 +399,8 @@ export const Lesson0Setup = () => {
             <Info size={14} className="shrink-0 mt-0.5 text-amber-500" />
             <span><strong>--global</strong> 代表這台電腦上各個 Git 專案共用的預設值；個別專案仍可能另設不同的值。</span>
           </div>
-          <div className="bg-white border border-amber-200 rounded-lg p-3 text-xs text-blue-800 flex items-start gap-2 shadow-sm">
-            <Info size={14} className="shrink-0 mt-0.5 text-blue-500" />
+          <div className="bg-white border border-line rounded-lg p-3 text-xs text-slate-700 flex items-start gap-2">
+            <Info size={14} className="shrink-0 mt-0.5 text-[#3E6BA8]" />
             <span>先填自己使用的信箱；到 L6 建立 GitHub 帳號後，再確認它已加入帳號並完成驗證，讓存檔能對應到你的帳號。</span>
           </div>
         </div>
