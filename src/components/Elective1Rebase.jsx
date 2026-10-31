@@ -2,9 +2,64 @@ import { useState } from 'react';
 import { SectionTitle, Card, Callout } from './Shared';
 
 const histories = {
-  diverged: '共同照片 → A（main）\n        ↘ B（你的分支）',
-  merged: '共同照片 → A ──→ M（合併照片）\n        ↘ B ──↗',
-  rebased: "共同照片 → A → B′（重新套用你的改動）",
+  diverged: '共同照片之後分成兩條：main 多了 A，你的分支多了 B。',
+  merged: '共同照片之後分成兩條：main 有 A、分支有 B，最後由合併照片 M 把兩條接起來。',
+  rebased: '共同照片 → A → B′：你的改動接在 A 後面重新保存成 B′，原本的 B 不再出現在這條線上。',
+};
+
+// E1 示意圖：與側欄目錄相同的 commit-graph 語言（main 墨色、分支橘紅）
+const INK = '#1B2430';
+const ACCENT = '#E2532D';
+const MUTED = '#CBD1D8';
+
+const Node = ({ x, y, color, hollow = false, faded = false }) => (
+  <circle cx={x} cy={y} r={9} fill={hollow ? '#fff' : color} stroke={color} strokeWidth={3} strokeDasharray={faded ? '3 3' : undefined} />
+);
+
+const Label = ({ x, y, children, color = INK, sub, faded = false }) => (
+  <text x={x} y={y} textAnchor="middle" fontSize="16" fontWeight="600" fill={faded ? '#646D79' : color}>
+    {children}
+    {sub && <tspan x={x} dy="19" fontSize="14" fontWeight="400" fill="#4B5460">{sub}</tspan>}
+  </text>
+);
+
+const HistoryGraph = ({ mode }) => {
+  const rebased = mode === 'rebased';
+  const branchColor = rebased ? MUTED : ACCENT;
+  return (
+    <svg viewBox="0 0 360 172" className="block h-auto w-full max-w-md" role="img" aria-label={histories[mode]}>
+      {/* 主線 */}
+      <line x1="36" y1="56" x2="150" y2="56" stroke={INK} strokeWidth="3" />
+      {/* 分支線 */}
+      <path d="M36 56 C 80 56, 96 126, 150 126" fill="none" stroke={branchColor} strokeWidth="3" strokeDasharray={rebased ? '5 5' : undefined} />
+      {mode === 'merged' && (
+        <>
+          <line x1="150" y1="56" x2="284" y2="56" stroke={INK} strokeWidth="3" />
+          <path d="M150 126 C 220 126, 226 56, 284 56" fill="none" stroke={ACCENT} strokeWidth="3" />
+        </>
+      )}
+      {rebased && <line x1="150" y1="56" x2="284" y2="56" stroke={ACCENT} strokeWidth="3" />}
+
+      <Node x={36} y={56} color={INK} />
+      <Label x={36} y={30}>共同照片</Label>
+      <Node x={150} y={56} color={INK} />
+      <Label x={150} y={30}>A（main）</Label>
+      <Node x={150} y={126} color={branchColor} hollow={rebased} faded={rebased} />
+      <Label x={150} y={158} color={ACCENT} faded={rebased}>B（你的分支）</Label>
+      {mode === 'merged' && (
+        <>
+          <Node x={284} y={56} color={ACCENT} />
+          <Label x={284} y={30} color={ACCENT}>M（合併照片）</Label>
+        </>
+      )}
+      {rebased && (
+        <>
+          <Node x={284} y={56} color={ACCENT} />
+          <Label x={284} y={86} color={ACCENT} sub="重新套用你的改動">B′</Label>
+        </>
+      )}
+    </svg>
+  );
 };
 
 export const Elective1Rebase = () => {
@@ -29,7 +84,7 @@ export const Elective1Rebase = () => {
             <button key={value} type="button" aria-pressed={mode === value} onClick={() => setMode(value)} className={`min-h-[44px] px-2 py-2 text-sm font-medium transition-colors ${mode === value ? 'bg-indigo-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}>{label}</button>
           ))}
         </div>
-        <pre className="overflow-x-auto rounded bg-slate-100 p-4" aria-live="polite">{histories[mode]}</pre>
+        <figure className="rounded-lg border border-line bg-slate-50 px-3 py-4 sm:px-6" aria-live="polite"><HistoryGraph mode={mode} /></figure>
         <p className="text-sm text-slate-600">這是相簿關係示意，不是終端機輸出，也沒有在你的電腦執行指令。兩邊都改到同一處時，兩種方法都可能需要你解衝突；不能靠選 Rebase 省略判斷。</p>
       </Card>
       <Callout variant="warning" title="照片已經分享出去，就先別重做">
