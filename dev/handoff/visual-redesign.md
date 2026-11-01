@@ -1,8 +1,0 @@
-# 全站視覺修整 [ACTIVE]
-- updated: 2026-11-01 (claude)
-- base: fba2e78
-- identity: {"executor":"claude","device":"desktop","host":"DESKTOP-20251004","session_id":"6814289d-57a6-457c-8195-1ab095dcda70","session_name":"unknown","identity_source":"claude-code-transcript-path"}
-- 停點: 視覺改版（8322060）、主欄加寬 60rem＋L1／L4–L9 圖解（bce9697）、enhance-word 文字檢核 153 條＋待確認 18 項（7396378、786aa28）、tutor-sop 稽核小修（124566e）都已完成並 push；build／lint 通過；尚未部署。
-- 下一步: Blake 已同意部署（2026-11-01），但 auto mode 擋下 Claude 執行；由 Blake 自己跑 `npm run deploy`，之後到 GitHub Pages 確認新版（側欄 commit-graph、L1 圖解）。部署確認後可刪本 lane。
-- 切入: tailwind.config.js（slate／indigo／green 重新對應為新色票）, src/components/Shared.jsx（Card 依 h3 自動套步驟卡／示範段版型）, src/components/Diagrams.jsx（FlowDiagram／BranchDiagram／ConflictDiagram）
-- 事實: [fact] 各課原始碼的 indigo-* 經 tailwind.config.js 重新對應後實際是橘紅，slate-* 是墨色中性灰（tailwind.config.js:1-30）。[fact] 瀏覽器分頁若只換 hash 不會重載，會看到舊 bundle；驗收前用 ?v= query 強制重載（2026-11-01 稽核 agent 實測）。[fact] 終端機輸出在非 TTY 錄製時沒有 (HEAD -> main) 標記，真機 TTY 會顯示；課文 log 範例已補標記並附說明（786aa28）。
